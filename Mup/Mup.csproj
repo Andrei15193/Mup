@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.0</TargetFramework>
+    <Version>1.0.0-alpha</Version>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Andrei Fangli</Authors>
+    <Company />
+    <Description>Markup Parser (Mup) is an extensible .NET Standard Library (1.0) containing parsers for different markup languages such as Markdown or Creole.</Description>
+    <PackageId>mup</PackageId>
+    <PackageTags>markup parser markdown creole extensible net standard</PackageTags>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://bitbucket.org/Andrei15193/mup/</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://bitbucket.org/Andrei15193/mup.git</RepositoryUrl>
+    <Copyright>Andrei Fangli</Copyright>
+    <PackageLicenseUrl>https://bitbucket.org/Andrei15193/mup/wiki/License</PackageLicenseUrl>
+    <PackageIconUrl>https://mosaicstore.blob.core.windows.net/nuget/logo.png</PackageIconUrl>
+  </PropertyGroup>
+
+</Project>
