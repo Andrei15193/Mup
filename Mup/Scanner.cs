@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mup
 {
-    public class Scanner<TTokenCode> where TTokenCode : struct
+    internal class Scanner<TTokenCode> where TTokenCode : struct
     {
         private const int _defaultBufferSize = 2048;
 

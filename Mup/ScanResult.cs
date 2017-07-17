@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Mup
 {
-    public class ScanResult<TTokenCode> where TTokenCode : struct
+    internal class ScanResult<TTokenCode> where TTokenCode : struct
     {
         public ScanResult(string text, IEnumerable<Token<TTokenCode>> tokens)
         {

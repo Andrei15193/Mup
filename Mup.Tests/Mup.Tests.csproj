@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreoleScanner_ScanAsync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scanner_Ctor.cs" />
     <Compile Include="Scanner_ScanAsync.cs" />

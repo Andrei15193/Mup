@@ -2,7 +2,7 @@
 
 namespace Mup
 {
-    public class Token<TTokenCode> where TTokenCode : struct
+    internal class Token<TTokenCode> where TTokenCode : struct
     {
         private readonly Lazy<string> _value;
 
