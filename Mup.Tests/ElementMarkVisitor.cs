@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using static Mup.ElementMarkCode;
 
 namespace Mup.Tests
@@ -7,11 +8,16 @@ namespace Mup.Tests
     {
         private readonly ICollection<ElementMarkCode> _marks = new List<ElementMarkCode>();
 
-        internal IEnumerable<ElementMarkCode> Marks => _marks;
+        internal IEnumerable<ElementMarkCode> Marks { get; private set; }
 
         protected override void Reset()
         {
             _marks.Clear();
+        }
+
+        protected override void Complete()
+        {
+            Marks = _marks.ToArray();
         }
 
         protected override void BeginHeading1()
@@ -67,6 +73,15 @@ namespace Mup.Tests
 
         protected override void EndEmphasis()
             => _marks.Add(EmphasisEnd);
+
+        protected override void BeginHyperlink(string destination)
+        {
+            _marks.Add(HyperlinkStart);
+            _marks.Add(HyperlinkDestination);
+        }
+
+        protected override void EndHyperlink()
+            => _marks.Add(HyperlinkEnd);
 
         protected override void Text(string text)
             => _marks.Add(PlainText);

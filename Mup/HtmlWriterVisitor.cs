@@ -64,6 +64,12 @@ namespace Mup
         protected override void EndEmphasis()
             => _htmlStringBuilder.Append("</em>");
 
+        protected override void BeginHyperlink(string destination)
+            => _htmlStringBuilder.Append("<a href=\"").Append(destination).Append("\">");
+
+        protected override void EndHyperlink()
+            => _htmlStringBuilder.Append("</a>");
+
         protected override void Text(string text)
         {
             foreach (var character in text)

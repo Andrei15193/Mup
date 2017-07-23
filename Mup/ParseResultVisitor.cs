@@ -59,11 +59,15 @@ namespace Mup
 
                 case ElementMarkCode.HorizontalLine:
                     break;
-                case ElementMarkCode.HyperlinkStart:
+
+                case HyperlinkStart:
                     break;
-                case ElementMarkCode.HyperlinkTextSeparator:
+                case HyperlinkDestination:
+                    var destination = text.Substring(mark.Start, mark.Length);
+                    visitTask = BeginHyperlinkAsync(destination, cancellationToken);
                     break;
-                case ElementMarkCode.HyperlinkEnd:
+                case HyperlinkEnd:
+                    visitTask = EndHyperlinkAsync(cancellationToken);
                     break;
                 case StrongStart:
                     visitTask = BeginStrongAsync(cancellationToken);
@@ -373,6 +377,26 @@ namespace Mup
         }
 
         protected virtual void EndEmphasis()
+        {
+        }
+
+        protected virtual Task BeginHyperlinkAsync(string hyperlinkDestinaton, CancellationToken cancellationToken)
+        {
+            BeginHyperlink(hyperlinkDestinaton);
+            return _completedTask;
+        }
+
+        protected virtual void BeginHyperlink(string destination)
+        {
+        }
+
+        protected virtual Task EndHyperlinkAsync(CancellationToken cancellationToken)
+        {
+            EndHyperlink();
+            return _completedTask;
+        }
+
+        protected virtual void EndHyperlink()
         {
         }
 
