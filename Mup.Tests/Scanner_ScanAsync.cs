@@ -70,15 +70,13 @@ namespace Mup.Tests
                         {
                             Code = 0,
                             Start = 0,
-                            Length = bufferSize,
-                            Value = new string('a', bufferSize)
+                            Length = bufferSize
                         },
                         new
                         {
                             Code = 1,
                             Start = bufferSize,
-                            Length = bufferSize,
-                            Value = new string('b', bufferSize)
+                            Length = bufferSize
                         }
                     },
                     result.Tokens.Select(token =>
@@ -86,10 +84,51 @@ namespace Mup.Tests
                         {
                             token.Code,
                             token.Start,
-                            token.Length,
-                            token.Value
+                            token.Length
                         }));
             }
+        }
+
+        [Trait("Class", nameof(Scanner<int>))]
+        [Theory(DisplayName = (_readerMethod + nameof(ScansFromTextSynchronously)))]
+        [InlineData(10)]
+        [InlineData(2)]
+        [InlineData(1)]
+        [InlineData(100)]
+        public void ScansFromTextSynchronously(int bufferSize)
+        {
+            var scanner = new Scanner<int>(
+                new Dictionary<int, Func<char, bool>>
+                {
+                    { 0, c => c == 'a' },
+                    { 1, c => c == 'b' }
+                });
+
+            var text = (new string('a', bufferSize) + new string('b', bufferSize));
+            var result = scanner.Scan(text);
+            Assert.Equal(
+                new[]
+                {
+                    new
+                    {
+                        Code = 0,
+                        Start = 0,
+                        Length = bufferSize
+                    },
+                    new
+                    {
+                        Code = 1,
+                        Start = bufferSize,
+                        Length = bufferSize
+                    }
+                },
+                result.Tokens.Select(token =>
+                new
+                {
+                    token.Code,
+                    token.Start,
+                    token.Length
+                }));
         }
 
         [Trait("Class", nameof(Scanner<int>))]
@@ -116,25 +155,22 @@ namespace Mup.Tests
                     {
                         Code = 0,
                         Start = 0,
-                        Length = sequenceLegth,
-                        Value = new string('a', sequenceLegth)
+                        Length = sequenceLegth
                     },
                     new
                     {
                         Code = 1,
                         Start = sequenceLegth,
-                        Length = sequenceLegth,
-                        Value = new string('b', sequenceLegth)
+                        Length = sequenceLegth
                     }
                 },
                 result.Tokens.Select(token =>
-                    new
-                    {
-                        token.Code,
-                        token.Start,
-                        token.Length,
-                        token.Value
-                    }));
+                new
+                {
+                    token.Code,
+                    token.Start,
+                    token.Length
+                }));
         }
 
         [Trait("Class", nameof(Scanner<int>))]
@@ -189,6 +225,27 @@ namespace Mup.Tests
                 using (var stringReader = new StringReader(string.Empty))
                     await scanner.ScanAsync(stringReader, cancellationTokenSource.Token).ContinueWith(resultTask => task = resultTask);
                 Assert.True(task.IsCanceled);
+            }
+        }
+
+        [Trait("Class", nameof(Scanner<int>))]
+        [Fact(DisplayName = (_textMethod + nameof(EmptyStringResultsInNotTokensFromText)))]
+        public async Task EmptyStringResultsInNotTokensFromText()
+        {
+            var scanner = new Scanner<int>(new Dictionary<int, Func<char, bool>>());
+            var result = await scanner.ScanAsync(string.Empty);
+            Assert.False(result.Tokens.Any());
+        }
+
+        [Trait("Class", nameof(Scanner<int>))]
+        [Fact(DisplayName = (_readerMethod + nameof(EmptyStringResultsInNotTokensFromReader)))]
+        public async Task EmptyStringResultsInNotTokensFromReader()
+        {
+            var scanner = new Scanner<int>(new Dictionary<int, Func<char, bool>>());
+            using (var stringReader = new StringReader(string.Empty))
+            {
+                var result = await scanner.ScanAsync(stringReader);
+                Assert.False(result.Tokens.Any());
             }
         }
     }

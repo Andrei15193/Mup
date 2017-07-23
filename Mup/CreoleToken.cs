@@ -15,7 +15,9 @@
         Equal,
         Dash,
         NewLine,
+        WhiteSpace,
         Hash,
-        Pipe
+        Pipe,
+        Tilde
     }
 }

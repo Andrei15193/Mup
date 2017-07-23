@@ -58,7 +58,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreoleParser_ParseAsync.cs" />
+    <Compile Include="HtmlWriterVisitor_Ctor.cs" />
     <Compile Include="CreoleScanner_ScanAsync.cs" />
+    <Compile Include="ElementMarkVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scanner_Ctor.cs" />
     <Compile Include="Scanner_ScanAsync.cs" />

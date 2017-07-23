@@ -39,7 +39,7 @@ namespace Mup.Tests
         {
             var tokens = Enumerable
                 .Range(0, tokensCount)
-                .Select(tokenCode => new Token<int>(text, tokenCode, 0, 0))
+                .Select(tokenCode => new Token<int>(tokenCode, 0, 0))
                 .ToList()
                 .AsEnumerable();
             var scanResult = new ScanResult<int>(text, tokens);

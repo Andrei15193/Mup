@@ -21,6 +21,13 @@ namespace Mup
                 throw new ArgumentException("Cannot contain null.", nameof(predicates));
         }
 
+        public ScanResult<TTokenCode> Scan(string text)
+        {
+            var scanner = new TextScanner(_predicates);
+            var scanResult = scanner.Scan(text);
+            return scanResult;
+        }
+
         public Task<ScanResult<TTokenCode>> ScanAsync(string text)
             => ScanAsync(text, CancellationToken.None);
 
@@ -89,7 +96,7 @@ namespace Mup
                 foreach (var character in text)
                     _Process(character);
 
-                var tokens = _tokenBuilders.Select(tokenBuilder => tokenBuilder.Build(text)).ToList();
+                var tokens = _tokenBuilders.Select(tokenBuilder => tokenBuilder.Build()).ToList();
                 var scanResult = new ScanResult<TTokenCode>(text, tokens);
 
                 return scanResult;
@@ -112,7 +119,7 @@ namespace Mup
                 while (bufferLength > 0);
 
                 var text = textBuilder.ToString();
-                var tokens = _tokenBuilders.Select(tokenBuilder => tokenBuilder.Build(text)).ToList();
+                var tokens = _tokenBuilders.Select(tokenBuilder => tokenBuilder.Build()).ToList();
                 var scanResult = new ScanResult<TTokenCode>(text, tokens);
 
                 return scanResult;
@@ -156,8 +163,8 @@ namespace Mup
 
                 internal int Length { get; set; }
 
-                internal Token<TTokenCode> Build(string text)
-                    => new Token<TTokenCode>(text, Code, Start, Length);
+                internal Token<TTokenCode> Build()
+                    => new Token<TTokenCode>(Code, Start, Length);
             }
         }
     }

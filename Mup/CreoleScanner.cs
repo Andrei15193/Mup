@@ -30,9 +30,13 @@ namespace Mup
 
                 new KeyValuePair<CreoleToken, Func<char, bool>>(NewLine, character => (character == '\r' || character == '\n')),
 
+                new KeyValuePair<CreoleToken, Func<char, bool>>(WhiteSpace, char.IsWhiteSpace),
+
                 new KeyValuePair<CreoleToken, Func<char, bool>>(Hash, character => (character == '#')),
 
                 new KeyValuePair<CreoleToken, Func<char, bool>>(Pipe, character => (character == '|')),
+
+                new KeyValuePair<CreoleToken, Func<char, bool>>(Tilde, character => (character == '~')),
 
                 new KeyValuePair<CreoleToken, Func<char, bool>>(Text, character => true)
             };
