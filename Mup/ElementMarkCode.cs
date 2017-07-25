@@ -8,6 +8,7 @@
 
         HyperlinkStart,
         HyperlinkDestination,
+        HyperlinkTextSeparator,
         HyperlinkEnd,
 
         StrongStart,

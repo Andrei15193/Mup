@@ -95,6 +95,7 @@ namespace Mup
             private const int _StrongCharacterRepeatCount = 2;
             private const int _EmphasisCharacterRepeatCount = 2;
             private const int _HyperlinkCharacterRepeatCount = 2;
+            private const int _HyperlinkTextSeparatorCharacterRepeatCount = 1;
             private const int _ImageCharacterRepeatCount = 2;
 
             private readonly string _text;
@@ -104,6 +105,8 @@ namespace Mup
             private ElementMark _strongStartMark = null;
             private ElementMark _emphasisStartMark = null;
             private ElementMark _hyperlinkStartMark = null;
+            private ElementMark _hyperlinkDestinationMark = null;
+            private ElementMark _hyperlinkTextSeparatorMark = null;
             private ElementMark _imageStartMark = null;
             private readonly IList<ElementMark> _marks = new List<ElementMark>();
             private readonly Stack<ElementBlock> _blocks = new Stack<ElementBlock>();
@@ -190,6 +193,10 @@ namespace Mup
             {
                 switch (currentToken.Code)
                 {
+                    case WhiteSpace:
+                    case NewLine:
+                        break;
+
                     case Asterisk when (currentToken.Length == 1):
                         _blocks.Push(BulletList);
                         _marks.Add(new ElementMark
@@ -333,6 +340,8 @@ namespace Mup
             {
                 if (_richTextBlocks.Count > 0 && (_richTextBlocks.Peek() == InlineHyperlink || _richTextBlocks.Peek() == EscapedInlineHyperlink))
                     _ProcessInlineHyperlink(previousToken, currentToken, nextToken);
+                else if (_hyperlinkStartMark != null && _hyperlinkTextSeparatorMark == null)
+                    _ProcessHyperlinkDestination(previousToken, currentToken, nextToken);
                 else
                     switch (currentToken.Code)
                     {
@@ -350,10 +359,16 @@ namespace Mup
 
                         case CreoleToken.BackSlash:
                             break;
-                        case CreoleToken.BracketOpen:
+
+                        case BracketOpen when (_hyperlinkStartMark == null && !_IsEscaped(previousToken, currentToken, nextToken) && currentToken.Length >= _HyperlinkCharacterRepeatCount):
+                        case BracketOpen when (_hyperlinkStartMark == null && _IsEscaped(previousToken, currentToken, nextToken) && currentToken.Length > _HyperlinkCharacterRepeatCount):
+                            _BeginHyperlink(previousToken, currentToken, nextToken);
                             break;
-                        case CreoleToken.BracketClose:
+
+                        case BracketClose when (currentToken.Length >= _HyperlinkCharacterRepeatCount):
+                            _EndHyperlink(previousToken, currentToken, nextToken);
                             break;
+
                         case CreoleToken.BraceOpen:
                             break;
                         case CreoleToken.BraceClose:
@@ -370,7 +385,7 @@ namespace Mup
                             break;
                         case CreoleToken.Pipe:
                             break;
-                        case Text when (_IsProtocol(previousToken, currentToken, nextToken)):
+                        case Text when (_IsProtocol(previousToken, currentToken, nextToken) && _hyperlinkStartMark == null):
                             _BeginInlineHyperlink(previousToken, currentToken, nextToken);
                             break;
 
@@ -533,28 +548,6 @@ namespace Mup
                 }
             }
 
-            private void _ProcessInlineHyperlink(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
-            {
-                switch (currentToken.Code)
-                {
-                    case WhiteSpace:
-                    case NewLine:
-                        if (_richTextBlocks.Peek() == InlineHyperlink)
-                            _EndHyperlink(previousToken, currentToken, nextToken);
-                        _marks.Add(new ElementMark
-                        {
-                            Code = PlainText,
-                            Start = currentToken.Start,
-                            Length = currentToken.Length
-                        });
-                        break;
-
-                    default:
-                        _marks[_marks.Count - 1].Length += currentToken.Length;
-                        break;
-                }
-            }
-
             private void _BeginHeading(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
             {
                 var headingMark = _GetHeadingStartMark(currentToken);
@@ -613,28 +606,6 @@ namespace Mup
                 }
             }
 
-            private void _BeginParagraph(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
-            {
-                _blocks.Push(Paragraph);
-                _marks.Add(new ElementMark
-                {
-                    Code = ParagraphStart,
-                    Start = currentToken.Start
-                });
-                _Process(previousToken, currentToken, nextToken);
-            }
-
-            private void _EndParagraph(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
-            {
-                _ClearRichText(previousToken, currentToken, nextToken);
-                _marks.Add(new ElementMark
-                {
-                    Code = ParagraphEnd,
-                    Start = currentToken.End
-                });
-                _blocks.Pop();
-            }
-
             private void _BeginInlineHyperlink(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
             {
                 if (_IsEscaped(previousToken, currentToken, nextToken))
@@ -664,7 +635,29 @@ namespace Mup
                 }
             }
 
-            private void _EndHyperlink(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            private void _ProcessInlineHyperlink(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                switch (currentToken.Code)
+                {
+                    case WhiteSpace:
+                    case NewLine:
+                        if (_richTextBlocks.Peek() == InlineHyperlink)
+                            _EndInlineHyperlink(previousToken, currentToken, nextToken);
+                        _marks.Add(new ElementMark
+                        {
+                            Code = PlainText,
+                            Start = currentToken.Start,
+                            Length = currentToken.Length
+                        });
+                        break;
+
+                    default:
+                        _marks[_marks.Count - 1].Length += currentToken.Length;
+                        break;
+                }
+            }
+
+            private void _EndInlineHyperlink(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
             {
                 var hyperlinkDestination = _marks[_marks.Count - 1];
                 if (hyperlinkDestination.Code == HyperlinkDestination)
@@ -679,25 +672,185 @@ namespace Mup
                     Code = HyperlinkEnd,
                     Start = currentToken.Start
                 });
+                _richTextBlocks.Pop();
+            }
+
+            private void _BeginHyperlink(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                if (currentToken.Length > _HyperlinkCharacterRepeatCount)
+                    _AppendPlainText(currentToken.Start, currentToken.Length - _HyperlinkCharacterRepeatCount);
+
+                _hyperlinkStartMark = new ElementMark
+                {
+                    Code = HyperlinkStart,
+                    Start = (currentToken.End - _HyperlinkCharacterRepeatCount),
+                    Length = _HyperlinkCharacterRepeatCount
+                };
+                _marks.Add(_hyperlinkStartMark);
+                _hyperlinkDestinationMark = new ElementMark
+                {
+                    Code = HyperlinkDestination,
+                    Start = currentToken.End
+                };
+                _marks.Add(_hyperlinkDestinationMark);
+                _richTextBlocks.Push(Hyperlink);
+            }
+
+            private void _ProcessHyperlinkDestination(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                switch (currentToken.Code)
+                {
+                    case BracketClose when (currentToken.Length >= _HyperlinkCharacterRepeatCount):
+                        _EndHyperlink(previousToken, currentToken, nextToken);
+                        break;
+
+                    case Pipe:
+                        _hyperlinkTextSeparatorMark = new ElementMark
+                        {
+                            Code = HyperlinkTextSeparator,
+                            Start = currentToken.Start,
+                            Length = _HyperlinkTextSeparatorCharacterRepeatCount
+                        };
+                        _marks.Add(_hyperlinkTextSeparatorMark);
+                        if (currentToken.Length > _HyperlinkTextSeparatorCharacterRepeatCount)
+                            _AppendPlainText(
+                                (currentToken.Start + _HyperlinkTextSeparatorCharacterRepeatCount),
+                                (currentToken.Length - _HyperlinkTextSeparatorCharacterRepeatCount));
+                        break;
+
+                    default:
+                        _hyperlinkDestinationMark.Length += currentToken.Length;
+                        break;
+                }
+            }
+
+            private void _EndHyperlink(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                var hyperlinkDestination = _marks[_marks.Count - 1];
+                if (hyperlinkDestination.Code == HyperlinkDestination)
+                    _marks.Add(new ElementMark
+                    {
+                        Code = PlainText,
+                        Start = hyperlinkDestination.Start,
+                        Length = hyperlinkDestination.Length
+                    });
+
+                _marks.Add(new ElementMark
+                {
+                    Code = HyperlinkEnd,
+                    Start = currentToken.Start,
+                    Length = _HyperlinkCharacterRepeatCount
+                });
+                if (currentToken.Length > _HyperlinkCharacterRepeatCount)
+                    _AppendPlainText(
+                        (currentToken.Start + _HyperlinkCharacterRepeatCount),
+                        (currentToken.Length - _HyperlinkCharacterRepeatCount));
+
+                _ClearHyperlinkRichText();
+
+                _hyperlinkStartMark = null;
+                _hyperlinkDestinationMark = null;
+                _hyperlinkTextSeparatorMark = null;
+            }
+
+            private void _ClearHyperlinkRichText()
+            {
+                var richTextBlock = _richTextBlocks.Pop();
+                while (richTextBlock != Hyperlink)
+                {
+                    switch (richTextBlock)
+                    {
+                        case Strong:
+                            _ClearStrong();
+                            break;
+                        case Emphasis:
+                            _ClearEmphasis();
+                            break;
+
+                        case Image:
+                            _ClearImage();
+                            break;
+                    }
+                    richTextBlock = _richTextBlocks.Pop();
+                }
+            }
+
+            private void _BeginParagraph(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _blocks.Push(Paragraph);
+                _marks.Add(new ElementMark
+                {
+                    Code = ParagraphStart,
+                    Start = currentToken.Start
+                });
+                _Process(previousToken, currentToken, nextToken);
+            }
+
+            private void _EndParagraph(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _ClearRichText(previousToken, currentToken, nextToken);
+                _marks.Add(new ElementMark
+                {
+                    Code = ParagraphEnd,
+                    Start = currentToken.End
+                });
+                _blocks.Pop();
             }
 
             private void _ClearRichText(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
             {
                 if (_richTextBlocks.Count > 0 && _richTextBlocks.Peek() == InlineHyperlink)
-                    _EndHyperlink(previousToken, currentToken, nextToken);
+                    _EndInlineHyperlink(previousToken, currentToken, nextToken);
 
+                _ClearStrong();
+                _ClearEmphasis();
+                _ClearHyperlink();
+                _ClearImage();
+
+                _richTextBlocks.Clear();
+            }
+
+            private void _ClearStrong()
+            {
                 if (_strongStartMark != null)
                 {
                     _strongStartMark.Code = PlainText;
                     _strongStartMark = null;
                 }
+            }
+
+            private void _ClearEmphasis()
+            {
                 if (_emphasisStartMark != null)
                 {
                     _emphasisStartMark.Code = PlainText;
                     _emphasisStartMark = null;
                 }
+            }
 
-                _richTextBlocks.Clear();
+
+            private void _ClearImage()
+            {
+
+            }
+
+            private void _ClearHyperlink()
+            {
+                if (_hyperlinkStartMark != null)
+                {
+                    _hyperlinkStartMark.Code = PlainText;
+                    _hyperlinkStartMark = null;
+                }
+                if (_hyperlinkDestinationMark != null)
+                {
+                    _hyperlinkDestinationMark.Code = PlainText;
+                    _hyperlinkDestinationMark = null;
+                }
+                if (_hyperlinkTextSeparatorMark != null)
+                {
+                    _hyperlinkTextSeparatorMark.Code = PlainText;
+                    _hyperlinkTextSeparatorMark = null;
+                }
             }
 
             private void _TrimWhiteSpaceEnd(ElementMark mark)
