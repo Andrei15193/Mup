@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.0</TargetFramework>
-    <Version>1.0.0-alpha</Version>
+    <Version>0.0.0-alpha</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Andrei Fangli</Authors>
     <Company />

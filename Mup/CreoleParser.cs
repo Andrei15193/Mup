@@ -92,12 +92,19 @@ namespace Mup
             private const char _ProtocolSchemeSeparator = ':';
 
             private const int _MaximumHeadingTokenLength = 6;
+
             private const int _StrongCharacterRepeatCount = 2;
             private const int _EmphasisCharacterRepeatCount = 2;
+
             private const int _HyperlinkCharacterRepeatCount = 2;
             private const int _HyperlinkTextSeparatorCharacterRepeatCount = 1;
+
             private const int _ImageCharacterRepeatCount = 2;
             private const int _ImageTextSeparatorCharacterRepeatCount = 1;
+
+            private const int _LineBreakRepeatCount = 2;
+
+            private const int _NoWikiCharacterRepeatCount = 3;
 
             private readonly string _text;
             private readonly IEnumerable<Token<CreoleToken>> _tokens;
@@ -197,7 +204,7 @@ namespace Mup
                 switch (currentToken.Code)
                 {
                     case WhiteSpace:
-                    case NewLine:
+                    case CreoleToken.NewLine:
                         break;
 
                     case Asterisk when (currentToken.Length == 1):
@@ -244,7 +251,7 @@ namespace Mup
                         _BeginHeading(previousToken, currentToken, nextToken);
                         break;
 
-                    case Dash when (currentToken.Length >= 4 && (nextToken == null || (nextToken.Code == NewLine && _LineFeedCount(nextToken) > 0))):
+                    case Dash when (currentToken.Length >= 4 && (nextToken == null || (nextToken.Code == CreoleToken.NewLine && _LineFeedCount(nextToken) > 0))):
                         _marks.Add(new ElementMark
                         {
                             Code = HorizontalLine,
@@ -314,7 +321,7 @@ namespace Mup
 
             private void _ProcessHeading(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
             {
-                if (currentToken.Code == NewLine && _LineFeedCount(currentToken) > 0)
+                if (currentToken.Code == CreoleToken.NewLine && _LineFeedCount(currentToken) > 0)
                     _EndHeading(previousToken, currentToken, nextToken);
                 else
                 {
@@ -330,7 +337,7 @@ namespace Mup
 
             private void _ProcessParagraph(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
             {
-                if (currentToken.Code == NewLine && _LineFeedCount(currentToken) >= 2)
+                if (currentToken.Code == CreoleToken.NewLine && _LineFeedCount(currentToken) >= 2)
                     _EndParagraph(previousToken, currentToken, nextToken);
                 else
                     _ProcessRichText(previousToken, currentToken, nextToken);
@@ -379,7 +386,8 @@ namespace Mup
                             _ProcessEmphasis(previousToken, currentToken, nextToken);
                             break;
 
-                        case CreoleToken.BackSlash:
+                        case BackSlash when (currentToken.Length >= _LineBreakRepeatCount):
+                            _ProcessLineBreak(previousToken, currentToken, nextToken);
                             break;
 
                         case BracketOpen when (_hyperlinkStartMark == null && !_IsEscaped(previousToken, currentToken, nextToken) && currentToken.Length >= _HyperlinkCharacterRepeatCount):
@@ -396,18 +404,11 @@ namespace Mup
                             _BeginImage(previousToken, currentToken, nextToken);
                             break;
 
-                        case CreoleToken.AngleOpen:
+                        case BraceOpen when (_imageStartMark == null && !_IsEscaped(previousToken, currentToken, nextToken) && currentToken.Length == _NoWikiCharacterRepeatCount):
+                        case BraceOpen when (_imageStartMark == null && _IsEscaped(previousToken, currentToken, nextToken) && currentToken.Length == (_NoWikiCharacterRepeatCount + 1)):
+                            // No Wiki
                             break;
-                        case CreoleToken.AngleClose:
-                            break;
-                        case CreoleToken.Equal:
-                            break;
-                        case CreoleToken.Dash:
-                            break;
-                        case CreoleToken.Hash:
-                            break;
-                        case CreoleToken.Pipe:
-                            break;
+
                         case Text when (_IsProtocol(previousToken, currentToken, nextToken) && _hyperlinkStartMark == null):
                             _BeginInlineHyperlink(previousToken, currentToken, nextToken);
                             break;
@@ -523,7 +524,7 @@ namespace Mup
                 }
 
                 var emphasisMarkCount = (length / 2);
-                for (int emphasisMarkStart = start, emphasisMarkNumber = 0; emphasisMarkNumber < emphasisMarkCount; emphasisMarkNumber++, emphasisMarkStart += _StrongCharacterRepeatCount)
+                for (int emphasisMarkStart = start, emphasisMarkNumber = 0; emphasisMarkNumber < emphasisMarkCount; emphasisMarkNumber++, emphasisMarkStart += _EmphasisCharacterRepeatCount)
                     _StartOrEndEmphasis(emphasisMarkStart, previousToken, currentToken, nextToken);
 
                 if (length % 2 == 1)
@@ -663,7 +664,7 @@ namespace Mup
                 switch (currentToken.Code)
                 {
                     case WhiteSpace:
-                    case NewLine:
+                    case CreoleToken.NewLine:
                         if (_richTextBlocks.Peek() == InlineHyperlink)
                             _EndInlineHyperlink(previousToken, currentToken, nextToken);
                         _marks.Add(new ElementMark
@@ -873,6 +874,42 @@ namespace Mup
                 _imageTextSeparatorMark = null;
 
                 _richTextBlocks.Pop();
+            }
+
+            private void _ProcessLineBreak(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                var isEscaped = _IsEscaped(previousToken, currentToken, nextToken);
+                var start = (currentToken.Start + (isEscaped ? 1 : 0));
+                var end = currentToken.End;
+                var length = currentToken.Length;
+                if (isEscaped)
+                {
+                    _marks.Add(new ElementMark
+                    {
+                        Code = PlainText,
+                        Start = currentToken.Start,
+                        Length = 1
+                    });
+                    start++;
+                    length--;
+                }
+
+                var lineBreakMarkCount = (length / 2);
+                for (int lineBreakMarkStart = start, emphasisMarkNumber = 0; emphasisMarkNumber < lineBreakMarkCount; emphasisMarkNumber++, lineBreakMarkStart += _LineBreakRepeatCount)
+                    _marks.Add(new ElementMark
+                    {
+                        Code = ElementMarkCode.LineBreak,
+                        Start = lineBreakMarkStart,
+                        Length = _LineBreakRepeatCount
+                    });
+
+                if (length % 2 == 1)
+                    _marks.Add(new ElementMark
+                    {
+                        Code = PlainText,
+                        Start = (currentToken.End - 1),
+                        Length = 1
+                    });
             }
 
             private void _BeginParagraph(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)

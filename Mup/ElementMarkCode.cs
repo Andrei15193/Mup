@@ -22,6 +22,8 @@
         ImageTitleSeparator,
         ImageEnd,
 
+        LineBreak,
+
         NoWikiStart,
         NoWikiEnd,
 

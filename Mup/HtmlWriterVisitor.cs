@@ -78,6 +78,9 @@ namespace Mup
             _htmlStringBuilder.Append(">");
         }
 
+        protected override void LineBreak()
+            => _htmlStringBuilder.Append("<br>");
+
         protected override void Text(string text)
         {
             foreach (var character in text)

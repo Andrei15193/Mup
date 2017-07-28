@@ -99,6 +99,11 @@ namespace Mup
                 case ImageEnd:
                     _imageSource = null;
                     break;
+
+                case ElementMarkCode.LineBreak:
+                    visitTask = LineBreakAsync(cancellationToken);
+                    break;
+
                 case ElementMarkCode.NoWikiStart:
                     break;
                 case ElementMarkCode.NoWikiEnd:
@@ -415,6 +420,16 @@ namespace Mup
         }
 
         protected virtual void Image(string source, string alternative)
+        {
+        }
+
+        protected virtual Task LineBreakAsync(CancellationToken cancellationToken)
+        {
+            LineBreak();
+            return _completedTask;
+        }
+
+        protected virtual void LineBreak()
         {
         }
 

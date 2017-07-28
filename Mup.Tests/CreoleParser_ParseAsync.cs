@@ -105,14 +105,6 @@ namespace Mup.Tests
         [InlineData("tcp://example.com", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("//http://example.com//", new object[] { ParagraphStart, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, ParagraphEnd })]
 
-        [InlineData("{{http://example.com/image.jpg}}", new object[] { ParagraphStart, ImageStart, ImageSource, PlainText, ImageEnd, ParagraphEnd })]
-        [InlineData("~{{http://example.com/image.jpg}}", new object[] { ParagraphStart, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, ParagraphEnd })]
-        [InlineData("{{http://example.com/image.jpg|alternative text}}", new object[] { ParagraphStart, ImageStart, ImageSource, PlainText, ImageEnd, ParagraphEnd })]
-        [InlineData("{{http://example.com/image.jpg|**no strong alternative text**}}", new object[] { ParagraphStart, ImageStart, ImageSource, PlainText, ImageEnd, ParagraphEnd })]
-        [InlineData("{{http://example.com/image.jpg|//no emphasised alternative text//}}", new object[] { ParagraphStart, ImageStart, ImageSource, PlainText, ImageEnd, ParagraphEnd })]
-        [InlineData("{http://example.com/image.jpg}}", new object[] { ParagraphStart, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, ParagraphEnd })]
-        [InlineData("{{http://example.com/image.jpg}", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
-
         [InlineData("[[http://example.com]]", new object[] { ParagraphStart, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, ParagraphEnd })]
         [InlineData("~[[http://example.com]]", new object[] { ParagraphStart, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, ParagraphEnd })]
         [InlineData("~[[~http://example.com]]", new object[] { ParagraphStart, PlainText, PlainText, ParagraphEnd })]
@@ -129,6 +121,19 @@ namespace Mup.Tests
         [InlineData("[[http://example.com/~|//emphasis// and **strong**]]", new object[] { ParagraphStart, HyperlinkStart, HyperlinkDestination, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, HyperlinkEnd, ParagraphEnd })]
         [InlineData("[[http://example.com/~|//no emphasis]]//", new object[] { ParagraphStart, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ParagraphEnd })]
         [InlineData("[[http://example.com/~|**no strong]]**", new object[] { ParagraphStart, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ParagraphEnd })]
+
+        [InlineData("{{http://example.com/image.jpg}}", new object[] { ParagraphStart, ImageStart, ImageSource, PlainText, ImageEnd, ParagraphEnd })]
+        [InlineData("~{{http://example.com/image.jpg}}", new object[] { ParagraphStart, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, ParagraphEnd })]
+        [InlineData("{{http://example.com/image.jpg|alternative text}}", new object[] { ParagraphStart, ImageStart, ImageSource, PlainText, ImageEnd, ParagraphEnd })]
+        [InlineData("{{http://example.com/image.jpg|**no strong alternative text**}}", new object[] { ParagraphStart, ImageStart, ImageSource, PlainText, ImageEnd, ParagraphEnd })]
+        [InlineData("{{http://example.com/image.jpg|//no emphasised alternative text//}}", new object[] { ParagraphStart, ImageStart, ImageSource, PlainText, ImageEnd, ParagraphEnd })]
+        [InlineData("{http://example.com/image.jpg}}", new object[] { ParagraphStart, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, ParagraphEnd })]
+        [InlineData("{{http://example.com/image.jpg}", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
+
+        [InlineData(@"line\\break", new object[] { ParagraphStart, PlainText, LineBreak, PlainText, ParagraphEnd })]
+        [InlineData(@"line~\\break", new object[] { ParagraphStart, PlainText, PlainText, ParagraphEnd })]
+        [InlineData(@"line~~\\break", new object[] { ParagraphStart, PlainText, LineBreak, PlainText, ParagraphEnd })]
+        [InlineData(@"line~\\\break", new object[] { ParagraphStart, PlainText, PlainText, LineBreak, PlainText, ParagraphEnd })]
 
         [InlineData("**//mixed strong emphasis**//", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("//**mixed emphasis strong//**", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
@@ -263,6 +268,11 @@ namespace Mup.Tests
         [InlineData("{{http://example.com/image.jpg|//no emphasised alternative text//}}", "<p><img src=\"http://example.com/image.jpg\" alt=\"//no emphasised alternative text//\"></p>")]
         [InlineData("{http://example.com/image.jpg}}", "<p>{<a href=\"http://example.com/image.jpg}}\">http://example.com/image.jpg}}</a></p>")]
         [InlineData("{{http://example.com/image.jpg}", "<p>{{http://example.com/image.jpg}</p>")]
+
+        [InlineData(@"line\\break", @"<p>line<br>break</p>")]
+        [InlineData(@"line~\\break", @"<p>line\\break</p>")]
+        [InlineData(@"line~~\\break", @"<p>line~<br>break</p>")]
+        [InlineData(@"line~\\\break", @"<p>line\<br>break</p>")]
 
         [InlineData("**//mixed strong emphasis**//", "<p>**//mixed strong emphasis**//</p>")]
         [InlineData("**//mixed strong emphasis**// still no emphasis//", "<p>**//mixed strong emphasis**// still no emphasis//</p>")]

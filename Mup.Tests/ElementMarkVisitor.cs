@@ -91,6 +91,9 @@ namespace Mup.Tests
             _marks.Add(ImageEnd);
         }
 
+        protected override void LineBreak()
+            => _marks.Add(ElementMarkCode.LineBreak);
+
         protected override void Text(string text)
             => _marks.Add(PlainText);
     }
