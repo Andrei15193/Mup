@@ -9,6 +9,8 @@ namespace Mup
     {
         private static readonly Task _completedTask = Task.FromResult<object>(null);
 
+        private string _imageSource;
+
         protected ParseResultVisitor()
         {
         }
@@ -52,7 +54,7 @@ namespace Mup
 
             switch (mark.Code)
             {
-                case PlainText:
+                case PlainText when (_imageSource == null):
                     var plainText = text.Substring(mark.Start, mark.Length);
                     visitTask = TextAsync(plainText, cancellationToken);
                     break;
@@ -85,11 +87,17 @@ namespace Mup
                     visitTask = EndEmphasisAsync(cancellationToken);
                     break;
 
-                case ElementMarkCode.ImageStart:
+                case ImageStart:
                     break;
-                case ElementMarkCode.ImageTitleSeparator:
+                case ImageSource:
+                    _imageSource = text.Substring(mark.Start, mark.Length);
                     break;
-                case ElementMarkCode.ImageEnd:
+                case PlainText when (_imageSource != null):
+                    var imageTitle = text.Substring(mark.Start, mark.Length);
+                    visitTask = ImageAsync(_imageSource, imageTitle, cancellationToken);
+                    break;
+                case ImageEnd:
+                    _imageSource = null;
                     break;
                 case ElementMarkCode.NoWikiStart:
                     break;
@@ -397,6 +405,16 @@ namespace Mup
         }
 
         protected virtual void EndHyperlink()
+        {
+        }
+
+        protected virtual Task ImageAsync(string source, string alternative, CancellationToken cancellationToken)
+        {
+            Image(source, alternative);
+            return _completedTask;
+        }
+
+        protected virtual void Image(string source, string alternative)
         {
         }
 

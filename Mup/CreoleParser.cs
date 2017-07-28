@@ -97,6 +97,7 @@ namespace Mup
             private const int _HyperlinkCharacterRepeatCount = 2;
             private const int _HyperlinkTextSeparatorCharacterRepeatCount = 1;
             private const int _ImageCharacterRepeatCount = 2;
+            private const int _ImageTextSeparatorCharacterRepeatCount = 1;
 
             private readonly string _text;
             private readonly IEnumerable<Token<CreoleToken>> _tokens;
@@ -108,6 +109,8 @@ namespace Mup
             private ElementMark _hyperlinkDestinationMark = null;
             private ElementMark _hyperlinkTextSeparatorMark = null;
             private ElementMark _imageStartMark = null;
+            private ElementMark _imageSourceMark = null;
+            private ElementMark _imageTextSeparatorMark = null;
             private readonly IList<ElementMark> _marks = new List<ElementMark>();
             private readonly Stack<ElementBlock> _blocks = new Stack<ElementBlock>();
             private readonly Stack<RichTextBlock> _richTextBlocks = new Stack<RichTextBlock>();
@@ -342,6 +345,25 @@ namespace Mup
                     _ProcessInlineHyperlink(previousToken, currentToken, nextToken);
                 else if (_hyperlinkStartMark != null && _hyperlinkTextSeparatorMark == null)
                     _ProcessHyperlinkDestination(previousToken, currentToken, nextToken);
+                else if (_imageStartMark != null && _imageTextSeparatorMark == null)
+                    _ProcessImageSource(previousToken, currentToken, nextToken);
+                else if (_richTextBlocks.Count > 0 && _richTextBlocks.Peek() == Image)
+                    switch (currentToken.Code)
+                    {
+                        case BraceClose when (currentToken.Length >= _ImageCharacterRepeatCount):
+                            _EndImage(previousToken, currentToken, nextToken);
+                            break;
+
+                        default:
+                            var startOffset = (_IsEscaped(previousToken, currentToken, nextToken) ? 1 : 0);
+                            _marks.Add(new ElementMark
+                            {
+                                Code = PlainText,
+                                Start = (currentToken.Start - startOffset),
+                                Length = (currentToken.Length + startOffset)
+                            });
+                            break;
+                    }
                 else
                     switch (currentToken.Code)
                     {
@@ -369,10 +391,11 @@ namespace Mup
                             _EndHyperlink(previousToken, currentToken, nextToken);
                             break;
 
-                        case CreoleToken.BraceOpen:
+                        case BraceOpen when (_imageStartMark == null && !_IsEscaped(previousToken, currentToken, nextToken) && currentToken.Length == _ImageCharacterRepeatCount):
+                        case BraceOpen when (_imageStartMark == null && _IsEscaped(previousToken, currentToken, nextToken) && currentToken.Length == (_ImageCharacterRepeatCount + 1)):
+                            _BeginImage(previousToken, currentToken, nextToken);
                             break;
-                        case CreoleToken.BraceClose:
-                            break;
+
                         case CreoleToken.AngleOpen:
                             break;
                         case CreoleToken.AngleClose:
@@ -775,6 +798,83 @@ namespace Mup
                 }
             }
 
+            private void _BeginImage(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                if (currentToken.Length > _ImageCharacterRepeatCount)
+                    _AppendPlainText(currentToken.Start, currentToken.Length - _ImageCharacterRepeatCount);
+
+                _imageStartMark = new ElementMark
+                {
+                    Code = ImageStart,
+                    Start = (currentToken.End - _ImageCharacterRepeatCount),
+                    Length = _ImageCharacterRepeatCount
+                };
+                _marks.Add(_imageStartMark);
+                _imageSourceMark = new ElementMark
+                {
+                    Code = ImageSource,
+                    Start = currentToken.End
+                };
+                _marks.Add(_imageSourceMark);
+                _richTextBlocks.Push(Image);
+            }
+
+            private void _ProcessImageSource(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                switch (currentToken.Code)
+                {
+                    case BraceClose when (currentToken.Length >= _ImageCharacterRepeatCount):
+                        _EndImage(previousToken, currentToken, nextToken);
+                        break;
+
+                    case Pipe:
+                        _imageTextSeparatorMark = new ElementMark
+                        {
+                            Code = HyperlinkTextSeparator,
+                            Start = currentToken.Start,
+                            Length = _ImageTextSeparatorCharacterRepeatCount
+                        };
+                        _marks.Add(_imageTextSeparatorMark);
+                        if (currentToken.Length > _ImageTextSeparatorCharacterRepeatCount)
+                            _AppendPlainText(
+                                (currentToken.Start + _ImageTextSeparatorCharacterRepeatCount),
+                                (currentToken.Length - _ImageTextSeparatorCharacterRepeatCount));
+                        break;
+
+                    default:
+                        _imageSourceMark.Length += currentToken.Length;
+                        break;
+                }
+            }
+
+            private void _EndImage(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                var imageSource = _marks[_marks.Count - 1];
+                if (imageSource.Code == ImageSource)
+                    _marks.Add(new ElementMark
+                    {
+                        Code = PlainText,
+                        Start = (imageSource.Start + imageSource.Length)
+                    });
+
+                _marks.Add(new ElementMark
+                {
+                    Code = ImageEnd,
+                    Start = currentToken.Start,
+                    Length = _ImageCharacterRepeatCount
+                });
+                if (currentToken.Length > _ImageCharacterRepeatCount)
+                    _AppendPlainText(
+                        (currentToken.Start + _ImageCharacterRepeatCount),
+                        (currentToken.Length - _ImageCharacterRepeatCount));
+
+                _imageStartMark = null;
+                _imageSourceMark = null;
+                _imageTextSeparatorMark = null;
+
+                _richTextBlocks.Pop();
+            }
+
             private void _BeginParagraph(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
             {
                 _blocks.Push(Paragraph);
@@ -831,7 +931,21 @@ namespace Mup
 
             private void _ClearImage()
             {
-
+                if (_imageStartMark != null)
+                {
+                    _imageStartMark.Code = PlainText;
+                    _imageStartMark = null;
+                }
+                if (_imageSourceMark != null)
+                {
+                    _imageSourceMark.Code = PlainText;
+                    _imageSourceMark = null;
+                }
+                if (_imageTextSeparatorMark != null)
+                {
+                    _imageTextSeparatorMark.Code = PlainText;
+                    _imageTextSeparatorMark = null;
+                }
             }
 
             private void _ClearHyperlink()

@@ -83,6 +83,14 @@ namespace Mup.Tests
         protected override void EndHyperlink()
             => _marks.Add(HyperlinkEnd);
 
+        protected override void Image(string source, string alternative)
+        {
+            _marks.Add(ImageStart);
+            _marks.Add(ImageSource);
+            _marks.Add(PlainText);
+            _marks.Add(ImageEnd);
+        }
+
         protected override void Text(string text)
             => _marks.Add(PlainText);
     }

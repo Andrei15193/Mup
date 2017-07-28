@@ -18,6 +18,7 @@
         EmphasisEnd,
 
         ImageStart,
+        ImageSource,
         ImageTitleSeparator,
         ImageEnd,
 

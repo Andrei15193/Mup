@@ -70,6 +70,14 @@ namespace Mup
         protected override void EndHyperlink()
             => _htmlStringBuilder.Append("</a>");
 
+        protected override void Image(string source, string alternative)
+        {
+            _htmlStringBuilder.Append("<img src=\"").Append(source).Append('"');
+            if (!string.IsNullOrWhiteSpace(alternative))
+                _htmlStringBuilder.Append(" alt=\"").Append(alternative).Append('"');
+            _htmlStringBuilder.Append(">");
+        }
+
         protected override void Text(string text)
         {
             foreach (var character in text)
