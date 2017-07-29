@@ -104,7 +104,7 @@ namespace Mup
 
             private const int _LineBreakRepeatCount = 2;
 
-            private const int _NoWikiCharacterRepeatCount = 3;
+            private const int _PreformattedCharacterRepeatCount = 3;
 
             private readonly string _text;
             private readonly IEnumerable<Token<CreoleToken>> _tokens;
@@ -112,12 +112,17 @@ namespace Mup
 
             private ElementMark _strongStartMark = null;
             private ElementMark _emphasisStartMark = null;
+
             private ElementMark _hyperlinkStartMark = null;
             private ElementMark _hyperlinkDestinationMark = null;
             private ElementMark _hyperlinkTextSeparatorMark = null;
+
             private ElementMark _imageStartMark = null;
             private ElementMark _imageSourceMark = null;
             private ElementMark _imageTextSeparatorMark = null;
+
+            private ElementMark _preformattedStartMark = null;
+
             private readonly IList<ElementMark> _marks = new List<ElementMark>();
             private readonly Stack<ElementBlock> _blocks = new Stack<ElementBlock>();
             private readonly Stack<RichTextBlock> _richTextBlocks = new Stack<RichTextBlock>();
@@ -204,7 +209,7 @@ namespace Mup
                 switch (currentToken.Code)
                 {
                     case WhiteSpace:
-                    case CreoleToken.NewLine:
+                    case NewLine:
                         break;
 
                     case Asterisk when (currentToken.Length == 1):
@@ -308,7 +313,7 @@ namespace Mup
                     case Table:
                         break;
 
-                    case NoWiki:
+                    case ElementBlock.NoWiki:
                         break;
 
                     case Plugin:
@@ -352,25 +357,10 @@ namespace Mup
                     _ProcessInlineHyperlink(previousToken, currentToken, nextToken);
                 else if (_hyperlinkStartMark != null && _hyperlinkTextSeparatorMark == null)
                     _ProcessHyperlinkDestination(previousToken, currentToken, nextToken);
-                else if (_imageStartMark != null && _imageTextSeparatorMark == null)
-                    _ProcessImageSource(previousToken, currentToken, nextToken);
-                else if (_richTextBlocks.Count > 0 && _richTextBlocks.Peek() == Image)
-                    switch (currentToken.Code)
-                    {
-                        case BraceClose when (currentToken.Length >= _ImageCharacterRepeatCount):
-                            _EndImage(previousToken, currentToken, nextToken);
-                            break;
-
-                        default:
-                            var startOffset = (_IsEscaped(previousToken, currentToken, nextToken) ? 1 : 0);
-                            _marks.Add(new ElementMark
-                            {
-                                Code = PlainText,
-                                Start = (currentToken.Start - startOffset),
-                                Length = (currentToken.Length + startOffset)
-                            });
-                            break;
-                    }
+                else if (_imageStartMark != null)
+                    _ProcessImage(previousToken, currentToken, nextToken);
+                else if (_preformattedStartMark != null)
+                    _ProcessPreformatted(previousToken, currentToken, nextToken);
                 else
                     switch (currentToken.Code)
                     {
@@ -404,9 +394,9 @@ namespace Mup
                             _BeginImage(previousToken, currentToken, nextToken);
                             break;
 
-                        case BraceOpen when (_imageStartMark == null && !_IsEscaped(previousToken, currentToken, nextToken) && currentToken.Length == _NoWikiCharacterRepeatCount):
-                        case BraceOpen when (_imageStartMark == null && _IsEscaped(previousToken, currentToken, nextToken) && currentToken.Length == (_NoWikiCharacterRepeatCount + 1)):
-                            // No Wiki
+                        case BraceOpen when (_imageStartMark == null && !_IsEscaped(previousToken, currentToken, nextToken) && currentToken.Length >= _PreformattedCharacterRepeatCount):
+                        case BraceOpen when (_imageStartMark == null && _IsEscaped(previousToken, currentToken, nextToken) && currentToken.Length > _PreformattedCharacterRepeatCount):
+                            _BeginPreformatted(previousToken, currentToken, nextToken);
                             break;
 
                         case Text when (_IsProtocol(previousToken, currentToken, nextToken) && _hyperlinkStartMark == null):
@@ -820,6 +810,14 @@ namespace Mup
                 _richTextBlocks.Push(Image);
             }
 
+            private void _ProcessImage(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                if (_imageTextSeparatorMark == null)
+                    _ProcessImageSource(previousToken, currentToken, nextToken);
+                else
+                    _ProcessImageAternativeText(previousToken, currentToken, nextToken);
+            }
+
             private void _ProcessImageSource(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
             {
                 switch (currentToken.Code)
@@ -844,6 +842,26 @@ namespace Mup
 
                     default:
                         _imageSourceMark.Length += currentToken.Length;
+                        break;
+                }
+            }
+
+            private void _ProcessImageAternativeText(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                switch (currentToken.Code)
+                {
+                    case BraceClose when (currentToken.Length >= _ImageCharacterRepeatCount):
+                        _EndImage(previousToken, currentToken, nextToken);
+                        break;
+
+                    default:
+                        var startOffset = (_IsEscaped(previousToken, currentToken, nextToken) ? 1 : 0);
+                        _marks.Add(new ElementMark
+                        {
+                            Code = PlainText,
+                            Start = (currentToken.Start - startOffset),
+                            Length = (currentToken.Length + startOffset)
+                        });
                         break;
                 }
             }
@@ -912,6 +930,58 @@ namespace Mup
                     });
             }
 
+            private void _BeginPreformatted(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                if (currentToken.Length > _PreformattedCharacterRepeatCount)
+                    _AppendPlainText(currentToken.Start, currentToken.Length - _PreformattedCharacterRepeatCount);
+
+                _preformattedStartMark = new ElementMark
+                {
+                    Code = PreformattedStart,
+                    Start = (currentToken.End - _PreformattedCharacterRepeatCount),
+                    Length = _PreformattedCharacterRepeatCount
+                };
+                _marks.Add(_preformattedStartMark);
+                _richTextBlocks.Push(Preformatted);
+            }
+
+            private void _ProcessPreformatted(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                switch (currentToken.Code)
+                {
+                    case BraceClose when (currentToken.Length >= _PreformattedCharacterRepeatCount):
+                        _EndPreformatted(previousToken, currentToken, nextToken);
+                        break;
+
+                    default:
+                        _marks.Add(new ElementMark
+                        {
+                            Code = PlainText,
+                            Start = currentToken.Start,
+                            Length = currentToken.Length
+                        });
+                        break;
+                }
+            }
+
+            private void _EndPreformatted(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                if (currentToken.Length > _PreformattedCharacterRepeatCount)
+                    _AppendPlainText(
+                        currentToken.Start,
+                        (currentToken.Length - _PreformattedCharacterRepeatCount));
+                _marks.Add(new ElementMark
+                {
+                    Code = PreformattedEnd,
+                    Start = currentToken.Start + _PreformattedCharacterRepeatCount,
+                    Length = _PreformattedCharacterRepeatCount
+                });
+
+                _preformattedStartMark = null;
+
+                _richTextBlocks.Pop();
+            }
+
             private void _BeginParagraph(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
             {
                 _blocks.Push(Paragraph);
@@ -943,6 +1013,7 @@ namespace Mup
                 _ClearEmphasis();
                 _ClearHyperlink();
                 _ClearImage();
+                _ClearPreformatted();
 
                 _richTextBlocks.Clear();
             }
@@ -965,6 +1036,24 @@ namespace Mup
                 }
             }
 
+            private void _ClearHyperlink()
+            {
+                if (_hyperlinkStartMark != null)
+                {
+                    _hyperlinkStartMark.Code = PlainText;
+                    _hyperlinkStartMark = null;
+                }
+                if (_hyperlinkDestinationMark != null)
+                {
+                    _hyperlinkDestinationMark.Code = PlainText;
+                    _hyperlinkDestinationMark = null;
+                }
+                if (_hyperlinkTextSeparatorMark != null)
+                {
+                    _hyperlinkTextSeparatorMark.Code = PlainText;
+                    _hyperlinkTextSeparatorMark = null;
+                }
+            }
 
             private void _ClearImage()
             {
@@ -985,22 +1074,12 @@ namespace Mup
                 }
             }
 
-            private void _ClearHyperlink()
+            private void _ClearPreformatted()
             {
-                if (_hyperlinkStartMark != null)
+                if (_preformattedStartMark != null)
                 {
-                    _hyperlinkStartMark.Code = PlainText;
-                    _hyperlinkStartMark = null;
-                }
-                if (_hyperlinkDestinationMark != null)
-                {
-                    _hyperlinkDestinationMark.Code = PlainText;
-                    _hyperlinkDestinationMark = null;
-                }
-                if (_hyperlinkTextSeparatorMark != null)
-                {
-                    _hyperlinkTextSeparatorMark.Code = PlainText;
-                    _hyperlinkTextSeparatorMark = null;
+                    _preformattedStartMark.Code = PlainText;
+                    _preformattedStartMark = null;
                 }
             }
 

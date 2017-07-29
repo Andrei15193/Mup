@@ -94,6 +94,12 @@ namespace Mup.Tests
         protected override void LineBreak()
             => _marks.Add(ElementMarkCode.LineBreak);
 
+        protected override void BeginPreformatted()
+            => _marks.Add(PreformattedStart);
+
+        protected override void EndPreformatted()
+            => _marks.Add(PreformattedEnd);
+
         protected override void Text(string text)
             => _marks.Add(PlainText);
     }

@@ -24,8 +24,8 @@
 
         LineBreak,
 
-        NoWikiStart,
-        NoWikiEnd,
+        PreformattedStart,
+        PreformattedEnd,
 
         Heading1Start,
         Heading1End,

@@ -104,9 +104,11 @@ namespace Mup
                     visitTask = LineBreakAsync(cancellationToken);
                     break;
 
-                case ElementMarkCode.NoWikiStart:
+                case PreformattedStart:
+                    visitTask = BeginPreformattedAsync(cancellationToken);
                     break;
-                case ElementMarkCode.NoWikiEnd:
+                case PreformattedEnd:
+                    visitTask = EndPreformattedAsync(cancellationToken);
                     break;
 
                 case Heading1Start:
@@ -430,6 +432,26 @@ namespace Mup
         }
 
         protected virtual void LineBreak()
+        {
+        }
+
+        protected virtual Task BeginPreformattedAsync(CancellationToken cancellationToken)
+        {
+            BeginPreformatted();
+            return _completedTask;
+        }
+
+        protected virtual void BeginPreformatted()
+        {
+        }
+
+        protected virtual Task EndPreformattedAsync(CancellationToken cancellationToken)
+        {
+            EndPreformatted();
+            return _completedTask;
+        }
+
+        protected virtual void EndPreformatted()
         {
         }
 

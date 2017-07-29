@@ -81,6 +81,12 @@ namespace Mup
         protected override void LineBreak()
             => _htmlStringBuilder.Append("<br>");
 
+        protected override void BeginPreformatted()
+            => _htmlStringBuilder.Append("<code>");
+
+        protected override void EndPreformatted()
+            => _htmlStringBuilder.Append("</code>");
+
         protected override void Text(string text)
         {
             foreach (var character in text)

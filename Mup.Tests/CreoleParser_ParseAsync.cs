@@ -135,6 +135,12 @@ namespace Mup.Tests
         [InlineData(@"line~~\\break", new object[] { ParagraphStart, PlainText, LineBreak, PlainText, ParagraphEnd })]
         [InlineData(@"line~\\\break", new object[] { ParagraphStart, PlainText, PlainText, LineBreak, PlainText, ParagraphEnd })]
 
+        [InlineData("{{{no wiki}}}", new object[] { ParagraphStart, PreformattedStart, PlainText, PreformattedEnd, ParagraphEnd })]
+        [InlineData("{{{no escape ~}}}", new object[] { ParagraphStart, PreformattedStart, PlainText, PreformattedEnd, ParagraphEnd })]
+        [InlineData("{{{no **strong**, no //emphais//, no [[hyperlinks]], no {{images}}}}}", new object[] { ParagraphStart, PreformattedStart, PlainText, PreformattedEnd, ParagraphEnd })]
+        [InlineData("plain {{{no wiki}}} text", new object[] { ParagraphStart, PlainText, PreformattedStart, PlainText, PreformattedEnd, PlainText, ParagraphEnd })]
+        [InlineData("{{{}}}", new object[] { ParagraphStart, PreformattedStart, PreformattedEnd, ParagraphEnd })]
+
         [InlineData("**//mixed strong emphasis**//", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("//**mixed emphasis strong//**", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         public async Task ParsesRichText(string text, object[] marks)
@@ -273,6 +279,12 @@ namespace Mup.Tests
         [InlineData(@"line~\\break", @"<p>line\\break</p>")]
         [InlineData(@"line~~\\break", @"<p>line~<br>break</p>")]
         [InlineData(@"line~\\\break", @"<p>line\<br>break</p>")]
+
+        [InlineData("{{{no wiki}}}", "<p><code>no wiki</code></p>")]
+        [InlineData("{{{no escape ~}}}", "<p><code>no escape ~</code></p>")]
+        [InlineData("{{{no **strong**, no //emphais//, no [[hyperlinks]], no {{images}}}}}", "<p><code>no **strong**, no //emphais//, no [[hyperlinks]], no {{images}}</code></p>")]
+        [InlineData("plain {{{no wiki}}} text", "<p>plain <code>no wiki</code> text</p>")]
+        [InlineData("{{{}}}", "<p><code></code></p>")]
 
         [InlineData("**//mixed strong emphasis**//", "<p>**//mixed strong emphasis**//</p>")]
         [InlineData("**//mixed strong emphasis**// still no emphasis//", "<p>**//mixed strong emphasis**// still no emphasis//</p>")]

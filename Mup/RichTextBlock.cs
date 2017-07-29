@@ -7,6 +7,7 @@
         Hyperlink,
         InlineHyperlink,
         EscapedInlineHyperlink,
-        Image
+        Image,
+        Preformatted
     }
 }
