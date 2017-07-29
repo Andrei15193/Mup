@@ -100,6 +100,9 @@ namespace Mup.Tests
         protected override void EndPreformatted()
             => _marks.Add(PreformattedEnd);
 
+        protected override void HorizontalRule()
+            => _marks.Add(ElementMarkCode.HorizontalRule);
+
         protected override void Text(string text)
             => _marks.Add(PlainText);
     }

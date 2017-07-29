@@ -87,6 +87,9 @@ namespace Mup
         protected override void EndPreformatted()
             => _htmlStringBuilder.Append("</code>");
 
+        protected override void HorizontalRule()
+            => _htmlStringBuilder.Append("<hr>");
+
         protected override void Text(string text)
         {
             foreach (var character in text)

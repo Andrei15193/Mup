@@ -154,6 +154,26 @@ namespace Mup.Tests
         }
 
         [Trait("Class", nameof(CreoleParser))]
+        [Theory(DisplayName = (_method + nameof(ParsesHorizontalRules)))]
+        [InlineData("----", new object[] { HorizontalRule })]
+        [InlineData("  ----", new object[] { HorizontalRule })]
+        [InlineData("\t----", new object[] { HorizontalRule })]
+        [InlineData("\r----", new object[] { HorizontalRule })]
+        [InlineData("\n----", new object[] { HorizontalRule })]
+        [InlineData("--------", new object[] { HorizontalRule })]
+        [InlineData("paragraph 1\n----\nparagraph 2", new object[] { ParagraphStart, PlainText, ParagraphEnd, HorizontalRule, ParagraphStart, PlainText, ParagraphEnd })]
+        [InlineData("~----", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
+        public async Task ParsesHorizontalRules(string text, object[] marks)
+        {
+            var result = await _parser.ParseAsync(text);
+
+            var elementMarkVisitor = new ElementMarkVisitor();
+            await result.AcceptAsync(elementMarkVisitor);
+
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+        }
+
+        [Trait("Class", nameof(CreoleParser))]
         [Theory(DisplayName = (_method + nameof(ParseHeadingsToHtml)))]
         [InlineData("= plain text", "<h1>plain text</h1>")]
         [InlineData("= heading 1\n== heading 2", "<h1>heading 1</h1><h2>heading 2</h2>")]
@@ -293,6 +313,27 @@ namespace Mup.Tests
         [InlineData("//**mixed emphasis strong//** still no strong**", "<p>//**mixed emphasis strong//** still no strong**</p>")]
         [InlineData("//**mixed emphasis strong//** still no emphasis//", "<p>//**mixed emphasis strong//** still no emphasis//</p>")]
         public async Task ParsesRichTextToHtml(string text, string expectedHtml)
+        {
+            var result = await _parser.ParseAsync(text);
+
+            var htmlStringBuilder = new StringBuilder();
+            var creoleToHtmlVisitor = new HtmlWriterVisitor(htmlStringBuilder);
+            await result.AcceptAsync(creoleToHtmlVisitor);
+
+            Assert.Equal(expectedHtml, htmlStringBuilder.ToString());
+        }
+
+        [Trait("Class", nameof(CreoleParser))]
+        [Theory(DisplayName = (_method + nameof(ParsesHorizontalRuleToHtml)))]
+        [InlineData("----", "<hr>")]
+        [InlineData("  ----", "<hr>")]
+        [InlineData("\t----", "<hr>")]
+        [InlineData("\r----", "<hr>")]
+        [InlineData("\n----", "<hr>")]
+        [InlineData("--------", "<hr>")]
+        [InlineData("paragraph 1\n----\nparagraph 2", "<p>paragraph 1</p><hr><p>paragraph 2</p>")]
+        [InlineData("~----", "<p>----</p>")]
+        public async Task ParsesHorizontalRuleToHtml(string text, string expectedHtml)
         {
             var result = await _parser.ParseAsync(text);
 

@@ -256,10 +256,10 @@ namespace Mup
                         _BeginHeading(previousToken, currentToken, nextToken);
                         break;
 
-                    case Dash when (currentToken.Length >= 4 && (nextToken == null || (nextToken.Code == CreoleToken.NewLine && _LineFeedCount(nextToken) > 0))):
+                    case Dash when (currentToken.Length >= 4 && (nextToken == null || (nextToken.Code == NewLine && _LineFeedCount(nextToken) > 0))):
                         _marks.Add(new ElementMark
                         {
-                            Code = HorizontalLine,
+                            Code = HorizontalRule,
                             Start = currentToken.Start,
                             Length = currentToken.Length
                         });
@@ -313,14 +313,14 @@ namespace Mup
                     case Table:
                         break;
 
-                    case ElementBlock.NoWiki:
+                    case PreformattedBlock:
                         break;
 
                     case Plugin:
                         break;
 
                     default:
-                        break;
+                        throw new InvalidOperationException($"Unknown block: '{currentBlock}'.");
                 }
             }
 
@@ -342,7 +342,7 @@ namespace Mup
 
             private void _ProcessParagraph(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
             {
-                if (currentToken.Code == CreoleToken.NewLine && _LineFeedCount(currentToken) >= 2)
+                if (currentToken.Code == NewLine && (_LineFeedCount(currentToken) >= 2 || (_LineFeedCount(currentToken) >= 1 && nextToken?.Code == Dash && nextToken.Length >= 4)))
                     _EndParagraph(previousToken, currentToken, nextToken);
                 else
                     _ProcessRichText(previousToken, currentToken, nextToken);
@@ -401,6 +401,15 @@ namespace Mup
 
                         case Text when (_IsProtocol(previousToken, currentToken, nextToken) && _hyperlinkStartMark == null):
                             _BeginInlineHyperlink(previousToken, currentToken, nextToken);
+                            break;
+
+                        case Dash:
+                            _marks.Add(new ElementMark
+                            {
+                                Code = PlainText,
+                                Start = currentToken.Start,
+                                Length = currentToken.Length
+                            });
                             break;
 
                         default:

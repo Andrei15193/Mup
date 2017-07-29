@@ -4,7 +4,7 @@
     {
         PlainText,
 
-        HorizontalLine,
+        HorizontalRule,
 
         HyperlinkStart,
         HyperlinkDestination,

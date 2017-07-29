@@ -59,7 +59,8 @@ namespace Mup
                     visitTask = TextAsync(plainText, cancellationToken);
                     break;
 
-                case ElementMarkCode.HorizontalLine:
+                case ElementMarkCode.HorizontalRule:
+                    visitTask = HorizontalRuleAsync(cancellationToken);
                     break;
 
                 case HyperlinkStart:
@@ -452,6 +453,16 @@ namespace Mup
         }
 
         protected virtual void EndPreformatted()
+        {
+        }
+
+        protected virtual Task HorizontalRuleAsync(CancellationToken cancellationToken)
+        {
+            HorizontalRule();
+            return _completedTask;
+        }
+
+        protected virtual void HorizontalRule()
         {
         }
 

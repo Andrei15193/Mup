@@ -12,7 +12,7 @@
         BulletList,
         OrderedList,
         Table,
-        NoWiki,
+        PreformattedBlock,
         Plugin
     }
 }
