@@ -62,6 +62,12 @@ namespace Mup.Tests
         protected override void EndParagraph()
             => _marks.Add(ParagraphEnd);
 
+        protected override void BeginPreformattedBlock()
+            => _marks.Add(PreformattedBlockStart);
+
+        protected override void EndPreformattedBlock()
+            => _marks.Add(PreformattedBlockEnd);
+
         protected override void BeginStrong()
             => _marks.Add(StrongStart);
 

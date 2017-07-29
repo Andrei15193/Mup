@@ -168,6 +168,14 @@ namespace Mup
                     visitTask = EndParagraphAsync(cancellationToken);
                     break;
 
+                case PreformattedBlockStart:
+                    visitTask = BeginPreformattedBlockAsync(cancellationToken);
+                    break;
+
+                case PreformattedBlockEnd:
+                    visitTask = EndPreformattedBlockAsync(cancellationToken);
+                    break;
+
                 case ElementMarkCode.TableStart:
                     break;
                 case ElementMarkCode.TableRowStart:
@@ -353,6 +361,26 @@ namespace Mup
         }
 
         protected virtual void EndParagraph()
+        {
+        }
+
+        protected virtual Task BeginPreformattedBlockAsync(CancellationToken cancellationToken)
+        {
+            BeginPreformattedBlock();
+            return _completedTask;
+        }
+
+        protected virtual void BeginPreformattedBlock()
+        {
+        }
+
+        protected virtual Task EndPreformattedBlockAsync(CancellationToken cancellationToken)
+        {
+            EndPreformattedBlock();
+            return _completedTask;
+        }
+
+        protected virtual void EndPreformattedBlock()
         {
         }
 

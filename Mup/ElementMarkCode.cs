@@ -48,6 +48,9 @@
         ParagraphStart,
         ParagraphEnd,
 
+        PreformattedBlockStart,
+        PreformattedBlockEnd,
+
         TableStart,
         TableRowStart,
         TableHeaderCellStart,

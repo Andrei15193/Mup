@@ -52,6 +52,12 @@ namespace Mup
         protected override void EndParagraph()
             => _htmlStringBuilder.Append("</p>");
 
+        protected override void BeginPreformattedBlock()
+            => _htmlStringBuilder.Append("<pre><code>");
+
+        protected override void EndPreformattedBlock()
+            => _htmlStringBuilder.Append("</code></pre>");
+
         protected override void BeginStrong()
             => _htmlStringBuilder.Append("<strong>");
 

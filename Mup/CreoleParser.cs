@@ -252,6 +252,10 @@ namespace Mup
                         });
                         break;
 
+                    case BraceOpen when (currentToken.Length >= _PreformattedCharacterRepeatCount):
+                        _BeginPreformattedBlock(previousToken, currentToken, nextToken);
+                        break;
+
                     case Equal:
                         _BeginHeading(previousToken, currentToken, nextToken);
                         break;
@@ -314,6 +318,7 @@ namespace Mup
                         break;
 
                     case PreformattedBlock:
+                        _ProcessPreformattedBlock(previousToken, currentToken, nextToken);
                         break;
 
                     case Plugin:
@@ -1010,6 +1015,55 @@ namespace Mup
                     Code = ParagraphEnd,
                     Start = currentToken.End
                 });
+                _blocks.Pop();
+            }
+
+            private void _BeginPreformattedBlock(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _blocks.Push(PreformattedBlock);
+                _marks.Add(new ElementMark
+                {
+                    Code = PreformattedBlockStart,
+                    Start = currentToken.Start,
+                    Length = _PreformattedCharacterRepeatCount
+                });
+
+                if (currentToken.Length > _PreformattedCharacterRepeatCount)
+                    _AppendPlainText(
+                        (currentToken.Start + _PreformattedCharacterRepeatCount),
+                        (currentToken.Length - _PreformattedCharacterRepeatCount));
+            }
+
+            private void _ProcessPreformattedBlock(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                if (currentToken.Code == BraceClose && currentToken.Length >= _PreformattedCharacterRepeatCount
+                    && (nextToken == null || (nextToken.Code == NewLine && _LineFeedCount(nextToken) > 0)))
+                    _EndPreformattedBlock(previousToken, currentToken, nextToken);
+                else
+                    _AppendPlainText(currentToken);
+            }
+
+            private void _EndPreformattedBlock(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                if (currentToken.Code == BraceClose)
+                {
+                    if (currentToken.Length > _PreformattedCharacterRepeatCount)
+                        _AppendPlainText(
+                            currentToken.Start,
+                            (currentToken.Length - _PreformattedCharacterRepeatCount));
+                    _marks.Add(new ElementMark
+                    {
+                        Code = PreformattedBlockEnd,
+                        Start = (currentToken.End - _PreformattedCharacterRepeatCount),
+                        Length = _PreformattedCharacterRepeatCount
+                    });
+                }
+                else
+                    _marks.Add(new ElementMark
+                    {
+                        Code = PreformattedBlockEnd,
+                        Start = currentToken.End
+                    });
                 _blocks.Pop();
             }
 
