@@ -104,6 +104,8 @@ namespace Mup
 
             private const int _LineBreakRepeatCount = 2;
 
+            private const int _PluginCharacterRepeatCount = 2;
+
             private const int _PreformattedCharacterRepeatCount = 3;
 
             private readonly string _text;
@@ -242,14 +244,8 @@ namespace Mup
                         });
                         break;
 
-                    case AngleOpen when (currentToken.Length == 2):
-                        _blocks.Push(Plugin);
-                        _marks.Add(new ElementMark
-                        {
-                            Code = PluginStart,
-                            Start = currentToken.Start,
-                            Length = currentToken.Length
-                        });
+                    case AngleOpen when (currentToken.Length >= _PluginCharacterRepeatCount):
+                        _BeginPlugIn(previousToken, currentToken, nextToken);
                         break;
 
                     case BraceOpen when (currentToken.Length >= _PreformattedCharacterRepeatCount):
@@ -322,6 +318,7 @@ namespace Mup
                         break;
 
                     case Plugin:
+                        _ProcessPlugIn(previousToken, currentToken, nextToken);
                         break;
 
                     default:
@@ -1062,6 +1059,55 @@ namespace Mup
                     _marks.Add(new ElementMark
                     {
                         Code = PreformattedBlockEnd,
+                        Start = currentToken.End
+                    });
+                _blocks.Pop();
+            }
+
+            private void _BeginPlugIn(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _blocks.Push(Plugin);
+                _marks.Add(new ElementMark
+                {
+                    Code = PluginStart,
+                    Start = currentToken.Start,
+                    Length = _PluginCharacterRepeatCount
+                });
+
+                if (currentToken.Length > _PluginCharacterRepeatCount)
+                    _AppendPlainText(
+                        (currentToken.Start + _PluginCharacterRepeatCount),
+                        (currentToken.Length - _PluginCharacterRepeatCount));
+            }
+
+            private void _ProcessPlugIn(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                if (currentToken.Code == AngleClose && currentToken.Length >= _PluginCharacterRepeatCount
+                    && (nextToken == null || (nextToken.Code == NewLine && _LineFeedCount(nextToken) > 0)))
+                    _EndPlugIn(previousToken, currentToken, nextToken);
+                else
+                    _AppendPlainText(currentToken);
+            }
+
+            private void _EndPlugIn(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                if (currentToken.Code == AngleClose)
+                {
+                    if (currentToken.Length > _PluginCharacterRepeatCount)
+                        _AppendPlainText(
+                            currentToken.Start,
+                            (currentToken.Length - _PluginCharacterRepeatCount));
+                    _marks.Add(new ElementMark
+                    {
+                        Code = PluginEnd,
+                        Start = (currentToken.End - _PluginCharacterRepeatCount),
+                        Length = _PluginCharacterRepeatCount
+                    });
+                }
+                else
+                    _marks.Add(new ElementMark
+                    {
+                        Code = PluginEnd,
                         Start = currentToken.End
                     });
                 _blocks.Pop();

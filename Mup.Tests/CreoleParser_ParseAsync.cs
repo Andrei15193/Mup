@@ -76,6 +76,23 @@ namespace Mup.Tests
         }
 
         [Trait("Class", nameof(CreoleParser))]
+        [Theory(DisplayName = (_method + nameof(ParsesPlugIns)))]
+        [InlineData("<<plug in>>", new object[] { PluginStart, PlainText, PluginEnd })]
+        [InlineData("<<<plug in>>", new object[] { PluginStart, PlainText, PluginEnd })]
+        [InlineData("<<plug in>>>", new object[] { PluginStart, PlainText, PluginEnd })]
+        [InlineData("<<<plug in>>>", new object[] { PluginStart, PlainText, PluginEnd })]
+        [InlineData("~<<plain text>>", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
+        public async Task ParsesPlugIns(string text, object[] marks)
+        {
+            var result = await _parser.ParseAsync(text);
+
+            var elementMarkVisitor = new ElementMarkVisitor();
+            await result.AcceptAsync(elementMarkVisitor);
+
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+        }
+
+        [Trait("Class", nameof(CreoleParser))]
         [Theory(DisplayName = (_method + nameof(ParsesEscapeCharacters)))]
         [InlineData("~plain text", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("~~plain text", new object[] { ParagraphStart, PlainText, PlainText, ParagraphEnd })]

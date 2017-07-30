@@ -72,7 +72,6 @@
         OrderedListEnd,
 
         PluginStart,
-        PluginText,
         PluginEnd
     }
 }

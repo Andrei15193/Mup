@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using static Mup.ElementMarkCode;
@@ -9,7 +10,9 @@ namespace Mup
     {
         private static readonly Task _completedTask = Task.FromResult<object>(null);
 
-        private string _imageSource;
+        private StringBuilder _imageSourceBuilder = null;
+        private StringBuilder _imageAlternativeTextBuilder = null;
+        private StringBuilder _pluginTextBuilder = null;
 
         protected ParseResultVisitor()
         {
@@ -54,11 +57,6 @@ namespace Mup
 
             switch (mark.Code)
             {
-                case PlainText when (_imageSource == null):
-                    var plainText = text.Substring(mark.Start, mark.Length);
-                    visitTask = TextAsync(plainText, cancellationToken);
-                    break;
-
                 case ElementMarkCode.HorizontalRule:
                     visitTask = HorizontalRuleAsync(cancellationToken);
                     break;
@@ -89,16 +87,19 @@ namespace Mup
                     break;
 
                 case ImageStart:
+                    _imageSourceBuilder = new StringBuilder();
+                    _imageAlternativeTextBuilder = new StringBuilder();
                     break;
                 case ImageSource:
-                    _imageSource = text.Substring(mark.Start, mark.Length);
+                    _imageSourceBuilder.Append(text, mark.Start, mark.Length);
                     break;
-                case PlainText when (_imageSource != null):
-                    var imageTitle = text.Substring(mark.Start, mark.Length);
-                    visitTask = ImageAsync(_imageSource, imageTitle, cancellationToken);
+                case PlainText when (_imageAlternativeTextBuilder != null):
+                    _imageAlternativeTextBuilder.Append(text, mark.Start, mark.Length);
                     break;
                 case ImageEnd:
-                    _imageSource = null;
+                    visitTask = ImageAsync(_imageSourceBuilder.ToString(), _imageAlternativeTextBuilder.ToString(), cancellationToken);
+                    _imageSourceBuilder = null;
+                    _imageAlternativeTextBuilder = null;
                     break;
 
                 case ElementMarkCode.LineBreak:
@@ -210,12 +211,23 @@ namespace Mup
                     break;
                 case ElementMarkCode.OrderedListEnd:
                     break;
-                case ElementMarkCode.PluginStart:
+
+                case PluginStart:
+                    _pluginTextBuilder = new StringBuilder();
                     break;
-                case ElementMarkCode.PluginText:
+                case PlainText when (_pluginTextBuilder != null):
+                    _pluginTextBuilder.Append(text, mark.Start, mark.Length);
                     break;
-                case ElementMarkCode.PluginEnd:
+                case PluginEnd:
+                    visitTask = PlugInAsync(_pluginTextBuilder.ToString(), cancellationToken);
+                    _pluginTextBuilder = null;
                     break;
+
+                case PlainText:
+                    var plainText = text.Substring(mark.Start, mark.Length);
+                    visitTask = TextAsync(plainText, cancellationToken);
+                    break;
+
                 default:
                     break;
             }
@@ -384,6 +396,26 @@ namespace Mup
         {
         }
 
+        protected virtual Task HorizontalRuleAsync(CancellationToken cancellationToken)
+        {
+            HorizontalRule();
+            return _completedTask;
+        }
+
+        protected virtual void HorizontalRule()
+        {
+        }
+
+        protected virtual Task PlugInAsync(string value, CancellationToken cancellationToken)
+        {
+            PlugIn(value);
+            return _completedTask;
+        }
+
+        protected virtual void PlugIn(string value)
+        {
+        }
+
         protected virtual Task BeginStrongAsync(CancellationToken cancellationToken)
         {
             BeginStrong();
@@ -481,16 +513,6 @@ namespace Mup
         }
 
         protected virtual void EndPreformatted()
-        {
-        }
-
-        protected virtual Task HorizontalRuleAsync(CancellationToken cancellationToken)
-        {
-            HorizontalRule();
-            return _completedTask;
-        }
-
-        protected virtual void HorizontalRule()
         {
         }
 

@@ -68,6 +68,16 @@ namespace Mup.Tests
         protected override void EndPreformattedBlock()
             => _marks.Add(PreformattedBlockEnd);
 
+        protected override void HorizontalRule()
+            => _marks.Add(ElementMarkCode.HorizontalRule);
+
+        protected override void PlugIn(string value)
+        {
+            _marks.Add(PluginStart);
+            _marks.Add(PlainText);
+            _marks.Add(PluginEnd);
+        }
+
         protected override void BeginStrong()
             => _marks.Add(StrongStart);
 
@@ -105,9 +115,6 @@ namespace Mup.Tests
 
         protected override void EndPreformatted()
             => _marks.Add(PreformattedEnd);
-
-        protected override void HorizontalRule()
-            => _marks.Add(ElementMarkCode.HorizontalRule);
 
         protected override void Text(string text)
             => _marks.Add(PlainText);
