@@ -177,24 +177,37 @@ namespace Mup
                     visitTask = EndPreformattedBlockAsync(cancellationToken);
                     break;
 
-                case ElementMarkCode.TableStart:
+                case TableStart:
+                    visitTask = BeginTableAsync(cancellationToken);
                     break;
-                case ElementMarkCode.TableRowStart:
+
+                case TableRowStart:
+                    visitTask = BeginTableRowAsync(cancellationToken);
                     break;
-                case ElementMarkCode.TableHeaderCellStart:
+
+                case TableHeaderCellStart:
+                    visitTask = BeginTableHeaderCellAsync(cancellationToken);
                     break;
-                case ElementMarkCode.TableHeaderCellEnd:
+                case TableHeaderCellEnd:
+                    visitTask = EndTableHeaderCellAsync(cancellationToken);
                     break;
-                case ElementMarkCode.TableCellStart:
+
+                case TableCellStart:
+                    visitTask = BeginTableCellAsync(cancellationToken);
                     break;
-                case ElementMarkCode.TableCellEnd:
+
+                case TableCellEnd:
+                    visitTask = EndTableCellAsync(cancellationToken);
                     break;
-                case ElementMarkCode.TableCellSeparator:
+
+                case TableRowEnd:
+                    visitTask = EndTableRowAsync(cancellationToken);
                     break;
-                case ElementMarkCode.TableRowEnd:
+
+                case TableEnd:
+                    visitTask = EndTableAsync(cancellationToken);
                     break;
-                case ElementMarkCode.TableEnd:
-                    break;
+
                 case ElementMarkCode.BulletListStart:
                     break;
                 case ElementMarkCode.BulletListItemStart:
@@ -413,6 +426,86 @@ namespace Mup
         }
 
         protected virtual void PlugIn(string value)
+        {
+        }
+
+        protected virtual Task BeginTableAsync(CancellationToken cancellationToken)
+        {
+            BeginTable();
+            return _completedTask;
+        }
+
+        protected virtual void BeginTable()
+        {
+        }
+
+        protected virtual Task EndTableAsync(CancellationToken cancellationToken)
+        {
+            EndTable();
+            return _completedTask;
+        }
+
+        protected virtual void EndTable()
+        {
+        }
+
+        protected virtual Task BeginTableRowAsync(CancellationToken cancellationToken)
+        {
+            BeginTableRow();
+            return _completedTask;
+        }
+
+        protected virtual void BeginTableRow()
+        {
+        }
+
+        protected virtual Task EndTableRowAsync(CancellationToken cancellationToken)
+        {
+            EndTableRow();
+            return _completedTask;
+        }
+
+        protected virtual void EndTableRow()
+        {
+        }
+
+        protected virtual Task BeginTableHeaderCellAsync(CancellationToken cancellationToken)
+        {
+            BeginTableHeaderCell();
+            return _completedTask;
+        }
+
+        protected virtual void BeginTableHeaderCell()
+        {
+        }
+
+        protected virtual Task EndTableHeaderCellAsync(CancellationToken cancellationToken)
+        {
+            EndTableHeaderCell();
+            return _completedTask;
+        }
+
+        protected virtual void EndTableHeaderCell()
+        {
+        }
+
+        protected virtual Task BeginTableCellAsync(CancellationToken cancellationToken)
+        {
+            BeginTableCell();
+            return _completedTask;
+        }
+
+        protected virtual void BeginTableCell()
+        {
+        }
+
+        protected virtual Task EndTableCellAsync(CancellationToken cancellationToken)
+        {
+            EndTableCell();
+            return _completedTask;
+        }
+
+        protected virtual void EndTableCell()
         {
         }
 

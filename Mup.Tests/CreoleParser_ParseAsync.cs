@@ -93,6 +93,29 @@ namespace Mup.Tests
         }
 
         [Trait("Class", nameof(CreoleParser))]
+        [Theory(DisplayName = (_method + nameof(ParsesTables)))]
+        [InlineData("|cell 1|cell 2|", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
+        [InlineData("|cell 1|cell 2", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
+        [InlineData("|=header cell 1|=header cell 2|", new object[] { TableStart, TableRowStart, TableHeaderCellStart, PlainText, TableHeaderCellEnd, TableHeaderCellStart, PlainText, TableHeaderCellEnd, TableRowEnd, TableEnd })]
+        [InlineData("|=header cell 1|=header cell 2", new object[] { TableStart, TableRowStart, TableHeaderCellStart, PlainText, TableHeaderCellEnd, TableHeaderCellStart, PlainText, TableHeaderCellEnd, TableRowEnd, TableEnd })]
+        [InlineData("|=header cell 1|=header cell 2|\n|cell 1|cell 2|", new object[] { TableStart, TableRowStart, TableHeaderCellStart, PlainText, TableHeaderCellEnd, TableHeaderCellStart, PlainText, TableHeaderCellEnd, TableRowEnd, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
+        [InlineData("|=header cell 1|=header cell 2\n|cell 1|cell 2", new object[] { TableStart, TableRowStart, TableHeaderCellStart, PlainText, TableHeaderCellEnd, TableHeaderCellStart, PlainText, TableHeaderCellEnd, TableRowEnd, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
+        [InlineData("|table 1\n\n|table 2", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd, TableStart, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
+        [InlineData("|cell ~| 1|", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
+        [InlineData("|cell 1~~|cell 2|", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
+        [InlineData("|cell with //emphasis//, **strong**, [[hyperlink]], {{image}}, http://example.com , {{{no wiki}}}", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, PreformattedStart, PlainText, PreformattedEnd, TableCellEnd, TableRowEnd, TableEnd })]
+        [InlineData("|//no emphasis", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
+        public async Task ParsesTables(string text, object[] marks)
+        {
+            var result = await _parser.ParseAsync(text);
+
+            var elementMarkVisitor = new ElementMarkVisitor();
+            await result.AcceptAsync(elementMarkVisitor);
+
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+        }
+
+        [Trait("Class", nameof(CreoleParser))]
         [Theory(DisplayName = (_method + nameof(ParsesEscapeCharacters)))]
         [InlineData("~plain text", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("~~plain text", new object[] { ParagraphStart, PlainText, PlainText, ParagraphEnd })]
@@ -257,6 +280,30 @@ namespace Mup.Tests
         [InlineData("{{{no **strong**, **emphasis**, [[hyperlinks]] or {{images}}}}}", "<pre><code>no **strong**, **emphasis**, [[hyperlinks]] or {{images}}</code></pre>")]
         [InlineData("~{{{image}}}", "<p>{<img src=\"image\">}</p>")]
         public async Task ParsePreforamattedBlocksToHtml(string text, string expectedHtml)
+        {
+            var result = await _parser.ParseAsync(text);
+
+            var htmlStringBuilder = new StringBuilder();
+            var creoleToHtmlVisitor = new HtmlWriterVisitor(htmlStringBuilder);
+            await result.AcceptAsync(creoleToHtmlVisitor);
+
+            Assert.Equal(expectedHtml, htmlStringBuilder.ToString());
+        }
+
+        [Trait("Class", nameof(CreoleParser))]
+        [Theory(DisplayName = (_method + nameof(ParseTablesToHtml)))]
+        [InlineData("|cell 1|cell 2|", "<table><tr><td>cell 1</td><td>cell 2</td></tr></table>")]
+        [InlineData("|cell 1|cell 2", "<table><tr><td>cell 1</td><td>cell 2</td></tr></table>")]
+        [InlineData("|=header cell 1|=header cell 2|", "<table><tr><th>header cell 1</th><th>header cell 2</th></tr></table>")]
+        [InlineData("|=header cell 1|=header cell 2", "<table><tr><th>header cell 1</th><th>header cell 2</th></tr></table>")]
+        [InlineData("|=header cell 1|=header cell 2|\n|cell 1|cell 2|", "<table><tr><th>header cell 1</th><th>header cell 2</th></tr><tr><td>cell 1</td><td>cell 2</td></tr></table>")]
+        [InlineData("|=header cell 1|=header cell 2\n|cell 1|cell 2", "<table><tr><th>header cell 1</th><th>header cell 2</th></tr><tr><td>cell 1</td><td>cell 2</td></tr></table>")]
+        [InlineData("|table 1\n\n|table 2", "<table><tr><td>table 1</td></tr></table><table><tr><td>table 2</td></tr></table>")]
+        [InlineData("|cell ~| 1|", "<table><tr><td>cell | 1</td></tr></table>")]
+        [InlineData("|cell 1~~|cell 2|", "<table><tr><td>cell 1~</td><td>cell 2</td></tr></table>")]
+        [InlineData("|cell with //emphasis//, **strong**, [[hyperlink]], {{image}}, http://example.com , {{{no wiki}}}", "<table><tr><td>cell with <em>emphasis</em>, <strong>strong</strong>, <a href=\"hyperlink\">hyperlink</a>, <img src=\"image\">, <a href=\"http://example.com\">http://example.com</a> , <code>no wiki</code></td></tr></table>")]
+        [InlineData("|//no emphasis", "<table><tr><td>//no emphasis</td></tr></table>")]
+        public async Task ParseTablesToHtml(string text, string expectedHtml)
         {
             var result = await _parser.ParseAsync(text);
 

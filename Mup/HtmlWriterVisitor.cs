@@ -58,6 +58,30 @@ namespace Mup
         protected override void EndPreformattedBlock()
             => _htmlStringBuilder.Append("</code></pre>");
 
+        protected override void BeginTable()
+            => _htmlStringBuilder.Append("<table>");
+
+        protected override void EndTable()
+            => _htmlStringBuilder.Append("</table>");
+
+        protected override void BeginTableRow()
+            => _htmlStringBuilder.Append("<tr>");
+
+        protected override void EndTableRow()
+            => _htmlStringBuilder.Append("</tr>");
+
+        protected override void BeginTableHeaderCell()
+            => _htmlStringBuilder.Append("<th>");
+
+        protected override void EndTableHeaderCell()
+            => _htmlStringBuilder.Append("</th>");
+
+        protected override void BeginTableCell()
+            => _htmlStringBuilder.Append("<td>");
+
+        protected override void EndTableCell()
+            => _htmlStringBuilder.Append("</td>");
+
         protected override void BeginStrong()
             => _htmlStringBuilder.Append("<strong>");
 

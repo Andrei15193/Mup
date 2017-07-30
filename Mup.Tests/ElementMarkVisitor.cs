@@ -78,6 +78,30 @@ namespace Mup.Tests
             _marks.Add(PluginEnd);
         }
 
+        protected override void BeginTable()
+            => _marks.Add(TableStart);
+
+        protected override void EndTable()
+            => _marks.Add(TableEnd);
+
+        protected override void BeginTableRow()
+            => _marks.Add(TableRowStart);
+
+        protected override void EndTableRow()
+            => _marks.Add(TableRowEnd);
+
+        protected override void BeginTableHeaderCell()
+            => _marks.Add(TableHeaderCellStart);
+
+        protected override void EndTableHeaderCell()
+            => _marks.Add(TableHeaderCellEnd);
+
+        protected override void BeginTableCell()
+            => _marks.Add(TableCellStart);
+
+        protected override void EndTableCell()
+            => _marks.Add(TableCellEnd);
+
         protected override void BeginStrong()
             => _marks.Add(StrongStart);
 

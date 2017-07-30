@@ -57,7 +57,6 @@
         TableHeaderCellEnd,
         TableCellStart,
         TableCellEnd,
-        TableCellSeparator,
         TableRowEnd,
         TableEnd,
 

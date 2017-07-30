@@ -125,6 +125,10 @@ namespace Mup
 
             private ElementMark _preformattedStartMark = null;
 
+            private ElementMark _tableStartMark;
+            private ElementMark _tableRowStartMark;
+            private ElementMark _tableCellStartMark;
+
             private readonly IList<ElementMark> _marks = new List<ElementMark>();
             private readonly Stack<ElementBlock> _blocks = new Stack<ElementBlock>();
             private readonly Stack<RichTextBlock> _richTextBlocks = new Stack<RichTextBlock>();
@@ -266,18 +270,7 @@ namespace Mup
                         break;
 
                     case Pipe:
-                        _blocks.Push(Table);
-                        _marks.Add(new ElementMark
-                        {
-                            Code = TableStart,
-                            Start = currentToken.Start,
-                            Length = currentToken.Length
-                        });
-                        _marks.Add(new ElementMark
-                        {
-                            Code = TableRowStart,
-                            Start = currentToken.End
-                        });
+                        _BeginTable(previousToken, currentToken, nextToken);
                         break;
 
                     default:
@@ -311,6 +304,7 @@ namespace Mup
                         break;
 
                     case Table:
+                        _ProcessTable(previousToken, currentToken, nextToken);
                         break;
 
                     case PreformattedBlock:
@@ -406,6 +400,7 @@ namespace Mup
                             break;
 
                         case Dash:
+                        case Pipe:
                             _marks.Add(new ElementMark
                             {
                                 Code = PlainText,
@@ -665,7 +660,7 @@ namespace Mup
                 switch (currentToken.Code)
                 {
                     case WhiteSpace:
-                    case CreoleToken.NewLine:
+                    case NewLine:
                         if (_richTextBlocks.Peek() == InlineHyperlink)
                             _EndInlineHyperlink(previousToken, currentToken, nextToken);
                         _marks.Add(new ElementMark
@@ -1111,6 +1106,130 @@ namespace Mup
                         Start = currentToken.End
                     });
                 _blocks.Pop();
+            }
+
+            private void _BeginTable(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _blocks.Push(Table);
+                _tableStartMark = new ElementMark
+                {
+                    Code = TableStart,
+                    Start = currentToken.Start
+                };
+                _marks.Add(_tableStartMark);
+                _Process(previousToken, currentToken, nextToken);
+            }
+
+            private void _ProcessTable(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                switch (currentToken.Code)
+                {
+                    case Pipe when (_tableRowStartMark != null && (nextToken?.Code == NewLine && _LineFeedCount(nextToken) > 0)):
+                        break;
+
+                    case Pipe when (_tableRowStartMark == null):
+                        _BeginTableRow(previousToken, currentToken, nextToken);
+                        break;
+
+                    case Pipe when (_tableCellStartMark != null && !_IsEscaped(previousToken, currentToken, nextToken)):
+                        _EndTableCell(previousToken, currentToken, nextToken);
+                        break;
+
+                    case Equal when (_tableCellStartMark == null):
+                        _BeginTableHeaderCell(previousToken, currentToken, nextToken);
+                        break;
+
+                    case NewLine when (_LineFeedCount(currentToken) > 1):
+                    case NewLine when (_LineFeedCount(currentToken) == 1 && nextToken?.Code != Pipe):
+                        _EndTable(previousToken, currentToken, nextToken);
+                        break;
+
+                    case NewLine:
+                        _EndTableRow(previousToken, currentToken, nextToken);
+                        break;
+
+                    case WhiteSpace when (_tableRowStartMark == null || _tableCellStartMark == null):
+                        break;
+
+                    default:
+                        if (_tableCellStartMark == null)
+                            _BeginTableCell(previousToken, currentToken, nextToken);
+                        _ProcessRichText(previousToken, currentToken, nextToken);
+                        break;
+                }
+
+                if (nextToken == null)
+                    _EndTable(previousToken, currentToken, nextToken);
+            }
+
+            private void _EndTable(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                if (_tableRowStartMark != null)
+                    _EndTableRow(previousToken, currentToken, nextToken);
+                _marks.Add(new ElementMark
+                {
+                    Code = TableEnd,
+                    Start = currentToken.Start
+                });
+                _tableStartMark = null;
+                _blocks.Pop();
+            }
+
+            private void _BeginTableRow(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _tableRowStartMark = new ElementMark
+                {
+                    Code = TableRowStart,
+                    Start = currentToken.Start,
+                    Length = currentToken.Length
+                };
+                _marks.Add(_tableRowStartMark);
+            }
+
+            private void _EndTableRow(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                if (_tableCellStartMark != null)
+                    _EndTableCell(previousToken, currentToken, nextToken);
+
+                _marks.Add(new ElementMark
+                {
+                    Code = TableRowEnd,
+                    Start = currentToken.Start
+                });
+                _tableRowStartMark = null;
+            }
+
+            private void _BeginTableHeaderCell(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _tableCellStartMark = new ElementMark
+                {
+                    Code = TableHeaderCellStart,
+                    Start = currentToken.Start,
+                    Length = currentToken.Length
+                };
+                _marks.Add(_tableCellStartMark);
+            }
+
+            private void _BeginTableCell(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _tableCellStartMark = new ElementMark
+                {
+                    Code = TableCellStart,
+                    Start = currentToken.Start,
+                    Length = currentToken.Length
+                };
+                _marks.Add(_tableCellStartMark);
+            }
+
+            private void _EndTableCell(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _ClearRichText(previousToken, currentToken, nextToken);
+                _marks.Add(new ElementMark
+                {
+                    Code = (_tableCellStartMark.Code == TableHeaderCellStart ? TableHeaderCellEnd : TableCellEnd),
+                    Start = currentToken.Start
+                });
+                _tableCellStartMark = null;
             }
 
             private void _ClearRichText(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
