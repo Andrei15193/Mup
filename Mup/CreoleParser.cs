@@ -219,33 +219,13 @@ namespace Mup
                         break;
 
                     case Asterisk when (currentToken.Length == 1):
-                        _blocks.Push(BulletList);
-                        _marks.Add(new ElementMark
-                        {
-                            Code = BulletListStart,
-                            Start = currentToken.Start
-                        });
-                        _marks.Add(new ElementMark
-                        {
-                            Code = BulletListItemStart,
-                            Start = currentToken.Start,
-                            Length = currentToken.Length
-                        });
+                        _BeginBulletList(previousToken, currentToken, nextToken);
+                        _Process(previousToken, currentToken, nextToken);
                         break;
 
                     case Hash when (currentToken.Length == 1):
-                        _blocks.Push(OrderedList);
-                        _marks.Add(new ElementMark
-                        {
-                            Code = OrderedListStart,
-                            Start = currentToken.Start
-                        });
-                        _marks.Add(new ElementMark
-                        {
-                            Code = OrderedListItemStart,
-                            Start = currentToken.Start,
-                            Length = currentToken.Length
-                        });
+                        _BeginOrderedList(previousToken, currentToken, nextToken);
+                        _Process(previousToken, currentToken, nextToken);
                         break;
 
                     case AngleOpen when (currentToken.Length >= _PluginCharacterRepeatCount):
@@ -261,12 +241,7 @@ namespace Mup
                         break;
 
                     case Dash when (currentToken.Length >= 4 && (nextToken == null || (nextToken.Code == NewLine && _LineFeedCount(nextToken) > 0))):
-                        _marks.Add(new ElementMark
-                        {
-                            Code = HorizontalRule,
-                            Start = currentToken.Start,
-                            Length = currentToken.Length
-                        });
+                        _HorizontalRule(previousToken, currentToken, nextToken);
                         break;
 
                     case Pipe:
@@ -298,9 +273,8 @@ namespace Mup
                         break;
 
                     case BulletList:
-                        break;
-
                     case OrderedList:
+                        _ProcessList(previousToken, currentToken, nextToken);
                         break;
 
                     case Table:
@@ -624,6 +598,154 @@ namespace Mup
                         Length = (currentToken.Code == Equal ? currentToken.Length : 0)
                     });
                 }
+            }
+
+            private void _HorizontalRule(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _marks.Add(new ElementMark
+                {
+                    Code = HorizontalRule,
+                    Start = currentToken.Start,
+                    Length = currentToken.Length
+                });
+            }
+
+            private void _BeginBulletList(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _blocks.Push(BulletList);
+                _marks.Add(new ElementMark
+                {
+                    Code = BulletListStart,
+                    Start = currentToken.Start
+                });
+            }
+
+            private void _BeginOrderedList(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _blocks.Push(OrderedList);
+                _marks.Add(new ElementMark
+                {
+                    Code = OrderedListStart,
+                    Start = currentToken.Start
+                });
+            }
+
+            private void _ProcessList(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                if (currentToken.Code == NewLine && _LineFeedCount(currentToken) > 1)
+                    while (_blocks.Count > 0)
+                        _EndList(previousToken, currentToken, nextToken);
+                else
+                {
+                    var listIndent = _blocks.Count;
+                    switch (currentToken.Code)
+                    {
+                        case Asterisk when (currentToken.Length == listIndent && (previousToken == null || (previousToken.Code == NewLine && _LineFeedCount(previousToken) > 0))):
+                            if (_blocks.Peek() != BulletList)
+                            {
+                                _EndList(previousToken, currentToken, nextToken);
+                                _BeginBulletList(previousToken, currentToken, nextToken);
+                            }
+                            else if (_marks[_marks.Count - 1].Code != BulletListStart)
+                                _EndListItem(previousToken, currentToken, nextToken);
+
+                            _BeginListItem(previousToken, currentToken, nextToken);
+                            break;
+
+                        case Asterisk when (currentToken.Length > listIndent && (previousToken == null || (previousToken.Code == NewLine && _LineFeedCount(previousToken) > 0))):
+                            do
+                            {
+                                _BeginBulletList(previousToken, currentToken, nextToken);
+                                _BeginListItem(previousToken, currentToken, nextToken);
+                                listIndent = _blocks.Count;
+                            } while (currentToken.Length > listIndent);
+                            break;
+
+                        case Asterisk when (currentToken.Length < listIndent && (previousToken == null || (previousToken.Code == NewLine && _LineFeedCount(previousToken) > 0))):
+                            do
+                            {
+                                _EndList(previousToken, currentToken, nextToken);
+                                listIndent = _blocks.Count;
+                            } while (currentToken.Length < listIndent);
+                            _EndListItem(previousToken, currentToken, nextToken);
+                            _BeginListItem(previousToken, currentToken, nextToken);
+                            break;
+
+                        case Hash when (currentToken.Length == listIndent && (previousToken == null || (previousToken.Code == NewLine && _LineFeedCount(previousToken) > 0))):
+                            if (_blocks.Peek() != OrderedList)
+                            {
+                                _EndList(previousToken, currentToken, nextToken);
+                                _BeginOrderedList(previousToken, currentToken, nextToken);
+                            }
+                            else if (_marks[_marks.Count - 1].Code != OrderedListStart)
+                                _EndListItem(previousToken, currentToken, nextToken);
+
+                            _BeginListItem(previousToken, currentToken, nextToken);
+                            break;
+
+                        case Hash when (currentToken.Length > listIndent && (previousToken == null || (previousToken.Code == NewLine && _LineFeedCount(previousToken) > 0))):
+                            do
+                            {
+                                _BeginOrderedList(previousToken, currentToken, nextToken);
+                                _BeginListItem(previousToken, currentToken, nextToken);
+                                listIndent = _blocks.Count;
+                            } while (currentToken.Length > listIndent);
+                            break;
+
+                        case Hash when (currentToken.Length < listIndent && (previousToken == null || (previousToken.Code == NewLine && _LineFeedCount(previousToken) > 0))):
+                            do
+                            {
+                                _EndList(previousToken, currentToken, nextToken);
+                                listIndent = _blocks.Count;
+                            } while (currentToken.Length < listIndent);
+                            _EndListItem(previousToken, currentToken, nextToken);
+                            _BeginListItem(previousToken, currentToken, nextToken);
+                            break;
+
+                        case WhiteSpace when (_marks[_marks.Count - 1].Code == ListItemStart || _marks[_marks.Count - 1].Code == ListItemEnd):
+                        case NewLine when (_marks[_marks.Count - 1].Code == ListItemStart || _marks[_marks.Count - 1].Code == ListItemEnd || nextToken?.Code == Asterisk || nextToken?.Code == Hash):
+                            break;
+
+                        default:
+                            _ProcessRichText(previousToken, currentToken, nextToken);
+                            break;
+                    }
+                }
+
+                if (nextToken == null)
+                    while (_blocks.Count > 0)
+                        _EndList(previousToken, currentToken, nextToken);
+            }
+
+            private void _EndList(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _EndListItem(previousToken, currentToken, nextToken);
+                var listType = _blocks.Pop();
+                _marks.Add(new ElementMark
+                {
+                    Code = (listType == BulletList ? BulletListEnd : OrderedListEnd),
+                    Start = currentToken.Start
+                });
+            }
+
+            private void _BeginListItem(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _marks.Add(new ElementMark
+                {
+                    Code = ListItemStart,
+                    Start = currentToken.Start,
+                    Length = currentToken.Length
+                });
+            }
+
+            private void _EndListItem(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)
+            {
+                _ClearRichText(previousToken, currentToken, nextToken);
+                _marks.Add(new ElementMark
+                {
+                    Code = ListItemEnd,
+                    Start = currentToken.Start
+                });
             }
 
             private void _BeginInlineHyperlink(Token<CreoleToken> previousToken, Token<CreoleToken> currentToken, Token<CreoleToken> nextToken)

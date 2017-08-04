@@ -82,6 +82,24 @@ namespace Mup
         protected override void EndTableCell()
             => _htmlStringBuilder.Append("</td>");
 
+        protected override void BeginUnorderedList()
+            => _htmlStringBuilder.Append("<ul>");
+
+        protected override void EndUnorderedList()
+            => _htmlStringBuilder.Append("</ul>");
+
+        protected override void BeginOrderedList()
+            => _htmlStringBuilder.Append("<ol>");
+
+        protected override void EndOrderedList()
+            => _htmlStringBuilder.Append("</ol>");
+
+        protected override void BeginListItem()
+            => _htmlStringBuilder.Append("<li>");
+
+        protected override void EndListItem()
+            => _htmlStringBuilder.Append("</li>");
+
         protected override void BeginStrong()
             => _htmlStringBuilder.Append("<strong>");
 

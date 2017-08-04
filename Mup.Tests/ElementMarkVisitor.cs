@@ -102,6 +102,24 @@ namespace Mup.Tests
         protected override void EndTableCell()
             => _marks.Add(TableCellEnd);
 
+        protected override void BeginUnorderedList()
+            => _marks.Add(BulletListStart);
+
+        protected override void EndUnorderedList()
+            => _marks.Add(BulletListEnd);
+
+        protected override void BeginOrderedList()
+            => _marks.Add(OrderedListStart);
+
+        protected override void EndOrderedList()
+            => _marks.Add(OrderedListEnd);
+
+        protected override void BeginListItem()
+            => _marks.Add(ListItemStart);
+
+        protected override void EndListItem()
+            => _marks.Add(ListItemEnd);
+
         protected override void BeginStrong()
             => _marks.Add(StrongStart);
 

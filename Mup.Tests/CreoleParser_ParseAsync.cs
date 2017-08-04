@@ -116,6 +116,49 @@ namespace Mup.Tests
         }
 
         [Trait("Class", nameof(CreoleParser))]
+        [Theory(DisplayName = (_method + nameof(ParsesLists)))]
+        [InlineData("*item", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("* item", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("* item 1\n*item 2", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("* item 1\n*item 2\n** sub item 1\n** sub item 2", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, BulletListEnd, ListItemEnd, BulletListEnd })]
+        [InlineData("* item 1\n*item 2\n** sub item 1\n** sub item 2\n* item 3", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, BulletListEnd, ListItemEnd, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("#item", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("# item", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("# item 1\n#item 2", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("# item 1\n#item 2\n## sub item 1\n## sub item 2", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, ListItemEnd, OrderedListEnd })]
+        [InlineData("# item 1\n#item 2\n## sub item 1\n## sub item 2\n# item 3", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, ListItemEnd, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("* bullet item\n# ordered item", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd, OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("# ordered item\n* bullet item", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("* item 1\n*item 2\n## sub item 1\n## sub item 2", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, ListItemEnd, BulletListEnd })]
+        [InlineData("# item 1\n#item 2\n** sub item 1\n** sub item 2", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, BulletListEnd, ListItemEnd, OrderedListEnd })]
+        [InlineData("* bullet list\non 2 lines", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("* bullet list\n\nparagraph", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd, ParagraphStart, PlainText, ParagraphEnd })]
+        [InlineData("# ordered list\non 2 lines", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("# ordered list\n\nparagraph", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, ParagraphStart, PlainText, ParagraphEnd })]
+
+        [InlineData("* plain //emphasised//, **strong**, {{image}}, [[hyperlink]], {{{no wiki}}}, http://example.com text", new object[] { BulletListStart, ListItemStart, PlainText, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, PreformattedStart, PlainText, PreformattedEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("* no // emphasis", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("* no ** strong", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("* no [[ hyperlink", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("* no {{ image", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("* no {{{ code", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("# plain //emphasised//, **strong**, {{image}}, [[hyperlink]], {{{no wiki}}}, http://example.com text", new object[] { OrderedListStart, ListItemStart, PlainText, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, PreformattedStart, PlainText, PreformattedEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("# no // emphasis", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("# no ** strong", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("# no [[ hyperlink", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("# no {{ image", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("# no {{{ code", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
+        public async Task ParsesLists(string text, object[] marks)
+        {
+            var result = await _parser.ParseAsync(text);
+
+            var elementMarkVisitor = new ElementMarkVisitor();
+            await result.AcceptAsync(elementMarkVisitor);
+
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+        }
+
+        [Trait("Class", nameof(CreoleParser))]
         [Theory(DisplayName = (_method + nameof(ParsesEscapeCharacters)))]
         [InlineData("~plain text", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("~~plain text", new object[] { ParagraphStart, PlainText, PlainText, ParagraphEnd })]
@@ -304,6 +347,47 @@ namespace Mup.Tests
         [InlineData("|cell with //emphasis//, **strong**, [[hyperlink]], {{image}}, http://example.com , {{{no wiki}}}", "<table><tr><td>cell with <em>emphasis</em>, <strong>strong</strong>, <a href=\"hyperlink\">hyperlink</a>, <img src=\"image\">, <a href=\"http://example.com\">http://example.com</a> , <code>no wiki</code></td></tr></table>")]
         [InlineData("|//no emphasis", "<table><tr><td>//no emphasis</td></tr></table>")]
         public async Task ParseTablesToHtml(string text, string expectedHtml)
+        {
+            var result = await _parser.ParseAsync(text);
+
+            var htmlStringBuilder = new StringBuilder();
+            var creoleToHtmlVisitor = new HtmlWriterVisitor(htmlStringBuilder);
+            await result.AcceptAsync(creoleToHtmlVisitor);
+
+            Assert.Equal(expectedHtml, htmlStringBuilder.ToString());
+        }
+
+        [Trait("Class", nameof(CreoleParser))]
+        [Theory(DisplayName = (_method + nameof(ParseListsToHtml)))]
+        [InlineData("*item", "<ul><li>item</li></ul>")]
+        [InlineData("* item", "<ul><li>item</li></ul>")]
+        [InlineData("* item 1\n*item 2", "<ul><li>item 1</li><li>item 2</li></ul>")]
+        [InlineData("* item 1\n*item 2\n** sub item 1\n** sub item 2", "<ul><li>item 1</li><li>item 2<ul><li>sub item 1</li><li>sub item 2</li></ul></li></ul>")]
+        [InlineData("* item 1\n*item 2\n** sub item 1\n** sub item 2\n* item 3", "<ul><li>item 1</li><li>item 2<ul><li>sub item 1</li><li>sub item 2</li></ul></li><li>item 3</li></ul>")]
+        [InlineData("# item 1\n#item 2", "<ol><li>item 1</li><li>item 2</li></ol>")]
+        [InlineData("# item 1\n#item 2\n## sub item 1\n## sub item 2", "<ol><li>item 1</li><li>item 2<ol><li>sub item 1</li><li>sub item 2</li></ol></li></ol>")]
+        [InlineData("# item 1\n#item 2\n## sub item 1\n## sub item 2\n# item 3", "<ol><li>item 1</li><li>item 2<ol><li>sub item 1</li><li>sub item 2</li></ol></li><li>item 3</li></ol>")]
+        [InlineData("* bullet item\n# ordered item", "<ul><li>bullet item</li></ul><ol><li>ordered item</li></ol>")]
+        [InlineData("# ordered item\n* bullet item", "<ol><li>ordered item</li></ol><ul><li>bullet item</li></ul>")]
+        [InlineData("* item 1\n*item 2\n## sub item 1\n## sub item 2", "<ul><li>item 1</li><li>item 2<ol><li>sub item 1</li><li>sub item 2</li></ol></li></ul>")]
+        [InlineData("# item 1\n#item 2\n** sub item 1\n** sub item 2", "<ol><li>item 1</li><li>item 2<ul><li>sub item 1</li><li>sub item 2</li></ul></li></ol>")]
+        [InlineData("* bullet list\non 2 lines", "<ul><li>bullet list\non 2 lines</li></ul>")]
+        [InlineData("* bullet list\n\nparagraph", "<ul><li>bullet list</li></ul><p>paragraph</p>")]
+        [InlineData("# ordered list\non 2 lines", "<ol><li>ordered list\non 2 lines</li></ol>")]
+        [InlineData("# ordered list\n\nparagraph", "<ol><li>ordered list</li></ol><p>paragraph</p>")]
+        [InlineData("* plain //emphasised//, **strong**, {{image}}, [[hyperlink]], {{{no wiki}}}, http://example.com text", "<ul><li>plain <em>emphasised</em>, <strong>strong</strong>, <img src=\"image\">, <a href=\"hyperlink\">hyperlink</a>, <code>no wiki</code>, <a href=\"http://example.com\">http://example.com</a> text</li></ul>")]
+        [InlineData("* no // emphasis", "<ul><li>no // emphasis</li></ul>")]
+        [InlineData("* no ** strong", "<ul><li>no ** strong</li></ul>")]
+        [InlineData("* no [[ hyperlink", "<ul><li>no [[ hyperlink</li></ul>")]
+        [InlineData("* no {{ image", "<ul><li>no {{ image</li></ul>")]
+        [InlineData("* no {{{ code", "<ul><li>no {{{ code</li></ul>")]
+        [InlineData("# plain //emphasised//, **strong**, {{image}}, [[hyperlink]], {{{no wiki}}}, http://example.com text", "<ol><li>plain <em>emphasised</em>, <strong>strong</strong>, <img src=\"image\">, <a href=\"hyperlink\">hyperlink</a>, <code>no wiki</code>, <a href=\"http://example.com\">http://example.com</a> text</li></ol>")]
+        [InlineData("# no // emphasis", "<ol><li>no // emphasis</li></ol>")]
+        [InlineData("# no ** strong", "<ol><li>no ** strong</li></ol>")]
+        [InlineData("# no [[ hyperlink", "<ol><li>no [[ hyperlink</li></ol>")]
+        [InlineData("# no {{ image", "<ol><li>no {{ image</li></ol>")]
+        [InlineData("# no {{{ code", "<ol><li>no {{{ code</li></ol>")]
+        public async Task ParseListsToHtml(string text, string expectedHtml)
         {
             var result = await _parser.ParseAsync(text);
 

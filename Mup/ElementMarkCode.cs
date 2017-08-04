@@ -61,14 +61,13 @@
         TableEnd,
 
         BulletListStart,
-        BulletListItemStart,
-        BulletListItemEnd,
         BulletListEnd,
 
         OrderedListStart,
-        OrderedListItemStart,
-        OrderedListItemEnd,
         OrderedListEnd,
+
+        ListItemStart,
+        ListItemEnd,
 
         PluginStart,
         PluginEnd

@@ -63,13 +63,16 @@ namespace Mup
 
                 case HyperlinkStart:
                     break;
+
                 case HyperlinkDestination:
                     var destination = text.Substring(mark.Start, mark.Length);
                     visitTask = BeginHyperlinkAsync(destination, cancellationToken);
                     break;
+
                 case HyperlinkEnd:
                     visitTask = EndHyperlinkAsync(cancellationToken);
                     break;
+
                 case StrongStart:
                     visitTask = BeginStrongAsync(cancellationToken);
                     break;
@@ -90,12 +93,15 @@ namespace Mup
                     _imageSourceBuilder = new StringBuilder();
                     _imageAlternativeTextBuilder = new StringBuilder();
                     break;
+
                 case ImageSource:
                     _imageSourceBuilder.Append(text, mark.Start, mark.Length);
                     break;
+
                 case PlainText when (_imageAlternativeTextBuilder != null):
                     _imageAlternativeTextBuilder.Append(text, mark.Start, mark.Length);
                     break;
+
                 case ImageEnd:
                     visitTask = ImageAsync(_imageSourceBuilder.ToString(), _imageAlternativeTextBuilder.ToString(), cancellationToken);
                     _imageSourceBuilder = null;
@@ -109,6 +115,7 @@ namespace Mup
                 case PreformattedStart:
                     visitTask = BeginPreformattedAsync(cancellationToken);
                     break;
+
                 case PreformattedEnd:
                     visitTask = EndPreformattedAsync(cancellationToken);
                     break;
@@ -188,6 +195,7 @@ namespace Mup
                 case TableHeaderCellStart:
                     visitTask = BeginTableHeaderCellAsync(cancellationToken);
                     break;
+
                 case TableHeaderCellEnd:
                     visitTask = EndTableHeaderCellAsync(cancellationToken);
                     break;
@@ -208,29 +216,38 @@ namespace Mup
                     visitTask = EndTableAsync(cancellationToken);
                     break;
 
-                case ElementMarkCode.BulletListStart:
+                case BulletListStart:
+                    visitTask = BeginUnorderedListAsync(cancellationToken);
                     break;
-                case ElementMarkCode.BulletListItemStart:
+
+                case BulletListEnd:
+                    visitTask = EndUnorderedListAsync(cancellationToken);
                     break;
-                case ElementMarkCode.BulletListItemEnd:
+
+                case OrderedListStart:
+                    visitTask = BeginOrderedListAsync(cancellationToken);
                     break;
-                case ElementMarkCode.BulletListEnd:
+
+                case OrderedListEnd:
+                    visitTask = EndOrderedListAsync(cancellationToken);
                     break;
-                case ElementMarkCode.OrderedListStart:
+
+                case ListItemStart:
+                    visitTask = BeginListItemAsync(cancellationToken);
                     break;
-                case ElementMarkCode.OrderedListItemStart:
-                    break;
-                case ElementMarkCode.OrderedListItemEnd:
-                    break;
-                case ElementMarkCode.OrderedListEnd:
+
+                case ListItemEnd:
+                    visitTask = EndListItemAsync(cancellationToken);
                     break;
 
                 case PluginStart:
                     _pluginTextBuilder = new StringBuilder();
                     break;
+
                 case PlainText when (_pluginTextBuilder != null):
                     _pluginTextBuilder.Append(text, mark.Start, mark.Length);
                     break;
+
                 case PluginEnd:
                     visitTask = PlugInAsync(_pluginTextBuilder.ToString(), cancellationToken);
                     _pluginTextBuilder = null;
@@ -506,6 +523,66 @@ namespace Mup
         }
 
         protected virtual void EndTableCell()
+        {
+        }
+
+        protected virtual Task BeginUnorderedListAsync(CancellationToken cancellationToken)
+        {
+            BeginUnorderedList();
+            return _completedTask;
+        }
+
+        protected virtual void BeginUnorderedList()
+        {
+        }
+
+        protected virtual Task EndUnorderedListAsync(CancellationToken cancellationToken)
+        {
+            EndUnorderedList();
+            return _completedTask;
+        }
+
+        protected virtual void EndUnorderedList()
+        {
+        }
+
+        protected virtual Task BeginOrderedListAsync(CancellationToken cancellationToken)
+        {
+            BeginOrderedList();
+            return _completedTask;
+        }
+
+        protected virtual void BeginOrderedList()
+        {
+        }
+
+        protected virtual Task EndOrderedListAsync(CancellationToken cancellationToken)
+        {
+            EndOrderedList();
+            return _completedTask;
+        }
+
+        protected virtual void EndOrderedList()
+        {
+        }
+
+        protected virtual Task BeginListItemAsync(CancellationToken cancellationToken)
+        {
+            BeginListItem();
+            return _completedTask;
+        }
+
+        protected virtual void BeginListItem()
+        {
+        }
+
+        protected virtual Task EndListItemAsync(CancellationToken cancellationToken)
+        {
+            EndListItem();
+            return _completedTask;
+        }
+
+        protected virtual void EndListItem()
         {
         }
 
