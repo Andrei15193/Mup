@@ -259,3 +259,18 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+.DS_STORE
+*~
+*.pyc
+static
+.grunt
+_SpecRunner.html
+__benchmarks__
+build/
+.module-cache
+*.gem
+*.iml
+.vscode
+*.swp
+*.swo
