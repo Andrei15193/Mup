@@ -1,24 +1,48 @@
-const IS_PRODUCTION = (process.argv.indexOf('-p') !== -1);
+const IS_PRODUCTION = (process.argv.indexOf("-p") !== -1);
 
 const path = require("path");
-const webpack = require("webpack");
+const Webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+function getAliases(config) {
+    var aliases = {};
+    Object
+        .getOwnPropertyNames(config.aliases)
+        .forEach(function (aliasKey) {
+            var alias = this[aliasKey];
+            Object.defineProperty(
+                aliases,
+                aliasKey,
+                {
+                    enumerable: true,
+                    writable: false,
+                    configurable: false,
+                    value: path.join(__dirname, alias)
+                });
+        }, config.aliases);
+    return aliases;
+}
+
+const config = require('./config.json');
+const aliases = getAliases(config);
 
 module.exports = {
     context: __dirname,
     devtool: (IS_PRODUCTION ? false : "inline-sourcemap"),
     entry: path.join(__dirname, "index.jsx"),
     resolve: {
-        extensions: [".js", ".jsx"]
+        extensions: [".js", ".jsx", ".json"],
+        alias: aliases
     },
     module: {
         loaders: [
             {
                 test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
-                loader: 'babel-loader',
+                exclude: [/node_modules/, /lib/],
+                loader: "babel-loader",
                 query: {
-                    presets: ['react', 'es2015']
+                    presets: ["react", "es2015"],
+                    plugins: ["react-html-attrs"]
                 }
             },
             {
@@ -32,22 +56,37 @@ module.exports = {
                 options: {
                     minimize: IS_PRODUCTION
                 }
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                exclude: /node_modules/,
+                loader: "file-loader"
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                include: path.join(__dirname, "lib"),
+                loader: "file-loader"
+            },
+            {
+                test: /\.js$/,
+                include: path.join(__dirname, "lib"),
+                loader: "file-loader?name=[name].[ext]"
             }
         ]
     },
     output: {
         path: path.join(__dirname, "build"),
-        publicPath: ".",
+        publicPath: "./",
         filename: "app.min.js"
     },
     plugins: [
         (IS_PRODUCTION ?
-            new webpack.DefinePlugin({
+            new Webpack.DefinePlugin({
                 "process.env": {
                     NODE_ENV: JSON.stringify("production")
                 }
             }) : null),
-        (IS_PRODUCTION ? new webpack.optimize.UglifyJsPlugin() : null),
+        (IS_PRODUCTION ? new Webpack.optimize.UglifyJsPlugin() : null),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "index.html")
         })
