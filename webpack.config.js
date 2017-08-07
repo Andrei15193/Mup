@@ -4,14 +4,15 @@ const path = require("path");
 const Webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-function getAliases(config) {
-    var aliases = {};
+const aliases = getAliases.call(require('./config/aliases.json'));
+function getAliases() {
+    var result = {};
     Object
-        .getOwnPropertyNames(config.aliases)
+        .getOwnPropertyNames(this)
         .forEach(function (aliasKey) {
             var alias = this[aliasKey];
             Object.defineProperty(
-                aliases,
+                result,
                 aliasKey,
                 {
                     enumerable: true,
@@ -19,12 +20,9 @@ function getAliases(config) {
                     configurable: false,
                     value: path.join(__dirname, alias)
                 });
-        }, config.aliases);
-    return aliases;
+        }, this);
+    return result;
 }
-
-const config = require('./config.json');
-const aliases = getAliases(config);
 
 module.exports = {
     context: __dirname,

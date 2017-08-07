@@ -1,0 +1,6 @@
+{
+    "home": "/",
+    "testCases": "/testCases",
+    "testCase": "/testCases/:id",
+    "roadmap": "/roadmap"
+}
