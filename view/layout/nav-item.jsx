@@ -8,7 +8,6 @@ import routePath from "route-path";
 
 import Bootstrap from "css/bootstrap";
 
-
 export default withRouter(
     class NavItem extends React.Component {
         static get propTypes() {

@@ -13,21 +13,23 @@ export default class LanguageStatus extends React.Component {
 
     render() {
         return (
-            <table class={join(Bootstrap.table, Bootstrap.tableHover)}>
-                <caption>Supported <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language">Lightweight Markup Languages</a></caption>
-                <thead>
-                    <tr>
-                        <th>Language</th>
-                        <th>Phase</th>
-                        <th>Since</th>
-                        <th width="60%">Elements</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <CreoleStatus />
-                    <MarkdownStatus />
-                </tbody>
-            </table>
+            <div>
+                <h2>Language Support</h2>
+                <table class={join(Bootstrap.table, Bootstrap.tableHover)}>
+                    <thead>
+                        <tr>
+                            <th>Language</th>
+                            <th>Phase</th>
+                            <th>Release Version</th>
+                            <th width="60%">Elements</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <CreoleStatus />
+                        <MarkdownStatus />
+                    </tbody>
+                </table>
+            </div>
         );
     }
 }
