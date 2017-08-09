@@ -14,7 +14,7 @@ export default class LanguageStatus extends React.Component {
     render() {
         return (
             <div>
-                <h2>Language Support</h2>
+                <h3>Language Support</h3>
                 <table class={join(Bootstrap.table, Bootstrap.tableHover)}>
                     <thead>
                         <tr>
