@@ -4,7 +4,12 @@
     "js/bootstrap": "./lib/Bootstrap/js/bootstrap.min.js",
     "js/jquery": "./lib/jQuery/3.2.1/jquery.min.js",
     "images/logo": "./images/logo.png",
+    "dependency-container": "./dependency-container",
     "common/bootstrap": "./common/bootstrap",
+    "constants/action-categories": "./constants/action-categories",
+    "constants/view-types": "./constants/view-types",
+    "actions/parser-actions": "./actions/parser-actions",
+    "stores/parser-store": "./stores/parser-store",
     "route-path": "./route-path",
     "view/pages": "./view/pages",
     "view/layout/page": "./view/layout/page"

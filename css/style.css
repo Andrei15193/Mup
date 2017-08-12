@@ -13,3 +13,7 @@
 .parse-content {
     min-height: 300px;
 }
+
+.vertical-resize {
+    resize: vertical;
+}

@@ -2,30 +2,33 @@ import React from "react";
 import join from "classnames";
 
 import Page from "view/layout/page";
+import ViewTypes from "constants/view-types"
+import { parserActions, parserStore } from "dependency-container";
 
 import Bootstrap from "css/bootstrap";
 import Style from "css/style";
 
-export default class Home extends React.Component {
+export default class OnlineParser extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { view: "pretty", html: "<p>Test</p>" };
+        this.state = { view: parserStore.view, html: parserStore.html };
+
+        this._updateView = () => this.setState({ view: parserStore.view });
+        this._updateHtml = () => this.setState({ html: parserStore.html });
     }
 
-    showPretty() {
-        this.setState({ view: "pretty" });
+    componentDidMount() {
+        parserStore.viewChanged.add(this._updateView);
+        parserStore.htmlChanged.add(this._updateHtml);
     }
 
-    showRaw() {
-        this.setState({ view: "raw" });
-    }
-
-    generateHtml() {
-        this.setState({ html: "<p>some new HTML</p>" });
+    componentWillUnmount() {
+        parserStore.viewChanged.remove(this._updateView);
+        parserStore.htmlChanged.remove(this._updateHtml);
     }
 
     get previewContent() {
-        if (this.state.view == "pretty")
+        if (this.state.view == ViewTypes.pretty)
             return (
                 <div class={join(Bootstrap.panel, Bootstrap.panelDefault, Style.parseContent, Style.noMargin)}>
                     <div class={Bootstrap.panelBody}>
@@ -40,18 +43,18 @@ export default class Home extends React.Component {
     }
 
     get previewButtonGroup() {
-        if (this.state.view == "pretty")
+        if (this.state.view == ViewTypes.pretty)
             return (
                 <div class={Bootstrap.btnGroup} role="group">
-                    <button class={join(Bootstrap.btn, Bootstrap.btnPrimary)} onClick={this.showPretty.bind(this)}>Pretty</button>
-                    <button class={join(Bootstrap.btn, Bootstrap.btnDefault)} onClick={this.showRaw.bind(this)}>Raw</button>
+                    <button class={join(Bootstrap.btn, Bootstrap.btnPrimary)} onClick={() => parserActions.showPretty()}>Pretty</button>
+                    <button class={join(Bootstrap.btn, Bootstrap.btnDefault)} onClick={() => parserActions.showRaw()}>Raw</button>
                 </div>
             );
         else
             return (
                 <div class={Bootstrap.btnGroup} role="group">
-                    <button class={join(Bootstrap.btn, Bootstrap.btnDefault)} onClick={this.showPretty.bind(this)}>Pretty</button>
-                    <button class={join(Bootstrap.btn, Bootstrap.btnPrimary)} onClick={this.showRaw.bind(this)}>Raw</button>
+                    <button class={join(Bootstrap.btn, Bootstrap.btnDefault)} onClick={() => parserActions.showPretty()}>Pretty</button>
+                    <button class={join(Bootstrap.btn, Bootstrap.btnPrimary)} onClick={() => parserActions.showRaw()}>Raw</button>
                 </div>
             );
     }
@@ -72,7 +75,7 @@ export default class Home extends React.Component {
                     <div class={Bootstrap.row}>
                         <div class={Bootstrap.colMd6}>
                             <div class={Bootstrap.formGroup}>
-                                <textarea class={join(Bootstrap.formControl, Style.parseContent)}></textarea>
+                                <textarea class={join(Bootstrap.formControl, Style.parseContent, Style.verticalResize)}></textarea>
                             </div>
                         </div>
                         <div class={Bootstrap.colMd6}>
@@ -81,7 +84,7 @@ export default class Home extends React.Component {
                     </div>
                     <div class={Bootstrap.row}>
                         <div class={join(Bootstrap.colMd6)}>
-                            <button class={join(Bootstrap.btn, Bootstrap.btnPrimary)} onClick={this.generateHtml.bind(this)}>Generate</button>
+                            <button class={join(Bootstrap.btn, Bootstrap.btnPrimary)} onClick={() => parserActions.parse("<p> this is a test </p>")}>Generate</button>
                         </div>
                         <div class={join(Bootstrap.colMd6)}>
                             {this.previewButtonGroup}
