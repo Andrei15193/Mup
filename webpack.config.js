@@ -27,7 +27,7 @@ function getAliases() {
 module.exports = {
     context: __dirname,
     devtool: (IS_PRODUCTION ? false : "inline-sourcemap"),
-    entry: path.join(__dirname, "index.jsx"),
+    entry: path.join(__dirname, "view", "index.jsx"),
     resolve: {
         extensions: [".js", ".jsx", ".json"],
         alias: aliases
@@ -86,7 +86,7 @@ module.exports = {
             }) : null),
         (IS_PRODUCTION ? new Webpack.optimize.UglifyJsPlugin() : null),
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, "index.html")
+            template: path.join(__dirname, "view", "index.html")
         })
     ].filter(plugin => plugin != null)
 };

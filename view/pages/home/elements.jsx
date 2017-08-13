@@ -1,5 +1,5 @@
 import React from "react";
-import { Label } from "common/bootstrap";
+import { Label } from "view/common/bootstrap";
 
 export default class Elements extends React.Component {
     constructor(props) {

@@ -4,7 +4,7 @@ import Bootstrap from "css/bootstrap";
 import Style from "css/style";
 import Logo from "images/logo";
 
-import { PrimaryLabel } from "common/bootstrap";
+import { PrimaryLabel } from "view/common/bootstrap";
 
 export default class Header extends React.Component {
     constructor(props) {
