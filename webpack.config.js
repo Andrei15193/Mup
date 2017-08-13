@@ -26,7 +26,7 @@ function getAliases() {
 
 module.exports = {
     context: __dirname,
-    devtool: (IS_PRODUCTION ? false : "inline-sourcemap"),
+    devtool: (IS_PRODUCTION ? false : "source-map"),
     entry: path.join(__dirname, "view", "index.jsx"),
     resolve: {
         extensions: [".js", ".jsx", ".json"],

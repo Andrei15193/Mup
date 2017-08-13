@@ -3,10 +3,13 @@ import join from "classnames";
 
 import Page from "view/layout/page";
 import ViewTypes from "constants/view-types"
-import { parserActions, parserStore } from "dependency-container";
+import container from "dependency-container";
 
 import Bootstrap from "css/bootstrap";
 import Style from "css/style";
+
+const parserActions = container.parserActions;
+const parserStore = container.parserStore;
 
 export default class OnlineParser extends React.Component {
     constructor(props) {
