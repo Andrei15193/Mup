@@ -1,3 +1,5 @@
+import Axios from "axios";
+
 import ActionCategories from "constants/action-categories";
 import ViewTypes from "constants/view-types";
 
@@ -44,8 +46,15 @@ export default class ParserStore {
                 break;
 
             case ActionCategories.parserParse:
-                console.log("Do async call for parse");
-                this._setHtml(this._text);
+                this._setHtml("Fetching some HTML for you, might take a bit...");
+                Axios
+                    .post("/api/creole", this._text)
+                    .then((function (response) {
+                        this._setHtml(response.data);
+                    }).bind(this))
+                    .catch((function (error) {
+                        this._setHtml("Something went wrong...");
+                    }).bind(this));
                 break;
         }
     }
