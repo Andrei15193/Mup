@@ -8,15 +8,15 @@ export default class ParserActions {
         this._dispatcher = dispatcher;
     }
 
-    showPretty() {
-        this._dispatcher.dispatch(new Action(ActionCategories.parserView, ViewTypes.pretty));
+    show(view) {
+        this._dispatcher.dispatch(new Action(ActionCategories.parserView, view));
     }
 
-    showRaw() {
-        this._dispatcher.dispatch(new Action(ActionCategories.parserView, ViewTypes.raw));
+    updateText(text) {
+        this._dispatcher.dispatch(new Action(ActionCategories.parserText, text));
     }
 
-    parse(text) {
-        this._dispatcher.dispatch(new Action(ActionCategories.parserProcess, text));
+    parse() {
+        this._dispatcher.dispatch(new Action(ActionCategories.parserParse));
     }
 };

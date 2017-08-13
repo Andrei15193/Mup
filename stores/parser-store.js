@@ -6,7 +6,8 @@ import EventHandler from "./event-handler";
 export default class ParserStore {
     constructor(dispatcher) {
         this._view = ViewTypes.pretty;
-        this._html = "<p>test html</p>";
+        this._text = "";
+        this._html = "";
 
         this.viewChanged = new EventHandler("viewChanged", this);
         this.htmlChanged = new EventHandler("htmlChanged", this);
@@ -38,8 +39,13 @@ export default class ParserStore {
                 this._setView(action.data);
                 break;
 
-            case ActionCategories.parserProcess:
-                this._setHtml(action.data);
+            case ActionCategories.parserText:
+                this._text = action.data;
+                break;
+
+            case ActionCategories.parserParse:
+                console.log("Do async call for parse");
+                this._setHtml(this._text);
                 break;
         }
     }
