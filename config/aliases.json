@@ -10,6 +10,7 @@
     "constants/view-types": "./constants/view-types",
     "actions/parser-actions": "./actions/parser-actions",
     "stores/parser-store": "./stores/parser-store",
+    "api/request": "./api/request",
     "view/common/bootstrap": "./view/common/bootstrap",
     "view/layout/page": "./view/layout/page",
     "view/pages": "./view/pages"

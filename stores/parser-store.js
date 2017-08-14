@@ -1,7 +1,6 @@
-import Axios from "axios";
-
 import ActionCategories from "constants/action-categories";
 import ViewTypes from "constants/view-types";
+import Request from "api/request";
 
 import EventHandler from "./event-handler";
 
@@ -47,8 +46,8 @@ export default class ParserStore {
 
             case ActionCategories.parserParse:
                 this._setHtml("Fetching some HTML for you, might take a bit...");
-                Axios
-                    .post("/api/creole", this._text)
+                Request
+                    .postAsync("/api/creole", this._text)
                     .then((function (response) {
                         this._setHtml(response.data);
                     }).bind(this))
