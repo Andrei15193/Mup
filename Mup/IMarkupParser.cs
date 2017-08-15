@@ -9,42 +9,42 @@ namespace Mup
     {
         /// <summary>Parses the given <paramref name="text"/>.</summary>
         /// <param name="text">The text to parse.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        IParseResult Parse(string text);
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        IParseTree Parse(string text);
 
         /// <summary>Asynchronously parses the given <paramref name="text"/>.</summary>
         /// <param name="text">The text to parse.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        Task<IParseResult> ParseAsync(string text);
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        Task<IParseTree> ParseAsync(string text);
 
         /// <summary>Asynchronously parses the given <paramref name="text"/>.</summary>
         /// <param name="text">The text to parse.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        Task<IParseResult> ParseAsync(string text, CancellationToken cancellationToken);
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        Task<IParseTree> ParseAsync(string text, CancellationToken cancellationToken);
 
         /// <summary>Asynchronously parses text from the given <paramref name="reader"/>.</summary>
         /// <param name="reader">A text reader from which to parse text.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        Task<IParseResult> ParseAsync(TextReader reader);
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        Task<IParseTree> ParseAsync(TextReader reader);
 
         /// <summary>Asynchronously parses text from the given <paramref name="reader"/>.</summary>
         /// <param name="reader">A text reader from which to parse text.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        Task<IParseResult> ParseAsync(TextReader reader, CancellationToken cancellationToken);
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        Task<IParseTree> ParseAsync(TextReader reader, CancellationToken cancellationToken);
 
         /// <summary>Asynchronously parses text from the given <paramref name="reader"/>.</summary>
         /// <param name="reader">A text reader from which to parse text.</param>
         /// <param name="bufferSize">The buffer size to use when reading text from the reader.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        Task<IParseResult> ParseAsync(TextReader reader, int bufferSize);
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        Task<IParseTree> ParseAsync(TextReader reader, int bufferSize);
 
         /// <summary>Asynchronously parses text from the given <paramref name="reader"/>.</summary>
         /// <param name="reader">A text reader from which to parse text.</param>
         /// <param name="bufferSize">The buffer size to use when reading text from the reader.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        Task<IParseResult> ParseAsync(TextReader reader, int bufferSize, CancellationToken cancellationToken);
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        Task<IParseTree> ParseAsync(TextReader reader, int bufferSize, CancellationToken cancellationToken);
     }
 }

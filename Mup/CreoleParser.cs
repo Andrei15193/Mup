@@ -30,69 +30,69 @@ namespace Mup
 
         /// <summary>Parses the given <paramref name="text"/>.</summary>
         /// <param name="text">The text to parse.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        public IParseResult Parse(string text)
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        public IParseTree Parse(string text)
         {
             var scanner = _GetScanner();
             var scanResult = scanner.Scan(text);
-            var parseResult = _Parse(scanResult);
-            return parseResult;
+            var parseTree = _Parse(scanResult);
+            return parseTree;
         }
 
         /// <summary>Asynchronously parses the given <paramref name="text"/>.</summary>
         /// <param name="text">The text to parse.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        public Task<IParseResult> ParseAsync(string text)
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        public Task<IParseTree> ParseAsync(string text)
             => ParseAsync(text, CancellationToken.None);
 
         /// <summary>Asynchronously parses the given <paramref name="text"/>.</summary>
         /// <param name="text">The text to parse.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        public async Task<IParseResult> ParseAsync(string text, CancellationToken cancellationToken)
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        public async Task<IParseTree> ParseAsync(string text, CancellationToken cancellationToken)
         {
             var scanner = _GetScanner();
             var scanResult = await scanner.ScanAsync(text, cancellationToken);
-            var parseResult = _Parse(scanResult);
-            return parseResult;
+            var parseTree = _Parse(scanResult);
+            return parseTree;
         }
 
         /// <summary>Asynchronously parses text from the given <paramref name="reader"/>.</summary>
         /// <param name="reader">A text reader from which to parse text.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        public Task<IParseResult> ParseAsync(TextReader reader)
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        public Task<IParseTree> ParseAsync(TextReader reader)
             => ParseAsync(reader);
 
         /// <summary>Asynchronously parses text from the given <paramref name="reader"/>.</summary>
         /// <param name="reader">A text reader from which to parse text.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        public async Task<IParseResult> ParseAsync(TextReader reader, CancellationToken cancellationToken)
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        public async Task<IParseTree> ParseAsync(TextReader reader, CancellationToken cancellationToken)
         {
             var scanner = _GetScanner();
             var scanResult = await scanner.ScanAsync(reader, cancellationToken);
-            var parseResult = _Parse(scanResult);
-            return parseResult;
+            var parseTree = _Parse(scanResult);
+            return parseTree;
         }
 
         /// <summary>Asynchronously parses text from the given <paramref name="reader"/>.</summary>
         /// <param name="reader">A text reader from which to parse text.</param>
         /// <param name="bufferSize">The buffer size to use when reading text from the reader.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        public Task<IParseResult> ParseAsync(TextReader reader, int bufferSize)
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        public Task<IParseTree> ParseAsync(TextReader reader, int bufferSize)
             => ParseAsync(reader, bufferSize, CancellationToken.None);
 
         /// <summary>Asynchronously parses text from the given <paramref name="reader"/>.</summary>
         /// <param name="reader">A text reader from which to parse text.</param>
         /// <param name="bufferSize">The buffer size to use when reading text from the reader.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        /// <returns>Returns an <see cref="IParseResult"/> that can be used to generate other formats.</returns>
-        public async Task<IParseResult> ParseAsync(TextReader reader, int bufferSize, CancellationToken cancellationToken)
+        /// <returns>Returns an <see cref="IParseTree"/> that can be used to generate other formats.</returns>
+        public async Task<IParseTree> ParseAsync(TextReader reader, int bufferSize, CancellationToken cancellationToken)
         {
             var scanner = _GetScanner();
             var scanResult = await scanner.ScanAsync(reader, bufferSize, cancellationToken);
-            var parseResult = _Parse(scanResult);
-            return parseResult;
+            var parseTree = _Parse(scanResult);
+            return parseTree;
         }
 
         /// <summary>Gets the protocols for which inline hyperlinks are generated.</summary>
@@ -113,11 +113,11 @@ namespace Mup
         private Scanner<CreoleTokenCode> _GetScanner()
             => new CreoleScanner();
 
-        private IParseResult _Parse(ScanResult<CreoleTokenCode> scanResult)
+        private IParseTree _Parse(ScanResult<CreoleTokenCode> scanResult)
         {
             var parser = new CreoleMarkupParser(scanResult, InlineHyperlinkProtocols);
-            var parseResult = parser.Parse();
-            return parseResult;
+            var parseTree = parser.Parse();
+            return parseTree;
         }
 
         private class CreoleMarkupParser
@@ -174,7 +174,7 @@ namespace Mup
                 _inlineHyperlinkProtocols = inlineHyperlinkProtocols;
             }
 
-            internal ParseResult Parse()
+            internal FlatParseTree Parse()
             {
                 Token<CreoleTokenCode> previous = null, current = null, next = null;
 
@@ -195,7 +195,7 @@ namespace Mup
                     }
 
                 var marks = _BuildMarks();
-                return new ParseResult(_text, marks);
+                return new FlatParseTree(_text, marks);
             }
 
             private IEnumerable<ElementMark> _BuildMarks()
