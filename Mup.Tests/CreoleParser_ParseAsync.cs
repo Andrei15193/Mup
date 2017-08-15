@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using static Mup.ElementMarkCode;
@@ -37,10 +36,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var elementMarkVisitor = new ElementMarkVisitor();
-            await result.AcceptAsync(elementMarkVisitor);
+            var actualMarks = await result.AcceptAsync(new ElementMarkVisitor());
 
-            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -51,10 +49,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var elementMarkVisitor = new ElementMarkVisitor();
-            await result.AcceptAsync(elementMarkVisitor);
+            var actualMarks = await result.AcceptAsync(new ElementMarkVisitor());
 
-            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -69,10 +66,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var elementMarkVisitor = new ElementMarkVisitor();
-            await result.AcceptAsync(elementMarkVisitor);
+            var actualMarks = await result.AcceptAsync(new ElementMarkVisitor());
 
-            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -86,10 +82,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var elementMarkVisitor = new ElementMarkVisitor();
-            await result.AcceptAsync(elementMarkVisitor);
+            var actualMarks = await result.AcceptAsync(new ElementMarkVisitor());
 
-            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -109,39 +104,38 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var elementMarkVisitor = new ElementMarkVisitor();
-            await result.AcceptAsync(elementMarkVisitor);
+            var actualMarks = await result.AcceptAsync(new ElementMarkVisitor());
 
-            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
         [Trait("Class", nameof(CreoleParser))]
         [Theory(DisplayName = (_method + nameof(ParsesLists)))]
-        [InlineData("*item", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
-        [InlineData("* item", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
-        [InlineData("* item 1\n*item 2", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
-        [InlineData("* item 1\n*item 2\n** sub item 1\n** sub item 2", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, BulletListEnd, ListItemEnd, BulletListEnd })]
-        [InlineData("* item 1\n*item 2\n** sub item 1\n** sub item 2\n* item 3", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, BulletListEnd, ListItemEnd, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("*item", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
+        [InlineData("* item", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
+        [InlineData("* item 1\n*item 2", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
+        [InlineData("* item 1\n*item 2\n** sub item 1\n** sub item 2", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, UnorderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd, ListItemEnd, UnorderedListEnd })]
+        [InlineData("* item 1\n*item 2\n** sub item 1\n** sub item 2\n* item 3", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, UnorderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd, ListItemEnd, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
         [InlineData("#item", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
         [InlineData("# item", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
         [InlineData("# item 1\n#item 2", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
         [InlineData("# item 1\n#item 2\n## sub item 1\n## sub item 2", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, ListItemEnd, OrderedListEnd })]
         [InlineData("# item 1\n#item 2\n## sub item 1\n## sub item 2\n# item 3", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, ListItemEnd, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
-        [InlineData("* bullet item\n# ordered item", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd, OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
-        [InlineData("# ordered item\n* bullet item", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
-        [InlineData("* item 1\n*item 2\n## sub item 1\n## sub item 2", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, ListItemEnd, BulletListEnd })]
-        [InlineData("# item 1\n#item 2\n** sub item 1\n** sub item 2", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, BulletListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, BulletListEnd, ListItemEnd, OrderedListEnd })]
-        [InlineData("* bullet list\non 2 lines", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
-        [InlineData("* bullet list\n\nparagraph", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd, ParagraphStart, PlainText, ParagraphEnd })]
+        [InlineData("* unordered item\n# ordered item", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd, OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("# ordered item\n* unordered item", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
+        [InlineData("* item 1\n*item 2\n## sub item 1\n## sub item 2", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, ListItemEnd, UnorderedListEnd })]
+        [InlineData("# item 1\n#item 2\n** sub item 1\n** sub item 2", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, UnorderedListStart, ListItemStart, PlainText, ListItemEnd, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd, ListItemEnd, OrderedListEnd })]
+        [InlineData("* unordered list\non 2 lines", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
+        [InlineData("* unordered list\n\nparagraph", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd, ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("# ordered list\non 2 lines", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
         [InlineData("# ordered list\n\nparagraph", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, ParagraphStart, PlainText, ParagraphEnd })]
 
-        [InlineData("* plain //emphasised//, **strong**, {{image}}, [[hyperlink]], {{{no wiki}}}, http://example.com text", new object[] { BulletListStart, ListItemStart, PlainText, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, PreformattedStart, PlainText, PreformattedEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ListItemEnd, BulletListEnd })]
-        [InlineData("* no // emphasis", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
-        [InlineData("* no ** strong", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
-        [InlineData("* no [[ hyperlink", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
-        [InlineData("* no {{ image", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
-        [InlineData("* no {{{ code", new object[] { BulletListStart, ListItemStart, PlainText, ListItemEnd, BulletListEnd })]
+        [InlineData("* plain //emphasised//, **strong**, {{image}}, [[hyperlink]], {{{no wiki}}}, http://example.com text", new object[] { UnorderedListStart, ListItemStart, PlainText, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, PreformattedStart, PlainText, PreformattedEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ListItemEnd, UnorderedListEnd })]
+        [InlineData("* no // emphasis", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
+        [InlineData("* no ** strong", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
+        [InlineData("* no [[ hyperlink", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
+        [InlineData("* no {{ image", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
+        [InlineData("* no {{{ code", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
         [InlineData("# plain //emphasised//, **strong**, {{image}}, [[hyperlink]], {{{no wiki}}}, http://example.com text", new object[] { OrderedListStart, ListItemStart, PlainText, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, PreformattedStart, PlainText, PreformattedEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ListItemEnd, OrderedListEnd })]
         [InlineData("# no // emphasis", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
         [InlineData("# no ** strong", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
@@ -152,10 +146,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var elementMarkVisitor = new ElementMarkVisitor();
-            await result.AcceptAsync(elementMarkVisitor);
+            var actualMarks = await result.AcceptAsync(new ElementMarkVisitor());
 
-            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -169,10 +162,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var elementMarkVisitor = new ElementMarkVisitor();
-            await result.AcceptAsync(elementMarkVisitor);
+            var actualMarks = await result.AcceptAsync(new ElementMarkVisitor());
 
-            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -248,10 +240,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var elementMarkVisitor = new ElementMarkVisitor();
-            await result.AcceptAsync(elementMarkVisitor);
+            var actualMarks = await result.AcceptAsync(new ElementMarkVisitor());
 
-            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -268,10 +259,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var elementMarkVisitor = new ElementMarkVisitor();
-            await result.AcceptAsync(elementMarkVisitor);
+            var actualMarks = await result.AcceptAsync(new ElementMarkVisitor());
 
-            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), elementMarkVisitor.Marks);
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -292,11 +282,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var htmlStringBuilder = new StringBuilder();
-            var creoleToHtmlVisitor = new HtmlWriterVisitor(htmlStringBuilder);
-            await result.AcceptAsync(creoleToHtmlVisitor);
+            var actualHtml = await result.AcceptAsync(new HtmlWriterVisitor());
 
-            Assert.Equal(expectedHtml, htmlStringBuilder.ToString());
+            Assert.Equal(expectedHtml, actualHtml);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -307,11 +295,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var htmlStringBuilder = new StringBuilder();
-            var creoleToHtmlVisitor = new HtmlWriterVisitor(htmlStringBuilder);
-            await result.AcceptAsync(creoleToHtmlVisitor);
+            var actualHtml = await result.AcceptAsync(new HtmlWriterVisitor());
 
-            Assert.Equal(expectedHtml, htmlStringBuilder.ToString());
+            Assert.Equal(expectedHtml, actualHtml);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -326,11 +312,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var htmlStringBuilder = new StringBuilder();
-            var creoleToHtmlVisitor = new HtmlWriterVisitor(htmlStringBuilder);
-            await result.AcceptAsync(creoleToHtmlVisitor);
+            var actualHtml = await result.AcceptAsync(new HtmlWriterVisitor());
 
-            Assert.Equal(expectedHtml, htmlStringBuilder.ToString());
+            Assert.Equal(expectedHtml, actualHtml);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -350,11 +334,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var htmlStringBuilder = new StringBuilder();
-            var creoleToHtmlVisitor = new HtmlWriterVisitor(htmlStringBuilder);
-            await result.AcceptAsync(creoleToHtmlVisitor);
+            var actualHtml = await result.AcceptAsync(new HtmlWriterVisitor());
 
-            Assert.Equal(expectedHtml, htmlStringBuilder.ToString());
+            Assert.Equal(expectedHtml, actualHtml);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -367,12 +349,12 @@ namespace Mup.Tests
         [InlineData("# item 1\n#item 2", "<ol><li>item 1</li><li>item 2</li></ol>")]
         [InlineData("# item 1\n#item 2\n## sub item 1\n## sub item 2", "<ol><li>item 1</li><li>item 2<ol><li>sub item 1</li><li>sub item 2</li></ol></li></ol>")]
         [InlineData("# item 1\n#item 2\n## sub item 1\n## sub item 2\n# item 3", "<ol><li>item 1</li><li>item 2<ol><li>sub item 1</li><li>sub item 2</li></ol></li><li>item 3</li></ol>")]
-        [InlineData("* bullet item\n# ordered item", "<ul><li>bullet item</li></ul><ol><li>ordered item</li></ol>")]
-        [InlineData("# ordered item\n* bullet item", "<ol><li>ordered item</li></ol><ul><li>bullet item</li></ul>")]
+        [InlineData("* unordered item\n# ordered item", "<ul><li>unordered item</li></ul><ol><li>ordered item</li></ol>")]
+        [InlineData("# ordered item\n* unordered item", "<ol><li>ordered item</li></ol><ul><li>unordered item</li></ul>")]
         [InlineData("* item 1\n*item 2\n## sub item 1\n## sub item 2", "<ul><li>item 1</li><li>item 2<ol><li>sub item 1</li><li>sub item 2</li></ol></li></ul>")]
         [InlineData("# item 1\n#item 2\n** sub item 1\n** sub item 2", "<ol><li>item 1</li><li>item 2<ul><li>sub item 1</li><li>sub item 2</li></ul></li></ol>")]
-        [InlineData("* bullet list\non 2 lines", "<ul><li>bullet list\non 2 lines</li></ul>")]
-        [InlineData("* bullet list\n\nparagraph", "<ul><li>bullet list</li></ul><p>paragraph</p>")]
+        [InlineData("* unordered list\non 2 lines", "<ul><li>unordered list\non 2 lines</li></ul>")]
+        [InlineData("* unordered list\n\nparagraph", "<ul><li>unordered list</li></ul><p>paragraph</p>")]
         [InlineData("# ordered list\non 2 lines", "<ol><li>ordered list\non 2 lines</li></ol>")]
         [InlineData("# ordered list\n\nparagraph", "<ol><li>ordered list</li></ol><p>paragraph</p>")]
         [InlineData("* plain //emphasised//, **strong**, {{image}}, [[hyperlink]], {{{no wiki}}}, http://example.com text", "<ul><li>plain <em>emphasised</em>, <strong>strong</strong>, <img src=\"image\">, <a href=\"hyperlink\">hyperlink</a>, <code>no wiki</code>, <a href=\"http://example.com\">http://example.com</a> text</li></ul>")]
@@ -391,11 +373,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var htmlStringBuilder = new StringBuilder();
-            var creoleToHtmlVisitor = new HtmlWriterVisitor(htmlStringBuilder);
-            await result.AcceptAsync(creoleToHtmlVisitor);
+            var actualHtml = await result.AcceptAsync(new HtmlWriterVisitor());
 
-            Assert.Equal(expectedHtml, htmlStringBuilder.ToString());
+            Assert.Equal(expectedHtml, actualHtml);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -409,11 +389,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var htmlStringBuilder = new StringBuilder();
-            var creoleToHtmlVisitor = new HtmlWriterVisitor(htmlStringBuilder);
-            await result.AcceptAsync(creoleToHtmlVisitor);
+            var actualHtml = await result.AcceptAsync(new HtmlWriterVisitor());
 
-            Assert.Equal(expectedHtml, htmlStringBuilder.ToString());
+            Assert.Equal(expectedHtml, actualHtml);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -501,11 +479,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var htmlStringBuilder = new StringBuilder();
-            var creoleToHtmlVisitor = new HtmlWriterVisitor(htmlStringBuilder);
-            await result.AcceptAsync(creoleToHtmlVisitor);
+            var actualHtml = await result.AcceptAsync(new HtmlWriterVisitor());
 
-            Assert.Equal(expectedHtml, htmlStringBuilder.ToString());
+            Assert.Equal(expectedHtml, actualHtml);
         }
 
         [Trait("Class", nameof(CreoleParser))]
@@ -522,11 +498,9 @@ namespace Mup.Tests
         {
             var result = await _parser.ParseAsync(text);
 
-            var htmlStringBuilder = new StringBuilder();
-            var creoleToHtmlVisitor = new HtmlWriterVisitor(htmlStringBuilder);
-            await result.AcceptAsync(creoleToHtmlVisitor);
+            var actualHtml = await result.AcceptAsync(new HtmlWriterVisitor());
 
-            Assert.Equal(expectedHtml, htmlStringBuilder.ToString());
+            Assert.Equal(expectedHtml, actualHtml);
         }
     }
 }

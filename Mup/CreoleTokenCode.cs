@@ -1,6 +1,6 @@
 ﻿namespace Mup
 {
-    internal enum CreoleToken
+    internal enum CreoleTokenCode
     {
         Text,
         Asterisk,

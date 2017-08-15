@@ -9,7 +9,7 @@
         Heading4,
         Heading5,
         Heading6,
-        BulletList,
+        UnorderedList,
         OrderedList,
         Table,
         PreformattedBlock,

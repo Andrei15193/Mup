@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-using static Mup.CreoleToken;
+using static Mup.CreoleTokenCode;
 
 namespace Mup.Tests
 {
@@ -30,8 +30,8 @@ namespace Mup.Tests
         [InlineData("paragraph1\r\n\nparagraph2", new object[] { Text, NewLine, Text })]
         [InlineData("paragraph1\n\r\nparagraph2", new object[] { Text, NewLine, Text })]
         [InlineData("paragraph1\r\n\r\nparagraph2", new object[] { Text, NewLine, Text })]
-        [InlineData("* bullet list", new object[] { Asterisk, WhiteSpace, Text, WhiteSpace, Text })]
-        [InlineData("* bullet sub list", new object[] { Asterisk, WhiteSpace, Text, WhiteSpace, Text, WhiteSpace, Text })]
+        [InlineData("* unordered list", new object[] { Asterisk, WhiteSpace, Text, WhiteSpace, Text })]
+        [InlineData("* unordered sub list", new object[] { Asterisk, WhiteSpace, Text, WhiteSpace, Text, WhiteSpace, Text })]
         [InlineData("# ordered list", new object[] { Hash, WhiteSpace, Text, WhiteSpace, Text })]
         [InlineData("## ordered sub list", new object[] { Hash, WhiteSpace, Text, WhiteSpace, Text, WhiteSpace, Text })]
         [InlineData("|=header 1|=header 2|", new object[] { Pipe, Equal, Text, WhiteSpace, Text, Pipe, Equal, Text, WhiteSpace, Text, Pipe })]
@@ -46,7 +46,7 @@ namespace Mup.Tests
         public async Task ScanText(string text, IEnumerable<object> tokens)
         {
             var scanResult = await _Scanner.ScanAsync(text);
-            Assert.Equal(tokens.Cast<CreoleToken>(), scanResult.Tokens.Select(token => token.Code));
+            Assert.Equal(tokens.Cast<CreoleTokenCode>(), scanResult.Tokens.Select(token => token.Code));
         }
     }
 }

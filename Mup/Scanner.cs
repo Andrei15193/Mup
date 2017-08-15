@@ -8,30 +8,31 @@ using System.Threading.Tasks;
 
 namespace Mup
 {
-    internal class Scanner<TTokenCode> where TTokenCode : struct
+    internal class Scanner<TTokenCode>
+        where TTokenCode : struct
     {
         private const int _defaultBufferSize = 2048;
 
         private readonly IEnumerable<KeyValuePair<TTokenCode, Func<char, bool>>> _predicates;
 
-        public Scanner(IEnumerable<KeyValuePair<TTokenCode, Func<char, bool>>> predicates)
+        internal Scanner(IEnumerable<KeyValuePair<TTokenCode, Func<char, bool>>> predicates)
         {
             _predicates = (predicates ?? throw new ArgumentNullException(nameof(predicates)));
             if (predicates.Any(predicate => predicate.Value == null))
                 throw new ArgumentException("Cannot contain null.", nameof(predicates));
         }
 
-        public ScanResult<TTokenCode> Scan(string text)
+        internal ScanResult<TTokenCode> Scan(string text)
         {
             var scanner = new TextScanner(_predicates);
             var scanResult = scanner.Scan(text);
             return scanResult;
         }
 
-        public Task<ScanResult<TTokenCode>> ScanAsync(string text)
+        internal Task<ScanResult<TTokenCode>> ScanAsync(string text)
             => ScanAsync(text, CancellationToken.None);
 
-        public async Task<ScanResult<TTokenCode>> ScanAsync(string text, CancellationToken cancellationToken)
+        internal async Task<ScanResult<TTokenCode>> ScanAsync(string text, CancellationToken cancellationToken)
         {
             if (text == null)
                 throw new ArgumentNullException(nameof(text));
@@ -59,16 +60,16 @@ namespace Mup
             return result;
         }
 
-        public Task<ScanResult<TTokenCode>> ScanAsync(TextReader reader)
+        internal Task<ScanResult<TTokenCode>> ScanAsync(TextReader reader)
             => ScanAsync(reader, _defaultBufferSize, CancellationToken.None);
 
-        public Task<ScanResult<TTokenCode>> ScanAsync(TextReader reader, int bufferSize)
+        internal Task<ScanResult<TTokenCode>> ScanAsync(TextReader reader, int bufferSize)
             => ScanAsync(reader, bufferSize, CancellationToken.None);
 
-        public Task<ScanResult<TTokenCode>> ScanAsync(TextReader reader, CancellationToken cancellationToken)
+        internal Task<ScanResult<TTokenCode>> ScanAsync(TextReader reader, CancellationToken cancellationToken)
             => ScanAsync(reader, _defaultBufferSize, cancellationToken);
 
-        public async Task<ScanResult<TTokenCode>> ScanAsync(TextReader reader, int bufferSize, CancellationToken cancellationToken)
+        internal async Task<ScanResult<TTokenCode>> ScanAsync(TextReader reader, int bufferSize, CancellationToken cancellationToken)
         {
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));

@@ -4,9 +4,10 @@ using System.Linq;
 
 namespace Mup
 {
-    internal class ScanResult<TTokenCode> where TTokenCode : struct
+    internal class ScanResult<TTokenCode>
+        where TTokenCode : struct
     {
-        public ScanResult(string text, IEnumerable<Token<TTokenCode>> tokens)
+        internal ScanResult(string text, IEnumerable<Token<TTokenCode>> tokens)
         {
             Text = (text ?? throw new ArgumentNullException(nameof(text)));
             Tokens = (tokens ?? throw new ArgumentNullException(nameof(tokens)));
@@ -15,8 +16,8 @@ namespace Mup
                 throw new ArgumentException("Cannot contain null.", nameof(tokens));
         }
 
-        public string Text { get; }
+        internal string Text { get; }
 
-        public IEnumerable<Token<TTokenCode>> Tokens { get; }
+        internal IEnumerable<Token<TTokenCode>> Tokens { get; }
     }
 }

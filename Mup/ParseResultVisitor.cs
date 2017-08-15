@@ -6,6 +6,7 @@ using static Mup.ElementMarkCode;
 
 namespace Mup
 {
+    /// <summary>Base class of all parse result visitors containing functionality for allowing parse trees to be visited.</summary>
     public abstract class ParseResultVisitor
     {
         private static readonly Task _completedTask = Task.FromResult<object>(null);
@@ -14,6 +15,7 @@ namespace Mup
         private StringBuilder _imageAlternativeTextBuilder = null;
         private StringBuilder _pluginTextBuilder = null;
 
+        /// <summary>Initializes a new instance of the <see cref="ParseResultVisitor"/> class.</summary>
         protected ParseResultVisitor()
         {
         }
@@ -23,31 +25,610 @@ namespace Mup
 
         internal async Task VisitAsync(string text, IEnumerable<ElementMark> marks, CancellationToken cancellationToken)
         {
-            await ResetAsync();
+            var beginVisitTask = BeginVisitAsync(cancellationToken);
+            if (beginVisitTask != _completedTask)
+                await beginVisitTask;
 
             foreach (var mark in marks)
                 await _VisitAsync(text, mark, cancellationToken);
 
-            await CompleteAsync();
+            var endingVisitTask = EndVisitAsync(cancellationToken);
+            if (endingVisitTask != _completedTask)
+                await endingVisitTask;
         }
 
-        protected virtual Task ResetAsync()
+        /// <summary>Asynchronously visits the beginning of the visit operation. This method is called before any other visit method.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task BeginVisitAsync(CancellationToken cancellationToken)
         {
-            Reset();
+            BeginVisit();
             return _completedTask;
         }
 
-        protected virtual Task CompleteAsync()
+        /// <summary>Visits the beginning of the visit operation. This method is called before any other visit method.</summary>
+        protected virtual void BeginVisit()
         {
-            Complete();
+        }
+
+        /// <summary>Asynchronously completes the visit operation. This method is called after all other methods.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task EndVisitAsync(CancellationToken cancellationToken)
+        {
+            EndVisit();
             return _completedTask;
         }
 
-        protected virtual void Reset()
+        /// <summary>Completes the visit operation. This method is called after all other methods.</summary>
+        protected virtual void EndVisit()
         {
         }
 
-        protected virtual void Complete()
+        /// <summary>Asynchronously visits the beginning of a level 1 heading.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHeading1BeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitHeading1Beginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a level 1 heading.</summary>
+        protected virtual void VisitHeading1Beginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a level 1 heading.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHeading1EndingAsync(CancellationToken cancellationToken)
+        {
+            VisitHeading1Ending();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a level 1 heading.</summary>
+        protected virtual void VisitHeading1Ending()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a level 2 heading.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHeading2BeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitHeading2Beginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a level 2 heading.</summary>
+        protected virtual void VisitHeading2Beginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a level 2 heading.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHeading2EndingAsync(CancellationToken cancellationToken)
+        {
+            VisitHeading2Ending();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a level 2 heading.</summary>
+        protected virtual void VisitHeading2Ending()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a level 3 heading.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHeading3BeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitHeading3Beginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a level 3 heading.</summary>
+        protected virtual void VisitHeading3Beginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a level 3 heading.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHeading3EndingAsync(CancellationToken cancellationToken)
+        {
+            VisitHeading3Ending();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a level 3 heading.</summary>
+        protected virtual void VisitHeading3Ending()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a level 4 heading.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHeading4BeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitHeading4Beginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a level 4 heading.</summary>
+        protected virtual void VisitHeading4Beginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a level 4 heading.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHeading4EndingAsync(CancellationToken cancellationToken)
+        {
+            VisitHeading4Ending();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a level 4 heading.</summary>
+        protected virtual void VisitHeading4Ending()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a level 5 heading.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHeading5BeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitHeading5Beginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a level 5 heading.</summary>
+        protected virtual void VisitHeading5Beginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a level 5 heading.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHeading5EndingAsync(CancellationToken cancellationToken)
+        {
+            VisitHeading5Ending();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a level 5 heading.</summary>
+        protected virtual void VisitHeading5Ending()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a level 6 heading.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHeading6BeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitHeading6Beginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a level 6 heading.</summary>
+        protected virtual void VisitHeading6Beginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a level 6 heading.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHeading6EndingAsync(CancellationToken cancellationToken)
+        {
+            VisitHeading6Ending();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a level 6 heading.</summary>
+        protected virtual void VisitHeading6Ending()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a paragraph.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitParagraphBeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitParagraphBeginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a paragraph.</summary>
+        protected virtual void VisitParagraphBeginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a paragraph.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitParagraphEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitParagraphEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a paragraph.</summary>
+        protected virtual void VisitParagraphEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a preformatted block.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitPreformattedBlockBeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitPreformattedBlockBeginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a preformatted block.</summary>
+        protected virtual void VisitPreformattedBlockBeginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a preformatted block.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitPreformattedBlockEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitPreformattedBlockEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a preformatted block.</summary>
+        protected virtual void VisitPreformattedBlockEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits a horizontal rule.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHorizontalRuleAsync(CancellationToken cancellationToken)
+        {
+            VisitHorizontalRule();
+            return _completedTask;
+        }
+
+        /// <summary>Visits a horizontal rule.</summary>
+        protected virtual void VisitHorizontalRule()
+        {
+        }
+
+        /// <summary>Asynchronously visits a plug in.</summary>
+        /// <param name="value">The value of the plug in.</param>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitPlugInAsync(string value, CancellationToken cancellationToken)
+        {
+            VisitPlugIn(value);
+            return _completedTask;
+        }
+
+        /// <summary>Visits a plug in.</summary>
+        /// <param name="value">The value of the plug in.</param>
+        protected virtual void VisitPlugIn(string value)
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a table.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitTableBeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitTableBeginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a table.</summary>
+        protected virtual void VisitTableBeginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a table.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitTableEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitTableEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a table.</summary>
+        protected virtual void VisitTableEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a table row.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitTableRowBeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitTableRowBeginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a table row.</summary>
+        protected virtual void VisitTableRowBeginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a table row.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitTableRowEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitTableRowEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a table row.</summary>
+        protected virtual void VisitTableRowEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a table header cell.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitTableHeaderCellBeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitTableHeaderCellBeginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a table header cell.</summary>
+        protected virtual void VisitTableHeaderCellBeginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a table header cell.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitTableHeaderCellEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitTableHeaderCellEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a table header cell.</summary>
+        protected virtual void VisitTableHeaderCellEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a table cell.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitTableCellBeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitTableCellBeginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a table cell.</summary>
+        protected virtual void VisitTableCellBeginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a table cell.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitTableCellEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitTableCellEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a table cell.</summary>
+        protected virtual void VisitTableCellEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of an unordered list.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitUnorderedListBeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitUnorderedListBeginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of an unordered list.</summary>
+        protected virtual void VisitUnorderedListBeginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of an unordered list.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitUnorderedListEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitUnorderedListEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of an unordered list.</summary>
+        protected virtual void VisitUnorderedListEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of an ordered list.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitOrderedListBeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitOrderedListBeginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of an ordered list.</summary>
+        protected virtual void VisitOrderedListBeginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of an ordered list.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitOrderedListEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitOrderedListEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of an ordered list.</summary>
+        protected virtual void VisitOrderedListEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a list item.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitListItemBeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitListItemBeginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a list item.</summary>
+        protected virtual void VisitListItemBeginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a list item.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitListItemEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitListItemEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a list item.</summary>
+        protected virtual void VisitListItemEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a strong element.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitStrongBeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitStrongBeginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a strong element.</summary>
+        protected virtual void VisitStrongBeginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a strong element.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitStrongEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitStrongEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a strong element.</summary>
+        protected virtual void VisitStrongEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of an emphasised element.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitEmphasisBeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitEmphasisBeginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of an emphasised element.</summary>
+        protected virtual void VisitEmphasisBeginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of an emphasised element.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitEmphasisEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitEmphasisEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of an emphasised element.</summary>
+        protected virtual void VisitEmphasisEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a hyperlink.</summary>
+        /// <param name="hyperlinkDestinaton">The hyperlink destination.</param>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHyperlinkBeginningAsync(string hyperlinkDestinaton, CancellationToken cancellationToken)
+        {
+            VisitHyperlinkBeginning(hyperlinkDestinaton);
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a hyperlink.</summary>
+        /// <param name="hyperlinkDestinaton">The hyperlink destination.</param>
+        protected virtual void VisitHyperlinkBeginning(string destination)
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a hyperlink.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitHyperlinkEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitHyperlinkEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a hyperlink.</summary>
+        protected virtual void VisitHyperlinkEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits an image.</summary>
+        /// <param name="source">The source of the image.</param>
+        /// <param name="alternative">The alternative text of the image.</param>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitImageAsync(string source, string alternative, CancellationToken cancellationToken)
+        {
+            VisitImage(source, alternative);
+            return _completedTask;
+        }
+
+        /// <summary>Visits an image.</summary>
+        /// <param name="source">The source of the image.</param>
+        /// <param name="alternative">The alternative text of the image.</param>
+        protected virtual void VisitImage(string source, string alternative)
+        {
+        }
+
+        /// <summary>Asynchronously visits a line break.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitLineBreakAsync(CancellationToken cancellationToken)
+        {
+            VisitLineBreak();
+            return _completedTask;
+        }
+
+        /// <summary>Visits a line break.</summary>
+        protected virtual void VisitLineBreak()
+        {
+        }
+
+        /// <summary>Asynchronously visits the beginning of a preformatted text.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitPreformattedTextBeginningAsync(CancellationToken cancellationToken)
+        {
+            VisitPreformattedTextBeginning();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the beginning of a preformatted text.</summary>
+        protected virtual void VisitPreformattedTextBeginning()
+        {
+        }
+
+        /// <summary>Asynchronously visits the ending of a preformatted text.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitPreformattedTextEndingAsync(CancellationToken cancellationToken)
+        {
+            VisitPreformattedTextEnding();
+            return _completedTask;
+        }
+
+        /// <summary>Visits the ending of a preformatted text.</summary>
+        protected virtual void VisitPreformattedTextEnding()
+        {
+        }
+
+        /// <summary>Asynchronously visits plain text. This method may be called multiple times consecutively.</summary>
+        /// <param name="text">The plain text.</param>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected virtual Task VisitTextAsync(string text, CancellationToken cancellationToken)
+        {
+            VisitText(text);
+            return _completedTask;
+        }
+
+        /// <summary>Visits plain text. This method may be called multiple times consecutively.</summary>
+        /// <param name="text">The plain text.</param>
+        protected virtual void VisitText(string text)
         {
         }
 
@@ -57,8 +638,8 @@ namespace Mup
 
             switch (mark.Code)
             {
-                case ElementMarkCode.HorizontalRule:
-                    visitTask = HorizontalRuleAsync(cancellationToken);
+                case HorizontalRule:
+                    visitTask = VisitHorizontalRuleAsync(cancellationToken);
                     break;
 
                 case HyperlinkStart:
@@ -66,27 +647,27 @@ namespace Mup
 
                 case HyperlinkDestination:
                     var destination = text.Substring(mark.Start, mark.Length);
-                    visitTask = BeginHyperlinkAsync(destination, cancellationToken);
+                    visitTask = VisitHyperlinkBeginningAsync(destination, cancellationToken);
                     break;
 
                 case HyperlinkEnd:
-                    visitTask = EndHyperlinkAsync(cancellationToken);
+                    visitTask = VisitHyperlinkEndingAsync(cancellationToken);
                     break;
 
                 case StrongStart:
-                    visitTask = BeginStrongAsync(cancellationToken);
+                    visitTask = VisitStrongBeginningAsync(cancellationToken);
                     break;
 
                 case StrongEnd:
-                    visitTask = EndStrongAsync(cancellationToken);
+                    visitTask = VisitStrongEndingAsync(cancellationToken);
                     break;
 
                 case EmphasisStart:
-                    visitTask = BeginEmphasisAsync(cancellationToken);
+                    visitTask = VisitEmphasisBeginningAsync(cancellationToken);
                     break;
 
                 case EmphasisEnd:
-                    visitTask = EndEmphasisAsync(cancellationToken);
+                    visitTask = VisitEmphasisEndingAsync(cancellationToken);
                     break;
 
                 case ImageStart:
@@ -103,141 +684,141 @@ namespace Mup
                     break;
 
                 case ImageEnd:
-                    visitTask = ImageAsync(_imageSourceBuilder.ToString(), _imageAlternativeTextBuilder.ToString(), cancellationToken);
+                    visitTask = VisitImageAsync(_imageSourceBuilder.ToString(), _imageAlternativeTextBuilder.ToString(), cancellationToken);
                     _imageSourceBuilder = null;
                     _imageAlternativeTextBuilder = null;
                     break;
 
-                case ElementMarkCode.LineBreak:
-                    visitTask = LineBreakAsync(cancellationToken);
+                case LineBreak:
+                    visitTask = VisitLineBreakAsync(cancellationToken);
                     break;
 
                 case PreformattedStart:
-                    visitTask = BeginPreformattedAsync(cancellationToken);
+                    visitTask = VisitPreformattedTextBeginningAsync(cancellationToken);
                     break;
 
                 case PreformattedEnd:
-                    visitTask = EndPreformattedAsync(cancellationToken);
+                    visitTask = VisitPreformattedTextEndingAsync(cancellationToken);
                     break;
 
                 case Heading1Start:
-                    visitTask = BeginHeading1Async(cancellationToken);
+                    visitTask = VisitHeading1BeginningAsync(cancellationToken);
                     break;
 
                 case Heading1End:
-                    visitTask = EndHeading1Async(cancellationToken);
+                    visitTask = VisitHeading1EndingAsync(cancellationToken);
                     break;
 
                 case Heading2Start:
-                    visitTask = BeginHeading2Async(cancellationToken);
+                    visitTask = VisitHeading2BeginningAsync(cancellationToken);
                     break;
 
                 case Heading2End:
-                    visitTask = EndHeading2Async(cancellationToken);
+                    visitTask = VisitHeading2EndingAsync(cancellationToken);
                     break;
 
                 case Heading3Start:
-                    visitTask = BeginHeading3Async(cancellationToken);
+                    visitTask = VisitHeading3BeginningAsync(cancellationToken);
                     break;
 
                 case Heading3End:
-                    visitTask = EndHeading3Async(cancellationToken);
+                    visitTask = VisitHeading3EndingAsync(cancellationToken);
                     break;
 
                 case Heading4Start:
-                    visitTask = BeginHeading4Async(cancellationToken);
+                    visitTask = VisitHeading4BeginningAsync(cancellationToken);
                     break;
 
                 case Heading4End:
-                    visitTask = EndHeading4Async(cancellationToken);
+                    visitTask = VisitHeading4EndingAsync(cancellationToken);
                     break;
 
                 case Heading5Start:
-                    visitTask = BeginHeading5Async(cancellationToken);
+                    visitTask = VisitHeading5BeginningAsync(cancellationToken);
                     break;
 
                 case Heading5End:
-                    visitTask = EndHeading5Async(cancellationToken);
+                    visitTask = VisitHeading5EndingAsync(cancellationToken);
                     break;
 
                 case Heading6Start:
-                    visitTask = BeginHeading6Async(cancellationToken);
+                    visitTask = VisitHeading6BeginningAsync(cancellationToken);
                     break;
 
                 case Heading6End:
-                    visitTask = EndHeading6Async(cancellationToken);
+                    visitTask = VisitHeading6EndingAsync(cancellationToken);
                     break;
 
                 case ParagraphStart:
-                    visitTask = BeginParagraphAsync(cancellationToken);
+                    visitTask = VisitParagraphBeginningAsync(cancellationToken);
                     break;
 
                 case ParagraphEnd:
-                    visitTask = EndParagraphAsync(cancellationToken);
+                    visitTask = VisitParagraphEndingAsync(cancellationToken);
                     break;
 
                 case PreformattedBlockStart:
-                    visitTask = BeginPreformattedBlockAsync(cancellationToken);
+                    visitTask = VisitPreformattedBlockBeginningAsync(cancellationToken);
                     break;
 
                 case PreformattedBlockEnd:
-                    visitTask = EndPreformattedBlockAsync(cancellationToken);
+                    visitTask = VisitPreformattedBlockEndingAsync(cancellationToken);
                     break;
 
                 case TableStart:
-                    visitTask = BeginTableAsync(cancellationToken);
+                    visitTask = VisitTableBeginningAsync(cancellationToken);
                     break;
 
                 case TableRowStart:
-                    visitTask = BeginTableRowAsync(cancellationToken);
+                    visitTask = VisitTableRowBeginningAsync(cancellationToken);
                     break;
 
                 case TableHeaderCellStart:
-                    visitTask = BeginTableHeaderCellAsync(cancellationToken);
+                    visitTask = VisitTableHeaderCellBeginningAsync(cancellationToken);
                     break;
 
                 case TableHeaderCellEnd:
-                    visitTask = EndTableHeaderCellAsync(cancellationToken);
+                    visitTask = VisitTableHeaderCellEndingAsync(cancellationToken);
                     break;
 
                 case TableCellStart:
-                    visitTask = BeginTableCellAsync(cancellationToken);
+                    visitTask = VisitTableCellBeginningAsync(cancellationToken);
                     break;
 
                 case TableCellEnd:
-                    visitTask = EndTableCellAsync(cancellationToken);
+                    visitTask = VisitTableCellEndingAsync(cancellationToken);
                     break;
 
                 case TableRowEnd:
-                    visitTask = EndTableRowAsync(cancellationToken);
+                    visitTask = VisitTableRowEndingAsync(cancellationToken);
                     break;
 
                 case TableEnd:
-                    visitTask = EndTableAsync(cancellationToken);
+                    visitTask = VisitTableEndingAsync(cancellationToken);
                     break;
 
-                case BulletListStart:
-                    visitTask = BeginUnorderedListAsync(cancellationToken);
+                case UnorderedListStart:
+                    visitTask = VisitUnorderedListBeginningAsync(cancellationToken);
                     break;
 
-                case BulletListEnd:
-                    visitTask = EndUnorderedListAsync(cancellationToken);
+                case UnorderedListEnd:
+                    visitTask = VisitUnorderedListEndingAsync(cancellationToken);
                     break;
 
                 case OrderedListStart:
-                    visitTask = BeginOrderedListAsync(cancellationToken);
+                    visitTask = VisitOrderedListBeginningAsync(cancellationToken);
                     break;
 
                 case OrderedListEnd:
-                    visitTask = EndOrderedListAsync(cancellationToken);
+                    visitTask = VisitOrderedListEndingAsync(cancellationToken);
                     break;
 
                 case ListItemStart:
-                    visitTask = BeginListItemAsync(cancellationToken);
+                    visitTask = VisitListItemBeginningAsync(cancellationToken);
                     break;
 
                 case ListItemEnd:
-                    visitTask = EndListItemAsync(cancellationToken);
+                    visitTask = VisitListItemEndingAsync(cancellationToken);
                     break;
 
                 case PluginStart:
@@ -249,13 +830,13 @@ namespace Mup
                     break;
 
                 case PluginEnd:
-                    visitTask = PlugInAsync(_pluginTextBuilder.ToString(), cancellationToken);
+                    visitTask = VisitPlugInAsync(_pluginTextBuilder.ToString(), cancellationToken);
                     _pluginTextBuilder = null;
                     break;
 
                 case PlainText:
                     var plainText = text.Substring(mark.Start, mark.Length);
-                    visitTask = TextAsync(plainText, cancellationToken);
+                    visitTask = VisitTextAsync(plainText, cancellationToken);
                     break;
 
                 default:
@@ -265,435 +846,28 @@ namespace Mup
             if (visitTask != _completedTask)
                 await visitTask;
         }
+    }
 
-        protected virtual Task BeginHeading1Async(CancellationToken cancellationToken)
+    /// <summary>Base class of all parse result visitors containing functionality for allowing parse trees to be visited and eventually
+    /// providing a result that is stored in memory (e.g. a <see cref="string"/> or a <see cref="System.IO.MemoryStream"/>).</summary>
+    public abstract class ParseResultVisitor<TResult>
+        : ParseResultVisitor
+    {
+        /// <summary>Initializes a new instance of the <see cref="ParseResultVisitor{TResult}"/> class.</summary>
+        protected ParseResultVisitor()
         {
-            BeginHeading1();
-            return _completedTask;
         }
 
-        protected virtual void BeginHeading1()
-        {
-        }
-
-        protected virtual Task EndHeading1Async(CancellationToken cancellationToken)
-        {
-            EndHeading1();
-            return _completedTask;
-        }
-
-        protected virtual void EndHeading1()
-        {
-        }
-
-        protected virtual Task BeginHeading2Async(CancellationToken cancellationToken)
-        {
-            BeginHeading2();
-            return _completedTask;
-        }
-
-        protected virtual void BeginHeading2()
-        {
-        }
-
-        protected virtual Task EndHeading2Async(CancellationToken cancellationToken)
-        {
-            EndHeading2();
-            return _completedTask;
-        }
-
-        protected virtual void EndHeading2()
-        {
-        }
-
-        protected virtual Task BeginHeading3Async(CancellationToken cancellationToken)
-        {
-            BeginHeading3();
-            return _completedTask;
-        }
-
-        protected virtual void BeginHeading3()
-        {
-        }
-
-        protected virtual Task EndHeading3Async(CancellationToken cancellationToken)
-        {
-            EndHeading3();
-            return _completedTask;
-        }
-
-        protected virtual void EndHeading3()
-        {
-        }
-
-        protected virtual Task BeginHeading4Async(CancellationToken cancellationToken)
-        {
-            BeginHeading4();
-            return _completedTask;
-        }
-
-        protected virtual void BeginHeading4()
-        {
-        }
-
-        protected virtual Task EndHeading4Async(CancellationToken cancellationToken)
-        {
-            EndHeading4();
-            return _completedTask;
-        }
-
-        protected virtual void EndHeading4()
-        {
-        }
-
-        protected virtual Task BeginHeading5Async(CancellationToken cancellationToken)
-        {
-            BeginHeading5();
-            return _completedTask;
-        }
-
-        protected virtual void BeginHeading5()
-        {
-        }
-
-        protected virtual Task EndHeading5Async(CancellationToken cancellationToken)
-        {
-            EndHeading5();
-            return _completedTask;
-        }
-
-        protected virtual void EndHeading5()
-        {
-        }
-
-        protected virtual Task BeginHeading6Async(CancellationToken cancellationToken)
-        {
-            BeginHeading6();
-            return _completedTask;
-        }
-
-        protected virtual void BeginHeading6()
-        {
-        }
-
-        protected virtual Task EndHeading6Async(CancellationToken cancellationToken)
-        {
-            EndHeading6();
-            return _completedTask;
-        }
-
-        protected virtual void EndHeading6()
-        {
-        }
-
-        protected virtual Task BeginParagraphAsync(CancellationToken cancellationToken)
-        {
-            BeginParagraph();
-            return _completedTask;
-        }
-
-        protected virtual void BeginParagraph()
-        {
-        }
-
-        protected virtual Task EndParagraphAsync(CancellationToken cancellationToken)
-        {
-            EndParagraph();
-            return _completedTask;
-        }
-
-        protected virtual void EndParagraph()
-        {
-        }
-
-        protected virtual Task BeginPreformattedBlockAsync(CancellationToken cancellationToken)
-        {
-            BeginPreformattedBlock();
-            return _completedTask;
-        }
-
-        protected virtual void BeginPreformattedBlock()
-        {
-        }
-
-        protected virtual Task EndPreformattedBlockAsync(CancellationToken cancellationToken)
-        {
-            EndPreformattedBlock();
-            return _completedTask;
-        }
-
-        protected virtual void EndPreformattedBlock()
-        {
-        }
-
-        protected virtual Task HorizontalRuleAsync(CancellationToken cancellationToken)
-        {
-            HorizontalRule();
-            return _completedTask;
-        }
-
-        protected virtual void HorizontalRule()
-        {
-        }
-
-        protected virtual Task PlugInAsync(string value, CancellationToken cancellationToken)
-        {
-            PlugIn(value);
-            return _completedTask;
-        }
-
-        protected virtual void PlugIn(string value)
-        {
-        }
-
-        protected virtual Task BeginTableAsync(CancellationToken cancellationToken)
-        {
-            BeginTable();
-            return _completedTask;
-        }
-
-        protected virtual void BeginTable()
-        {
-        }
-
-        protected virtual Task EndTableAsync(CancellationToken cancellationToken)
-        {
-            EndTable();
-            return _completedTask;
-        }
-
-        protected virtual void EndTable()
-        {
-        }
-
-        protected virtual Task BeginTableRowAsync(CancellationToken cancellationToken)
-        {
-            BeginTableRow();
-            return _completedTask;
-        }
-
-        protected virtual void BeginTableRow()
-        {
-        }
-
-        protected virtual Task EndTableRowAsync(CancellationToken cancellationToken)
-        {
-            EndTableRow();
-            return _completedTask;
-        }
+        /// <summary>Gets the visitor result. This values is used only after the visit operation completes.</summary>
+        protected abstract TResult Result { get; }
 
-        protected virtual void EndTableRow()
-        {
-        }
-
-        protected virtual Task BeginTableHeaderCellAsync(CancellationToken cancellationToken)
-        {
-            BeginTableHeaderCell();
-            return _completedTask;
-        }
-
-        protected virtual void BeginTableHeaderCell()
-        {
-        }
-
-        protected virtual Task EndTableHeaderCellAsync(CancellationToken cancellationToken)
-        {
-            EndTableHeaderCell();
-            return _completedTask;
-        }
-
-        protected virtual void EndTableHeaderCell()
-        {
-        }
-
-        protected virtual Task BeginTableCellAsync(CancellationToken cancellationToken)
-        {
-            BeginTableCell();
-            return _completedTask;
-        }
-
-        protected virtual void BeginTableCell()
-        {
-        }
-
-        protected virtual Task EndTableCellAsync(CancellationToken cancellationToken)
-        {
-            EndTableCell();
-            return _completedTask;
-        }
-
-        protected virtual void EndTableCell()
-        {
-        }
-
-        protected virtual Task BeginUnorderedListAsync(CancellationToken cancellationToken)
-        {
-            BeginUnorderedList();
-            return _completedTask;
-        }
-
-        protected virtual void BeginUnorderedList()
-        {
-        }
-
-        protected virtual Task EndUnorderedListAsync(CancellationToken cancellationToken)
-        {
-            EndUnorderedList();
-            return _completedTask;
-        }
-
-        protected virtual void EndUnorderedList()
-        {
-        }
-
-        protected virtual Task BeginOrderedListAsync(CancellationToken cancellationToken)
-        {
-            BeginOrderedList();
-            return _completedTask;
-        }
-
-        protected virtual void BeginOrderedList()
-        {
-        }
-
-        protected virtual Task EndOrderedListAsync(CancellationToken cancellationToken)
-        {
-            EndOrderedList();
-            return _completedTask;
-        }
-
-        protected virtual void EndOrderedList()
-        {
-        }
-
-        protected virtual Task BeginListItemAsync(CancellationToken cancellationToken)
-        {
-            BeginListItem();
-            return _completedTask;
-        }
-
-        protected virtual void BeginListItem()
-        {
-        }
-
-        protected virtual Task EndListItemAsync(CancellationToken cancellationToken)
-        {
-            EndListItem();
-            return _completedTask;
-        }
-
-        protected virtual void EndListItem()
-        {
-        }
-
-        protected virtual Task BeginStrongAsync(CancellationToken cancellationToken)
-        {
-            BeginStrong();
-            return _completedTask;
-        }
-
-        protected virtual void BeginStrong()
-        {
-        }
-
-        protected virtual Task EndStrongAsync(CancellationToken cancellationToken)
-        {
-            EndStrong();
-            return _completedTask;
-        }
-
-        protected virtual void EndStrong()
-        {
-        }
-
-        protected virtual Task BeginEmphasisAsync(CancellationToken cancellationToken)
-        {
-            BeginEmphasis();
-            return _completedTask;
-        }
-
-        protected virtual void BeginEmphasis()
-        {
-        }
-
-        protected virtual Task EndEmphasisAsync(CancellationToken cancellationToken)
-        {
-            EndEmphasis();
-            return _completedTask;
-        }
-
-        protected virtual void EndEmphasis()
-        {
-        }
-
-        protected virtual Task BeginHyperlinkAsync(string hyperlinkDestinaton, CancellationToken cancellationToken)
-        {
-            BeginHyperlink(hyperlinkDestinaton);
-            return _completedTask;
-        }
-
-        protected virtual void BeginHyperlink(string destination)
-        {
-        }
-
-        protected virtual Task EndHyperlinkAsync(CancellationToken cancellationToken)
-        {
-            EndHyperlink();
-            return _completedTask;
-        }
-
-        protected virtual void EndHyperlink()
-        {
-        }
-
-        protected virtual Task ImageAsync(string source, string alternative, CancellationToken cancellationToken)
-        {
-            Image(source, alternative);
-            return _completedTask;
-        }
-
-        protected virtual void Image(string source, string alternative)
-        {
-        }
-
-        protected virtual Task LineBreakAsync(CancellationToken cancellationToken)
-        {
-            LineBreak();
-            return _completedTask;
-        }
-
-        protected virtual void LineBreak()
-        {
-        }
-
-        protected virtual Task BeginPreformattedAsync(CancellationToken cancellationToken)
-        {
-            BeginPreformatted();
-            return _completedTask;
-        }
-
-        protected virtual void BeginPreformatted()
-        {
-        }
-
-        protected virtual Task EndPreformattedAsync(CancellationToken cancellationToken)
-        {
-            EndPreformatted();
-            return _completedTask;
-        }
-
-        protected virtual void EndPreformatted()
-        {
-        }
-
-        protected virtual Task TextAsync(string text, CancellationToken cancellationToken)
-        {
-            Text(text);
-            return _completedTask;
-        }
+        new internal Task<TResult> VisitAsync(string text, IEnumerable<ElementMark> marks)
+            => VisitAsync(text, marks, CancellationToken.None);
 
-        protected virtual void Text(string text)
+        new internal async Task<TResult> VisitAsync(string text, IEnumerable<ElementMark> marks, CancellationToken cancellationToken)
         {
+            await base.VisitAsync(text, marks, cancellationToken);
+            return Result;
         }
     }
 }

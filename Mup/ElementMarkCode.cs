@@ -60,8 +60,8 @@
         TableRowEnd,
         TableEnd,
 
-        BulletListStart,
-        BulletListEnd,
+        UnorderedListStart,
+        UnorderedListEnd,
 
         OrderedListStart,
         OrderedListEnd,

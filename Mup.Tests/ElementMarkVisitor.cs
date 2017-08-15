@@ -1,147 +1,142 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using static Mup.ElementMarkCode;
 
 namespace Mup.Tests
 {
-    internal class ElementMarkVisitor : ParseResultVisitor
+    internal class ElementMarkVisitor
+        : ParseResultVisitor<IEnumerable<ElementMarkCode>>
     {
-        private readonly ICollection<ElementMarkCode> _marks = new List<ElementMarkCode>();
+        private List<ElementMarkCode> _marks = null;
 
-        internal IEnumerable<ElementMarkCode> Marks { get; private set; }
-
-        protected override void Reset()
+        protected override void BeginVisit()
         {
-            _marks.Clear();
+            _marks = new List<ElementMarkCode>();
         }
 
-        protected override void Complete()
-        {
-            Marks = _marks.ToArray();
-        }
+        protected override IEnumerable<ElementMarkCode> Result => _marks;
 
-        protected override void BeginHeading1()
+        protected override void VisitHeading1Beginning()
             => _marks.Add(Heading1Start);
 
-        protected override void EndHeading1()
+        protected override void VisitHeading1Ending()
             => _marks.Add(Heading1End);
 
-        protected override void BeginHeading2()
+        protected override void VisitHeading2Beginning()
             => _marks.Add(Heading2Start);
 
-        protected override void EndHeading2()
+        protected override void VisitHeading2Ending()
             => _marks.Add(Heading2End);
 
-        protected override void BeginHeading3()
+        protected override void VisitHeading3Beginning()
             => _marks.Add(Heading3Start);
 
-        protected override void EndHeading3()
+        protected override void VisitHeading3Ending()
             => _marks.Add(Heading3End);
 
-        protected override void BeginHeading4()
+        protected override void VisitHeading4Beginning()
             => _marks.Add(Heading4Start);
 
-        protected override void EndHeading4()
+        protected override void VisitHeading4Ending()
             => _marks.Add(Heading4End);
 
-        protected override void BeginHeading5()
+        protected override void VisitHeading5Beginning()
             => _marks.Add(Heading5Start);
 
-        protected override void EndHeading5()
+        protected override void VisitHeading5Ending()
             => _marks.Add(Heading5End);
 
-        protected override void BeginHeading6()
+        protected override void VisitHeading6Beginning()
             => _marks.Add(Heading6Start);
 
-        protected override void EndHeading6()
+        protected override void VisitHeading6Ending()
             => _marks.Add(Heading6End);
 
-        protected override void BeginParagraph()
+        protected override void VisitParagraphBeginning()
             => _marks.Add(ParagraphStart);
 
-        protected override void EndParagraph()
+        protected override void VisitParagraphEnding()
             => _marks.Add(ParagraphEnd);
 
-        protected override void BeginPreformattedBlock()
+        protected override void VisitPreformattedBlockBeginning()
             => _marks.Add(PreformattedBlockStart);
 
-        protected override void EndPreformattedBlock()
+        protected override void VisitPreformattedBlockEnding()
             => _marks.Add(PreformattedBlockEnd);
 
-        protected override void HorizontalRule()
-            => _marks.Add(ElementMarkCode.HorizontalRule);
+        protected override void VisitHorizontalRule()
+            => _marks.Add(HorizontalRule);
 
-        protected override void PlugIn(string value)
+        protected override void VisitPlugIn(string value)
         {
             _marks.Add(PluginStart);
             _marks.Add(PlainText);
             _marks.Add(PluginEnd);
         }
 
-        protected override void BeginTable()
+        protected override void VisitTableBeginning()
             => _marks.Add(TableStart);
 
-        protected override void EndTable()
+        protected override void VisitTableEnding()
             => _marks.Add(TableEnd);
 
-        protected override void BeginTableRow()
+        protected override void VisitTableRowBeginning()
             => _marks.Add(TableRowStart);
 
-        protected override void EndTableRow()
+        protected override void VisitTableRowEnding()
             => _marks.Add(TableRowEnd);
 
-        protected override void BeginTableHeaderCell()
+        protected override void VisitTableHeaderCellBeginning()
             => _marks.Add(TableHeaderCellStart);
 
-        protected override void EndTableHeaderCell()
+        protected override void VisitTableHeaderCellEnding()
             => _marks.Add(TableHeaderCellEnd);
 
-        protected override void BeginTableCell()
+        protected override void VisitTableCellBeginning()
             => _marks.Add(TableCellStart);
 
-        protected override void EndTableCell()
+        protected override void VisitTableCellEnding()
             => _marks.Add(TableCellEnd);
 
-        protected override void BeginUnorderedList()
-            => _marks.Add(BulletListStart);
+        protected override void VisitUnorderedListBeginning()
+            => _marks.Add(UnorderedListStart);
 
-        protected override void EndUnorderedList()
-            => _marks.Add(BulletListEnd);
+        protected override void VisitUnorderedListEnding()
+            => _marks.Add(UnorderedListEnd);
 
-        protected override void BeginOrderedList()
+        protected override void VisitOrderedListBeginning()
             => _marks.Add(OrderedListStart);
 
-        protected override void EndOrderedList()
+        protected override void VisitOrderedListEnding()
             => _marks.Add(OrderedListEnd);
 
-        protected override void BeginListItem()
+        protected override void VisitListItemBeginning()
             => _marks.Add(ListItemStart);
 
-        protected override void EndListItem()
+        protected override void VisitListItemEnding()
             => _marks.Add(ListItemEnd);
 
-        protected override void BeginStrong()
+        protected override void VisitStrongBeginning()
             => _marks.Add(StrongStart);
 
-        protected override void EndStrong()
+        protected override void VisitStrongEnding()
             => _marks.Add(StrongEnd);
 
-        protected override void BeginEmphasis()
+        protected override void VisitEmphasisBeginning()
             => _marks.Add(EmphasisStart);
 
-        protected override void EndEmphasis()
+        protected override void VisitEmphasisEnding()
             => _marks.Add(EmphasisEnd);
 
-        protected override void BeginHyperlink(string destination)
+        protected override void VisitHyperlinkBeginning(string destination)
         {
             _marks.Add(HyperlinkStart);
             _marks.Add(HyperlinkDestination);
         }
 
-        protected override void EndHyperlink()
+        protected override void VisitHyperlinkEnding()
             => _marks.Add(HyperlinkEnd);
 
-        protected override void Image(string source, string alternative)
+        protected override void VisitImage(string source, string alternative)
         {
             _marks.Add(ImageStart);
             _marks.Add(ImageSource);
@@ -149,16 +144,16 @@ namespace Mup.Tests
             _marks.Add(ImageEnd);
         }
 
-        protected override void LineBreak()
-            => _marks.Add(ElementMarkCode.LineBreak);
+        protected override void VisitLineBreak()
+            => _marks.Add(LineBreak);
 
-        protected override void BeginPreformatted()
+        protected override void VisitPreformattedTextBeginning()
             => _marks.Add(PreformattedStart);
 
-        protected override void EndPreformatted()
+        protected override void VisitPreformattedTextEnding()
             => _marks.Add(PreformattedEnd);
 
-        protected override void Text(string text)
+        protected override void VisitText(string text)
             => _marks.Add(PlainText);
     }
 }

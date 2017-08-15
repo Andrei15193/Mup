@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace Mup
 {
-    internal class ParseResult : IParseResult
+    internal class ParseResult
+        : IParseResult
     {
         private readonly IEnumerable<ElementMark> _marks;
 
@@ -26,6 +27,17 @@ namespace Mup
                 throw new ArgumentNullException(nameof(visitor));
 
             await visitor.VisitAsync(Text, _marks, cancellationToken);
+        }
+
+        public Task<TResult> AcceptAsync<TResult>(ParseResultVisitor<TResult> visitor)
+            => AcceptAsync(visitor, CancellationToken.None);
+
+        public async Task<TResult> AcceptAsync<TResult>(ParseResultVisitor<TResult> visitor, CancellationToken cancellationToken)
+        {
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+
+            return await visitor.VisitAsync(Text, _marks, cancellationToken);
         }
     }
 }

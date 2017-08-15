@@ -1,124 +1,194 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Mup
 {
-    public class HtmlWriterVisitor : ParseResultVisitor
+    /// <summary>Visitor for generating HTML from <see cref="IParseResult"/>.</summary>
+    public class HtmlWriterVisitor
+        : ParseResultVisitor<string>
     {
-        private readonly StringBuilder _htmlStringBuilder;
+        private string _result = null;
+        private StringBuilder _htmlStringBuilder = null;
 
-        public HtmlWriterVisitor(StringBuilder htmlStringBuilder)
-            => _htmlStringBuilder = (htmlStringBuilder ?? throw new ArgumentNullException(nameof(htmlStringBuilder)));
+        /// <summary>Initializes a new instance of the <see cref="HtmlWriterVisitor"/> class.</summary>
+        public HtmlWriterVisitor()
+        {
+        }
 
-        protected override void BeginHeading1()
+        /// <summary>Asynchronously visits the beginning of the visit operation. This method is called before any other visit method.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected sealed override Task BeginVisitAsync(CancellationToken cancellationToken)
+            => base.BeginVisitAsync(cancellationToken);
+
+        /// <summary>Visits the beginning of the visit operation. This method is called before any other visit method.</summary>
+        protected sealed override void BeginVisit()
+        {
+            _result = null;
+            _htmlStringBuilder = new StringBuilder();
+        }
+
+        /// <summary>Asynchronously completes the visit operation. This method is called after all other methods.</summary>
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        protected sealed override Task EndVisitAsync(CancellationToken cancellationToken)
+            => base.EndVisitAsync(cancellationToken);
+
+        /// <summary>Completes the visit operation. This method is called after all other methods.</summary>
+        protected sealed override void EndVisit()
+        {
+            _result = _htmlStringBuilder.ToString();
+            _htmlStringBuilder = null;
+        }
+
+        /// <summary>Provides the HTML for the parsed text.</summary>
+        protected override string Result => _result;
+
+        /// <summary>Visits the beginning of a level 1 heading.</summary>
+        protected override void VisitHeading1Beginning()
             => _htmlStringBuilder.Append("<h1>");
 
-        protected override void EndHeading1()
+        /// <summary>Visits the ending of a level 1 heading.</summary>
+        protected override void VisitHeading1Ending()
             => _htmlStringBuilder.Append("</h1>");
 
-        protected override void BeginHeading2()
+        /// <summary>Visits the beginning of a level 2 heading.</summary>
+        protected override void VisitHeading2Beginning()
             => _htmlStringBuilder.Append("<h2>");
 
-        protected override void EndHeading2()
+        /// <summary>Visits the ending of a level 2 heading.</summary>
+        protected override void VisitHeading2Ending()
             => _htmlStringBuilder.Append("</h2>");
 
-        protected override void BeginHeading3()
+        /// <summary>Visits the beginning of a level 3 heading.</summary>
+        protected override void VisitHeading3Beginning()
             => _htmlStringBuilder.Append("<h3>");
 
-        protected override void EndHeading3()
+        /// <summary>Visits the ending of a level 3 heading.</summary>
+        protected override void VisitHeading3Ending()
             => _htmlStringBuilder.Append("</h3>");
 
-        protected override void BeginHeading4()
+        /// <summary>Visits the beginning of a level 4 heading.</summary>
+        protected override void VisitHeading4Beginning()
             => _htmlStringBuilder.Append("<h4>");
 
-        protected override void EndHeading4()
+        /// <summary>Visits the ending of a level 4 heading.</summary>
+        protected override void VisitHeading4Ending()
             => _htmlStringBuilder.Append("</h4>");
 
-        protected override void BeginHeading5()
+        /// <summary>Visits the beginning of a level 5 heading.</summary>
+        protected override void VisitHeading5Beginning()
             => _htmlStringBuilder.Append("<h5>");
 
-        protected override void EndHeading5()
+        /// <summary>Visits the ending of a level 5 heading.</summary>
+        protected override void VisitHeading5Ending()
             => _htmlStringBuilder.Append("</h5>");
 
-        protected override void BeginHeading6()
+        /// <summary>Visits the beginning of a level 6 heading.</summary>
+        protected override void VisitHeading6Beginning()
             => _htmlStringBuilder.Append("<h6>");
 
-        protected override void EndHeading6()
+        /// <summary>Visits the ending of a level 6 heading.</summary>
+        protected override void VisitHeading6Ending()
             => _htmlStringBuilder.Append("</h6>");
 
-        protected override void BeginParagraph()
+        /// <summary>Visits the beginning of a paragraph.</summary>
+        protected override void VisitParagraphBeginning()
             => _htmlStringBuilder.Append("<p>");
 
-        protected override void EndParagraph()
+        /// <summary>Visits the ending of a paragraph.</summary>
+        protected override void VisitParagraphEnding()
             => _htmlStringBuilder.Append("</p>");
 
-        protected override void BeginPreformattedBlock()
+        /// <summary>Visits the beginning of a preformatted block.</summary>
+        protected override void VisitPreformattedBlockBeginning()
             => _htmlStringBuilder.Append("<pre><code>");
 
-        protected override void EndPreformattedBlock()
+        /// <summary>Visits the ending of a preformatted block.</summary>
+        protected override void VisitPreformattedBlockEnding()
             => _htmlStringBuilder.Append("</code></pre>");
 
-        protected override void BeginTable()
+        /// <summary>Visits the beginning of a table.</summary>
+        protected override void VisitTableBeginning()
             => _htmlStringBuilder.Append("<table>");
 
-        protected override void EndTable()
+        /// <summary>Visits the ending of a table.</summary>
+        protected override void VisitTableEnding()
             => _htmlStringBuilder.Append("</table>");
 
-        protected override void BeginTableRow()
+        /// <summary>Visits the beginning of a table row.</summary>
+        protected override void VisitTableRowBeginning()
             => _htmlStringBuilder.Append("<tr>");
 
-        protected override void EndTableRow()
+        /// <summary>Visits the ending of a table row.</summary>
+        protected override void VisitTableRowEnding()
             => _htmlStringBuilder.Append("</tr>");
 
-        protected override void BeginTableHeaderCell()
+        /// <summary>Visits the beginning of a table header cell.</summary>
+        protected override void VisitTableHeaderCellBeginning()
             => _htmlStringBuilder.Append("<th>");
 
-        protected override void EndTableHeaderCell()
+        /// <summary>Visits the ending of a table header cell.</summary>
+        protected override void VisitTableHeaderCellEnding()
             => _htmlStringBuilder.Append("</th>");
 
-        protected override void BeginTableCell()
+        /// <summary>Visits the beginning of a table cell.</summary>
+        protected override void VisitTableCellBeginning()
             => _htmlStringBuilder.Append("<td>");
 
-        protected override void EndTableCell()
+        /// <summary>Visits the ending of a table cell.</summary>
+        protected override void VisitTableCellEnding()
             => _htmlStringBuilder.Append("</td>");
 
-        protected override void BeginUnorderedList()
+        /// <summary>Visits the beginning of an unordered list.</summary>
+        protected override void VisitUnorderedListBeginning()
             => _htmlStringBuilder.Append("<ul>");
 
-        protected override void EndUnorderedList()
+        /// <summary>Visits the ending of an unordered list.</summary>
+        protected override void VisitUnorderedListEnding()
             => _htmlStringBuilder.Append("</ul>");
 
-        protected override void BeginOrderedList()
+        /// <summary>Visits the beginning of an ordered list.</summary>
+        protected override void VisitOrderedListBeginning()
             => _htmlStringBuilder.Append("<ol>");
 
-        protected override void EndOrderedList()
+        /// <summary>Visits the ending of an ordered list.</summary>
+        protected override void VisitOrderedListEnding()
             => _htmlStringBuilder.Append("</ol>");
 
-        protected override void BeginListItem()
+        /// <summary>Visits the beginning of a list item.</summary>
+        protected override void VisitListItemBeginning()
             => _htmlStringBuilder.Append("<li>");
 
-        protected override void EndListItem()
+        /// <summary>Visits the ending of a list item.</summary>
+        protected override void VisitListItemEnding()
             => _htmlStringBuilder.Append("</li>");
 
-        protected override void BeginStrong()
+        /// <summary>Visits the beginning of a strong element.</summary>
+        protected override void VisitStrongBeginning()
             => _htmlStringBuilder.Append("<strong>");
 
-        protected override void EndStrong()
+        /// <summary>Visits the ending of a strong element.</summary>
+        protected override void VisitStrongEnding()
             => _htmlStringBuilder.Append("</strong>");
 
-        protected override void BeginEmphasis()
+        /// <summary>Visits the beginning of an emphasised element.</summary>
+        protected override void VisitEmphasisBeginning()
             => _htmlStringBuilder.Append("<em>");
 
-        protected override void EndEmphasis()
+        /// <summary>Visits the ending of an emphasised element.</summary>
+        protected override void VisitEmphasisEnding()
             => _htmlStringBuilder.Append("</em>");
 
-        protected override void BeginHyperlink(string destination)
+        /// <summary>Visits the beginning of a hyperlink.</summary>
+        protected override void VisitHyperlinkBeginning(string destination)
             => _htmlStringBuilder.Append("<a href=\"").Append(destination).Append("\">");
 
-        protected override void EndHyperlink()
+        /// <summary>Visits the ending of a hyperlink.</summary>
+        protected override void VisitHyperlinkEnding()
             => _htmlStringBuilder.Append("</a>");
 
-        protected override void Image(string source, string alternative)
+        /// <summary>Visits an image.</summary>
+        protected override void VisitImage(string source, string alternative)
         {
             _htmlStringBuilder.Append("<img src=\"").Append(source).Append('"');
             if (!string.IsNullOrWhiteSpace(alternative))
@@ -126,19 +196,24 @@ namespace Mup
             _htmlStringBuilder.Append(">");
         }
 
-        protected override void LineBreak()
+        /// <summary>Visits a line break.</summary>
+        protected override void VisitLineBreak()
             => _htmlStringBuilder.Append("<br>");
 
-        protected override void BeginPreformatted()
+        /// <summary>Visits the beginning of a preformatted text.</summary>
+        protected override void VisitPreformattedTextBeginning()
             => _htmlStringBuilder.Append("<code>");
 
-        protected override void EndPreformatted()
+        /// <summary>Visits the ending of a preformatted text.</summary>
+        protected override void VisitPreformattedTextEnding()
             => _htmlStringBuilder.Append("</code>");
 
-        protected override void HorizontalRule()
+        /// <summary>Visits a horizontal rule.</summary>
+        protected override void VisitHorizontalRule()
             => _htmlStringBuilder.Append("<hr>");
 
-        protected override void Text(string text)
+        /// <summary>Visits plain text. This method may be called multiple times consecutively.</summary>
+        protected override void VisitText(string text)
         {
             foreach (var character in text)
                 _AppendHtmlSafe(character);
