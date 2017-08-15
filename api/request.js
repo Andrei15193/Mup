@@ -8,6 +8,12 @@ const config = {
 
 export default class Request {
     static postAsync(url, data) {
-        return Axios.post(url, data, config);
+        var requestData;
+        if (typeof(data) === "string")
+            requestData = JSON.stringify(data);
+        else
+            requestData = data;
+
+        return Axios.post(url, requestData, config);
     }
 };
