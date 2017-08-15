@@ -4,139 +4,139 @@ using static Mup.ElementMarkCode;
 namespace Mup.Tests
 {
     internal class ElementMarkVisitor
-        : ParseResultVisitor<IEnumerable<ElementMarkCode>>
+        : ParseTreeVisitor<IEnumerable<ElementMarkCode>>
     {
         private List<ElementMarkCode> _marks = null;
 
-        protected override void BeginVisit()
+        protected internal override void BeginVisit()
         {
             _marks = new List<ElementMarkCode>();
         }
 
-        protected override IEnumerable<ElementMarkCode> Result => _marks;
+        protected internal override IEnumerable<ElementMarkCode> Result => _marks;
 
-        protected override void VisitHeading1Beginning()
+        protected internal override void VisitHeading1Beginning()
             => _marks.Add(Heading1Start);
 
-        protected override void VisitHeading1Ending()
+        protected internal override void VisitHeading1Ending()
             => _marks.Add(Heading1End);
 
-        protected override void VisitHeading2Beginning()
+        protected internal override void VisitHeading2Beginning()
             => _marks.Add(Heading2Start);
 
-        protected override void VisitHeading2Ending()
+        protected internal override void VisitHeading2Ending()
             => _marks.Add(Heading2End);
 
-        protected override void VisitHeading3Beginning()
+        protected internal override void VisitHeading3Beginning()
             => _marks.Add(Heading3Start);
 
-        protected override void VisitHeading3Ending()
+        protected internal override void VisitHeading3Ending()
             => _marks.Add(Heading3End);
 
-        protected override void VisitHeading4Beginning()
+        protected internal override void VisitHeading4Beginning()
             => _marks.Add(Heading4Start);
 
-        protected override void VisitHeading4Ending()
+        protected internal override void VisitHeading4Ending()
             => _marks.Add(Heading4End);
 
-        protected override void VisitHeading5Beginning()
+        protected internal override void VisitHeading5Beginning()
             => _marks.Add(Heading5Start);
 
-        protected override void VisitHeading5Ending()
+        protected internal override void VisitHeading5Ending()
             => _marks.Add(Heading5End);
 
-        protected override void VisitHeading6Beginning()
+        protected internal override void VisitHeading6Beginning()
             => _marks.Add(Heading6Start);
 
-        protected override void VisitHeading6Ending()
+        protected internal override void VisitHeading6Ending()
             => _marks.Add(Heading6End);
 
-        protected override void VisitParagraphBeginning()
+        protected internal override void VisitParagraphBeginning()
             => _marks.Add(ParagraphStart);
 
-        protected override void VisitParagraphEnding()
+        protected internal override void VisitParagraphEnding()
             => _marks.Add(ParagraphEnd);
 
-        protected override void VisitPreformattedBlockBeginning()
+        protected internal override void VisitPreformattedBlockBeginning()
             => _marks.Add(PreformattedBlockStart);
 
-        protected override void VisitPreformattedBlockEnding()
+        protected internal override void VisitPreformattedBlockEnding()
             => _marks.Add(PreformattedBlockEnd);
 
-        protected override void VisitHorizontalRule()
+        protected internal override void VisitHorizontalRule()
             => _marks.Add(HorizontalRule);
 
-        protected override void VisitPlugIn(string value)
+        protected internal override void VisitPlugIn(string value)
         {
             _marks.Add(PluginStart);
             _marks.Add(PlainText);
             _marks.Add(PluginEnd);
         }
 
-        protected override void VisitTableBeginning()
+        protected internal override void VisitTableBeginning()
             => _marks.Add(TableStart);
 
-        protected override void VisitTableEnding()
+        protected internal override void VisitTableEnding()
             => _marks.Add(TableEnd);
 
-        protected override void VisitTableRowBeginning()
+        protected internal override void VisitTableRowBeginning()
             => _marks.Add(TableRowStart);
 
-        protected override void VisitTableRowEnding()
+        protected internal override void VisitTableRowEnding()
             => _marks.Add(TableRowEnd);
 
-        protected override void VisitTableHeaderCellBeginning()
+        protected internal override void VisitTableHeaderCellBeginning()
             => _marks.Add(TableHeaderCellStart);
 
-        protected override void VisitTableHeaderCellEnding()
+        protected internal override void VisitTableHeaderCellEnding()
             => _marks.Add(TableHeaderCellEnd);
 
-        protected override void VisitTableCellBeginning()
+        protected internal override void VisitTableCellBeginning()
             => _marks.Add(TableCellStart);
 
-        protected override void VisitTableCellEnding()
+        protected internal override void VisitTableCellEnding()
             => _marks.Add(TableCellEnd);
 
-        protected override void VisitUnorderedListBeginning()
+        protected internal override void VisitUnorderedListBeginning()
             => _marks.Add(UnorderedListStart);
 
-        protected override void VisitUnorderedListEnding()
+        protected internal override void VisitUnorderedListEnding()
             => _marks.Add(UnorderedListEnd);
 
-        protected override void VisitOrderedListBeginning()
+        protected internal override void VisitOrderedListBeginning()
             => _marks.Add(OrderedListStart);
 
-        protected override void VisitOrderedListEnding()
+        protected internal override void VisitOrderedListEnding()
             => _marks.Add(OrderedListEnd);
 
-        protected override void VisitListItemBeginning()
+        protected internal override void VisitListItemBeginning()
             => _marks.Add(ListItemStart);
 
-        protected override void VisitListItemEnding()
+        protected internal override void VisitListItemEnding()
             => _marks.Add(ListItemEnd);
 
-        protected override void VisitStrongBeginning()
+        protected internal override void VisitStrongBeginning()
             => _marks.Add(StrongStart);
 
-        protected override void VisitStrongEnding()
+        protected internal override void VisitStrongEnding()
             => _marks.Add(StrongEnd);
 
-        protected override void VisitEmphasisBeginning()
+        protected internal override void VisitEmphasisBeginning()
             => _marks.Add(EmphasisStart);
 
-        protected override void VisitEmphasisEnding()
+        protected internal override void VisitEmphasisEnding()
             => _marks.Add(EmphasisEnd);
 
-        protected override void VisitHyperlinkBeginning(string destination)
+        protected internal override void VisitHyperlinkBeginning(string destination)
         {
             _marks.Add(HyperlinkStart);
             _marks.Add(HyperlinkDestination);
         }
 
-        protected override void VisitHyperlinkEnding()
+        protected internal override void VisitHyperlinkEnding()
             => _marks.Add(HyperlinkEnd);
 
-        protected override void VisitImage(string source, string alternative)
+        protected internal override void VisitImage(string source, string alternative)
         {
             _marks.Add(ImageStart);
             _marks.Add(ImageSource);
@@ -144,16 +144,16 @@ namespace Mup.Tests
             _marks.Add(ImageEnd);
         }
 
-        protected override void VisitLineBreak()
+        protected internal override void VisitLineBreak()
             => _marks.Add(LineBreak);
 
-        protected override void VisitPreformattedTextBeginning()
+        protected internal override void VisitPreformattedTextBeginning()
             => _marks.Add(PreformattedStart);
 
-        protected override void VisitPreformattedTextEnding()
+        protected internal override void VisitPreformattedTextEnding()
             => _marks.Add(PreformattedEnd);
 
-        protected override void VisitText(string text)
+        protected internal override void VisitText(string text)
             => _marks.Add(PlainText);
     }
 }

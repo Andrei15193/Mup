@@ -17,7 +17,8 @@ namespace Mup.Tests
         [InlineData("<>&\"'", "&lt;&gt;&amp;&quot;&#39;")]
         public async Task EscapesHtmlSpecialCharacters(string text, string expectedHtml)
         {
-            var actualHtml = await new HtmlWriterVisitor().VisitAsync(text, new[] { new ElementMark { Code = ElementMarkCode.PlainText, Start = 0, Length = text.Length } });
+            var parseTree = new FlatParseTree(text, new[] { new ElementMark { Code = ElementMarkCode.PlainText, Start = 0, Length = text.Length } });
+            var actualHtml = await parseTree.AcceptAsync(new HtmlWriterVisitor());
 
             Assert.Equal(expectedHtml, actualHtml);
         }
