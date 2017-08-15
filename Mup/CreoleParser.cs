@@ -330,7 +330,7 @@ namespace Mup
 
             private void _ProcessHeading(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
             {
-                if (currentToken.Code == CreoleTokenCode.NewLine && _LineFeedCount(currentToken) > 0)
+                if (currentToken.Code == NewLine && _LineFeedCount(currentToken) > 0)
                     _EndHeading(previousToken, currentToken, nextToken);
                 else
                 {
@@ -1078,7 +1078,7 @@ namespace Mup
                 for (int lineBreakMarkStart = start, emphasisMarkNumber = 0; emphasisMarkNumber < lineBreakMarkCount; emphasisMarkNumber++, lineBreakMarkStart += _LineBreakRepeatCount)
                     _marks.Add(new ElementMark
                     {
-                        Code = ElementMarkCode.LineBreak,
+                        Code = LineBreak,
                         Start = lineBreakMarkStart,
                         Length = _LineBreakRepeatCount
                     });

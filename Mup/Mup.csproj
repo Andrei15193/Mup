@@ -5,7 +5,6 @@
     <Version>0.0.1-alpha</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Andrei Fangli</Authors>
-    <Company />
     <Title>Mup</Title>
     <Description>Markup Parser (Mup) is an extensible .NET Standard Library (1.0) containing types for parsing and generating HTML from text using the Creole lightweight markup language.</Description>
     <PackageId>Mup</PackageId>
@@ -15,6 +14,14 @@
     <Copyright>Andrei Fangli</Copyright>
     <PackageLicenseUrl>http://www.mup-project.net/#/license</PackageLicenseUrl>
     <PackageIconUrl>https://mupstore.blob.core.windows.net/nuget/logo.png</PackageIconUrl>
+    <Product>Mup</Product>
+    <Company>Andrei Fangli</Company>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.0\Mup.xml</DocumentationFile>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <TreatSpecificWarningsAsErrors />
   </PropertyGroup>
 
 </Project>

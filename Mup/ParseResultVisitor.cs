@@ -534,16 +534,16 @@ namespace Mup
         }
 
         /// <summary>Asynchronously visits the beginning of a hyperlink.</summary>
-        /// <param name="hyperlinkDestinaton">The hyperlink destination.</param>
+        /// <param name="destination">The hyperlink destination.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        protected virtual Task VisitHyperlinkBeginningAsync(string hyperlinkDestinaton, CancellationToken cancellationToken)
+        protected virtual Task VisitHyperlinkBeginningAsync(string destination, CancellationToken cancellationToken)
         {
-            VisitHyperlinkBeginning(hyperlinkDestinaton);
+            VisitHyperlinkBeginning(destination);
             return _completedTask;
         }
 
         /// <summary>Visits the beginning of a hyperlink.</summary>
-        /// <param name="hyperlinkDestinaton">The hyperlink destination.</param>
+        /// <param name="destination">The hyperlink destination.</param>
         protected virtual void VisitHyperlinkBeginning(string destination)
         {
         }
