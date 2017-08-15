@@ -16,6 +16,9 @@
     <PackageIconUrl>https://mupstore.blob.core.windows.net/nuget/logo.png</PackageIconUrl>
     <Product>Mup</Product>
     <Company>Andrei Fangli</Company>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>Mup.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

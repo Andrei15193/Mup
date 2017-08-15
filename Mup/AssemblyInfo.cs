@@ -4,4 +4,4 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
-[assembly: InternalsVisibleTo("Mup.Tests")]
+[assembly: InternalsVisibleTo("Mup.Tests, PublicKey=00240000048000009400000006020000002400005253413100040000010001002d17cd4dbf3d1a7c18152c73f8d8fcea40eb34e159075478100f355daef09b03e784904d53e6946b9e874ff60cb3e4d7a7658ab2662ffac23560117cb8ec3958b652a0bbac0e52f506e831d5e4f0fa36e5a8d480de1174e7246bbb80ef61724d1a242d34ba9fad1924cb2d8a1e17bb9e3fbb356b7b01b99ceaa4ee55b42992d2")]
