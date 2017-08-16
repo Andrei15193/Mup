@@ -19,11 +19,7 @@ export default class Description extends React.Component {
                 </p>
                 <p>
                     The library does not expose types for each mentioned format, but it is made to be extensible. Any parsed text can be run through
-                    a custom visitor which, um, “visits” the results allowing the developer to specify what exactly needs to be generated at every step.
-                </p>
-                <p>
-                    The library does not expose types for each mentioned format, but it is made to be extensible. Any parsed text can be run through
-                    a custom visitor which, um, “visits” the results allowing the developer to specify what exactly needs to be generated at every step.
+                    a custom visitor which, um, "visits" the results allowing the developer to specify what exactly needs to be generated at every step.
                 </p>
                 <p>
                     To keep it lightweight, the library only provides parsers for several languages (see below) and
