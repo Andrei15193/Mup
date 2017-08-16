@@ -12,7 +12,7 @@ const parserActions = container.parserActions;
 export default class Editor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { text: parserStore.html };
+        this.state = { text: parserStore.text };
     }
 
     render() {
