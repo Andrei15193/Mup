@@ -34,6 +34,10 @@ export default class ParserStore {
         this.htmlChanged.invoke(this);
     }
 
+    get text() {
+        return this._text;
+    }
+
     _handle(action) {
         switch (action.category) {
             case ActionCategories.parserView:
