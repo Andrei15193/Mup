@@ -306,6 +306,7 @@ namespace Mup.Tests
         [InlineData("|cell 1~~|cell 2|", "<table><tr><td>cell 1~</td><td>cell 2</td></tr></table>")]
         [InlineData("|cell with //emphasis//, **strong**, [[hyperlink]], {{image}}, http://example.com , {{{no wiki}}}", "<table><tr><td>cell with <em>emphasis</em>, <strong>strong</strong>, <a href=\"hyperlink\">hyperlink</a>, <img src=\"image\">, <a href=\"http://example.com\">http://example.com</a> , <code>no wiki</code></td></tr></table>")]
         [InlineData("|//no emphasis", "<table><tr><td>//no emphasis</td></tr></table>")]
+        [InlineData("|= \t white space is trimmed \t |= \t white space is trimmed \t \n| \t white space is trimmed \t | \t white space is trimmed \t ", "<table><tr><th>white space is trimmed</th><th>white space is trimmed</th></tr><tr><td>white space is trimmed</td><td>white space is trimmed</td></tr></table>")]
         public async Task ParseTablesToHtml(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
