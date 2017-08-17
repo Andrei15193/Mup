@@ -24,8 +24,8 @@
 
         LineBreak,
 
-        PreformattedStart,
-        PreformattedEnd,
+        PreformattedTextStart,
+        PreformattedTextEnd,
 
         Heading1Start,
         Heading1End,
