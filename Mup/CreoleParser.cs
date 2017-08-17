@@ -249,7 +249,6 @@ namespace Mup
                 switch (currentToken.Code)
                 {
                     case WhiteSpace:
-                    case NewLine:
                         break;
 
                     case Asterisk when (currentToken.Length == 1):
@@ -274,7 +273,7 @@ namespace Mup
                         _BeginHeading(previousToken, currentToken, nextToken);
                         break;
 
-                    case Dash when (currentToken.Length >= 4 && (nextToken == null || (nextToken.Code == NewLine && _LineFeedCount(nextToken) > 0))):
+                    case Dash when (currentToken.Length >= 4 && (nextToken == null || (nextToken.Code == WhiteSpace && _LineFeedCount(nextToken) > 0))):
                         _HorizontalRule(previousToken, currentToken, nextToken);
                         break;
 
@@ -330,7 +329,7 @@ namespace Mup
 
             private void _ProcessHeading(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
             {
-                if (currentToken.Code == NewLine && _LineFeedCount(currentToken) > 0)
+                if (currentToken.Code == WhiteSpace && _LineFeedCount(currentToken) > 0)
                     _EndHeading(previousToken, currentToken, nextToken);
                 else
                 {
@@ -346,7 +345,7 @@ namespace Mup
 
             private void _ProcessParagraph(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
             {
-                if (currentToken.Code == NewLine && (_LineFeedCount(currentToken) >= 2 || (_LineFeedCount(currentToken) >= 1 && nextToken?.Code == Dash && nextToken.Length >= 4)))
+                if (currentToken.Code == WhiteSpace && (_LineFeedCount(currentToken) >= 2 || (_LineFeedCount(currentToken) >= 1 && nextToken?.Code == Dash && nextToken.Length >= 4)))
                     _EndParagraph(previousToken, currentToken, nextToken);
                 else
                     _ProcessRichText(previousToken, currentToken, nextToken);
@@ -666,7 +665,7 @@ namespace Mup
 
             private void _ProcessList(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
             {
-                if (currentToken.Code == NewLine && _LineFeedCount(currentToken) > 1)
+                if (currentToken.Code == WhiteSpace && _LineFeedCount(currentToken) > 1)
                     while (_blocks.Count > 0)
                         _EndList(previousToken, currentToken, nextToken);
                 else
@@ -674,7 +673,7 @@ namespace Mup
                     var listIndent = _blocks.Count;
                     switch (currentToken.Code)
                     {
-                        case Asterisk when (currentToken.Length == listIndent && (previousToken == null || (previousToken.Code == NewLine && _LineFeedCount(previousToken) > 0))):
+                        case Asterisk when (currentToken.Length == listIndent && (previousToken == null || (previousToken.Code == WhiteSpace && _LineFeedCount(previousToken) > 0))):
                             if (_blocks.Peek() != UnorderedList)
                             {
                                 _EndList(previousToken, currentToken, nextToken);
@@ -686,7 +685,7 @@ namespace Mup
                             _BeginListItem(previousToken, currentToken, nextToken);
                             break;
 
-                        case Asterisk when (currentToken.Length > listIndent && (previousToken == null || (previousToken.Code == NewLine && _LineFeedCount(previousToken) > 0))):
+                        case Asterisk when (currentToken.Length > listIndent && (previousToken == null || (previousToken.Code == WhiteSpace && _LineFeedCount(previousToken) > 0))):
                             do
                             {
                                 _BeginUnorderedList(previousToken, currentToken, nextToken);
@@ -695,7 +694,7 @@ namespace Mup
                             } while (currentToken.Length > listIndent);
                             break;
 
-                        case Asterisk when (currentToken.Length < listIndent && (previousToken == null || (previousToken.Code == NewLine && _LineFeedCount(previousToken) > 0))):
+                        case Asterisk when (currentToken.Length < listIndent && (previousToken == null || (previousToken.Code == WhiteSpace && _LineFeedCount(previousToken) > 0))):
                             do
                             {
                                 _EndList(previousToken, currentToken, nextToken);
@@ -705,7 +704,7 @@ namespace Mup
                             _BeginListItem(previousToken, currentToken, nextToken);
                             break;
 
-                        case Hash when (currentToken.Length == listIndent && (previousToken == null || (previousToken.Code == NewLine && _LineFeedCount(previousToken) > 0))):
+                        case Hash when (currentToken.Length == listIndent && (previousToken == null || (previousToken.Code == WhiteSpace && _LineFeedCount(previousToken) > 0))):
                             if (_blocks.Peek() != OrderedList)
                             {
                                 _EndList(previousToken, currentToken, nextToken);
@@ -717,7 +716,7 @@ namespace Mup
                             _BeginListItem(previousToken, currentToken, nextToken);
                             break;
 
-                        case Hash when (currentToken.Length > listIndent && (previousToken == null || (previousToken.Code == NewLine && _LineFeedCount(previousToken) > 0))):
+                        case Hash when (currentToken.Length > listIndent && (previousToken == null || (previousToken.Code == WhiteSpace && _LineFeedCount(previousToken) > 0))):
                             do
                             {
                                 _BeginOrderedList(previousToken, currentToken, nextToken);
@@ -726,7 +725,7 @@ namespace Mup
                             } while (currentToken.Length > listIndent);
                             break;
 
-                        case Hash when (currentToken.Length < listIndent && (previousToken == null || (previousToken.Code == NewLine && _LineFeedCount(previousToken) > 0))):
+                        case Hash when (currentToken.Length < listIndent && (previousToken == null || (previousToken.Code == WhiteSpace && _LineFeedCount(previousToken) > 0))):
                             do
                             {
                                 _EndList(previousToken, currentToken, nextToken);
@@ -737,7 +736,7 @@ namespace Mup
                             break;
 
                         case WhiteSpace when (_marks[_marks.Count - 1].Code == ListItemStart || _marks[_marks.Count - 1].Code == ListItemEnd):
-                        case NewLine when (_marks[_marks.Count - 1].Code == ListItemStart || _marks[_marks.Count - 1].Code == ListItemEnd || nextToken?.Code == Asterisk || nextToken?.Code == Hash):
+                        case WhiteSpace when (_LineFeedCount(currentToken) > 0 && (_marks[_marks.Count - 1].Code == ListItemStart || _marks[_marks.Count - 1].Code == ListItemEnd || nextToken?.Code == Asterisk || nextToken?.Code == Hash)):
                             break;
 
                         default:
@@ -816,7 +815,6 @@ namespace Mup
                 switch (currentToken.Code)
                 {
                     case WhiteSpace:
-                    case NewLine:
                         if (_richTextBlocks.Peek() == InlineHyperlink)
                             _EndInlineHyperlink(previousToken, currentToken, nextToken);
                         _marks.Add(new ElementMark
@@ -1185,7 +1183,7 @@ namespace Mup
             private void _ProcessPreformattedBlock(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Code == BraceClose && currentToken.Length >= _PreformattedCharacterRepeatCount
-                    && (nextToken == null || (nextToken.Code == NewLine && _LineFeedCount(nextToken) > 0)))
+                    && (nextToken == null || (nextToken.Code == WhiteSpace && _LineFeedCount(nextToken) > 0)))
                     _EndPreformattedBlock(previousToken, currentToken, nextToken);
                 else
                     _AppendPlainText(currentToken);
@@ -1234,7 +1232,7 @@ namespace Mup
             private void _ProcessPlugIn(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Code == AngleClose && currentToken.Length >= _PluginCharacterRepeatCount
-                    && (nextToken == null || (nextToken.Code == NewLine && _LineFeedCount(nextToken) > 0)))
+                    && (nextToken == null || (nextToken.Code == WhiteSpace && _LineFeedCount(nextToken) > 0)))
                     _EndPlugIn(previousToken, currentToken, nextToken);
                 else
                     _AppendPlainText(currentToken);
@@ -1280,7 +1278,7 @@ namespace Mup
             {
                 switch (currentToken.Code)
                 {
-                    case Pipe when (_tableRowStartMark != null && (nextToken?.Code == NewLine && _LineFeedCount(nextToken) > 0)):
+                    case Pipe when (_tableRowStartMark != null && (nextToken?.Code == WhiteSpace && _LineFeedCount(nextToken) > 0)):
                         break;
 
                     case Pipe when (_tableRowStartMark == null):
@@ -1295,12 +1293,12 @@ namespace Mup
                         _BeginTableHeaderCell(previousToken, currentToken, nextToken);
                         break;
 
-                    case NewLine when (_LineFeedCount(currentToken) > 1):
-                    case NewLine when (_LineFeedCount(currentToken) == 1 && nextToken?.Code != Pipe):
+                    case WhiteSpace when (_LineFeedCount(currentToken) > 1):
+                    case WhiteSpace when (_LineFeedCount(currentToken) == 1 && nextToken?.Code != Pipe):
                         _EndTable(previousToken, currentToken, nextToken);
                         break;
 
-                    case NewLine:
+                    case WhiteSpace when (_LineFeedCount(currentToken) > 0):
                         _EndTableRow(previousToken, currentToken, nextToken);
                         break;
 
