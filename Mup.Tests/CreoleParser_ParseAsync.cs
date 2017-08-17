@@ -90,7 +90,7 @@ namespace Mup.Tests
         [InlineData("|table 1\n\n|table 2", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd, TableStart, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
         [InlineData("|cell ~| 1|", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
         [InlineData("|cell 1~~|cell 2|", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
-        [InlineData("|cell with //emphasis//, **strong**, [[hyperlink]], {{image}}, http://example.com , {{{no wiki}}}", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, PreformattedStart, PlainText, PreformattedEnd, TableCellEnd, TableRowEnd, TableEnd })]
+        [InlineData("|cell with //emphasis//, **strong**, [[hyperlink]], {{image}}, http://example.com , {{{no wiki}}}", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, PreformattedTextStart, PlainText, PreformattedTextEnd, TableCellEnd, TableRowEnd, TableEnd })]
         [InlineData("|//no emphasis", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
         public async Task ParsesTables(string text, object[] marks)
         {
@@ -120,13 +120,13 @@ namespace Mup.Tests
         [InlineData("# ordered list\non 2 lines", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
         [InlineData("# ordered list\n\nparagraph", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd, ParagraphStart, PlainText, ParagraphEnd })]
 
-        [InlineData("* plain //emphasised//, **strong**, {{image}}, [[hyperlink]], {{{no wiki}}}, http://example.com text", new object[] { UnorderedListStart, ListItemStart, PlainText, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, PreformattedStart, PlainText, PreformattedEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ListItemEnd, UnorderedListEnd })]
+        [InlineData("* plain //emphasised//, **strong**, {{image}}, [[hyperlink]], {{{no wiki}}}, http://example.com text", new object[] { UnorderedListStart, ListItemStart, PlainText, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, PreformattedTextStart, PlainText, PreformattedTextEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ListItemEnd, UnorderedListEnd })]
         [InlineData("* no // emphasis", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
         [InlineData("* no ** strong", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
         [InlineData("* no [[ hyperlink", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
         [InlineData("* no {{ image", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
         [InlineData("* no {{{ code", new object[] { UnorderedListStart, ListItemStart, PlainText, ListItemEnd, UnorderedListEnd })]
-        [InlineData("# plain //emphasised//, **strong**, {{image}}, [[hyperlink]], {{{no wiki}}}, http://example.com text", new object[] { OrderedListStart, ListItemStart, PlainText, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, PreformattedStart, PlainText, PreformattedEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ListItemEnd, OrderedListEnd })]
+        [InlineData("# plain //emphasised//, **strong**, {{image}}, [[hyperlink]], {{{no wiki}}}, http://example.com text", new object[] { OrderedListStart, ListItemStart, PlainText, EmphasisStart, PlainText, EmphasisEnd, PlainText, StrongStart, PlainText, StrongEnd, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, PreformattedTextStart, PlainText, PreformattedTextEnd, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ListItemEnd, OrderedListEnd })]
         [InlineData("# no // emphasis", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
         [InlineData("# no ** strong", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
         [InlineData("# no [[ hyperlink", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
@@ -214,11 +214,11 @@ namespace Mup.Tests
         [InlineData(@"line~~\\break", new object[] { ParagraphStart, PlainText, LineBreak, PlainText, ParagraphEnd })]
         [InlineData(@"line~\\\break", new object[] { ParagraphStart, PlainText, PlainText, LineBreak, PlainText, ParagraphEnd })]
 
-        [InlineData("plain {{{no wiki}}} text", new object[] { ParagraphStart, PlainText, PreformattedStart, PlainText, PreformattedEnd, PlainText, ParagraphEnd })]
-        [InlineData("plain {{{no escape ~}}} text", new object[] { ParagraphStart, PlainText, PreformattedStart, PlainText, PreformattedEnd, PlainText, ParagraphEnd })]
-        [InlineData("plain {{{no **strong**, no //emphais//, no [[hyperlinks]], no {{images}}}}} text", new object[] { ParagraphStart, PlainText, PreformattedStart, PlainText, PreformattedEnd, PlainText, ParagraphEnd })]
-        [InlineData("plain {{{no wiki}}} text", new object[] { ParagraphStart, PlainText, PreformattedStart, PlainText, PreformattedEnd, PlainText, ParagraphEnd })]
-        [InlineData("plain {{{}}} text", new object[] { ParagraphStart, PlainText, PreformattedStart, PreformattedEnd, PlainText, ParagraphEnd })]
+        [InlineData("plain {{{no wiki}}} text", new object[] { ParagraphStart, PlainText, PreformattedTextStart, PlainText, PreformattedTextEnd, PlainText, ParagraphEnd })]
+        [InlineData("plain {{{no escape ~}}} text", new object[] { ParagraphStart, PlainText, PreformattedTextStart, PlainText, PreformattedTextEnd, PlainText, ParagraphEnd })]
+        [InlineData("plain {{{no **strong**, no //emphais//, no [[hyperlinks]], no {{images}}}}} text", new object[] { ParagraphStart, PlainText, PreformattedTextStart, PlainText, PreformattedTextEnd, PlainText, ParagraphEnd })]
+        [InlineData("plain {{{no wiki}}} text", new object[] { ParagraphStart, PlainText, PreformattedTextStart, PlainText, PreformattedTextEnd, PlainText, ParagraphEnd })]
+        [InlineData("plain {{{}}} text", new object[] { ParagraphStart, PlainText, PreformattedTextStart, PlainText, PreformattedTextEnd, PlainText, ParagraphEnd })]
 
         [InlineData("**//mixed strong emphasis**//", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("//**mixed emphasis strong//**", new object[] { ParagraphStart, PlainText, ParagraphEnd })]

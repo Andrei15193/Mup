@@ -57,11 +57,12 @@ namespace Mup.Tests
         protected internal override void VisitParagraphEnding()
             => _marks.Add(ParagraphEnd);
 
-        protected internal override void VisitPreformattedBlockBeginning()
-            => _marks.Add(PreformattedBlockStart);
-
-        protected internal override void VisitPreformattedBlockEnding()
-            => _marks.Add(PreformattedBlockEnd);
+        protected internal override void VisitPreformattedBlock(string preformattedText)
+        {
+            _marks.Add(PreformattedBlockStart);
+            _marks.Add(PlainText);
+            _marks.Add(PreformattedBlockEnd);
+        }
 
         protected internal override void VisitHorizontalRule()
             => _marks.Add(HorizontalRule);
@@ -147,11 +148,12 @@ namespace Mup.Tests
         protected internal override void VisitLineBreak()
             => _marks.Add(LineBreak);
 
-        protected internal override void VisitPreformattedTextBeginning()
-            => _marks.Add(PreformattedStart);
-
-        protected internal override void VisitPreformattedTextEnding()
-            => _marks.Add(PreformattedEnd);
+        protected internal override void VisitPreformattedText(string preformattedText)
+        {
+            _marks.Add(PreformattedTextStart);
+            _marks.Add(PlainText);
+            _marks.Add(PreformattedTextEnd);
+        }
 
         protected internal override void VisitText(string text)
             => _marks.Add(PlainText);

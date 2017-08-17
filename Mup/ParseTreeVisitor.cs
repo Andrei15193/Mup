@@ -221,29 +221,18 @@ namespace Mup
         {
         }
 
-        /// <summary>Asynchronously visits the beginning of a preformatted block.</summary>
+        /// <summary>Asynchronously visits a preformatted block.</summary>
+        /// <param name="preformattedText">The preformatted text.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        protected internal virtual Task VisitPreformattedBlockBeginningAsync(CancellationToken cancellationToken)
+        protected internal virtual Task VisitPreformattedBlockAsync(string preformattedText, CancellationToken cancellationToken)
         {
-            VisitPreformattedBlockBeginning();
+            VisitPreformattedBlock(preformattedText);
             return _completedTask;
         }
 
-        /// <summary>Visits the beginning of a preformatted block.</summary>
-        protected internal virtual void VisitPreformattedBlockBeginning()
-        {
-        }
-
-        /// <summary>Asynchronously visits the ending of a preformatted block.</summary>
-        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        protected internal virtual Task VisitPreformattedBlockEndingAsync(CancellationToken cancellationToken)
-        {
-            VisitPreformattedBlockEnding();
-            return _completedTask;
-        }
-
-        /// <summary>Visits the ending of a preformatted block.</summary>
-        protected internal virtual void VisitPreformattedBlockEnding()
+        /// <summary>Visits a preformatted block.</summary>
+        /// <param name="preformattedText">The preformatted text.</param>
+        protected internal virtual void VisitPreformattedBlock(string preformattedText)
         {
         }
 
@@ -567,29 +556,18 @@ namespace Mup
         {
         }
 
-        /// <summary>Asynchronously visits the beginning of a preformatted text.</summary>
+        /// <summary>Asynchronously visits a preformatted text inside a block (e.g.: paragraph, list item or table).</summary>
+        /// <param name="preformattedText">The preformatted text.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        protected internal virtual Task VisitPreformattedTextBeginningAsync(CancellationToken cancellationToken)
+        protected internal virtual Task VisitPreformattedTextAsync(string preformattedText, CancellationToken cancellationToken)
         {
-            VisitPreformattedTextBeginning();
+            VisitPreformattedText(preformattedText);
             return _completedTask;
         }
 
-        /// <summary>Visits the beginning of a preformatted text.</summary>
-        protected internal virtual void VisitPreformattedTextBeginning()
-        {
-        }
-
-        /// <summary>Asynchronously visits the ending of a preformatted text.</summary>
-        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        protected internal virtual Task VisitPreformattedTextEndingAsync(CancellationToken cancellationToken)
-        {
-            VisitPreformattedTextEnding();
-            return _completedTask;
-        }
-
-        /// <summary>Visits the ending of a preformatted text.</summary>
-        protected internal virtual void VisitPreformattedTextEnding()
+        /// <summary>Visits a preformatted text inside a block (e.g.: paragraph, list item or table).</summary>
+        /// <param name="preformattedText">The preformatted text.</param>
+        protected internal virtual void VisitPreformattedText(string preformattedText)
         {
         }
 

@@ -1099,7 +1099,7 @@ namespace Mup
 
                 _preformattedStartMark = new ElementMark
                 {
-                    Code = PreformattedStart,
+                    Code = PreformattedTextStart,
                     Start = (currentToken.End - _PreformattedCharacterRepeatCount),
                     Length = _PreformattedCharacterRepeatCount
                 };
@@ -1134,7 +1134,7 @@ namespace Mup
                         (currentToken.Length - _PreformattedCharacterRepeatCount));
                 _marks.Add(new ElementMark
                 {
-                    Code = PreformattedEnd,
+                    Code = PreformattedTextEnd,
                     Start = currentToken.Start + _PreformattedCharacterRepeatCount,
                     Length = _PreformattedCharacterRepeatCount
                 });

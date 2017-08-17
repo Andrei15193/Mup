@@ -47,6 +47,8 @@ namespace Mup
             private StringBuilder _imageSourceBuilder;
             private StringBuilder _imageAlternativeTextBuilder;
             private StringBuilder _pluginTextBuilder;
+            private StringBuilder _preformattedTextBuilder;
+            private StringBuilder _preformattedBlockBuilder;
 
             internal FlatParseTreeHelper(string text, IEnumerable<ElementMark> marks)
             {
@@ -56,6 +58,8 @@ namespace Mup
                 _imageSourceBuilder = null;
                 _imageAlternativeTextBuilder = null;
                 _pluginTextBuilder = null;
+                _preformattedTextBuilder = null;
+                _preformattedBlockBuilder = null;
             }
 
             internal async Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken)
@@ -130,12 +134,18 @@ namespace Mup
                         await visitor.VisitLineBreakAsync(cancellationToken);
                         break;
 
-                    case PreformattedStart:
-                        await visitor.VisitPreformattedTextBeginningAsync(cancellationToken);
+                    case PreformattedTextStart:
+                        _preformattedTextBuilder = new StringBuilder();
                         break;
 
-                    case PreformattedEnd:
-                        await visitor.VisitPreformattedTextEndingAsync(cancellationToken);
+                    case PlainText when (_preformattedTextBuilder != null):
+                        _preformattedTextBuilder.Append(_text, mark.Start, mark.Length);
+                        break;
+
+                    case PreformattedTextEnd:
+                        var preformattedText = _preformattedTextBuilder.ToString();
+                        _preformattedTextBuilder = null;
+                        await visitor.VisitPreformattedTextAsync(preformattedText, cancellationToken);
                         break;
 
                     case Heading1Start:
@@ -195,11 +205,17 @@ namespace Mup
                         break;
 
                     case PreformattedBlockStart:
-                        await visitor.VisitPreformattedBlockBeginningAsync(cancellationToken);
+                        _preformattedBlockBuilder = new StringBuilder();
+                        break;
+
+                    case PlainText when (_preformattedBlockBuilder != null):
+                        _preformattedBlockBuilder.Append(_text, mark.Start, mark.Length);
                         break;
 
                     case PreformattedBlockEnd:
-                        await visitor.VisitPreformattedBlockEndingAsync(cancellationToken);
+                        var preformattedBlock = _preformattedBlockBuilder.ToString();
+                        _preformattedBlockBuilder = null;
+                        await visitor.VisitPreformattedBlockAsync(preformattedBlock, cancellationToken);
                         break;
 
                     case TableStart:

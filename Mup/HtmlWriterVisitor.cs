@@ -101,13 +101,10 @@ namespace Mup
         protected internal override void VisitParagraphEnding()
             => HtmlStringBuilder.Append("</p>");
 
-        /// <summary>Visits the beginning of a preformatted block.</summary>
-        protected internal override void VisitPreformattedBlockBeginning()
-            => HtmlStringBuilder.Append("<pre><code>");
-
-        /// <summary>Visits the ending of a preformatted block.</summary>
-        protected internal override void VisitPreformattedBlockEnding()
-            => HtmlStringBuilder.Append("</code></pre>");
+        /// <summary>Visits a preformatted block.</summary>
+        /// <param name="preformattedText">The preformatted text.</param>
+        protected internal override void VisitPreformattedBlock(string preformattedText)
+            => HtmlStringBuilder.Append("<pre><code>").Append(preformattedText).Append("</code></pre>");
 
         /// <summary>Visits the beginning of a table.</summary>
         protected internal override void VisitTableBeginning()
@@ -202,13 +199,10 @@ namespace Mup
         protected internal override void VisitLineBreak()
             => HtmlStringBuilder.Append("<br>");
 
-        /// <summary>Visits the beginning of a preformatted text.</summary>
-        protected internal override void VisitPreformattedTextBeginning()
-            => HtmlStringBuilder.Append("<code>");
-
-        /// <summary>Visits the ending of a preformatted text.</summary>
-        protected internal override void VisitPreformattedTextEnding()
-            => HtmlStringBuilder.Append("</code>");
+        /// <summary>Visits a preformatted text inside a block (e.g.: paragraph, list item or table).</summary>
+        /// <param name="preformattedText">The preformatted text.</param>
+        protected internal override void VisitPreformattedText(string preformattedText)
+            => HtmlStringBuilder.Append("<code>").Append(preformattedText).Append("</code>");
 
         /// <summary>Visits a horizontal rule.</summary>
         protected internal override void VisitHorizontalRule()
