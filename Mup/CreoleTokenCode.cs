@@ -14,7 +14,6 @@
         AngleClose,
         Equal,
         Dash,
-        NewLine,
         WhiteSpace,
         Hash,
         Pipe,

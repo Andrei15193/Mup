@@ -29,8 +29,6 @@ namespace Mup
 
                 new KeyValuePair<CreoleTokenCode, Func<char, bool>>(Dash, character => (character == '-')),
 
-                new KeyValuePair<CreoleTokenCode, Func<char, bool>>(NewLine, character => (character == '\r' || character == '\n')),
-
                 new KeyValuePair<CreoleTokenCode, Func<char, bool>>(WhiteSpace, char.IsWhiteSpace),
 
                 new KeyValuePair<CreoleTokenCode, Func<char, bool>>(Hash, character => (character == '#')),
