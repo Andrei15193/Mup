@@ -14,7 +14,7 @@ export default class Description extends React.Component {
                 </p>
                 <p>
                     The main purpose of the library is to support
-                    parsing <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language">Lightweight Markup Languages</a> into
+                    parsing <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language" target="_blank">Lightweight Markup Languages</a> into
                     various output formats, such as HTML, XHTML, XML, Word Documents, Excel Documents, and any other type of document.
                 </p>
                 <p>
@@ -25,9 +25,9 @@ export default class Description extends React.Component {
                     To keep it lightweight, the library only provides parsers for several languages (see below) and
                     an <abbr title="HyperText Markup Language">HTML</abbr> visitor which allows users to
                     generate <abbr title="HyperText Markup Language">HTML</abbr> from parsed text. With each increment (or major version if
-                    that helps), the library will bring a new parser into the fold and thus supporting more languages.
-                    The end goal is to support all <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language">Lightweight Markup Languages</a>, however that may
-                    take some time, thus the incremental approach.
+                    that helps), the library will bring a new parser into the fold and thus supporting more languages. The end goal is to support
+                    all <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language" target="_blank">Lightweight Markup Languages</a>,
+                    however that may take some time, thus the incremental approach.
                 </p>
             </div>
         );

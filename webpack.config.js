@@ -1,36 +1,19 @@
 const IS_PRODUCTION = (process.argv.indexOf("-p") !== -1);
 
 const path = require("path");
-const Webpack = require("webpack");
+const UglifyJsPlugin = require("webpack").optimize.UglifyJsPlugin;
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const aliases = getAliases.call(require('./config/aliases.json'));
-function getAliases() {
-    var result = {};
-    Object
-        .getOwnPropertyNames(this)
-        .forEach(function (aliasKey) {
-            var alias = this[aliasKey];
-            Object.defineProperty(
-                result,
-                aliasKey,
-                {
-                    enumerable: true,
-                    writable: false,
-                    configurable: false,
-                    value: path.join(__dirname, alias)
-                });
-        }, this);
-    return result;
-}
+const aliases = require('./config/aliases.json');
+const config = require("./config/" + (IS_PRODUCTION ? "release" : "debug") + ".json");
 
 module.exports = {
     context: __dirname,
-    devtool: (IS_PRODUCTION ? false : "source-map"),
+    devtool: config.devtool,
     entry: path.join(__dirname, "view", "index.jsx"),
     resolve: {
         extensions: [".js", ".jsx", ".json"],
-        alias: aliases
+        alias: mapAliases(__dirname, aliases)
     },
     module: {
         loaders: [
@@ -51,9 +34,7 @@ module.exports = {
             {
                 test: /\.html$/,
                 loader: "html-loader",
-                options: {
-                    minimize: IS_PRODUCTION
-                }
+                options: config.html
             },
             {
                 test: /\.(png|svg|jpg|gif)$/,
@@ -78,15 +59,42 @@ module.exports = {
         filename: "app.min.js"
     },
     plugins: [
-        (IS_PRODUCTION ?
-            new Webpack.DefinePlugin({
-                "process.env": {
-                    NODE_ENV: JSON.stringify("production")
-                }
-            }) : null),
-        (IS_PRODUCTION ? new Webpack.optimize.UglifyJsPlugin() : null),
+        new UglifyJsPlugin({
+            compress: config.uglifyJs.compress,
+            beautify: config.uglifyJs.beautify,
+            sourceMap: config.uglifyJs.sourceMap,
+            warningsFilter: getWarningsFilter(config.uglifyJs.warnings)
+        }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "view", "index.html")
         })
-    ].filter(plugin => plugin != null)
+    ]
 };
+
+function mapAliases(rootFolder, aliases) {
+    var result = {};
+    Object
+        .getOwnPropertyNames(aliases)
+        .forEach(function (aliasKey) {
+            var alias = aliases[aliasKey];
+            Object.defineProperty(
+                result,
+                aliasKey,
+                {
+                    enumerable: true,
+                    writable: false,
+                    configurable: false,
+                    value: path.join(rootFolder, alias)
+                });
+        });
+    return result;
+}
+
+function getWarningsFilter(warningsConfig) {
+    if (warningsConfig.exclude && warningsConfig.exclude.length > 0) {
+        var regExp = new RegExp("(\/|^)(" + warningsConfig.exclude.join("|") + ")(\/|$)");
+        return regExp.test.bind(regExp);
+    }
+    else
+        return () => false;
+}

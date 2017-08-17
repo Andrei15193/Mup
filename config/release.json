@@ -1,0 +1,16 @@
+{
+    "devtool": false,
+    "uglifyJs": {
+        "compress": true,
+        "beautify": false,
+        "sourceMap": true,
+        "warnings": {
+            "exclude": [
+                "node_modules"
+            ]
+        }
+    },
+    "html": {
+        "minimize": true
+    }
+}
