@@ -33,13 +33,15 @@ export default class Preview extends React.Component {
             return (
                 <div class={join(Bootstrap.panel, Bootstrap.panelDefault, Style.parseContent, Style.noMargin)}>
                     <div class={Bootstrap.panelBody}>
-                        <div dangerouslySetInnerHTML={{ __html: this.state.html }} />
+                        <div class={Style.preview} dangerouslySetInnerHTML={{ __html: this.state.html }} />
                     </div>
                 </div>
             );
-        else
+        else {
+            var rawHtml = this.state.html.replace(new RegExp("<span class=\"keyword\">(\\w+)</span>", "mg"), "$1");
             return (
-                <pre class={Style.parseContent}><code>{this.state.html}</code></pre>
+                <pre class={Style.parseContent}><code>{rawHtml}</code></pre>
             );
+        }
     }
 };
