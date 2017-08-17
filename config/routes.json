@@ -1,8 +1,5 @@
 {
     "home": "/",
     "onlineParser": "/onlineParser",
-    "testCases": "/testCases",
-    "testCase": "/testCases/:id",
-    "roadmap": "/roadmap",
     "license": "/license"
 }

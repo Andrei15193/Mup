@@ -10,10 +10,10 @@ export default class Home extends React.Component {
     render() {
         return (
             <Page title="Home">
-                <GetInvolved />
+                {/* <GetInvolved /> */}
                 <Description />
                 <LanguageStatus />
-                <Documentation />
+                {/* <Documentation /> */}
             </Page>
         );
     }

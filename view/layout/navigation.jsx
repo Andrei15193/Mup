@@ -16,8 +16,6 @@ export default class Navigation extends React.Component {
             <ul class={join(Style.content, Bootstrap.nav, Bootstrap.navTabs)}>
                 <NavItem title="Home" page="home" />
                 <NavItem title="Online Parser" page="onlineParser" />
-                <NavItem title="Test Cases" page="testCases" />
-                <NavItem title="Roadmap" page="roadmap" />
                 <NavItem title="License" page="license" />
             </ul>
         );
