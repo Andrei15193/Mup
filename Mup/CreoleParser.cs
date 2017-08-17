@@ -1302,7 +1302,7 @@ namespace Mup
                         _EndTableRow(previousToken, currentToken, nextToken);
                         break;
 
-                    case WhiteSpace when (_tableRowStartMark == null || _tableCellStartMark == null):
+                    case WhiteSpace when (_tableRowStartMark == null || _tableCellStartMark == null || _marks[_marks.Count - 1] == _tableCellStartMark):
                         break;
 
                     default:
@@ -1378,6 +1378,15 @@ namespace Mup
             private void _EndTableCell(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
             {
                 _ClearRichText(previousToken, currentToken, nextToken);
+
+                var plainTextMark = _marks[_marks.Count - 1];
+                if (plainTextMark.Code == PlainText)
+                {
+                    _TrimWhiteSpaceEnd(plainTextMark);
+                    if (plainTextMark.Length == 0)
+                        _marks.RemoveAt(_marks.Count - 1);
+                }
+
                 _marks.Add(new ElementMark
                 {
                     Code = (_tableCellStartMark.Code == TableHeaderCellStart ? TableHeaderCellEnd : TableCellEnd),
