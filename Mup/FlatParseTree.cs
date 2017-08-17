@@ -25,7 +25,7 @@ namespace Mup
         public async Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken)
         {
             var helper = new FlatParseTreeHelper(_text, _marks);
-            await helper.AcceptAsync(visitor, cancellationToken);
+            await helper.AcceptAsync(visitor, cancellationToken).ConfigureAwait(false);
         }
 
         public Task<TResult> AcceptAsync<TResult>(ParseTreeVisitor<TResult> visitor)
@@ -34,7 +34,7 @@ namespace Mup
         public async Task<TResult> AcceptAsync<TResult>(ParseTreeVisitor<TResult> visitor, CancellationToken cancellationToken)
         {
             var helper = new FlatParseTreeHelper(_text, _marks);
-            await helper.AcceptAsync(visitor, cancellationToken);
+            await helper.AcceptAsync(visitor, cancellationToken).ConfigureAwait(false);
             var result = visitor.Result;
             return result;
         }
@@ -67,12 +67,12 @@ namespace Mup
                 if (visitor == null)
                     throw new ArgumentNullException(nameof(visitor));
 
-                await visitor.BeginVisitAsync(cancellationToken);
+                await visitor.BeginVisitAsync(cancellationToken).ConfigureAwait(false);
 
                 foreach (var mark in _marks)
-                    await _VisitAsync(visitor, mark, cancellationToken);
+                    await _VisitAsync(visitor, mark, cancellationToken).ConfigureAwait(false);
 
-                await visitor.EndVisitAsync(cancellationToken);
+                await visitor.EndVisitAsync(cancellationToken).ConfigureAwait(false);
             }
 
             private async Task _VisitAsync(ParseTreeVisitor visitor, ElementMark mark, CancellationToken cancellationToken)
@@ -80,7 +80,7 @@ namespace Mup
                 switch (mark.Code)
                 {
                     case HorizontalRule:
-                        await visitor.VisitHorizontalRuleAsync(cancellationToken);
+                        await visitor.VisitHorizontalRuleAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case HyperlinkStart:
@@ -88,27 +88,27 @@ namespace Mup
 
                     case HyperlinkDestination:
                         var destination = _text.Substring(mark.Start, mark.Length);
-                        await visitor.VisitHyperlinkBeginningAsync(destination, cancellationToken);
+                        await visitor.VisitHyperlinkBeginningAsync(destination, cancellationToken).ConfigureAwait(false);
                         break;
 
                     case HyperlinkEnd:
-                        await visitor.VisitHyperlinkEndingAsync(cancellationToken);
+                        await visitor.VisitHyperlinkEndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case StrongStart:
-                        await visitor.VisitStrongBeginningAsync(cancellationToken);
+                        await visitor.VisitStrongBeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case StrongEnd:
-                        await visitor.VisitStrongEndingAsync(cancellationToken);
+                        await visitor.VisitStrongEndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case EmphasisStart:
-                        await visitor.VisitEmphasisBeginningAsync(cancellationToken);
+                        await visitor.VisitEmphasisBeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case EmphasisEnd:
-                        await visitor.VisitEmphasisEndingAsync(cancellationToken);
+                        await visitor.VisitEmphasisEndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case ImageStart:
@@ -125,13 +125,13 @@ namespace Mup
                         break;
 
                     case ImageEnd:
-                        await visitor.VisitImageAsync(_imageSourceBuilder.ToString(), _imageAlternativeTextBuilder.ToString(), cancellationToken);
+                        await visitor.VisitImageAsync(_imageSourceBuilder.ToString(), _imageAlternativeTextBuilder.ToString(), cancellationToken).ConfigureAwait(false);
                         _imageSourceBuilder = null;
                         _imageAlternativeTextBuilder = null;
                         break;
 
                     case LineBreak:
-                        await visitor.VisitLineBreakAsync(cancellationToken);
+                        await visitor.VisitLineBreakAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case PreformattedTextStart:
@@ -145,63 +145,63 @@ namespace Mup
                     case PreformattedTextEnd:
                         var preformattedText = _preformattedTextBuilder.ToString();
                         _preformattedTextBuilder = null;
-                        await visitor.VisitPreformattedTextAsync(preformattedText, cancellationToken);
+                        await visitor.VisitPreformattedTextAsync(preformattedText, cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading1Start:
-                        await visitor.VisitHeading1BeginningAsync(cancellationToken);
+                        await visitor.VisitHeading1BeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading1End:
-                        await visitor.VisitHeading1EndingAsync(cancellationToken);
+                        await visitor.VisitHeading1EndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading2Start:
-                        await visitor.VisitHeading2BeginningAsync(cancellationToken);
+                        await visitor.VisitHeading2BeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading2End:
-                        await visitor.VisitHeading2EndingAsync(cancellationToken);
+                        await visitor.VisitHeading2EndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading3Start:
-                        await visitor.VisitHeading3BeginningAsync(cancellationToken);
+                        await visitor.VisitHeading3BeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading3End:
-                        await visitor.VisitHeading3EndingAsync(cancellationToken);
+                        await visitor.VisitHeading3EndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading4Start:
-                        await visitor.VisitHeading4BeginningAsync(cancellationToken);
+                        await visitor.VisitHeading4BeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading4End:
-                        await visitor.VisitHeading4EndingAsync(cancellationToken);
+                        await visitor.VisitHeading4EndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading5Start:
-                        await visitor.VisitHeading5BeginningAsync(cancellationToken);
+                        await visitor.VisitHeading5BeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading5End:
-                        await visitor.VisitHeading5EndingAsync(cancellationToken);
+                        await visitor.VisitHeading5EndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading6Start:
-                        await visitor.VisitHeading6BeginningAsync(cancellationToken);
+                        await visitor.VisitHeading6BeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading6End:
-                        await visitor.VisitHeading6EndingAsync(cancellationToken);
+                        await visitor.VisitHeading6EndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case ParagraphStart:
-                        await visitor.VisitParagraphBeginningAsync(cancellationToken);
+                        await visitor.VisitParagraphBeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case ParagraphEnd:
-                        await visitor.VisitParagraphEndingAsync(cancellationToken);
+                        await visitor.VisitParagraphEndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case PreformattedBlockStart:
@@ -215,63 +215,63 @@ namespace Mup
                     case PreformattedBlockEnd:
                         var preformattedBlock = _preformattedBlockBuilder.ToString();
                         _preformattedBlockBuilder = null;
-                        await visitor.VisitPreformattedBlockAsync(preformattedBlock, cancellationToken);
+                        await visitor.VisitPreformattedBlockAsync(preformattedBlock, cancellationToken).ConfigureAwait(false);
                         break;
 
                     case TableStart:
-                        await visitor.VisitTableBeginningAsync(cancellationToken);
+                        await visitor.VisitTableBeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case TableRowStart:
-                        await visitor.VisitTableRowBeginningAsync(cancellationToken);
+                        await visitor.VisitTableRowBeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case TableHeaderCellStart:
-                        await visitor.VisitTableHeaderCellBeginningAsync(cancellationToken);
+                        await visitor.VisitTableHeaderCellBeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case TableHeaderCellEnd:
-                        await visitor.VisitTableHeaderCellEndingAsync(cancellationToken);
+                        await visitor.VisitTableHeaderCellEndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case TableCellStart:
-                        await visitor.VisitTableCellBeginningAsync(cancellationToken);
+                        await visitor.VisitTableCellBeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case TableCellEnd:
-                        await visitor.VisitTableCellEndingAsync(cancellationToken);
+                        await visitor.VisitTableCellEndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case TableRowEnd:
-                        await visitor.VisitTableRowEndingAsync(cancellationToken);
+                        await visitor.VisitTableRowEndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case TableEnd:
-                        await visitor.VisitTableEndingAsync(cancellationToken);
+                        await visitor.VisitTableEndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case UnorderedListStart:
-                        await visitor.VisitUnorderedListBeginningAsync(cancellationToken);
+                        await visitor.VisitUnorderedListBeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case UnorderedListEnd:
-                        await visitor.VisitUnorderedListEndingAsync(cancellationToken);
+                        await visitor.VisitUnorderedListEndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case OrderedListStart:
-                        await visitor.VisitOrderedListBeginningAsync(cancellationToken);
+                        await visitor.VisitOrderedListBeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case OrderedListEnd:
-                        await visitor.VisitOrderedListEndingAsync(cancellationToken);
+                        await visitor.VisitOrderedListEndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case ListItemStart:
-                        await visitor.VisitListItemBeginningAsync(cancellationToken);
+                        await visitor.VisitListItemBeginningAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case ListItemEnd:
-                        await visitor.VisitListItemEndingAsync(cancellationToken);
+                        await visitor.VisitListItemEndingAsync(cancellationToken).ConfigureAwait(false);
                         break;
 
                     case PluginStart:
@@ -283,12 +283,12 @@ namespace Mup
                         break;
 
                     case PluginEnd:
-                        await visitor.VisitPlugInAsync(_pluginTextBuilder.ToString(), cancellationToken);
+                        await visitor.VisitPlugInAsync(_pluginTextBuilder.ToString(), cancellationToken).ConfigureAwait(false);
                         break;
 
                     case PlainText:
                         var plainText = _text.Substring(mark.Start, mark.Length);
-                        await visitor.VisitTextAsync(plainText, cancellationToken);
+                        await visitor.VisitTextAsync(plainText, cancellationToken).ConfigureAwait(false);
                         break;
                 }
             }

@@ -46,14 +46,14 @@ namespace Mup
                     return scanResult;
                 });
             if (!cancellationToken.CanBeCanceled)
-                result = await scanTask;
+                result = await scanTask.ConfigureAwait(false);
             else
             {
                 var cancellationSignal = new TaskCompletionSource<ScanResult<TTokenCode>>();
                 using (cancellationToken.Register(cancellationSignal.SetCanceled))
                 {
-                    var compeltedTask = await Task.WhenAny(cancellationSignal.Task, scanTask);
-                    result = await compeltedTask;
+                    var compeltedTask = await Task.WhenAny(cancellationSignal.Task, scanTask).ConfigureAwait(false);
+                    result = await compeltedTask.ConfigureAwait(false);
                 }
             }
 
@@ -77,7 +77,7 @@ namespace Mup
                 throw new ArgumentException("The buffer size must be greater than zero.", nameof(bufferSize));
 
             var scanner = new TextScanner(_predicates);
-            var scanResult = await scanner.ScanAsync(reader, bufferSize, cancellationToken);
+            var scanResult = await scanner.ScanAsync(reader, bufferSize, cancellationToken).ConfigureAwait(false);
             return scanResult;
         }
 
@@ -110,7 +110,7 @@ namespace Mup
                 var textBuilder = new StringBuilder();
                 do
                 {
-                    bufferLength = await reader.ReadAsync(buffer, 0, bufferSize);
+                    bufferLength = await reader.ReadAsync(buffer, 0, bufferSize).ConfigureAwait(false);
                     cancellationToken.ThrowIfCancellationRequested();
 
                     textBuilder.Append(buffer, 0, bufferLength);
