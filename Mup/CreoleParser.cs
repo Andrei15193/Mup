@@ -52,7 +52,7 @@ namespace Mup
         public async Task<IParseTree> ParseAsync(string text, CancellationToken cancellationToken)
         {
             var scanner = _GetScanner();
-            var scanResult = await scanner.ScanAsync(text, cancellationToken);
+            var scanResult = await scanner.ScanAsync(text, cancellationToken).ConfigureAwait(false);
             var parseTree = _Parse(scanResult);
             return parseTree;
         }
@@ -70,7 +70,7 @@ namespace Mup
         public async Task<IParseTree> ParseAsync(TextReader reader, CancellationToken cancellationToken)
         {
             var scanner = _GetScanner();
-            var scanResult = await scanner.ScanAsync(reader, cancellationToken);
+            var scanResult = await scanner.ScanAsync(reader, cancellationToken).ConfigureAwait(false);
             var parseTree = _Parse(scanResult);
             return parseTree;
         }
@@ -90,7 +90,7 @@ namespace Mup
         public async Task<IParseTree> ParseAsync(TextReader reader, int bufferSize, CancellationToken cancellationToken)
         {
             var scanner = _GetScanner();
-            var scanResult = await scanner.ScanAsync(reader, bufferSize, cancellationToken);
+            var scanResult = await scanner.ScanAsync(reader, bufferSize, cancellationToken).ConfigureAwait(false);
             var parseTree = _Parse(scanResult);
             return parseTree;
         }
