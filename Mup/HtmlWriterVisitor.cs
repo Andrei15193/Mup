@@ -104,7 +104,11 @@ namespace Mup
         /// <summary>Visits a preformatted block.</summary>
         /// <param name="preformattedText">The preformatted text.</param>
         protected internal override void VisitPreformattedBlock(string preformattedText)
-            => HtmlStringBuilder.Append("<pre><code>").Append(preformattedText).Append("</code></pre>");
+        {
+            HtmlStringBuilder.Append("<pre><code>");
+            AppendHtmlSafe(preformattedText);
+            HtmlStringBuilder.Append("</code></pre>");
+        }
 
         /// <summary>Visits the beginning of a table.</summary>
         protected internal override void VisitTableBeginning()
@@ -180,7 +184,11 @@ namespace Mup
 
         /// <summary>Visits the beginning of a hyperlink.</summary>
         protected internal override void VisitHyperlinkBeginning(string destination)
-            => HtmlStringBuilder.Append("<a href=\"").Append(destination).Append("\">");
+        {
+            HtmlStringBuilder.Append("<a href=\"");
+            AppendHtmlSafe(destination);
+            HtmlStringBuilder.Append("\">");
+        }
 
         /// <summary>Visits the ending of a hyperlink.</summary>
         protected internal override void VisitHyperlinkEnding()
@@ -189,9 +197,15 @@ namespace Mup
         /// <summary>Visits an image.</summary>
         protected internal override void VisitImage(string source, string alternative)
         {
-            HtmlStringBuilder.Append("<img src=\"").Append(source).Append('"');
+            HtmlStringBuilder.Append("<img src=\"");
+            AppendHtmlSafe(source);
+            HtmlStringBuilder.Append('"');
             if (!string.IsNullOrWhiteSpace(alternative))
-                HtmlStringBuilder.Append(" alt=\"").Append(alternative).Append('"');
+            {
+                HtmlStringBuilder.Append(" alt=\"");
+                AppendHtmlSafe(alternative);
+                HtmlStringBuilder.Append('"');
+            }
             HtmlStringBuilder.Append(">");
         }
 
@@ -202,7 +216,11 @@ namespace Mup
         /// <summary>Visits a preformatted text inside a block (e.g.: paragraph, list item or table).</summary>
         /// <param name="preformattedText">The preformatted text.</param>
         protected internal override void VisitPreformattedText(string preformattedText)
-            => HtmlStringBuilder.Append("<code>").Append(preformattedText).Append("</code>");
+        {
+            HtmlStringBuilder.Append("<code>");
+            AppendHtmlSafe(preformattedText);
+            HtmlStringBuilder.Append("</code>");
+        }
 
         /// <summary>Visits a horizontal rule.</summary>
         protected internal override void VisitHorizontalRule()
@@ -210,12 +228,19 @@ namespace Mup
 
         /// <summary>Visits plain text. This method may be called multiple times consecutively.</summary>
         protected internal override void VisitText(string text)
+            => AppendHtmlSafe(text);
+
+        /// <summary>Appends the HTML encoded, if necessary, <paramref name="text"/>.</summary>
+        /// <param name="text">The text to append to <see cref="HtmlStringBuilder"/>.</param>
+        protected void AppendHtmlSafe(string text)
         {
             foreach (var character in text)
-                _AppendHtmlSafe(character);
+                AppendHtmlSafe(character);
         }
 
-        private void _AppendHtmlSafe(char character)
+        /// <summary>Appends the HTML encoded, if necessary, <paramref name="character"/>.</summary>
+        /// <param name="character">The character to append to <see cref="HtmlStringBuilder"/>.</param>
+        protected void AppendHtmlSafe(char character)
         {
             switch (character)
             {
