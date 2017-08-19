@@ -9,12 +9,17 @@ const config = require("./config/" + (IS_PRODUCTION ? "release" : "debug") + ".j
 
 module.exports = {
     context: __dirname,
-    devtool: config.devtool,
     entry: path.join(__dirname, "view", "index.jsx"),
+    output: {
+        path: path.join(__dirname, "build"),
+        publicPath: "./",
+        filename: "app.min.js?[hash]"
+    },
     resolve: {
         extensions: [".js", ".jsx", ".json"],
         alias: mapAliases(__dirname, aliases)
     },
+    devtool: config.devtool,
     module: {
         loaders: [
             {
@@ -52,11 +57,6 @@ module.exports = {
                 loader: "file-loader?name=[name].[ext]"
             }
         ]
-    },
-    output: {
-        path: path.join(__dirname, "build"),
-        publicPath: "./",
-        filename: "app.min.js"
     },
     plugins: [
         new UglifyJsPlugin({
