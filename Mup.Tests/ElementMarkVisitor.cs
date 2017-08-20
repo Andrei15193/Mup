@@ -13,7 +13,8 @@ namespace Mup.Tests
             _marks = new List<ElementMarkCode>();
         }
 
-        protected internal override IEnumerable<ElementMarkCode> Result => _marks;
+        protected internal override IEnumerable<ElementMarkCode> GetResult()
+            => _marks;
 
         protected internal override void VisitHeading1Beginning()
             => _marks.Add(Heading1Start);

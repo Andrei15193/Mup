@@ -599,6 +599,13 @@ namespace Mup
         }
 
         /// <summary>Gets the visitor result. This values is used only after the visit operation completes.</summary>
-        protected internal abstract TResult Result { get; }
+        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns the result after the entire parse tree has been visited.</returns>
+        protected internal virtual Task<TResult> GetResultAsync(CancellationToken cancellationToken)
+            => Task.FromResult(GetResult());
+
+        /// <summary>Gets the visitor result. This values is used only after the visit operation completes.</summary>
+        /// <returns>Returns the result after the entire parse tree has been visited.</returns>
+        protected internal abstract TResult GetResult();
     }
 }

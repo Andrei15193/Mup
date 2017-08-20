@@ -18,8 +18,10 @@ namespace Mup
         /// <summary>Gets the <see cref="StringBuilder"/> where the HTML is being written.</summary>
         protected StringBuilder HtmlStringBuilder { get; private set; } = null;
 
-        /// <summary>Provides the HTML for the parsed text.</summary>
-        protected internal sealed override string Result => _result;
+        /// <summary>Gets the visitor result. This values is used only after the visit operation completes.</summary>
+        /// <returns>Returns the result after the entire parse tree has been visited.</returns>
+        protected internal override string GetResult()
+            => _result;
 
         /// <summary>Asynchronously visits the beginning of the visit operation. This method is called before any other visit method.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
