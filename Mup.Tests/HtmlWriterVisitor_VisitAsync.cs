@@ -8,6 +8,42 @@ namespace Mup.Tests
         private const string _method = (nameof(HtmlWriterVisitor) + ".VisitAsync(string, IEnumerable<ElementMark>): ");
 
         [Trait("Class", nameof(HtmlWriterVisitor))]
+        [Theory(DisplayName = (_method + nameof(UsingEitherAcceptOverloadReturnsTheSameResult)))]
+        [InlineData("test")]
+        [InlineData("test 123")]
+        [InlineData("<>&\"'")]
+        public void UsingEitherAcceptOverloadReturnsTheSameResult(string text)
+        {
+            var parseTree = new FlatParseTree(text, new[] { new ElementMark { Code = ElementMarkCode.PlainText, Start = 0, Length = text.Length } });
+
+            var expectedHtml = parseTree.Accept(new HtmlWriterVisitor());
+
+            var htmlWriterVisitor = new HtmlWriterVisitor();
+            parseTree.Accept((ParseTreeVisitor)htmlWriterVisitor);
+            var actualHtml = htmlWriterVisitor.GetResult();
+
+            Assert.Equal(expectedHtml, actualHtml);
+        }
+
+        [Trait("Class", nameof(HtmlWriterVisitor))]
+        [Theory(DisplayName = (_method + nameof(UsingEitherAcceptAsyncOverloadReturnsTheSameResult)))]
+        [InlineData("test")]
+        [InlineData("test 123")]
+        [InlineData("<>&\"'")]
+        public async Task UsingEitherAcceptAsyncOverloadReturnsTheSameResult(string text)
+        {
+            var parseTree = new FlatParseTree(text, new[] { new ElementMark { Code = ElementMarkCode.PlainText, Start = 0, Length = text.Length } });
+
+            var expectedHtml = await parseTree.AcceptAsync(new HtmlWriterVisitor());
+
+            var htmlWriterVisitor = new HtmlWriterVisitor();
+            await parseTree.AcceptAsync((ParseTreeVisitor)htmlWriterVisitor);
+            var actualHtml = htmlWriterVisitor.GetResult();
+
+            Assert.Equal(expectedHtml, actualHtml);
+        }
+
+        [Trait("Class", nameof(HtmlWriterVisitor))]
         [Theory(DisplayName = (_method + nameof(EscapesHtmlSpecialCharactersForPlainText)))]
         [InlineData("<", "&lt;")]
         [InlineData(">", "&gt;")]

@@ -598,7 +598,7 @@ namespace Mup
         {
         }
 
-        /// <summary>Gets the visitor result. This values is used only after the visit operation completes.</summary>
+        /// <summary>Asynchronously gets the visitor result. This values is used only after the visit operation completes.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
         /// <returns>Returns the result after the entire parse tree has been visited.</returns>
         protected internal virtual Task<TResult> GetResultAsync(CancellationToken cancellationToken)
