@@ -35,7 +35,7 @@ namespace Mup
         {
             var helper = new FlatParseTreeHelper(_text, _marks);
             await helper.AcceptAsync(visitor, cancellationToken).ConfigureAwait(false);
-            var result = visitor.Result;
+            var result = await visitor.GetResultAsync(cancellationToken).ConfigureAwait(false);
             return result;
         }
 
@@ -68,11 +68,15 @@ namespace Mup
                     throw new ArgumentNullException(nameof(visitor));
 
                 await visitor.BeginVisitAsync(cancellationToken).ConfigureAwait(false);
-
-                foreach (var mark in _marks)
-                    await _VisitAsync(visitor, mark, cancellationToken).ConfigureAwait(false);
-
-                await visitor.EndVisitAsync(cancellationToken).ConfigureAwait(false);
+                try
+                {
+                    foreach (var mark in _marks)
+                        await _VisitAsync(visitor, mark, cancellationToken).ConfigureAwait(false);
+                }
+                finally
+                {
+                    await visitor.EndVisitAsync(cancellationToken).ConfigureAwait(false);
+                }
             }
 
             private async Task _VisitAsync(ParseTreeVisitor visitor, ElementMark mark, CancellationToken cancellationToken)
