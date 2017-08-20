@@ -1,11 +1,15 @@
 const IS_PRODUCTION = (process.argv.indexOf("-p") !== -1);
+const BUILD_PARAMETERS = {
+    isProduction: IS_PRODUCTION,
+    config: (IS_PRODUCTION ? "release" : "debug")
+};
 
 const path = require("path");
 const UglifyJsPlugin = require("webpack").optimize.UglifyJsPlugin;
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const aliases = require('./config/aliases.json');
-const config = require("./config/" + (IS_PRODUCTION ? "release" : "debug") + ".json");
+const config = require(resolve("./config/build.${config}.json", BUILD_PARAMETERS));
 
 module.exports = {
     context: __dirname,
@@ -17,7 +21,7 @@ module.exports = {
     },
     resolve: {
         extensions: [".js", ".jsx", ".json"],
-        alias: mapAliases(__dirname, aliases)
+        alias: mapAliases(__dirname, aliases, BUILD_PARAMETERS)
     },
     devtool: config.devtool,
     module: {
@@ -71,7 +75,7 @@ module.exports = {
     ]
 };
 
-function mapAliases(rootFolder, aliases) {
+function mapAliases(rootFolder, aliases, parameters) {
     var result = {};
     Object
         .getOwnPropertyNames(aliases)
@@ -84,10 +88,24 @@ function mapAliases(rootFolder, aliases) {
                     enumerable: true,
                     writable: false,
                     configurable: false,
-                    value: path.join(rootFolder, alias)
+                    value: path.join(rootFolder, resolve(alias, parameters))
                 });
         });
     return result;
+}
+
+function resolve(path, parameters) {
+    if (parameters) {
+        const allowedParameterNamePattern = /\w+/;
+        const parameterSubstitutionPattern = new RegExp("\\$\\{("
+            + Object
+                .getOwnPropertyNames(parameters)
+                .filter(parameterName => allowedParameterNamePattern.test(parameterName))
+                .join("|")
+            + ")\\}", "gi");
+        path = path.replace(parameterSubstitutionPattern, (match, parameterName) => parameters[parameterName]);
+    }
+    return path;
 }
 
 function getWarningsFilter(warningsConfig) {

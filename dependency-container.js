@@ -1,9 +1,16 @@
 import { Dispatcher } from "flux";
 
-import ParserActions from "actions/parser-actions";
-import ParserStore from "stores/parser-store";
+import apiConfig from "config/api";
+
+import ParserActions from "./actions/parser-actions";
+import ParserStore from "./stores/parser-store";
+import Request from "./request";
 
 export default {
+    get request() {
+        return singleton("request", () => new Request(apiConfig));
+    },
+
     get dispatcher() {
         return singleton("dispatcher", () => new Dispatcher());
     },
@@ -13,7 +20,7 @@ export default {
     },
 
     get parserStore() {
-        return singleton("parser-store", () => new ParserStore(this.dispatcher), this);
+        return singleton("parser-store", () => new ParserStore(this.dispatcher, this.request), this);
     }
 }
 

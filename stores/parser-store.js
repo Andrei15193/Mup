@@ -1,11 +1,13 @@
 import ActionCategories from "constants/action-categories";
 import ViewTypes from "constants/view-types";
-import Request from "api/request";
+import dependencyContainer from "dependency-container";
 
 import EventHandler from "./event-handler";
 
 export default class ParserStore {
-    constructor(dispatcher) {
+    constructor(dispatcher, request) {
+        this._request = request;
+
         this._view = ViewTypes.pretty;
         this._text = "";
         this._html = "";
@@ -50,7 +52,7 @@ export default class ParserStore {
 
             case ActionCategories.parserParse:
                 this._setHtml("Fetching some HTML for you, might take a bit...");
-                Request
+                this._request
                     .postAsync("/api/creole", this._text)
                     .then((function (response) {
                         this._setHtml(response.data);
