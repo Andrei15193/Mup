@@ -114,11 +114,11 @@ namespace Mup
 
         /// <summary>Visits the beginning of a table.</summary>
         protected internal override void VisitTableBeginning()
-            => HtmlStringBuilder.Append("<table>");
+            => HtmlStringBuilder.Append("<table><tbody>");
 
         /// <summary>Visits the ending of a table.</summary>
         protected internal override void VisitTableEnding()
-            => HtmlStringBuilder.Append("</table>");
+            => HtmlStringBuilder.Append("</tbody></table>");
 
         /// <summary>Visits the beginning of a table row.</summary>
         protected internal override void VisitTableRowBeginning()
