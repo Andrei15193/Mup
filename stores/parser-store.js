@@ -11,9 +11,11 @@ export default class ParserStore {
         this._view = ViewTypes.pretty;
         this._text = "";
         this._html = "";
+        this._json = [];
 
         this.viewChanged = new EventHandler("viewChanged", this);
         this.htmlChanged = new EventHandler("htmlChanged", this);
+        this.jsonChanged = new EventHandler("jsonChanged", this);
 
         dispatcher.register(this._handle.bind(this));
     }
@@ -36,6 +38,15 @@ export default class ParserStore {
         this.htmlChanged.invoke(this);
     }
 
+    get json() {
+        return this._json;
+    }
+
+    _setJson(value) {
+        this._json = value;
+        this.jsonChanged.invoke(this);
+    }
+
     get text() {
         return this._text;
     }
@@ -52,15 +63,26 @@ export default class ParserStore {
 
             case ActionCategories.parserParse:
                 this._setHtml("Fetching some HTML for you, might take a bit...");
+                this._setTextJson("Fetching some HTML for you, might take a bit...");
+
                 this._request
                     .postAsync("/api/creole", this._text)
                     .then((function (response) {
-                        this._setHtml(response.data);
+                        this._setHtml(response.data.html);
+                        this._setJson(response.data.json);
                     }).bind(this))
                     .catch((function (error) {
                         this._setHtml("Something went wrong...");
+                        this._setTextJson("Something went wrong...");
                     }).bind(this));
                 break;
         }
+    }
+
+    _setTextJson(text) {
+        this._setJson([{
+            "type": "text",
+            "content": text
+        }]);
     }
 };

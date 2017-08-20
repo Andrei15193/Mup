@@ -17,8 +17,3 @@
 .vertical-resize {
     resize: vertical;
 }
-
-div.preview pre code span{
-    /* Bootstrap Primary */
-    color: #337AB7;
-}
