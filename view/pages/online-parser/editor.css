@@ -1,0 +1,26 @@
+.writer, .preview {
+    height: 100%;
+    margin: 0;
+}
+
+.writer > textarea {
+    height: 100% !important;
+    resize: none;
+}
+
+.content {
+    min-height: 100px;
+    height: 100%;
+}
+
+.loading-bar {
+    margin: 10px 0 5px 0;
+}
+
+.loading-bar > div {
+    width: 100%;
+}
+
+.loading-bar-inactive {
+    display: none;
+}

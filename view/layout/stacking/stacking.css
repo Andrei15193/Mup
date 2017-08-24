@@ -1,0 +1,21 @@
+.container {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+.row, .main-row {
+    display: table-row;
+}
+
+.row {
+  height: 1px;
+}
+
+.main-row {
+    height: auto;
+}
+
+.cell {
+    display: table-cell;
+}

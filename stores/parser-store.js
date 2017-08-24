@@ -1,5 +1,5 @@
 import ActionCategories from "constants/action-categories";
-import ViewTypes from "constants/view-types";
+import ViewMode from "constants/view-mode";
 import dependencyContainer from "dependency-container";
 
 import EventHandler from "./event-handler";
@@ -8,14 +8,17 @@ export default class ParserStore {
     constructor(dispatcher, request) {
         this._request = request;
 
-        this._view = ViewTypes.pretty;
+        this._view = ViewMode.edit;
         this._text = "";
         this._html = "";
         this._json = [];
+        this._isLoading = false;
+        this._textChanged = true;
 
         this.viewChanged = new EventHandler("viewChanged", this);
         this.htmlChanged = new EventHandler("htmlChanged", this);
         this.jsonChanged = new EventHandler("jsonChanged", this);
+        this.isLoadingChanged = new EventHandler("isLoadingChanged", this);
 
         dispatcher.register(this._handle.bind(this));
     }
@@ -25,8 +28,29 @@ export default class ParserStore {
     }
 
     _setView(value) {
-        this._view = value;
-        this.viewChanged.invoke(this);
+        if (value !== ViewMode.edit && this._textChanged && !this.isLoading) {
+            this.isLoading = true;
+
+            this._request
+                .postAsync("/api/creole", this._text)
+                .then((function (response) {
+                    this._setHtml(response.data.html);
+                    this._setJson(response.data.json);
+                }).bind(this))
+                .catch((function (error) {
+                    this._setHtml("Something went wrong...");
+                    this._setTextJson("Something went wrong...");
+                }).bind(this))
+                .then((function () {
+                    this._textChanged = false;
+                    this.isLoading = false;
+                    this._setView(value);
+                }).bind(this));
+        }
+        else {
+            this._view = value;
+            this.viewChanged.invoke(this);
+        }
     }
 
     get html() {
@@ -51,6 +75,22 @@ export default class ParserStore {
         return this._text;
     }
 
+    _setText(value) {
+        if (this._text !== value) {
+            this._text = value;
+            this._textChanged = true;
+        }
+    }
+
+    get isLoading() {
+        return this._isLoading;
+    }
+
+    set isLoading(value) {
+        this._isLoading = value;
+        this.isLoadingChanged.invoke(this);
+    }
+
     _handle(action) {
         switch (action.category) {
             case ActionCategories.parserView:
@@ -58,23 +98,7 @@ export default class ParserStore {
                 break;
 
             case ActionCategories.parserText:
-                this._text = action.data;
-                break;
-
-            case ActionCategories.parserParse:
-                this._setHtml("Fetching some HTML for you, might take a bit...");
-                this._setTextJson("Fetching some HTML for you, might take a bit...");
-
-                this._request
-                    .postAsync("/api/creole", this._text)
-                    .then((function (response) {
-                        this._setHtml(response.data.html);
-                        this._setJson(response.data.json);
-                    }).bind(this))
-                    .catch((function (error) {
-                        this._setHtml("Something went wrong...");
-                        this._setTextJson("Something went wrong...");
-                    }).bind(this));
+                this._setText(action.data);
                 break;
         }
     }

@@ -1,5 +1,4 @@
 import ActionCategories from "constants/action-categories";
-import ViewTypes from "constants/view-types";
 
 import Action from "./action";
 

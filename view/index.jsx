@@ -5,6 +5,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import IndexPage from "./index.html";
+import Style from "./index.css";
 import App from "./app";
 
-ReactDOM.render(<App />, document.getElementById("app"));
+const rootElement = document.getElementById("root");
+rootElement.className = Style.root;
+
+ReactDOM.render(<App />, rootElement);

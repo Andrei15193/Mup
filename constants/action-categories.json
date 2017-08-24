@@ -1,5 +1,4 @@
 {
     "parserView": "parser/view",
-    "parserText": "parser/text",
-    "parserParse": "parser/parse"
+    "parserText": "parser/text"
 }
