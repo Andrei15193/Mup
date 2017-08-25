@@ -248,5 +248,95 @@ namespace Mup.Tests
                 Assert.False(result.Tokens.Any());
             }
         }
+
+        [Trait("Class", nameof(Scanner<int>))]
+        [Fact(DisplayName = (_readerMethod + nameof(TokensHaveNext)))]
+        public async Task TokensHaveNext()
+        {
+            var scanner = new Scanner<int>(
+                new Dictionary<int, Func<char, bool>>
+                {
+                    { 0, c => c == 'a' },
+                    { 1, c => c == 'b' },
+                    { 2, c => c == 'c' }
+                });
+
+            using (var stringReader = new StringReader("abc"))
+            {
+                var result = await scanner.ScanAsync(stringReader);
+
+                var token = result.Tokens.First();
+                var nextToken = result.Tokens.Skip(1).First();
+
+                Assert.Same(nextToken, token.Next);
+            }
+        }
+
+        [Trait("Class", nameof(Scanner<int>))]
+        [Fact(DisplayName = (_readerMethod + nameof(LastTokenDoesNotHaveNext)))]
+        public async Task LastTokenDoesNotHaveNext()
+        {
+            var scanner = new Scanner<int>(
+                new Dictionary<int, Func<char, bool>>
+                {
+                    { 0, c => c == 'a' },
+                    { 1, c => c == 'b' },
+                    { 2, c => c == 'c' }
+                });
+
+            using (var stringReader = new StringReader("abc"))
+            {
+                var result = await scanner.ScanAsync(stringReader);
+
+                var lastToken = result.Tokens.Last();
+
+                Assert.Null(lastToken.Next);
+            }
+        }
+
+        [Trait("Class", nameof(Scanner<int>))]
+        [Fact(DisplayName = (_readerMethod + nameof(TokensHavePrevious)))]
+        public async Task TokensHavePrevious()
+        {
+            var scanner = new Scanner<int>(
+                new Dictionary<int, Func<char, bool>>
+                {
+                    { 0, c => c == 'a' },
+                    { 1, c => c == 'b' },
+                    { 2, c => c == 'c' }
+                });
+
+            using (var stringReader = new StringReader("abc"))
+            {
+                var result = await scanner.ScanAsync(stringReader);
+
+                var token = result.Tokens.Skip(1).First();
+                var previousToken = result.Tokens.First();
+
+                Assert.Same(previousToken, token.Previous);
+            }
+        }
+
+        [Trait("Class", nameof(Scanner<int>))]
+        [Fact(DisplayName = (_readerMethod + nameof(FirstTokenDoesNotHavePrevious)))]
+        public async Task FirstTokenDoesNotHavePrevious()
+        {
+            var scanner = new Scanner<int>(
+                new Dictionary<int, Func<char, bool>>
+                {
+                    { 0, c => c == 'a' },
+                    { 1, c => c == 'b' },
+                    { 2, c => c == 'c' }
+                });
+
+            using (var stringReader = new StringReader("abc"))
+            {
+                var result = await scanner.ScanAsync(stringReader);
+
+                var first = result.Tokens.First();
+
+                Assert.Null(first.Previous);
+            }
+        }
     }
 }

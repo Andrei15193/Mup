@@ -7,7 +7,7 @@ namespace Mup
     internal class ScanResult<TTokenCode>
         where TTokenCode : struct
     {
-        internal ScanResult(string text, IEnumerable<Token<TTokenCode>> tokens)
+        internal ScanResult(string text, IEnumerable<IToken<TTokenCode>> tokens)
         {
             Text = (text ?? throw new ArgumentNullException(nameof(text)));
             Tokens = (tokens ?? throw new ArgumentNullException(nameof(tokens)));
@@ -18,6 +18,6 @@ namespace Mup
 
         internal string Text { get; }
 
-        internal IEnumerable<Token<TTokenCode>> Tokens { get; }
+        internal IEnumerable<IToken<TTokenCode>> Tokens { get; }
     }
 }

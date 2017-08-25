@@ -75,7 +75,6 @@
     <Compile Include="Scanner_Ctor.cs" />
     <Compile Include="Scanner_ScanAsync.cs" />
     <Compile Include="ScanResult_Ctor.cs" />
-    <Compile Include="Token_Ctor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Mup.Tests.snk" />

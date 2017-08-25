@@ -12,7 +12,7 @@ namespace Mup.Tests
         [Fact(DisplayName = (_method + nameof(CannotHaveNullText)))]
         public void CannotHaveNullText()
         {
-            Assert.Throws<ArgumentNullException>(() => new ScanResult<int>(null, Enumerable.Empty<Token<int>>()));
+            Assert.Throws<ArgumentNullException>(() => new ScanResult<int>(null, Enumerable.Empty<IToken<int>>()));
         }
 
         [Trait("Class", nameof(ScanResult<int>))]
@@ -26,7 +26,7 @@ namespace Mup.Tests
         [Fact(DisplayName = (_method + nameof(CannotHaveNullTokens)))]
         public void CannotHaveNullTokens()
         {
-            Assert.Throws<ArgumentException>(() => new ScanResult<int>("", new Token<int>[] { null }));
+            Assert.Throws<ArgumentException>(() => new ScanResult<int>("", new IToken<int>[] { null }));
         }
 
         [Trait("Class", nameof(ScanResult<int>))]
@@ -39,9 +39,9 @@ namespace Mup.Tests
         {
             var tokens = Enumerable
                 .Range(0, tokensCount)
-                .Select(tokenCode => new Token<int>(tokenCode, 0, 0))
+                .Select(tokenCode => new Token<int> { Code = tokenCode })
                 .ToList()
-                .AsEnumerable();
+                .AsEnumerable<IToken<int>>();
             var scanResult = new ScanResult<int>(text, tokens);
 
             Assert.Equal(

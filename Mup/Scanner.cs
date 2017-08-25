@@ -86,7 +86,7 @@ namespace Mup
             private int _line = 1;
             private int _column = 1;
             private int _index = 0;
-            private readonly List<TokenBuilder> _tokenBuilders = new List<TokenBuilder>();
+            private readonly List<Token<TTokenCode>> _tokens = new List<Token<TTokenCode>>();
             private readonly IEnumerable<KeyValuePair<TTokenCode, Func<char, bool>>> _predicates;
 
             internal TextScanner(IEnumerable<KeyValuePair<TTokenCode, Func<char, bool>>> predicates)
@@ -97,8 +97,8 @@ namespace Mup
                 foreach (var character in text)
                     _Process(character);
 
-                var tokens = _tokenBuilders.Select(tokenBuilder => tokenBuilder.Build()).ToList();
-                var scanResult = new ScanResult<TTokenCode>(text, tokens);
+                _InitializeTokens();
+                var scanResult = new ScanResult<TTokenCode>(text, _tokens);
 
                 return scanResult;
             }
@@ -120,8 +120,8 @@ namespace Mup
                 while (bufferLength > 0);
 
                 var text = textBuilder.ToString();
-                var tokens = _tokenBuilders.Select(tokenBuilder => tokenBuilder.Build()).ToList();
-                var scanResult = new ScanResult<TTokenCode>(text, tokens);
+                _InitializeTokens();
+                var scanResult = new ScanResult<TTokenCode>(text, _tokens);
 
                 return scanResult;
             }
@@ -131,12 +131,12 @@ namespace Mup
                 var match = _predicates.FirstOrDefault(predicate => predicate.Value(character));
                 if (match.Value != null)
                 {
-                    var tokenBuilder = _tokenBuilders.LastOrDefault();
+                    var tokenBuilder = _tokens.LastOrDefault();
                     if (tokenBuilder != null && tokenBuilder.Code.Equals(match.Key))
                         tokenBuilder.Length++;
                     else
-                        _tokenBuilders.Add(
-                            new TokenBuilder
+                        _tokens.Add(
+                            new Token<TTokenCode>()
                             {
                                 Code = match.Key,
                                 Start = _index,
@@ -156,16 +156,26 @@ namespace Mup
                     _column++;
             }
 
-            private class TokenBuilder
+            private void _InitializeTokens()
             {
-                internal TTokenCode Code { get; set; }
+                using (var token = _tokens.GetEnumerator())
+                    if (token.MoveNext())
+                    {
+                        var currentToken = token.Current;
+                        currentToken.End = (currentToken.Start + currentToken.Length);
+                        var previousToken = currentToken;
 
-                internal int Start { get; set; }
+                        while (token.MoveNext())
+                        {
+                            currentToken = token.Current;
+                            currentToken.End = (currentToken.Start + currentToken.Length);
 
-                internal int Length { get; set; }
+                            currentToken.Previous = previousToken;
+                            previousToken.Next = currentToken;
 
-                internal Token<TTokenCode> Build()
-                    => new Token<TTokenCode>(Code, Start, Length);
+                            previousToken = currentToken;
+                        }
+                    }
             }
         }
     }
