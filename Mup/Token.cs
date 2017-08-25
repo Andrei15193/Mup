@@ -1,21 +1,18 @@
 ﻿namespace Mup
 {
-    internal class Token<TTokenCode>
+    internal class Token<TTokenCode> : IToken<TTokenCode>
         where TTokenCode : struct
     {
-        internal Token(TTokenCode code, int start, int length)
-        {
-            Code = code;
-            Start = start;
-            Length = length;
-        }
+        public TTokenCode Code { get; set; }
 
-        internal TTokenCode Code { get; }
+        public int Start { get; set; }
 
-        internal int Start { get; }
+        public int Length { get; set; }
 
-        internal int Length { get; }
+        public int End { get; set; }
 
-        internal int End => (Start + Length);
+        public IToken<TTokenCode> Previous { get; set; }
+
+        public IToken<TTokenCode> Next { get; set; }
     }
 }

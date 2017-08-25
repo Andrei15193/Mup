@@ -143,7 +143,7 @@ namespace Mup
             private const int _PreformattedCharacterRepeatCount = 3;
 
             private readonly string _text;
-            private readonly IEnumerable<Token<CreoleTokenCode>> _tokens;
+            private readonly IEnumerable<IToken<CreoleTokenCode>> _tokens;
             private readonly IEnumerable<string> _inlineHyperlinkProtocols;
 
             private ElementMark _strongStartMark = null;
@@ -176,7 +176,7 @@ namespace Mup
 
             internal FlatParseTree Parse()
             {
-                Token<CreoleTokenCode> previous = null, current = null, next = null;
+                IToken<CreoleTokenCode> previous = null, current = null, next = null;
 
                 using (var token = _tokens.GetEnumerator())
                     if (token.MoveNext())
@@ -236,7 +236,7 @@ namespace Mup
                 return marks;
             }
 
-            private void _Process(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _Process(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (_blocks.Count == 0)
                     _BeginBlock(previousToken, currentToken, nextToken);
@@ -244,7 +244,7 @@ namespace Mup
                     _ProcessBlock(previousToken, currentToken, nextToken);
             }
 
-            private void _BeginBlock(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginBlock(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 switch (currentToken.Code)
                 {
@@ -287,7 +287,7 @@ namespace Mup
                 }
             }
 
-            private void _ProcessBlock(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessBlock(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 var currentBlock = _blocks.Peek();
                 switch (currentBlock)
@@ -327,7 +327,7 @@ namespace Mup
                 }
             }
 
-            private void _ProcessHeading(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessHeading(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Code == WhiteSpace && _LineFeedCount(currentToken) > 0)
                     _EndHeading(previousToken, currentToken, nextToken);
@@ -343,7 +343,7 @@ namespace Mup
                 }
             }
 
-            private void _ProcessParagraph(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessParagraph(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Code == WhiteSpace && (_LineFeedCount(currentToken) >= 2 || (_LineFeedCount(currentToken) >= 1 && nextToken?.Code == Dash && nextToken.Length >= 4)))
                     _EndParagraph(previousToken, currentToken, nextToken);
@@ -354,7 +354,7 @@ namespace Mup
                     _EndParagraph(previousToken, currentToken, nextToken);
             }
 
-            private void _ProcessRichText(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessRichText(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (_richTextBlocks.Count > 0 && (_richTextBlocks.Peek() == InlineHyperlink || _richTextBlocks.Peek() == EscapedInlineHyperlink))
                     _ProcessInlineHyperlink(previousToken, currentToken, nextToken);
@@ -428,7 +428,7 @@ namespace Mup
                     }
             }
 
-            private void _ProcessTilde(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessTilde(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 var tildeStart = currentToken.Start;
                 var tildeCount = (currentToken.Length / 2);
@@ -441,7 +441,7 @@ namespace Mup
                     });
             }
 
-            private void _ProcessStrong(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessStrong(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 var isEscaped = _IsEscaped(previousToken, currentToken, nextToken);
                 var start = (currentToken.Start + (isEscaped ? 1 : 0));
@@ -472,7 +472,7 @@ namespace Mup
                     });
             }
 
-            private void _StartOrEndStrong(int strongMarkStart, Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _StartOrEndStrong(int strongMarkStart, IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (_strongStartMark == null)
                 {
@@ -508,7 +508,7 @@ namespace Mup
                 }
             }
 
-            private void _ProcessEmphasis(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessEmphasis(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 var isEscaped = _IsEscaped(previousToken, currentToken, nextToken);
                 var start = (currentToken.Start + (isEscaped ? 1 : 0));
@@ -539,7 +539,7 @@ namespace Mup
                     });
             }
 
-            private void _StartOrEndEmphasis(int emphasisMarkStart, Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _StartOrEndEmphasis(int emphasisMarkStart, IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (_emphasisStartMark == null)
                 {
@@ -575,7 +575,7 @@ namespace Mup
                 }
             }
 
-            private void _BeginHeading(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginHeading(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 var headingMark = _GetHeadingStartMark(currentToken);
                 var block = _GetHeadingBlockFor(headingMark);
@@ -604,7 +604,7 @@ namespace Mup
                 }
             }
 
-            private void _EndHeading(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndHeading(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 var headingBlock = _blocks.Pop();
                 if (currentToken.Code == Equal && currentToken.Length > _MaximumHeadingTokenLength)
@@ -633,7 +633,7 @@ namespace Mup
                 }
             }
 
-            private void _HorizontalRule(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _HorizontalRule(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _marks.Add(new ElementMark
                 {
@@ -643,7 +643,7 @@ namespace Mup
                 });
             }
 
-            private void _BeginUnorderedList(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginUnorderedList(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _blocks.Push(UnorderedList);
                 _marks.Add(new ElementMark
@@ -653,7 +653,7 @@ namespace Mup
                 });
             }
 
-            private void _BeginOrderedList(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginOrderedList(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _blocks.Push(OrderedList);
                 _marks.Add(new ElementMark
@@ -663,7 +663,7 @@ namespace Mup
                 });
             }
 
-            private void _ProcessList(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessList(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Code == WhiteSpace && _LineFeedCount(currentToken) > 1)
                     while (_blocks.Count > 0)
@@ -750,7 +750,7 @@ namespace Mup
                         _EndList(previousToken, currentToken, nextToken);
             }
 
-            private void _EndList(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndList(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _EndListItem(previousToken, currentToken, nextToken);
                 var listType = _blocks.Pop();
@@ -761,7 +761,7 @@ namespace Mup
                 });
             }
 
-            private void _BeginListItem(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginListItem(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _marks.Add(new ElementMark
                 {
@@ -771,7 +771,7 @@ namespace Mup
                 });
             }
 
-            private void _EndListItem(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndListItem(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _ClearRichText(previousToken, currentToken, nextToken);
                 _marks.Add(new ElementMark
@@ -781,7 +781,7 @@ namespace Mup
                 });
             }
 
-            private void _BeginInlineHyperlink(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginInlineHyperlink(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (_IsEscaped(previousToken, currentToken, nextToken))
                 {
@@ -810,7 +810,7 @@ namespace Mup
                 }
             }
 
-            private void _ProcessInlineHyperlink(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessInlineHyperlink(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 switch (currentToken.Code)
                 {
@@ -831,7 +831,7 @@ namespace Mup
                 }
             }
 
-            private void _EndInlineHyperlink(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndInlineHyperlink(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 var hyperlinkDestination = _marks[_marks.Count - 1];
                 if (hyperlinkDestination.Code == HyperlinkDestination)
@@ -849,7 +849,7 @@ namespace Mup
                 _richTextBlocks.Pop();
             }
 
-            private void _BeginHyperlink(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginHyperlink(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Length > _HyperlinkCharacterRepeatCount)
                     _AppendPlainText(currentToken.Start, currentToken.Length - _HyperlinkCharacterRepeatCount);
@@ -870,7 +870,7 @@ namespace Mup
                 _richTextBlocks.Push(Hyperlink);
             }
 
-            private void _ProcessHyperlinkDestination(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessHyperlinkDestination(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 switch (currentToken.Code)
                 {
@@ -898,7 +898,7 @@ namespace Mup
                 }
             }
 
-            private void _EndHyperlink(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndHyperlink(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 var hyperlinkDestination = _marks[_marks.Count - 1];
                 if (hyperlinkDestination.Code == HyperlinkDestination)
@@ -949,7 +949,7 @@ namespace Mup
                 }
             }
 
-            private void _BeginImage(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginImage(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Length > _ImageCharacterRepeatCount)
                     _AppendPlainText(currentToken.Start, currentToken.Length - _ImageCharacterRepeatCount);
@@ -970,7 +970,7 @@ namespace Mup
                 _richTextBlocks.Push(Image);
             }
 
-            private void _ProcessImage(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessImage(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (_imageTextSeparatorMark == null)
                     _ProcessImageSource(previousToken, currentToken, nextToken);
@@ -978,7 +978,7 @@ namespace Mup
                     _ProcessImageAternativeText(previousToken, currentToken, nextToken);
             }
 
-            private void _ProcessImageSource(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessImageSource(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 switch (currentToken.Code)
                 {
@@ -1006,7 +1006,7 @@ namespace Mup
                 }
             }
 
-            private void _ProcessImageAternativeText(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessImageAternativeText(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 switch (currentToken.Code)
                 {
@@ -1026,7 +1026,7 @@ namespace Mup
                 }
             }
 
-            private void _EndImage(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndImage(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 var imageSource = _marks[_marks.Count - 1];
                 if (imageSource.Code == ImageSource)
@@ -1054,7 +1054,7 @@ namespace Mup
                 _richTextBlocks.Pop();
             }
 
-            private void _ProcessLineBreak(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessLineBreak(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 var isEscaped = _IsEscaped(previousToken, currentToken, nextToken);
                 var start = (currentToken.Start + (isEscaped ? 1 : 0));
@@ -1090,7 +1090,7 @@ namespace Mup
                     });
             }
 
-            private void _BeginPreformatted(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginPreformatted(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Length > _PreformattedCharacterRepeatCount)
                     _AppendPlainText(currentToken.Start, currentToken.Length - _PreformattedCharacterRepeatCount);
@@ -1105,7 +1105,7 @@ namespace Mup
                 _richTextBlocks.Push(Preformatted);
             }
 
-            private void _ProcessPreformatted(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessPreformatted(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 switch (currentToken.Code)
                 {
@@ -1124,7 +1124,7 @@ namespace Mup
                 }
             }
 
-            private void _EndPreformatted(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndPreformatted(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Length > _PreformattedCharacterRepeatCount)
                     _AppendPlainText(
@@ -1142,7 +1142,7 @@ namespace Mup
                 _richTextBlocks.Pop();
             }
 
-            private void _BeginParagraph(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginParagraph(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _blocks.Push(Paragraph);
                 _marks.Add(new ElementMark
@@ -1153,7 +1153,7 @@ namespace Mup
                 _Process(previousToken, currentToken, nextToken);
             }
 
-            private void _EndParagraph(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndParagraph(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _ClearRichText(previousToken, currentToken, nextToken);
                 _marks.Add(new ElementMark
@@ -1164,7 +1164,7 @@ namespace Mup
                 _blocks.Pop();
             }
 
-            private void _BeginPreformattedBlock(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginPreformattedBlock(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _blocks.Push(PreformattedBlock);
                 _marks.Add(new ElementMark
@@ -1180,7 +1180,7 @@ namespace Mup
                         (currentToken.Length - _PreformattedCharacterRepeatCount));
             }
 
-            private void _ProcessPreformattedBlock(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessPreformattedBlock(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Code == BraceClose && currentToken.Length >= _PreformattedCharacterRepeatCount
                     && (nextToken == null || (nextToken.Code == WhiteSpace && _LineFeedCount(nextToken) > 0)))
@@ -1189,7 +1189,7 @@ namespace Mup
                     _AppendPlainText(currentToken);
             }
 
-            private void _EndPreformattedBlock(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndPreformattedBlock(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Code == BraceClose)
                 {
@@ -1213,7 +1213,7 @@ namespace Mup
                 _blocks.Pop();
             }
 
-            private void _BeginPlugIn(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginPlugIn(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _blocks.Push(Plugin);
                 _marks.Add(new ElementMark
@@ -1229,7 +1229,7 @@ namespace Mup
                         (currentToken.Length - _PluginCharacterRepeatCount));
             }
 
-            private void _ProcessPlugIn(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessPlugIn(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Code == AngleClose && currentToken.Length >= _PluginCharacterRepeatCount
                     && (nextToken == null || (nextToken.Code == WhiteSpace && _LineFeedCount(nextToken) > 0)))
@@ -1238,7 +1238,7 @@ namespace Mup
                     _AppendPlainText(currentToken);
             }
 
-            private void _EndPlugIn(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndPlugIn(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (currentToken.Code == AngleClose)
                 {
@@ -1262,7 +1262,7 @@ namespace Mup
                 _blocks.Pop();
             }
 
-            private void _BeginTable(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginTable(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _blocks.Push(Table);
                 _tableStartMark = new ElementMark
@@ -1274,7 +1274,7 @@ namespace Mup
                 _Process(previousToken, currentToken, nextToken);
             }
 
-            private void _ProcessTable(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ProcessTable(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 switch (currentToken.Code)
                 {
@@ -1316,7 +1316,7 @@ namespace Mup
                     _EndTable(previousToken, currentToken, nextToken);
             }
 
-            private void _EndTable(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndTable(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (_tableRowStartMark != null)
                     _EndTableRow(previousToken, currentToken, nextToken);
@@ -1329,7 +1329,7 @@ namespace Mup
                 _blocks.Pop();
             }
 
-            private void _BeginTableRow(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginTableRow(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _tableRowStartMark = new ElementMark
                 {
@@ -1340,7 +1340,7 @@ namespace Mup
                 _marks.Add(_tableRowStartMark);
             }
 
-            private void _EndTableRow(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndTableRow(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (_tableCellStartMark != null)
                     _EndTableCell(previousToken, currentToken, nextToken);
@@ -1353,7 +1353,7 @@ namespace Mup
                 _tableRowStartMark = null;
             }
 
-            private void _BeginTableHeaderCell(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginTableHeaderCell(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _tableCellStartMark = new ElementMark
                 {
@@ -1364,7 +1364,7 @@ namespace Mup
                 _marks.Add(_tableCellStartMark);
             }
 
-            private void _BeginTableCell(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _BeginTableCell(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _tableCellStartMark = new ElementMark
                 {
@@ -1375,7 +1375,7 @@ namespace Mup
                 _marks.Add(_tableCellStartMark);
             }
 
-            private void _EndTableCell(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _EndTableCell(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 _ClearRichText(previousToken, currentToken, nextToken);
 
@@ -1395,7 +1395,7 @@ namespace Mup
                 _tableCellStartMark = null;
             }
 
-            private void _ClearRichText(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private void _ClearRichText(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 if (_richTextBlocks.Count > 0 && _richTextBlocks.Peek() == InlineHyperlink)
                     _EndInlineHyperlink(previousToken, currentToken, nextToken);
@@ -1480,7 +1480,7 @@ namespace Mup
                     mark.Length--;
             }
 
-            private void _AppendPlainText(Token<CreoleTokenCode> token)
+            private void _AppendPlainText(IToken<CreoleTokenCode> token)
             {
                 _AppendPlainText(token.Start, token.Length);
             }
@@ -1499,7 +1499,7 @@ namespace Mup
                     mark.Length += length;
             }
 
-            private static ElementMarkCode _GetHeadingStartMark(Token<CreoleTokenCode> currentToken)
+            private static ElementMarkCode _GetHeadingStartMark(IToken<CreoleTokenCode> currentToken)
             {
                 switch (currentToken.Length)
                 {
@@ -1577,10 +1577,10 @@ namespace Mup
                 }
             }
 
-            private static bool _IsEscaped(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private static bool _IsEscaped(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
                 => (previousToken != null && previousToken.Code == Tilde && (previousToken.Length % 2 == 1));
 
-            private bool _IsProtocol(Token<CreoleTokenCode> previousToken, Token<CreoleTokenCode> currentToken, Token<CreoleTokenCode> nextToken)
+            private bool _IsProtocol(IToken<CreoleTokenCode> previousToken, IToken<CreoleTokenCode> currentToken, IToken<CreoleTokenCode> nextToken)
             {
                 var index = currentToken.Start;
                 var end = (currentToken.End - 1);
@@ -1607,7 +1607,7 @@ namespace Mup
                 return (candidateProtocols.Count > 0);
             }
 
-            private int _LineFeedCount(Token<CreoleTokenCode> token)
+            private int _LineFeedCount(IToken<CreoleTokenCode> token)
             {
                 var count = 0;
 
