@@ -247,6 +247,8 @@ namespace Mup
                     && _currentToken.Next?.Code == WhiteSpace
                     && _LineFeedCount(_currentToken.Next) > 0)
                     processed = _TryProcessPreformattedBlock();
+                else if (_currentToken.Code == AngleOpen && _currentToken.Length >= _PluginCharacterRepeatCount && !_IsEscaped(_currentToken))
+                    processed = _TryProcessPlugin();
 
                 if (!processed)
                     switch (_currentToken.Code)
@@ -262,10 +264,6 @@ namespace Mup
                         case Hash when (_currentToken.Length == 1):
                             _BeginOrderedList();
                             _Process();
-                            break;
-
-                        case AngleOpen when (_currentToken.Length >= _PluginCharacterRepeatCount):
-                            _BeginPlugIn();
                             break;
 
                         case Equal:
@@ -326,6 +324,46 @@ namespace Mup
                     return false;
             }
 
+            private bool _TryProcessPlugin()
+            {
+                var startToken = _currentToken;
+                var endToken = _currentToken;
+                while (endToken != null && !(endToken.Code == AngleClose && endToken.Length >= _PluginCharacterRepeatCount && (endToken.Next == null || _FindLineFeeds(endToken.Next).Any())))
+                    endToken = endToken.Next;
+
+                if (endToken != null)
+                {
+                    _marks.Add(new ElementMark
+                    {
+                        Code = PluginStart,
+                        Start = startToken.Start,
+                        Length = _PreformattedCharacterRepeatCount
+                    });
+
+                    var plainTextStartIndex = (startToken.Start + _PluginCharacterRepeatCount);
+                    var plainTextTextEndIndex = (endToken.Start - plainTextStartIndex);
+
+                    _marks.Add(new ElementMark
+                    {
+                        Code = PlainText,
+                        Start = plainTextStartIndex,
+                        Length = (plainTextTextEndIndex - plainTextStartIndex)
+                    });
+
+                    _marks.Add(new ElementMark
+                    {
+                        Code = PluginEnd,
+                        Start = (endToken.End - _PluginCharacterRepeatCount),
+                        Length = _PluginCharacterRepeatCount
+                    });
+
+                    _currentToken = endToken;
+                    return true;
+                }
+                else
+                    return false;
+            }
+
             private void _ProcessBlock()
             {
                 var currentBlock = _blocks.Peek();
@@ -351,10 +389,6 @@ namespace Mup
 
                     case Table:
                         _ProcessTable();
-                        break;
-
-                    case Plugin:
-                        _ProcessPlugIn();
                         break;
 
                     default:
@@ -1190,55 +1224,6 @@ namespace Mup
                     Code = ParagraphEnd,
                     Start = _currentToken.End
                 });
-                _blocks.Pop();
-            }
-
-            private void _BeginPlugIn()
-            {
-                _blocks.Push(Plugin);
-                _marks.Add(new ElementMark
-                {
-                    Code = PluginStart,
-                    Start = _currentToken.Start,
-                    Length = _PluginCharacterRepeatCount
-                });
-
-                if (_currentToken.Length > _PluginCharacterRepeatCount)
-                    _AppendPlainText(
-                        (_currentToken.Start + _PluginCharacterRepeatCount),
-                        (_currentToken.Length - _PluginCharacterRepeatCount));
-            }
-
-            private void _ProcessPlugIn()
-            {
-                if (_currentToken.Code == AngleClose && _currentToken.Length >= _PluginCharacterRepeatCount
-                    && (_currentToken.Next == null || (_currentToken.Next.Code == WhiteSpace && _LineFeedCount(_currentToken.Next) > 0)))
-                    _EndPlugIn();
-                else
-                    _AppendPlainText(_currentToken);
-            }
-
-            private void _EndPlugIn()
-            {
-                if (_currentToken.Code == AngleClose)
-                {
-                    if (_currentToken.Length > _PluginCharacterRepeatCount)
-                        _AppendPlainText(
-                            _currentToken.Start,
-                            (_currentToken.Length - _PluginCharacterRepeatCount));
-                    _marks.Add(new ElementMark
-                    {
-                        Code = PluginEnd,
-                        Start = (_currentToken.End - _PluginCharacterRepeatCount),
-                        Length = _PluginCharacterRepeatCount
-                    });
-                }
-                else
-                    _marks.Add(new ElementMark
-                    {
-                        Code = PluginEnd,
-                        Start = _currentToken.End
-                    });
                 _blocks.Pop();
             }
 

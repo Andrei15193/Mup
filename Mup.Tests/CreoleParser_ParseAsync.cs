@@ -73,6 +73,7 @@ namespace Mup.Tests
         [InlineData("<<plug in>>>", new object[] { PluginStart, PlainText, PluginEnd })]
         [InlineData("<<<plug in>>>", new object[] { PluginStart, PlainText, PluginEnd })]
         [InlineData("~<<plain text>>", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
+        [InlineData("<<test", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         public async Task ParsesPlugIns(string text, object[] marks)
         {
             var actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
@@ -443,6 +444,9 @@ namespace Mup.Tests
         [InlineData("plain {{{no wiki}}} text", "<p>plain <code>no wiki</code> text</p>")]
         [InlineData("plain {{{}}} text", "<p>plain <code></code> text</p>")]
         [InlineData("preformatted text {{{\n\n}}} cannot bridge paragraphs", "<p>preformatted text {{{</p><p>}}} cannot bridge paragraphs</p>")]
+
+
+        [InlineData("<<test", "<p>&lt;&lt;test</p>")]
 
         [InlineData("**//mixed strong emphasis**//", "<p>**//mixed strong emphasis**//</p>")]
         [InlineData("**//mixed strong emphasis**// still no emphasis//", "<p>**//mixed strong emphasis**// still no emphasis//</p>")]
