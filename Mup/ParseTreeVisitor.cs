@@ -249,18 +249,18 @@ namespace Mup
         {
         }
 
-        /// <summary>Asynchronously visits a plug in.</summary>
-        /// <param name="value">The value of the plug in.</param>
+        /// <summary>Asynchronously visits a plugin.</summary>
+        /// <param name="text">The plugin text.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        protected internal virtual Task VisitPlugInAsync(string value, CancellationToken cancellationToken)
+        protected internal virtual Task VisitPluginAsync(string text, CancellationToken cancellationToken)
         {
-            VisitPlugIn(value);
+            VisitPlugin(text);
             return _completedTask;
         }
 
-        /// <summary>Visits a plug in.</summary>
-        /// <param name="value">The value of the plug in.</param>
-        protected internal virtual void VisitPlugIn(string value)
+        /// <summary>Visits a plugin.</summary>
+        /// <param name="text">The plugin text.</param>
+        protected internal virtual void VisitPlugin(string text)
         {
         }
 
