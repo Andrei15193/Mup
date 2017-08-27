@@ -52,12 +52,13 @@ namespace Mup.Tests
 
         [Trait("Class", nameof(CreoleParser))]
         [Theory(DisplayName = (_method + nameof(ParsesPreforamattedBlocks)))]
-        [InlineData("{{{no wiki}}}", new object[] { PreformattedBlockStart, PlainText, PreformattedBlockEnd })]
-        [InlineData("{{{no wiki end}}}{{{has to be at end of line}}}", new object[] { PreformattedBlockStart, PlainText, PreformattedBlockEnd })]
-        [InlineData("{{{no wiki 1}}}\n{{{no wiki 2}}}", new object[] { PreformattedBlockStart, PlainText, PreformattedBlockEnd, PreformattedBlockStart, PlainText, PreformattedBlockEnd })]
-        [InlineData("{{{no escape~}}}", new object[] { PreformattedBlockStart, PlainText, PreformattedBlockEnd })]
-        [InlineData("{{{no **strong**, **emphasis**, [[hyperlinks]] or {{images}}}}}", new object[] { PreformattedBlockStart, PlainText, PreformattedBlockEnd })]
+        [InlineData("{{{\nno wiki\n}}}", new object[] { PreformattedBlockStart, PlainText, PreformattedBlockEnd })]
+        [InlineData("{{{\nno wiki end}}}{{{has to be at end of line\n}}}", new object[] { PreformattedBlockStart, PlainText, PreformattedBlockEnd })]
+        [InlineData("{{{\nno wiki 1\n}}}\n{{{\nno wiki 2\n}}}", new object[] { PreformattedBlockStart, PlainText, PreformattedBlockEnd, PreformattedBlockStart, PlainText, PreformattedBlockEnd })]
+        [InlineData("{{{\nno escape~\n}}}", new object[] { PreformattedBlockStart, PlainText, PreformattedBlockEnd })]
+        [InlineData("{{{\nno **strong**, **emphasis**, [[hyperlinks]] or {{images}}\n}}}", new object[] { PreformattedBlockStart, PlainText, PreformattedBlockEnd })]
         [InlineData("~{{{image}}}", new object[] { ParagraphStart, PlainText, ImageStart, ImageSource, PlainText, ImageEnd, PlainText, ParagraphEnd })]
+        [InlineData("{{{\ntest", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         public async Task ParsesPreforamattedBlocks(string text, object[] marks)
         {
             var actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
@@ -219,6 +220,7 @@ namespace Mup.Tests
         [InlineData("plain {{{no **strong**, no //emphais//, no [[hyperlinks]], no {{images}}}}} text", new object[] { ParagraphStart, PlainText, PreformattedTextStart, PlainText, PreformattedTextEnd, PlainText, ParagraphEnd })]
         [InlineData("plain {{{no wiki}}} text", new object[] { ParagraphStart, PlainText, PreformattedTextStart, PlainText, PreformattedTextEnd, PlainText, ParagraphEnd })]
         [InlineData("plain {{{}}} text", new object[] { ParagraphStart, PlainText, PreformattedTextStart, PlainText, PreformattedTextEnd, PlainText, ParagraphEnd })]
+        [InlineData("preformatted text {{{\n\n}}} cannot bridge paragraphs", new object[] { ParagraphStart, PlainText, ParagraphEnd, ParagraphStart, PlainText, ParagraphEnd })]
 
         [InlineData("**//mixed strong emphasis**//", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("//**mixed emphasis strong//**", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
@@ -280,12 +282,13 @@ namespace Mup.Tests
 
         [Trait("Class", nameof(CreoleParser))]
         [Theory(DisplayName = (_method + nameof(ParsePreforamattedBlocksToHtml)))]
-        [InlineData("{{{no wiki}}}", "<pre><code>no wiki</code></pre>")]
-        [InlineData("{{{no wiki end}}}{{{has to be at end of line}}}", "<pre><code>no wiki end}}}{{{has to be at end of line</code></pre>")]
-        [InlineData("{{{no wiki 1}}}\n{{{no wiki 2}}}", "<pre><code>no wiki 1</code></pre><pre><code>no wiki 2</code></pre>")]
-        [InlineData("{{{no escape~}}}", "<pre><code>no escape~</code></pre>")]
-        [InlineData("{{{no **strong**, **emphasis**, [[hyperlinks]] or {{images}}}}}", "<pre><code>no **strong**, **emphasis**, [[hyperlinks]] or {{images}}</code></pre>")]
+        [InlineData("{{{\nno wiki\n}}}", "<pre><code>no wiki</code></pre>")]
+        [InlineData("{{{\nno wiki end}}}{{{has to be at end of line\n}}}", "<pre><code>no wiki end}}}{{{has to be at end of line</code></pre>")]
+        [InlineData("{{{\nno wiki 1\n}}}\n{{{\nno wiki 2\n}}}", "<pre><code>no wiki 1</code></pre><pre><code>no wiki 2</code></pre>")]
+        [InlineData("{{{\nno escape~\n}}}", "<pre><code>no escape~</code></pre>")]
+        [InlineData("{{{\nno **strong**, **emphasis**, [[hyperlinks]] or {{images}}\n}}}", "<pre><code>no **strong**, **emphasis**, [[hyperlinks]] or {{images}}</code></pre>")]
         [InlineData("~{{{image}}}", "<p>{<img src=\"image\">}</p>")]
+        [InlineData("{{{\ntest", "<p>{{{\ntest</p>")]
         public async Task ParsePreforamattedBlocksToHtml(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
@@ -439,6 +442,7 @@ namespace Mup.Tests
         [InlineData("plain {{{no **strong**, no //emphais//, no [[hyperlinks]], no {{images}}}}} text", "<p>plain <code>no **strong**, no //emphais//, no [[hyperlinks]], no {{images}}</code> text</p>")]
         [InlineData("plain {{{no wiki}}} text", "<p>plain <code>no wiki</code> text</p>")]
         [InlineData("plain {{{}}} text", "<p>plain <code></code> text</p>")]
+        [InlineData("preformatted text {{{\n\n}}} cannot bridge paragraphs", "<p>preformatted text {{{</p><p>}}} cannot bridge paragraphs</p>")]
 
         [InlineData("**//mixed strong emphasis**//", "<p>**//mixed strong emphasis**//</p>")]
         [InlineData("**//mixed strong emphasis**// still no emphasis//", "<p>**//mixed strong emphasis**// still no emphasis//</p>")]
