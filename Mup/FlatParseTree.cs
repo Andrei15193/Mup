@@ -299,7 +299,7 @@ namespace Mup
                         break;
 
                     case PluginEnd:
-                        await visitor.VisitPlugInAsync(_pluginTextBuilder.ToString(), cancellationToken).ConfigureAwait(false);
+                        await visitor.VisitPluginAsync(_pluginTextBuilder.ToString(), cancellationToken).ConfigureAwait(false);
                         break;
 
                     case PlainText:

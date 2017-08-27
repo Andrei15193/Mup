@@ -67,14 +67,14 @@ namespace Mup.Tests
         }
 
         [Trait("Class", nameof(CreoleParser))]
-        [Theory(DisplayName = (_method + nameof(ParsesPlugIns)))]
+        [Theory(DisplayName = (_method + nameof(ParsesPlugins)))]
         [InlineData("<<plug in>>", new object[] { PluginStart, PlainText, PluginEnd })]
         [InlineData("<<<plug in>>", new object[] { PluginStart, PlainText, PluginEnd })]
         [InlineData("<<plug in>>>", new object[] { PluginStart, PlainText, PluginEnd })]
         [InlineData("<<<plug in>>>", new object[] { PluginStart, PlainText, PluginEnd })]
         [InlineData("~<<plain text>>", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("<<test", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
-        public async Task ParsesPlugIns(string text, object[] marks)
+        public async Task ParsesPlugins(string text, object[] marks)
         {
             var actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
 
@@ -445,9 +445,6 @@ namespace Mup.Tests
         [InlineData("plain {{{}}} text", "<p>plain <code></code> text</p>")]
         [InlineData("preformatted text {{{\n\n}}} cannot bridge paragraphs", "<p>preformatted text {{{</p><p>}}} cannot bridge paragraphs</p>")]
 
-
-        [InlineData("<<test", "<p>&lt;&lt;test</p>")]
-
         [InlineData("**//mixed strong emphasis**//", "<p>**//mixed strong emphasis**//</p>")]
         [InlineData("**//mixed strong emphasis**// still no emphasis//", "<p>**//mixed strong emphasis**// still no emphasis//</p>")]
         [InlineData("**//mixed strong emphasis**// still no strong**", "<p>**//mixed strong emphasis**// still no strong**</p>")]
@@ -472,6 +469,21 @@ namespace Mup.Tests
         [InlineData("paragraph 1\n----\nparagraph 2", "<p>paragraph 1</p><hr><p>paragraph 2</p>")]
         [InlineData("~----", "<p>----</p>")]
         public async Task ParsesHorizontalRuleToHtml(string text, string expectedHtml)
+        {
+            var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
+
+            Assert.Equal(expectedHtml, actualHtml);
+        }
+
+        [Trait("Class", nameof(CreoleParser))]
+        [Theory(DisplayName = (_method + nameof(ParsesPluginsToHtml)))]
+        [InlineData("<<plug in>>", "<!-- plug in -->")]
+        [InlineData("<<<plug in>>", "<!-- &lt;plug in -->")]
+        [InlineData("<<plug in>>>", "<!-- plug in&gt; -->")]
+        [InlineData("<<<plug in>>>", "<!-- &lt;plug in&gt; -->")]
+        [InlineData("~<<plain text>>", "<p>&lt;&lt;plain text&gt;&gt;</p>")]
+        [InlineData("<<test", "<p>&lt;&lt;test</p>")]
+        public async Task ParsesPluginsToHtml(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
 

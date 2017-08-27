@@ -68,7 +68,7 @@ namespace Mup.Tests
         protected internal override void VisitHorizontalRule()
             => _marks.Add(HorizontalRule);
 
-        protected internal override void VisitPlugIn(string value)
+        protected internal override void VisitPlugin(string value)
         {
             _marks.Add(PluginStart);
             _marks.Add(PlainText);

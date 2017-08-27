@@ -168,6 +168,15 @@ namespace Mup
         protected internal override void VisitListItemEnding()
             => HtmlStringBuilder.Append("</li>");
 
+        /// <summary>Visits a plugin.</summary>
+        /// <param name="text">The plugin text.</param>
+        protected internal override void VisitPlugin(string text)
+        {
+            HtmlStringBuilder.Append("<!-- ");
+            AppendHtmlSafe(text);
+            HtmlStringBuilder.Append(" -->");
+        }
+
         /// <summary>Visits the beginning of a strong element.</summary>
         protected internal override void VisitStrongBeginning()
             => HtmlStringBuilder.Append("<strong>");

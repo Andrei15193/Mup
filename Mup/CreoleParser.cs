@@ -341,7 +341,7 @@ namespace Mup
                     });
 
                     var plainTextStartIndex = (startToken.Start + _PluginCharacterRepeatCount);
-                    var plainTextTextEndIndex = (endToken.Start - plainTextStartIndex);
+                    var plainTextTextEndIndex = (endToken.End - _PluginCharacterRepeatCount);
 
                     _marks.Add(new ElementMark
                     {
@@ -475,6 +475,7 @@ namespace Mup
 
                             case Dash:
                             case Pipe:
+                            case AngleOpen:
                                 _marks.Add(new ElementMark
                                 {
                                     Code = PlainText,
