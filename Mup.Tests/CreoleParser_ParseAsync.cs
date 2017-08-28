@@ -451,6 +451,8 @@ namespace Mup.Tests
         [InlineData("//**mixed emphasis strong//**", "<p>//**mixed emphasis strong//**</p>")]
         [InlineData("//**mixed emphasis strong//** still no strong**", "<p>//**mixed emphasis strong//** still no strong**</p>")]
         [InlineData("//**mixed emphasis strong//** still no emphasis//", "<p>//**mixed emphasis strong//** still no emphasis//</p>")]
+
+        [InlineData("test\n\n<<test>>\n\ntest", "<p>test</p><!-- test --><p>test</p>")]
         public async Task ParsesRichTextToHtml(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());

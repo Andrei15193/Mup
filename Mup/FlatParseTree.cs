@@ -300,6 +300,7 @@ namespace Mup
 
                     case PluginEnd:
                         await visitor.VisitPluginAsync(_pluginTextBuilder.ToString(), cancellationToken).ConfigureAwait(false);
+                        _pluginTextBuilder = null;
                         break;
 
                     case PlainText:

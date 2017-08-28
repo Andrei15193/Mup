@@ -337,7 +337,7 @@ namespace Mup
                     {
                         Code = PluginStart,
                         Start = startToken.Start,
-                        Length = _PreformattedCharacterRepeatCount
+                        Length = _PluginCharacterRepeatCount
                     });
 
                     var plainTextStartIndex = (startToken.Start + _PluginCharacterRepeatCount);
