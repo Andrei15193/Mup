@@ -1,5 +1,6 @@
 {
     "home": "/",
     "onlineParser": "/onlineParser",
+    "documentation": "/documentation/:member?",
     "license": "/license"
 }
