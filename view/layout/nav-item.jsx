@@ -26,7 +26,7 @@ export default withRouter(
 
         render() {
             return (
-                <li class={join({ [Bootstrap.active]: (this.props.match.path === routePath(this.props.page)) })} >
+                <li class={join({ [Bootstrap.active]: (this.props.match.path === routePath[this.props.page].path) })} >
                     <Link to={routePath(this.props.page)}>{this.props.title}</Link>
                 </li>
             );

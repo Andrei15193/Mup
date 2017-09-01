@@ -10,9 +10,9 @@ export default class App extends React.Component {
         return (
             <HashRouter>
                 <Switch>
-                    <Route exact path={routePath.home} component={Home} />
-                    <Route exact path={routePath.onlineParser} component={OnlineParser} />
-                    <Route exact path={routePath.license} component={License} />
+                    <Route exact path={routePath.home.path} component={Home} />
+                    <Route exact path={routePath.onlineParser.path} component={OnlineParser} />
+                    <Route exact path={routePath.license.path} component={License} />
                     <Route path="/" component={Home} />
                 </Switch>
             </HashRouter>

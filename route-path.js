@@ -6,7 +6,7 @@ function fillParameters(route, params) {
     return route.replace(routeParamsRegex, function (match, prefix, paramName, isOptional) {
         const paramValue = params[paramName];
         if (paramValue !== undefined && paramValue !== null)
-            return (prefix +paramValue.toString().replace("/", "%2F"));
+            return (prefix + paramValue.toString().replace("/", "%2F"));
         else if (isOptional || paramValue === null)
             return "";
         else
@@ -15,21 +15,26 @@ function fillParameters(route, params) {
 }
 
 let routePath = function (name, params) {
-    const route = this[name];
-    if (params)
-        return fillParameters(route, params);
-    else
-        return route;
-}.bind(Routes);
+    const route = Routes[name];
+    if (route === undefined)
+        throw new Error("Unknown route '" + name + "'.");
+    return fillParameters(route, (params || {}));
+};
 
 routePath.names = Object.getOwnPropertyNames(Routes);
 routePath
     .names
     .forEach(function (routeName) {
         const route = Routes[routeName];
-        routePath[routeName] = route;
-        if (!routePath.default && route === "/")
-            routePath.default = route;
+        let routeMapper = (params) => fillParameters(route, (params || {}));
+        routeMapper.path = route;
+
+        routePath[routeName] = routeMapper;
+        if (!routePath.default && route === "/") {
+            let defaultRouteMapper = (params) => fillParameters(route, (params || {}));
+            defaultRouteMapper.path = route;
+            routePath.default = defaultRouteMapper;
+        }
     });
 
 export default routePath;
