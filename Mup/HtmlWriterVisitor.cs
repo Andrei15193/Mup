@@ -194,6 +194,7 @@ namespace Mup
             => HtmlStringBuilder.Append("</em>");
 
         /// <summary>Visits the beginning of a hyperlink.</summary>
+        /// <param name="destination">The hyperlink destination.</param>
         protected internal override void VisitHyperlinkBeginning(string destination)
         {
             HtmlStringBuilder.Append("<a href=\"");
@@ -206,6 +207,8 @@ namespace Mup
             => HtmlStringBuilder.Append("</a>");
 
         /// <summary>Visits an image.</summary>
+        /// <param name="source">The source of the image.</param>
+        /// <param name="alternative">The alternative text of the image.</param>
         protected internal override void VisitImage(string source, string alternative)
         {
             HtmlStringBuilder.Append("<img src=\"");
@@ -238,6 +241,7 @@ namespace Mup
             => HtmlStringBuilder.Append("<hr>");
 
         /// <summary>Visits plain text. This method may be called multiple times consecutively.</summary>
+        /// <param name="text">The plain text.</param>
         protected internal override void VisitText(string text)
             => AppendHtmlSafe(text);
 
