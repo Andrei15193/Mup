@@ -3,6 +3,7 @@ import React from "react";
 
 import Mup from "./mup.jsx";
 import MupCreoleParser from "./Mup/creole-parser.jsx";
+import MupCreoleParserCreoleParser from "./Mup/creole-parser-ctor().jsx";
 import MupCreoleParserInlineHyperlinkProtocols from "./Mup/creole-parser-inline-hyperlink-protocols.jsx";
 import MupCreoleParserParseSystemString from "./Mup/creole-parser-parse(systemstring).jsx";
 import MupCreoleParserParseAsyncSystemString from "./Mup/creole-parser-parse-async(systemstring).jsx";
@@ -12,6 +13,7 @@ import MupCreoleParserParseAsyncSystemIOTextReaderSystemThreadingCancellationTok
 import MupCreoleParserParseAsyncSystemIOTextReaderSystemInt32 from "./Mup/creole-parser-parse-async(system-iotext-reader-systemint32).jsx";
 import MupCreoleParserParseAsyncSystemIOTextReaderSystemInt32SystemThreadingCancellationToken from "./Mup/creole-parser-parse-async(system-iotext-reader-systemint32-system-threadingcancellation-token).jsx";
 import MupHtmlWriterVisitor from "./Mup/html-writer-visitor.jsx";
+import MupHtmlWriterVisitorHtmlWriterVisitor from "./Mup/html-writer-visitor-ctor().jsx";
 import MupHtmlWriterVisitorHtmlStringBuilder from "./Mup/html-writer-visitor-html-string-builder.jsx";
 import MupHtmlWriterVisitorGetResult from "./Mup/html-writer-visitor-get-result().jsx";
 import MupHtmlWriterVisitorBeginVisitAsyncSystemThreadingCancellationToken from "./Mup/html-writer-visitor-begin-visit-async(system-threadingcancellation-token).jsx";
@@ -175,6 +177,7 @@ import MupParseTreeVisitor$1GetResult from "./Mup/parse-tree-visitor`1-get-resul
 const Factories = {
     "mup": () => <Mup />,
     "mup.creoleparser": () => <MupCreoleParser />,
+    "mup.creoleparser.creoleparser()": () => <MupCreoleParserCreoleParser />,
     "mup.creoleparser.inlinehyperlinkprotocols": () => <MupCreoleParserInlineHyperlinkProtocols />,
     "mup.creoleparser.parse(system.string)": () => <MupCreoleParserParseSystemString />,
     "mup.creoleparser.parseasync(system.string)": () => <MupCreoleParserParseAsyncSystemString />,
@@ -184,6 +187,7 @@ const Factories = {
     "mup.creoleparser.parseasync(system.io.textreader,system.int32)": () => <MupCreoleParserParseAsyncSystemIOTextReaderSystemInt32 />,
     "mup.creoleparser.parseasync(system.io.textreader,system.int32,system.threading.cancellationtoken)": () => <MupCreoleParserParseAsyncSystemIOTextReaderSystemInt32SystemThreadingCancellationToken />,
     "mup.htmlwritervisitor": () => <MupHtmlWriterVisitor />,
+    "mup.htmlwritervisitor.htmlwritervisitor()": () => <MupHtmlWriterVisitorHtmlWriterVisitor />,
     "mup.htmlwritervisitor.htmlstringbuilder": () => <MupHtmlWriterVisitorHtmlStringBuilder />,
     "mup.htmlwritervisitor.getresult()": () => <MupHtmlWriterVisitorGetResult />,
     "mup.htmlwritervisitor.beginvisitasync(system.threading.cancellationtoken)": () => <MupHtmlWriterVisitorBeginVisitAsyncSystemThreadingCancellationToken />,

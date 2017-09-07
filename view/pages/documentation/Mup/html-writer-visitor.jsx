@@ -23,6 +23,25 @@ export default class extends React.PureComponent {
                 <h2>HtmlWriterVisitor Class</h2>
                 <p>Visitor for generating HTML from <Link to={routePath.documentation({ member: "Mup.IParseTree" })}>IParseTree</Link>.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>public</span> <span class={Bootstrap.textPrimary}>class</span> HtmlWriterVisitor : ParseTreeVisitor&lt;<span class={Bootstrap.textPrimary}>string</span>&gt;</code></pre>
+                <h3>Constructors</h3>
+                <table class={join(Bootstrap.table, Bootstrap.tableHover)}>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Access Modifier</th>
+                            <th>Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor.HtmlWriterVisitor()" })}>HtmlWriterVisitor()</Link>
+                            </td>
+                            <td>public</td>
+                            <td>Initializes a new instance of the <Link to={routePath.documentation({ member: "Mup.HtmlWriterVisitor" })}>HtmlWriterVisitor</Link> class.</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <h3>Properties</h3>
                 <table class={join(Bootstrap.table, Bootstrap.tableHover)}>
                     <thead>

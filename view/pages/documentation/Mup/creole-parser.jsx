@@ -23,6 +23,25 @@ export default class extends React.PureComponent {
                 <h2>CreoleParser Class</h2>
                 <p>A markup parser implementation for Creole.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>public</span> <span class={Bootstrap.textPrimary}>class</span> CreoleParser : IMarkupParser</code></pre>
+                <h3>Constructors</h3>
+                <table class={join(Bootstrap.table, Bootstrap.tableHover)}>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Access Modifier</th>
+                            <th>Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <Link to={routePath.documentation({ "member": "Mup.CreoleParser.CreoleParser()" })}>CreoleParser()</Link>
+                            </td>
+                            <td>public</td>
+                            <td>Initializes a new instance of the <Link to={routePath.documentation({ member: "Mup.CreoleParser" })}>CreoleParser</Link> class.</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <h3>Properties</h3>
                 <table class={join(Bootstrap.table, Bootstrap.tableHover)}>
                     <thead>
