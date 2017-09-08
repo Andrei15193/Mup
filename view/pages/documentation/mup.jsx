@@ -48,25 +48,25 @@ export default class extends React.PureComponent {
                             <td>
                                 <Link to={routePath.documentation({ member: "Mup.HtmlWriterVisitor" })}>HtmlWriterVisitor</Link>
                             </td>
-                            <td>Visitor for generating HTML from <Link to={routePath.documentation({ member: "Mup.IParseTree" })}>IParseTree</Link>.</td>
+                            <td>A <Link to={routePath.documentation({ member: "Mup.ParseTreeVisitor<TResult>" })}>ParseTreeVisitor&lt;TResult&gt;</Link> implementation for generating HTML from an <Link to={routePath.documentation({ member: "Mup.IParseTree" })}>IParseTree</Link>.</td>
                         </tr>
                         <tr>
                             <td>
                                 <Link to={routePath.documentation({ member: "Mup.ParseTreeExtensions" })}>ParseTreeExtensions</Link>
                             </td>
-                            <td>A helper class containing extension methods for <Link to={routePath.documentation({ member: "Mup.IParseTree" })}>IParseTree</Link>.</td>
+                            <td>A helper class containing extension methods for parse tasks.</td>
                         </tr>
                         <tr>
                             <td>
                                 <Link to={routePath.documentation({ member: "Mup.ParseTreeVisitor" })}>ParseTreeVisitor</Link>
                             </td>
-                            <td>Base class of all parse result visitors containing functionality for allowing parse trees to be visited.</td>
+                            <td>Base class of all parse tree visitors.</td>
                         </tr>
                         <tr>
                             <td>
                                 <Link to={routePath.documentation({ member: "Mup.ParseTreeVisitor<TResult>" })}>ParseTreeVisitor&lt;TResult&gt;</Link>
                             </td>
-                            <td>Base class of all parse result visitors containing functionality for allowing parse trees to be visited and eventually providing a result that is stored in memory (e.g. a <a href="https://msdn.microsoft.com/en-us/library/system.string.aspx">string</a> or a <a href="https://msdn.microsoft.com/en-us/library/system.io.memorystream.aspx">MemoryStream</a>).</td>
+                            <td>Base class for all parse tree visitors that eventually provide a result that is stored in memory (e.g. a <a href="https://msdn.microsoft.com/en-us/library/system.string.aspx">string</a> or a <a href="https://msdn.microsoft.com/en-us/library/system.io.memorystream.aspx">MemoryStream</a>).</td>
                         </tr>
                     </tbody>
                 </table>

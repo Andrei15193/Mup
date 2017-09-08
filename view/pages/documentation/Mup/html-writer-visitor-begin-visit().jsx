@@ -24,8 +24,8 @@ export default class extends React.PureComponent {
                     <li class={Bootstrap.active}>BeginVisit()</li>
                 </ol>
                 <h2>BeginVisit() Method</h2>
-                <p>Visits the beginning of the visit operation. This method is called before any other visit method.</p>
-                <pre><code><span class={Bootstrap.textPrimary}>protected</span> <span class={Bootstrap.textPrimary}>override</span> <span class={Bootstrap.textPrimary}>void</span> BeginVisit()</code></pre>
+                <p>Initializes the visitor. This method is called before any visit method.</p>
+                <pre><code><span class={Bootstrap.textPrimary}>protected</span> <span class={Bootstrap.textPrimary}>sealed</span> <span class={Bootstrap.textPrimary}>void</span> BeginVisit()</code></pre>
             </div>
         );
     }

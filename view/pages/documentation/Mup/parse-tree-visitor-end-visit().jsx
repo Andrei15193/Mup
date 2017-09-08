@@ -24,7 +24,7 @@ export default class extends React.PureComponent {
                     <li class={Bootstrap.active}>EndVisit()</li>
                 </ol>
                 <h2>EndVisit() Method</h2>
-                <p>Completes the visit operation. This method is called after all other methods.</p>
+                <p>Completes the visit operation. This method is called after all visit methods.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>protected</span> <span class={Bootstrap.textPrimary}>virtual</span> <span class={Bootstrap.textPrimary}>void</span> EndVisit()</code></pre>
             </div>
         );

@@ -24,7 +24,7 @@ export default class extends React.PureComponent {
                     <li class={Bootstrap.active}>GetResult()</li>
                 </ol>
                 <h2>GetResult() Method</h2>
-                <p>Gets the visitor result. This values is used only after the visit operation completes.</p>
+                <p>Gets the visitor result. This method is called only after the visit operation completes.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>protected</span> <span class={Bootstrap.textPrimary}>abstract</span> TResult GetResult()</code></pre>
                 <h3>Returns</h3>
                 <p>Returns the result after the entire parse tree has been visited.</p>

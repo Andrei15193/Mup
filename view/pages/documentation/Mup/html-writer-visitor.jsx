@@ -21,7 +21,7 @@ export default class extends React.PureComponent {
                     <li class={Bootstrap.active}>HtmlWriterVisitor</li>
                 </ol>
                 <h2>HtmlWriterVisitor Class</h2>
-                <p>Visitor for generating HTML from <Link to={routePath.documentation({ member: "Mup.IParseTree" })}>IParseTree</Link>.</p>
+                <p>A <Link to={routePath.documentation({ member: "Mup.ParseTreeVisitor<TResult>" })}>ParseTreeVisitor&lt;TResult&gt;</Link> implementation for generating HTML from an <Link to={routePath.documentation({ member: "Mup.IParseTree" })}>IParseTree</Link>.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>public</span> <span class={Bootstrap.textPrimary}>class</span> HtmlWriterVisitor : ParseTreeVisitor&lt;<span class={Bootstrap.textPrimary}>string</span>&gt;</code></pre>
                 <h3>Constructors</h3>
                 <table class={join(Bootstrap.table, Bootstrap.tableHover)}>
@@ -76,49 +76,49 @@ export default class extends React.PureComponent {
                                 <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor.AppendHtmlSafe(System.Char)" })}>AppendHtmlSafe(char)</Link>
                             </td>
                             <td>protected</td>
-                            <td>Appends the HTML encoded, if necessary, character.</td>
+                            <td>Appends the HTML encoded character. Encoding is done only for special characters.</td>
                         </tr>
                         <tr>
                             <td>
                                 <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor.AppendHtmlSafe(System.String)" })}>AppendHtmlSafe(string)</Link>
                             </td>
                             <td>protected</td>
-                            <td>Appends the HTML encoded, if necessary, text.</td>
+                            <td>Appends the HTML encoded text. Encoding is done only for special characters.</td>
                         </tr>
                         <tr>
                             <td>
                                 <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor.BeginVisit()" })}>BeginVisit()</Link>
                             </td>
                             <td>protected</td>
-                            <td>Visits the beginning of the visit operation. This method is called before any other visit method.</td>
+                            <td>Initializes the visitor. This method is called before any visit method.</td>
                         </tr>
                         <tr>
                             <td>
                                 <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor.BeginVisitAsync(System.Threading.CancellationToken)" })}>BeginVisitAsync(CancellationToken)</Link>
                             </td>
                             <td>protected</td>
-                            <td>Asynchronously visits the beginning of the visit operation. This method is called before any other visit method.</td>
+                            <td>Asynchronously initializes the visitor. This method is called before any visit method.</td>
                         </tr>
                         <tr>
                             <td>
                                 <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor.EndVisit()" })}>EndVisit()</Link>
                             </td>
                             <td>protected</td>
-                            <td>Completes the visit operation. This method is called after all other methods.</td>
+                            <td>Completes the visit operation. This method is called after all visit methods.</td>
                         </tr>
                         <tr>
                             <td>
                                 <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor.EndVisitAsync(System.Threading.CancellationToken)" })}>EndVisitAsync(CancellationToken)</Link>
                             </td>
                             <td>protected</td>
-                            <td>Asynchronously completes the visit operation. This method is called after all other methods.</td>
+                            <td>Asynchronously completes the visit operation. This method is called after all visit methods.</td>
                         </tr>
                         <tr>
                             <td>
                                 <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor.GetResult()" })}>GetResult()</Link>
                             </td>
                             <td>protected</td>
-                            <td>Gets the visitor result. This values is used only after the visit operation completes.</td>
+                            <td>Gets the visitor result. This method is called only after the visit operation completes.</td>
                         </tr>
                         <tr>
                             <td>

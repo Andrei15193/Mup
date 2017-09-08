@@ -42,7 +42,7 @@ export default class extends React.PureComponent {
                         </tr>
                         <tr>
                             <td>
-                                <Link to={routePath.documentation({ "member": "Mup.IParseTree.Accept`1(Mup.ParseTreeVisitor<Mup.TResult>)" })}>Accept(ParseTreeVisitor&lt;TResult&gt;)</Link>
+                                <Link to={routePath.documentation({ "member": "Mup.IParseTree.Accept<TResult>(Mup.ParseTreeVisitor<TResult>)" })}>Accept&lt;TResult&gt;(ParseTreeVisitor&lt;TResult&gt;)</Link>
                             </td>
                             <td>public</td>
                             <td>Accepts a visitor which can be used to generate output from the parse tree.</td>
@@ -63,14 +63,14 @@ export default class extends React.PureComponent {
                         </tr>
                         <tr>
                             <td>
-                                <Link to={routePath.documentation({ "member": "Mup.IParseTree.AcceptAsync`1(Mup.ParseTreeVisitor<Mup.TResult>)" })}>AcceptAsync(ParseTreeVisitor&lt;TResult&gt;)</Link>
+                                <Link to={routePath.documentation({ "member": "Mup.IParseTree.AcceptAsync<TResult>(Mup.ParseTreeVisitor<TResult>)" })}>AcceptAsync&lt;TResult&gt;(ParseTreeVisitor&lt;TResult&gt;)</Link>
                             </td>
                             <td>public</td>
                             <td>Asynchronously accepts a visitor which can be used to generate output from the parse tree.</td>
                         </tr>
                         <tr>
                             <td>
-                                <Link to={routePath.documentation({ "member": "Mup.IParseTree.AcceptAsync`1(Mup.ParseTreeVisitor<Mup.TResult>,System.Threading.CancellationToken)" })}>AcceptAsync(ParseTreeVisitor&lt;TResult&gt;, CancellationToken)</Link>
+                                <Link to={routePath.documentation({ "member": "Mup.IParseTree.AcceptAsync<TResult>(Mup.ParseTreeVisitor<TResult>,System.Threading.CancellationToken)" })}>AcceptAsync&lt;TResult&gt;(ParseTreeVisitor&lt;TResult&gt;, CancellationToken)</Link>
                             </td>
                             <td>public</td>
                             <td>Asynchronously accepts a visitor which can be used to generate output from the parse tree.</td>

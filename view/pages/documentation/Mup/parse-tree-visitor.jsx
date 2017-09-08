@@ -21,7 +21,7 @@ export default class extends React.PureComponent {
                     <li class={Bootstrap.active}>ParseTreeVisitor</li>
                 </ol>
                 <h2>ParseTreeVisitor Class</h2>
-                <p>Base class of all parse result visitors containing functionality for allowing parse trees to be visited.</p>
+                <p>Base class of all parse tree visitors.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>public</span> <span class={Bootstrap.textPrimary}>abstract</span> <span class={Bootstrap.textPrimary}>class</span> ParseTreeVisitor</code></pre>
                 <h3>Methods</h3>
                 <table class={join(Bootstrap.table, Bootstrap.tableHover)}>
@@ -38,28 +38,28 @@ export default class extends React.PureComponent {
                                 <Link to={routePath.documentation({ "member": "Mup.ParseTreeVisitor.BeginVisit()" })}>BeginVisit()</Link>
                             </td>
                             <td>protected</td>
-                            <td>Visits the beginning of the visit operation. This method is called before any other visit method.</td>
+                            <td>Initializes the visitor. This method is called before any visit method.</td>
                         </tr>
                         <tr>
                             <td>
                                 <Link to={routePath.documentation({ "member": "Mup.ParseTreeVisitor.BeginVisitAsync(System.Threading.CancellationToken)" })}>BeginVisitAsync(CancellationToken)</Link>
                             </td>
                             <td>protected</td>
-                            <td>Asynchronously visits the beginning of the visit operation. This method is called before any other visit method.</td>
+                            <td>Asynchronously initializes the visitor. This method is called before any visit method.</td>
                         </tr>
                         <tr>
                             <td>
                                 <Link to={routePath.documentation({ "member": "Mup.ParseTreeVisitor.EndVisit()" })}>EndVisit()</Link>
                             </td>
                             <td>protected</td>
-                            <td>Completes the visit operation. This method is called after all other methods.</td>
+                            <td>Completes the visit operation. This method is called after all visit methods.</td>
                         </tr>
                         <tr>
                             <td>
                                 <Link to={routePath.documentation({ "member": "Mup.ParseTreeVisitor.EndVisitAsync(System.Threading.CancellationToken)" })}>EndVisitAsync(CancellationToken)</Link>
                             </td>
                             <td>protected</td>
-                            <td>Asynchronously completes the visit operation. This method is called after all other methods.</td>
+                            <td>Asynchronously completes the visit operation. This method is called after all visit methods.</td>
                         </tr>
                         <tr>
                             <td>

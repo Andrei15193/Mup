@@ -5,20 +5,20 @@ import Mup from "./mup.jsx";
 import MupCreoleParser from "./Mup/creole-parser.jsx";
 import MupCreoleParserCreoleParser from "./Mup/creole-parser-ctor().jsx";
 import MupCreoleParserInlineHyperlinkProtocols from "./Mup/creole-parser-inline-hyperlink-protocols.jsx";
-import MupCreoleParserParseSystemString from "./Mup/creole-parser-parse(systemstring).jsx";
-import MupCreoleParserParseAsyncSystemString from "./Mup/creole-parser-parse-async(systemstring).jsx";
-import MupCreoleParserParseAsyncSystemStringSystemThreadingCancellationToken from "./Mup/creole-parser-parse-async(systemstring-system-threadingcancellation-token).jsx";
-import MupCreoleParserParseAsyncSystemIOTextReader from "./Mup/creole-parser-parse-async(system-iotext-reader).jsx";
-import MupCreoleParserParseAsyncSystemIOTextReaderSystemThreadingCancellationToken from "./Mup/creole-parser-parse-async(system-iotext-reader-system-threadingcancellation-token).jsx";
-import MupCreoleParserParseAsyncSystemIOTextReaderSystemInt32 from "./Mup/creole-parser-parse-async(system-iotext-reader-systemint32).jsx";
-import MupCreoleParserParseAsyncSystemIOTextReaderSystemInt32SystemThreadingCancellationToken from "./Mup/creole-parser-parse-async(system-iotext-reader-systemint32-system-threadingcancellation-token).jsx";
+import MupCreoleParserParseSystemString from "./Mup/creole-parser-parse(system-string).jsx";
+import MupCreoleParserParseAsyncSystemString from "./Mup/creole-parser-parse-async(system-string).jsx";
+import MupCreoleParserParseAsyncSystemStringSystemThreadingCancellationToken from "./Mup/creole-parser-parse-async(system-string-system-threading-cancellation-token).jsx";
+import MupCreoleParserParseAsyncSystemIOTextReader from "./Mup/creole-parser-parse-async(system-io-text-reader).jsx";
+import MupCreoleParserParseAsyncSystemIOTextReaderSystemThreadingCancellationToken from "./Mup/creole-parser-parse-async(system-io-text-reader-system-threading-cancellation-token).jsx";
+import MupCreoleParserParseAsyncSystemIOTextReaderSystemInt32 from "./Mup/creole-parser-parse-async(system-io-text-reader-system-int32).jsx";
+import MupCreoleParserParseAsyncSystemIOTextReaderSystemInt32SystemThreadingCancellationToken from "./Mup/creole-parser-parse-async(system-io-text-reader-system-int32-system-threading-cancellation-token).jsx";
 import MupHtmlWriterVisitor from "./Mup/html-writer-visitor.jsx";
 import MupHtmlWriterVisitorHtmlWriterVisitor from "./Mup/html-writer-visitor-ctor().jsx";
 import MupHtmlWriterVisitorHtmlStringBuilder from "./Mup/html-writer-visitor-html-string-builder.jsx";
 import MupHtmlWriterVisitorGetResult from "./Mup/html-writer-visitor-get-result().jsx";
-import MupHtmlWriterVisitorBeginVisitAsyncSystemThreadingCancellationToken from "./Mup/html-writer-visitor-begin-visit-async(system-threadingcancellation-token).jsx";
+import MupHtmlWriterVisitorBeginVisitAsyncSystemThreadingCancellationToken from "./Mup/html-writer-visitor-begin-visit-async(system-threading-cancellation-token).jsx";
 import MupHtmlWriterVisitorBeginVisit from "./Mup/html-writer-visitor-begin-visit().jsx";
-import MupHtmlWriterVisitorEndVisitAsyncSystemThreadingCancellationToken from "./Mup/html-writer-visitor-end-visit-async(system-threadingcancellation-token).jsx";
+import MupHtmlWriterVisitorEndVisitAsyncSystemThreadingCancellationToken from "./Mup/html-writer-visitor-end-visit-async(system-threading-cancellation-token).jsx";
 import MupHtmlWriterVisitorEndVisit from "./Mup/html-writer-visitor-end-visit().jsx";
 import MupHtmlWriterVisitorVisitHeading1Beginning from "./Mup/html-writer-visitor-visit-heading1-beginning().jsx";
 import MupHtmlWriterVisitorVisitHeading1Ending from "./Mup/html-writer-visitor-visit-heading1-ending().jsx";
@@ -34,7 +34,7 @@ import MupHtmlWriterVisitorVisitHeading6Beginning from "./Mup/html-writer-visito
 import MupHtmlWriterVisitorVisitHeading6Ending from "./Mup/html-writer-visitor-visit-heading6-ending().jsx";
 import MupHtmlWriterVisitorVisitParagraphBeginning from "./Mup/html-writer-visitor-visit-paragraph-beginning().jsx";
 import MupHtmlWriterVisitorVisitParagraphEnding from "./Mup/html-writer-visitor-visit-paragraph-ending().jsx";
-import MupHtmlWriterVisitorVisitPreformattedBlockSystemString from "./Mup/html-writer-visitor-visit-preformatted-block(systemstring).jsx";
+import MupHtmlWriterVisitorVisitPreformattedBlockSystemString from "./Mup/html-writer-visitor-visit-preformatted-block(system-string).jsx";
 import MupHtmlWriterVisitorVisitTableBeginning from "./Mup/html-writer-visitor-visit-table-beginning().jsx";
 import MupHtmlWriterVisitorVisitTableEnding from "./Mup/html-writer-visitor-visit-table-ending().jsx";
 import MupHtmlWriterVisitorVisitTableRowBeginning from "./Mup/html-writer-visitor-visit-table-row-beginning().jsx";
@@ -49,129 +49,129 @@ import MupHtmlWriterVisitorVisitOrderedListBeginning from "./Mup/html-writer-vis
 import MupHtmlWriterVisitorVisitOrderedListEnding from "./Mup/html-writer-visitor-visit-ordered-list-ending().jsx";
 import MupHtmlWriterVisitorVisitListItemBeginning from "./Mup/html-writer-visitor-visit-list-item-beginning().jsx";
 import MupHtmlWriterVisitorVisitListItemEnding from "./Mup/html-writer-visitor-visit-list-item-ending().jsx";
-import MupHtmlWriterVisitorVisitPluginSystemString from "./Mup/html-writer-visitor-visit-plugin(systemstring).jsx";
+import MupHtmlWriterVisitorVisitPluginSystemString from "./Mup/html-writer-visitor-visit-plugin(system-string).jsx";
 import MupHtmlWriterVisitorVisitStrongBeginning from "./Mup/html-writer-visitor-visit-strong-beginning().jsx";
 import MupHtmlWriterVisitorVisitStrongEnding from "./Mup/html-writer-visitor-visit-strong-ending().jsx";
 import MupHtmlWriterVisitorVisitEmphasisBeginning from "./Mup/html-writer-visitor-visit-emphasis-beginning().jsx";
 import MupHtmlWriterVisitorVisitEmphasisEnding from "./Mup/html-writer-visitor-visit-emphasis-ending().jsx";
-import MupHtmlWriterVisitorVisitHyperlinkBeginningSystemString from "./Mup/html-writer-visitor-visit-hyperlink-beginning(systemstring).jsx";
+import MupHtmlWriterVisitorVisitHyperlinkBeginningSystemString from "./Mup/html-writer-visitor-visit-hyperlink-beginning(system-string).jsx";
 import MupHtmlWriterVisitorVisitHyperlinkEnding from "./Mup/html-writer-visitor-visit-hyperlink-ending().jsx";
-import MupHtmlWriterVisitorVisitImageSystemStringSystemString from "./Mup/html-writer-visitor-visit-image(systemstring-systemstring).jsx";
+import MupHtmlWriterVisitorVisitImageSystemStringSystemString from "./Mup/html-writer-visitor-visit-image(system-string-system-string).jsx";
 import MupHtmlWriterVisitorVisitLineBreak from "./Mup/html-writer-visitor-visit-line-break().jsx";
-import MupHtmlWriterVisitorVisitPreformattedTextSystemString from "./Mup/html-writer-visitor-visit-preformatted-text(systemstring).jsx";
+import MupHtmlWriterVisitorVisitPreformattedTextSystemString from "./Mup/html-writer-visitor-visit-preformatted-text(system-string).jsx";
 import MupHtmlWriterVisitorVisitHorizontalRule from "./Mup/html-writer-visitor-visit-horizontal-rule().jsx";
-import MupHtmlWriterVisitorVisitTextSystemString from "./Mup/html-writer-visitor-visit-text(systemstring).jsx";
-import MupHtmlWriterVisitorAppendHtmlSafeSystemString from "./Mup/html-writer-visitor-append-html-safe(systemstring).jsx";
-import MupHtmlWriterVisitorAppendHtmlSafeSystemChar from "./Mup/html-writer-visitor-append-html-safe(systemchar).jsx";
+import MupHtmlWriterVisitorVisitTextSystemString from "./Mup/html-writer-visitor-visit-text(system-string).jsx";
+import MupHtmlWriterVisitorAppendHtmlSafeSystemString from "./Mup/html-writer-visitor-append-html-safe(system-string).jsx";
+import MupHtmlWriterVisitorAppendHtmlSafeSystemChar from "./Mup/html-writer-visitor-append-html-safe(system-char).jsx";
 import MupIMarkupParser from "./Mup/imarkup-parser.jsx";
-import MupIMarkupParserParseSystemString from "./Mup/imarkup-parser-parse(systemstring).jsx";
-import MupIMarkupParserParseAsyncSystemString from "./Mup/imarkup-parser-parse-async(systemstring).jsx";
-import MupIMarkupParserParseAsyncSystemStringSystemThreadingCancellationToken from "./Mup/imarkup-parser-parse-async(systemstring-system-threadingcancellation-token).jsx";
-import MupIMarkupParserParseAsyncSystemIOTextReader from "./Mup/imarkup-parser-parse-async(system-iotext-reader).jsx";
-import MupIMarkupParserParseAsyncSystemIOTextReaderSystemThreadingCancellationToken from "./Mup/imarkup-parser-parse-async(system-iotext-reader-system-threadingcancellation-token).jsx";
-import MupIMarkupParserParseAsyncSystemIOTextReaderSystemInt32 from "./Mup/imarkup-parser-parse-async(system-iotext-reader-systemint32).jsx";
-import MupIMarkupParserParseAsyncSystemIOTextReaderSystemInt32SystemThreadingCancellationToken from "./Mup/imarkup-parser-parse-async(system-iotext-reader-systemint32-system-threadingcancellation-token).jsx";
+import MupIMarkupParserParseSystemString from "./Mup/imarkup-parser-parse(system-string).jsx";
+import MupIMarkupParserParseAsyncSystemString from "./Mup/imarkup-parser-parse-async(system-string).jsx";
+import MupIMarkupParserParseAsyncSystemStringSystemThreadingCancellationToken from "./Mup/imarkup-parser-parse-async(system-string-system-threading-cancellation-token).jsx";
+import MupIMarkupParserParseAsyncSystemIOTextReader from "./Mup/imarkup-parser-parse-async(system-io-text-reader).jsx";
+import MupIMarkupParserParseAsyncSystemIOTextReaderSystemThreadingCancellationToken from "./Mup/imarkup-parser-parse-async(system-io-text-reader-system-threading-cancellation-token).jsx";
+import MupIMarkupParserParseAsyncSystemIOTextReaderSystemInt32 from "./Mup/imarkup-parser-parse-async(system-io-text-reader-system-int32).jsx";
+import MupIMarkupParserParseAsyncSystemIOTextReaderSystemInt32SystemThreadingCancellationToken from "./Mup/imarkup-parser-parse-async(system-io-text-reader-system-int32-system-threading-cancellation-token).jsx";
 import MupIParseTree from "./Mup/iparse-tree.jsx";
-import MupIParseTreeAcceptMupParseTreeVisitor from "./Mup/iparse-tree-accept(mupparse-tree-visitor).jsx";
-import MupIParseTreeAcceptMupParseTreeVisitor$1 from "./Mup/iparse-tree-accept(mupparse-tree-visitor`1).jsx";
-import MupIParseTreeAcceptAsyncMupParseTreeVisitor from "./Mup/iparse-tree-accept-async(mupparse-tree-visitor).jsx";
-import MupIParseTreeAcceptAsyncMupParseTreeVisitorSystemThreadingCancellationToken from "./Mup/iparse-tree-accept-async(mupparse-tree-visitor-system-threadingcancellation-token).jsx";
-import MupIParseTreeAcceptAsyncMupParseTreeVisitor$1 from "./Mup/iparse-tree-accept-async(mupparse-tree-visitor`1).jsx";
-import MupIParseTreeAcceptAsyncMupParseTreeVisitor$1SystemThreadingCancellationToken from "./Mup/iparse-tree-accept-async(mupparse-tree-visitor`1-system-threadingcancellation-token).jsx";
+import MupIParseTreeAcceptMupParseTreeVisitor from "./Mup/iparse-tree-accept(mup-parse-tree-visitor).jsx";
+import MupIParseTreeAcceptMupParseTreeVisitor$1 from "./Mup/iparse-tree-accept(mup-parse-tree-visitor`1).jsx";
+import MupIParseTreeAcceptAsyncMupParseTreeVisitor from "./Mup/iparse-tree-accept-async(mup-parse-tree-visitor).jsx";
+import MupIParseTreeAcceptAsyncMupParseTreeVisitorSystemThreadingCancellationToken from "./Mup/iparse-tree-accept-async(mup-parse-tree-visitor-system-threading-cancellation-token).jsx";
+import MupIParseTreeAcceptAsyncMupParseTreeVisitor$1 from "./Mup/iparse-tree-accept-async(mup-parse-tree-visitor`1).jsx";
+import MupIParseTreeAcceptAsyncMupParseTreeVisitor$1SystemThreadingCancellationToken from "./Mup/iparse-tree-accept-async(mup-parse-tree-visitor`1-system-threading-cancellation-token).jsx";
 import MupParseTreeExtensions from "./Mup/parse-tree-extensions.jsx";
-import MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitor from "./Mup/parse-tree-extensions-with(system-threading-taskstask`1-mupparse-tree-visitor).jsx";
-import MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitorSystemThreadingCancellationToken from "./Mup/parse-tree-extensions-with(system-threading-taskstask`1-mupparse-tree-visitor-system-threadingcancellation-token).jsx";
-import MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitor$1 from "./Mup/parse-tree-extensions-with(system-threading-taskstask`1-mupparse-tree-visitor`1).jsx";
-import MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitor$1SystemThreadingCancellationToken from "./Mup/parse-tree-extensions-with(system-threading-taskstask`1-mupparse-tree-visitor`1-system-threadingcancellation-token).jsx";
+import MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitor from "./Mup/parse-tree-extensions-with(system-threading-tasks-task`1-mup-parse-tree-visitor).jsx";
+import MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitorSystemThreadingCancellationToken from "./Mup/parse-tree-extensions-with(system-threading-tasks-task`1-mup-parse-tree-visitor-system-threading-cancellation-token).jsx";
+import MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitor$1 from "./Mup/parse-tree-extensions-with(system-threading-tasks-task`1-mup-parse-tree-visitor`1).jsx";
+import MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitor$1SystemThreadingCancellationToken from "./Mup/parse-tree-extensions-with(system-threading-tasks-task`1-mup-parse-tree-visitor`1-system-threading-cancellation-token).jsx";
 import MupParseTreeVisitor from "./Mup/parse-tree-visitor.jsx";
-import MupParseTreeVisitorBeginVisitAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-begin-visit-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorBeginVisitAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-begin-visit-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorBeginVisit from "./Mup/parse-tree-visitor-begin-visit().jsx";
-import MupParseTreeVisitorEndVisitAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-end-visit-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorEndVisitAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-end-visit-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorEndVisit from "./Mup/parse-tree-visitor-end-visit().jsx";
-import MupParseTreeVisitorVisitHeading1BeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading1-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHeading1BeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading1-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHeading1Beginning from "./Mup/parse-tree-visitor-visit-heading1-beginning().jsx";
-import MupParseTreeVisitorVisitHeading1EndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading1-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHeading1EndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading1-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHeading1Ending from "./Mup/parse-tree-visitor-visit-heading1-ending().jsx";
-import MupParseTreeVisitorVisitHeading2BeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading2-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHeading2BeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading2-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHeading2Beginning from "./Mup/parse-tree-visitor-visit-heading2-beginning().jsx";
-import MupParseTreeVisitorVisitHeading2EndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading2-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHeading2EndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading2-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHeading2Ending from "./Mup/parse-tree-visitor-visit-heading2-ending().jsx";
-import MupParseTreeVisitorVisitHeading3BeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading3-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHeading3BeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading3-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHeading3Beginning from "./Mup/parse-tree-visitor-visit-heading3-beginning().jsx";
-import MupParseTreeVisitorVisitHeading3EndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading3-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHeading3EndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading3-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHeading3Ending from "./Mup/parse-tree-visitor-visit-heading3-ending().jsx";
-import MupParseTreeVisitorVisitHeading4BeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading4-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHeading4BeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading4-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHeading4Beginning from "./Mup/parse-tree-visitor-visit-heading4-beginning().jsx";
-import MupParseTreeVisitorVisitHeading4EndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading4-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHeading4EndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading4-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHeading4Ending from "./Mup/parse-tree-visitor-visit-heading4-ending().jsx";
-import MupParseTreeVisitorVisitHeading5BeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading5-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHeading5BeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading5-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHeading5Beginning from "./Mup/parse-tree-visitor-visit-heading5-beginning().jsx";
-import MupParseTreeVisitorVisitHeading5EndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading5-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHeading5EndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading5-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHeading5Ending from "./Mup/parse-tree-visitor-visit-heading5-ending().jsx";
-import MupParseTreeVisitorVisitHeading6BeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading6-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHeading6BeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading6-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHeading6Beginning from "./Mup/parse-tree-visitor-visit-heading6-beginning().jsx";
-import MupParseTreeVisitorVisitHeading6EndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading6-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHeading6EndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-heading6-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHeading6Ending from "./Mup/parse-tree-visitor-visit-heading6-ending().jsx";
-import MupParseTreeVisitorVisitParagraphBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-paragraph-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitParagraphBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-paragraph-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitParagraphBeginning from "./Mup/parse-tree-visitor-visit-paragraph-beginning().jsx";
-import MupParseTreeVisitorVisitParagraphEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-paragraph-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitParagraphEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-paragraph-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitParagraphEnding from "./Mup/parse-tree-visitor-visit-paragraph-ending().jsx";
-import MupParseTreeVisitorVisitPreformattedBlockAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-preformatted-block-async(systemstring-system-threadingcancellation-token).jsx";
-import MupParseTreeVisitorVisitPreformattedBlockSystemString from "./Mup/parse-tree-visitor-visit-preformatted-block(systemstring).jsx";
-import MupParseTreeVisitorVisitHorizontalRuleAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-horizontal-rule-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitPreformattedBlockAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-preformatted-block-async(system-string-system-threading-cancellation-token).jsx";
+import MupParseTreeVisitorVisitPreformattedBlockSystemString from "./Mup/parse-tree-visitor-visit-preformatted-block(system-string).jsx";
+import MupParseTreeVisitorVisitHorizontalRuleAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-horizontal-rule-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHorizontalRule from "./Mup/parse-tree-visitor-visit-horizontal-rule().jsx";
-import MupParseTreeVisitorVisitPluginAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-plugin-async(systemstring-system-threadingcancellation-token).jsx";
-import MupParseTreeVisitorVisitPluginSystemString from "./Mup/parse-tree-visitor-visit-plugin(systemstring).jsx";
-import MupParseTreeVisitorVisitTableBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitPluginAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-plugin-async(system-string-system-threading-cancellation-token).jsx";
+import MupParseTreeVisitorVisitPluginSystemString from "./Mup/parse-tree-visitor-visit-plugin(system-string).jsx";
+import MupParseTreeVisitorVisitTableBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitTableBeginning from "./Mup/parse-tree-visitor-visit-table-beginning().jsx";
-import MupParseTreeVisitorVisitTableEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitTableEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitTableEnding from "./Mup/parse-tree-visitor-visit-table-ending().jsx";
-import MupParseTreeVisitorVisitTableRowBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-row-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitTableRowBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-row-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitTableRowBeginning from "./Mup/parse-tree-visitor-visit-table-row-beginning().jsx";
-import MupParseTreeVisitorVisitTableRowEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-row-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitTableRowEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-row-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitTableRowEnding from "./Mup/parse-tree-visitor-visit-table-row-ending().jsx";
-import MupParseTreeVisitorVisitTableHeaderCellBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-header-cell-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitTableHeaderCellBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-header-cell-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitTableHeaderCellBeginning from "./Mup/parse-tree-visitor-visit-table-header-cell-beginning().jsx";
-import MupParseTreeVisitorVisitTableHeaderCellEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-header-cell-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitTableHeaderCellEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-header-cell-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitTableHeaderCellEnding from "./Mup/parse-tree-visitor-visit-table-header-cell-ending().jsx";
-import MupParseTreeVisitorVisitTableCellBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-cell-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitTableCellBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-cell-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitTableCellBeginning from "./Mup/parse-tree-visitor-visit-table-cell-beginning().jsx";
-import MupParseTreeVisitorVisitTableCellEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-cell-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitTableCellEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-table-cell-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitTableCellEnding from "./Mup/parse-tree-visitor-visit-table-cell-ending().jsx";
-import MupParseTreeVisitorVisitUnorderedListBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-unordered-list-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitUnorderedListBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-unordered-list-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitUnorderedListBeginning from "./Mup/parse-tree-visitor-visit-unordered-list-beginning().jsx";
-import MupParseTreeVisitorVisitUnorderedListEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-unordered-list-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitUnorderedListEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-unordered-list-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitUnorderedListEnding from "./Mup/parse-tree-visitor-visit-unordered-list-ending().jsx";
-import MupParseTreeVisitorVisitOrderedListBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-ordered-list-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitOrderedListBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-ordered-list-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitOrderedListBeginning from "./Mup/parse-tree-visitor-visit-ordered-list-beginning().jsx";
-import MupParseTreeVisitorVisitOrderedListEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-ordered-list-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitOrderedListEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-ordered-list-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitOrderedListEnding from "./Mup/parse-tree-visitor-visit-ordered-list-ending().jsx";
-import MupParseTreeVisitorVisitListItemBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-list-item-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitListItemBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-list-item-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitListItemBeginning from "./Mup/parse-tree-visitor-visit-list-item-beginning().jsx";
-import MupParseTreeVisitorVisitListItemEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-list-item-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitListItemEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-list-item-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitListItemEnding from "./Mup/parse-tree-visitor-visit-list-item-ending().jsx";
-import MupParseTreeVisitorVisitStrongBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-strong-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitStrongBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-strong-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitStrongBeginning from "./Mup/parse-tree-visitor-visit-strong-beginning().jsx";
-import MupParseTreeVisitorVisitStrongEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-strong-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitStrongEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-strong-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitStrongEnding from "./Mup/parse-tree-visitor-visit-strong-ending().jsx";
-import MupParseTreeVisitorVisitEmphasisBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-emphasis-beginning-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitEmphasisBeginningAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-emphasis-beginning-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitEmphasisBeginning from "./Mup/parse-tree-visitor-visit-emphasis-beginning().jsx";
-import MupParseTreeVisitorVisitEmphasisEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-emphasis-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitEmphasisEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-emphasis-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitEmphasisEnding from "./Mup/parse-tree-visitor-visit-emphasis-ending().jsx";
-import MupParseTreeVisitorVisitHyperlinkBeginningAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-hyperlink-beginning-async(systemstring-system-threadingcancellation-token).jsx";
-import MupParseTreeVisitorVisitHyperlinkBeginningSystemString from "./Mup/parse-tree-visitor-visit-hyperlink-beginning(systemstring).jsx";
-import MupParseTreeVisitorVisitHyperlinkEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-hyperlink-ending-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitHyperlinkBeginningAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-hyperlink-beginning-async(system-string-system-threading-cancellation-token).jsx";
+import MupParseTreeVisitorVisitHyperlinkBeginningSystemString from "./Mup/parse-tree-visitor-visit-hyperlink-beginning(system-string).jsx";
+import MupParseTreeVisitorVisitHyperlinkEndingAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-hyperlink-ending-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitHyperlinkEnding from "./Mup/parse-tree-visitor-visit-hyperlink-ending().jsx";
-import MupParseTreeVisitorVisitImageAsyncSystemStringSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-image-async(systemstring-systemstring-system-threadingcancellation-token).jsx";
-import MupParseTreeVisitorVisitImageSystemStringSystemString from "./Mup/parse-tree-visitor-visit-image(systemstring-systemstring).jsx";
-import MupParseTreeVisitorVisitLineBreakAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-line-break-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitorVisitImageAsyncSystemStringSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-image-async(system-string-system-string-system-threading-cancellation-token).jsx";
+import MupParseTreeVisitorVisitImageSystemStringSystemString from "./Mup/parse-tree-visitor-visit-image(system-string-system-string).jsx";
+import MupParseTreeVisitorVisitLineBreakAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-line-break-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitLineBreak from "./Mup/parse-tree-visitor-visit-line-break().jsx";
-import MupParseTreeVisitorVisitPreformattedTextAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-preformatted-text-async(systemstring-system-threadingcancellation-token).jsx";
-import MupParseTreeVisitorVisitPreformattedTextSystemString from "./Mup/parse-tree-visitor-visit-preformatted-text(systemstring).jsx";
-import MupParseTreeVisitorVisitTextAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-text-async(systemstring-system-threadingcancellation-token).jsx";
-import MupParseTreeVisitorVisitTextSystemString from "./Mup/parse-tree-visitor-visit-text(systemstring).jsx";
+import MupParseTreeVisitorVisitPreformattedTextAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-preformatted-text-async(system-string-system-threading-cancellation-token).jsx";
+import MupParseTreeVisitorVisitPreformattedTextSystemString from "./Mup/parse-tree-visitor-visit-preformatted-text(system-string).jsx";
+import MupParseTreeVisitorVisitTextAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-text-async(system-string-system-threading-cancellation-token).jsx";
+import MupParseTreeVisitorVisitTextSystemString from "./Mup/parse-tree-visitor-visit-text(system-string).jsx";
 import MupParseTreeVisitor$1 from "./Mup/parse-tree-visitor`1.jsx";
-import MupParseTreeVisitor$1GetResultAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor`1-get-result-async(system-threadingcancellation-token).jsx";
+import MupParseTreeVisitor$1GetResultAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor`1-get-result-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitor$1GetResult from "./Mup/parse-tree-visitor`1-get-result().jsx";
 
 const Factories = {
@@ -247,16 +247,16 @@ const Factories = {
     "mup.imarkupparser.parseasync(system.io.textreader,system.int32,system.threading.cancellationtoken)": () => <MupIMarkupParserParseAsyncSystemIOTextReaderSystemInt32SystemThreadingCancellationToken />,
     "mup.iparsetree": () => <MupIParseTree />,
     "mup.iparsetree.accept(mup.parsetreevisitor)": () => <MupIParseTreeAcceptMupParseTreeVisitor />,
-    "mup.iparsetree.accept`1(mup.parsetreevisitor<mup.tresult>)": () => <MupIParseTreeAcceptMupParseTreeVisitor$1 />,
+    "mup.iparsetree.accept<tresult>(mup.parsetreevisitor<tresult>)": () => <MupIParseTreeAcceptMupParseTreeVisitor$1 />,
     "mup.iparsetree.acceptasync(mup.parsetreevisitor)": () => <MupIParseTreeAcceptAsyncMupParseTreeVisitor />,
     "mup.iparsetree.acceptasync(mup.parsetreevisitor,system.threading.cancellationtoken)": () => <MupIParseTreeAcceptAsyncMupParseTreeVisitorSystemThreadingCancellationToken />,
-    "mup.iparsetree.acceptasync`1(mup.parsetreevisitor<mup.tresult>)": () => <MupIParseTreeAcceptAsyncMupParseTreeVisitor$1 />,
-    "mup.iparsetree.acceptasync`1(mup.parsetreevisitor<mup.tresult>,system.threading.cancellationtoken)": () => <MupIParseTreeAcceptAsyncMupParseTreeVisitor$1SystemThreadingCancellationToken />,
+    "mup.iparsetree.acceptasync<tresult>(mup.parsetreevisitor<tresult>)": () => <MupIParseTreeAcceptAsyncMupParseTreeVisitor$1 />,
+    "mup.iparsetree.acceptasync<tresult>(mup.parsetreevisitor<tresult>,system.threading.cancellationtoken)": () => <MupIParseTreeAcceptAsyncMupParseTreeVisitor$1SystemThreadingCancellationToken />,
     "mup.parsetreeextensions": () => <MupParseTreeExtensions />,
     "mup.parsetreeextensions.with(system.threading.tasks.task<mup.iparsetree>,mup.parsetreevisitor)": () => <MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitor />,
     "mup.parsetreeextensions.with(system.threading.tasks.task<mup.iparsetree>,mup.parsetreevisitor,system.threading.cancellationtoken)": () => <MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitorSystemThreadingCancellationToken />,
-    "mup.parsetreeextensions.with`1(system.threading.tasks.task<mup.iparsetree>,mup.parsetreevisitor<mup.tresult>)": () => <MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitor$1 />,
-    "mup.parsetreeextensions.with`1(system.threading.tasks.task<mup.iparsetree>,mup.parsetreevisitor<mup.tresult>,system.threading.cancellationtoken)": () => <MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitor$1SystemThreadingCancellationToken />,
+    "mup.parsetreeextensions.with<tresult>(system.threading.tasks.task<mup.iparsetree>,mup.parsetreevisitor<tresult>)": () => <MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitor$1 />,
+    "mup.parsetreeextensions.with<tresult>(system.threading.tasks.task<mup.iparsetree>,mup.parsetreevisitor<tresult>,system.threading.cancellationtoken)": () => <MupParseTreeExtensionsWithSystemThreadingTasksTask$1MupParseTreeVisitor$1SystemThreadingCancellationToken />,
     "mup.parsetreevisitor": () => <MupParseTreeVisitor />,
     "mup.parsetreevisitor.beginvisitasync(system.threading.cancellationtoken)": () => <MupParseTreeVisitorBeginVisitAsyncSystemThreadingCancellationToken />,
     "mup.parsetreevisitor.beginvisit()": () => <MupParseTreeVisitorBeginVisit />,
