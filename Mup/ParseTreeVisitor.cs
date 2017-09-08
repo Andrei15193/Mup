@@ -3,44 +3,42 @@ using System.Threading.Tasks;
 
 namespace Mup
 {
-    /// <summary>Base class of all parse result visitors containing functionality for allowing parse trees to be visited.</summary>
+    /// <summary>Base class of all parse tree visitors.</summary>
     public abstract class ParseTreeVisitor
     {
         private static readonly Task _completedTask = Task.FromResult<object>(null);
 
-        /// <summary>Initializes a new instance of the <see cref="ParseTreeVisitor"/> class.</summary>
-        protected ParseTreeVisitor()
-        {
-        }
-
-        /// <summary>Asynchronously visits the beginning of the visit operation. This method is called before any other visit method.</summary>
+        /// <summary>Asynchronously initializes the visitor. This method is called before any visit method.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task BeginVisitAsync(CancellationToken cancellationToken)
         {
             BeginVisit();
             return _completedTask;
         }
 
-        /// <summary>Visits the beginning of the visit operation. This method is called before any other visit method.</summary>
+        /// <summary>Initializes the visitor. This method is called before any visit method.</summary>
         protected internal virtual void BeginVisit()
         {
         }
 
-        /// <summary>Asynchronously completes the visit operation. This method is called after all other methods.</summary>
+        /// <summary>Asynchronously completes the visit operation. This method is called after all visit methods.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task EndVisitAsync(CancellationToken cancellationToken)
         {
             EndVisit();
             return _completedTask;
         }
 
-        /// <summary>Completes the visit operation. This method is called after all other methods.</summary>
+        /// <summary>Completes the visit operation. This method is called after all visit methods.</summary>
         protected internal virtual void EndVisit()
         {
         }
 
         /// <summary>Asynchronously visits the beginning of a level 1 heading.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHeading1BeginningAsync(CancellationToken cancellationToken)
         {
             VisitHeading1Beginning();
@@ -54,6 +52,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a level 1 heading.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHeading1EndingAsync(CancellationToken cancellationToken)
         {
             VisitHeading1Ending();
@@ -67,6 +66,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of a level 2 heading.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHeading2BeginningAsync(CancellationToken cancellationToken)
         {
             VisitHeading2Beginning();
@@ -80,6 +80,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a level 2 heading.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHeading2EndingAsync(CancellationToken cancellationToken)
         {
             VisitHeading2Ending();
@@ -93,6 +94,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of a level 3 heading.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHeading3BeginningAsync(CancellationToken cancellationToken)
         {
             VisitHeading3Beginning();
@@ -106,6 +108,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a level 3 heading.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHeading3EndingAsync(CancellationToken cancellationToken)
         {
             VisitHeading3Ending();
@@ -119,6 +122,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of a level 4 heading.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHeading4BeginningAsync(CancellationToken cancellationToken)
         {
             VisitHeading4Beginning();
@@ -132,6 +136,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a level 4 heading.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHeading4EndingAsync(CancellationToken cancellationToken)
         {
             VisitHeading4Ending();
@@ -145,6 +150,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of a level 5 heading.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHeading5BeginningAsync(CancellationToken cancellationToken)
         {
             VisitHeading5Beginning();
@@ -158,6 +164,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a level 5 heading.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHeading5EndingAsync(CancellationToken cancellationToken)
         {
             VisitHeading5Ending();
@@ -171,6 +178,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of a level 6 heading.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHeading6BeginningAsync(CancellationToken cancellationToken)
         {
             VisitHeading6Beginning();
@@ -184,6 +192,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a level 6 heading.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHeading6EndingAsync(CancellationToken cancellationToken)
         {
             VisitHeading6Ending();
@@ -197,6 +206,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of a paragraph.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitParagraphBeginningAsync(CancellationToken cancellationToken)
         {
             VisitParagraphBeginning();
@@ -210,6 +220,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a paragraph.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitParagraphEndingAsync(CancellationToken cancellationToken)
         {
             VisitParagraphEnding();
@@ -224,6 +235,7 @@ namespace Mup
         /// <summary>Asynchronously visits a preformatted block.</summary>
         /// <param name="preformattedText">The preformatted text.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitPreformattedBlockAsync(string preformattedText, CancellationToken cancellationToken)
         {
             VisitPreformattedBlock(preformattedText);
@@ -238,6 +250,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits a horizontal rule.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHorizontalRuleAsync(CancellationToken cancellationToken)
         {
             VisitHorizontalRule();
@@ -252,6 +265,7 @@ namespace Mup
         /// <summary>Asynchronously visits a plugin.</summary>
         /// <param name="text">The plugin text.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitPluginAsync(string text, CancellationToken cancellationToken)
         {
             VisitPlugin(text);
@@ -266,6 +280,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of a table.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitTableBeginningAsync(CancellationToken cancellationToken)
         {
             VisitTableBeginning();
@@ -279,6 +294,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a table.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitTableEndingAsync(CancellationToken cancellationToken)
         {
             VisitTableEnding();
@@ -292,6 +308,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of a table row.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitTableRowBeginningAsync(CancellationToken cancellationToken)
         {
             VisitTableRowBeginning();
@@ -305,6 +322,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a table row.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitTableRowEndingAsync(CancellationToken cancellationToken)
         {
             VisitTableRowEnding();
@@ -318,6 +336,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of a table header cell.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitTableHeaderCellBeginningAsync(CancellationToken cancellationToken)
         {
             VisitTableHeaderCellBeginning();
@@ -331,6 +350,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a table header cell.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitTableHeaderCellEndingAsync(CancellationToken cancellationToken)
         {
             VisitTableHeaderCellEnding();
@@ -344,6 +364,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of a table cell.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitTableCellBeginningAsync(CancellationToken cancellationToken)
         {
             VisitTableCellBeginning();
@@ -357,6 +378,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a table cell.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitTableCellEndingAsync(CancellationToken cancellationToken)
         {
             VisitTableCellEnding();
@@ -370,6 +392,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of an unordered list.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitUnorderedListBeginningAsync(CancellationToken cancellationToken)
         {
             VisitUnorderedListBeginning();
@@ -383,6 +406,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of an unordered list.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitUnorderedListEndingAsync(CancellationToken cancellationToken)
         {
             VisitUnorderedListEnding();
@@ -396,6 +420,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of an ordered list.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitOrderedListBeginningAsync(CancellationToken cancellationToken)
         {
             VisitOrderedListBeginning();
@@ -409,6 +434,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of an ordered list.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitOrderedListEndingAsync(CancellationToken cancellationToken)
         {
             VisitOrderedListEnding();
@@ -422,6 +448,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of a list item.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitListItemBeginningAsync(CancellationToken cancellationToken)
         {
             VisitListItemBeginning();
@@ -435,6 +462,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a list item.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitListItemEndingAsync(CancellationToken cancellationToken)
         {
             VisitListItemEnding();
@@ -448,6 +476,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of a strong element.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitStrongBeginningAsync(CancellationToken cancellationToken)
         {
             VisitStrongBeginning();
@@ -461,6 +490,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a strong element.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitStrongEndingAsync(CancellationToken cancellationToken)
         {
             VisitStrongEnding();
@@ -474,6 +504,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the beginning of an emphasised element.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitEmphasisBeginningAsync(CancellationToken cancellationToken)
         {
             VisitEmphasisBeginning();
@@ -487,6 +518,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of an emphasised element.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitEmphasisEndingAsync(CancellationToken cancellationToken)
         {
             VisitEmphasisEnding();
@@ -501,6 +533,7 @@ namespace Mup
         /// <summary>Asynchronously visits the beginning of a hyperlink.</summary>
         /// <param name="destination">The hyperlink destination.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHyperlinkBeginningAsync(string destination, CancellationToken cancellationToken)
         {
             VisitHyperlinkBeginning(destination);
@@ -515,6 +548,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits the ending of a hyperlink.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitHyperlinkEndingAsync(CancellationToken cancellationToken)
         {
             VisitHyperlinkEnding();
@@ -530,6 +564,7 @@ namespace Mup
         /// <param name="source">The source of the image.</param>
         /// <param name="alternative">The alternative text of the image.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitImageAsync(string source, string alternative, CancellationToken cancellationToken)
         {
             VisitImage(source, alternative);
@@ -545,6 +580,7 @@ namespace Mup
 
         /// <summary>Asynchronously visits a line break.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitLineBreakAsync(CancellationToken cancellationToken)
         {
             VisitLineBreak();
@@ -559,6 +595,7 @@ namespace Mup
         /// <summary>Asynchronously visits a preformatted text inside a block (e.g.: paragraph, list item or table).</summary>
         /// <param name="preformattedText">The preformatted text.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitPreformattedTextAsync(string preformattedText, CancellationToken cancellationToken)
         {
             VisitPreformattedText(preformattedText);
@@ -574,6 +611,7 @@ namespace Mup
         /// <summary>Asynchronously visits plain text. This method may be called multiple times consecutively.</summary>
         /// <param name="text">The plain text.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitTextAsync(string text, CancellationToken cancellationToken)
         {
             VisitText(text);
@@ -587,24 +625,19 @@ namespace Mup
         }
     }
 
-    /// <summary>Base class of all parse result visitors containing functionality for allowing parse trees to be visited and eventually
-    /// providing a result that is stored in memory (e.g. a <see cref="string"/> or a <see cref="System.IO.MemoryStream"/>).</summary>
+    /// <summary>Base class for all parse tree visitors that eventually provide a result that is stored in
+    /// memory (e.g. a <see cref="string"/> or a <see cref="System.IO.MemoryStream"/>).</summary>
     /// <typeparam name="TResult">The type which is constructed after visitng a parse tree.</typeparam>
     public abstract class ParseTreeVisitor<TResult>
         : ParseTreeVisitor
     {
-        /// <summary>Initializes a new instance of the <see cref="ParseTreeVisitor{TResult}"/> class.</summary>
-        protected ParseTreeVisitor()
-        {
-        }
-
-        /// <summary>Asynchronously gets the visitor result. This values is used only after the visit operation completes.</summary>
+        /// <summary>Asynchronously gets the visitor result. This method is called only after the visit operation completes.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        /// <returns>Returns the result after the entire parse tree has been visited.</returns>
+        /// <returns>Returns the result after the entire parse tree has been visited wrapped in a <see cref="Task{TResult}"/>.</returns>
         protected internal virtual Task<TResult> GetResultAsync(CancellationToken cancellationToken)
             => Task.FromResult(GetResult());
 
-        /// <summary>Gets the visitor result. This values is used only after the visit operation completes.</summary>
+        /// <summary>Gets the visitor result. This method is called only after the visit operation completes.</summary>
         /// <returns>Returns the result after the entire parse tree has been visited.</returns>
         protected internal abstract TResult GetResult();
     }
