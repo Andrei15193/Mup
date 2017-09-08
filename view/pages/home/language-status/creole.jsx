@@ -31,7 +31,7 @@ export default class CreoleStatus extends React.Component {
         return (
             <tr>
                 <Language name="Creole" site="http://www.wikicreole.org/wiki/Home/" />
-                <Phase name="alpha" />
+                <Phase name="beta" />
                 <Version major={1} />
                 <Elements elements={SupportedElements} />
             </tr>
