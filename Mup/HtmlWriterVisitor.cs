@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Mup
 {
-    /// <summary>Visitor for generating HTML from <see cref="IParseTree"/>.</summary>
+    /// <summary>A <see cref="ParseTreeVisitor{TResult}"/> implementation for generating HTML from an <see cref="IParseTree"/>.</summary>
     public class HtmlWriterVisitor
         : ParseTreeVisitor<string>
     {
@@ -18,29 +18,31 @@ namespace Mup
         /// <summary>Gets the <see cref="StringBuilder"/> where the HTML is being written.</summary>
         protected StringBuilder HtmlStringBuilder { get; private set; } = null;
 
-        /// <summary>Gets the visitor result. This values is used only after the visit operation completes.</summary>
+        /// <summary>Gets the visitor result. This method is called only after the visit operation completes.</summary>
         /// <returns>Returns the result after the entire parse tree has been visited.</returns>
         protected internal override string GetResult()
             => _result;
 
-        /// <summary>Asynchronously visits the beginning of the visit operation. This method is called before any other visit method.</summary>
+        /// <summary>Asynchronously initializes the visitor. This method is called before any visit method.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal sealed override Task BeginVisitAsync(CancellationToken cancellationToken)
             => base.BeginVisitAsync(cancellationToken);
 
-        /// <summary>Visits the beginning of the visit operation. This method is called before any other visit method.</summary>
+        /// <summary>Initializes the visitor. This method is called before any visit method.</summary>
         protected internal sealed override void BeginVisit()
         {
             _result = null;
             HtmlStringBuilder = new StringBuilder();
         }
 
-        /// <summary>Asynchronously completes the visit operation. This method is called after all other methods.</summary>
+        /// <summary>Asynchronously completes the visit operation. This method is called after all visit methods.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
+        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal sealed override Task EndVisitAsync(CancellationToken cancellationToken)
             => base.EndVisitAsync(cancellationToken);
 
-        /// <summary>Completes the visit operation. This method is called after all other methods.</summary>
+        /// <summary>Completes the visit operation. This method is called after all visit methods.</summary>
         protected internal sealed override void EndVisit()
         {
             _result = HtmlStringBuilder.ToString();
@@ -245,7 +247,7 @@ namespace Mup
         protected internal override void VisitText(string text)
             => AppendHtmlSafe(text);
 
-        /// <summary>Appends the HTML encoded, if necessary, <paramref name="text"/>.</summary>
+        /// <summary>Appends the HTML encoded <paramref name="text"/>. Encoding is done only for special characters.</summary>
         /// <param name="text">The text to append to <see cref="HtmlStringBuilder"/>.</param>
         protected void AppendHtmlSafe(string text)
         {
@@ -253,7 +255,7 @@ namespace Mup
                 AppendHtmlSafe(character);
         }
 
-        /// <summary>Appends the HTML encoded, if necessary, <paramref name="character"/>.</summary>
+        /// <summary>Appends the HTML encoded <paramref name="character"/>. Encoding is done only for special characters.</summary>
         /// <param name="character">The character to append to <see cref="HtmlStringBuilder"/>.</param>
         protected void AppendHtmlSafe(char character)
         {
