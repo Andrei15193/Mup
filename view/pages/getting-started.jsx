@@ -64,7 +64,7 @@ protected virtual void Visit{Element}()
 
                 <h2>Using the Library</h2>
 
-                <p>To exemplify how easy it is to get starting with Mup we will build a small web application that exposes just one endpoint which parses the body of a request and returns the HTML, similar to what this site uses for the <a href="/#/onlineParser">Online Parser</a> (if you haven&#39;t tried it, you should definitely give it a go, it&#39;s really cool).</p>
+                <p>To exemplify how easy it is to get starting with Mup we will build a small web application that exposes just one endpoint which parses the body of a request and returns the HTML, similar to what this site uses for the <Link to={routePath.onlineParser()}>Online Parser</Link> (if you haven&#39;t tried it, you should definitely give it a go, it&#39;s really cool).</p>
 
                 <p>For our little web project we will be using .NET Core for convenience and because it is cross-platform, you do not really need to run Windows to go though this example. Besides, the library is cross-platform itself.</p>
 
@@ -155,7 +155,7 @@ This is a test"`}
 
                 <p>Depending on your needs you will inherit from one or the other, the only thing that <code>ParseTreeVisitor&lt;TResult&gt;</code> adds is an abstract method for providing the result and a virtual asynchronous counterpart.</p>
 
-                <p>If you look at the HTML result you get from the <a href="/#/onlineParser">Online Parser</a> you will notice that it looks a bit different than what our endpoint returns. The HtmlWriterVisitor that is provided with the library tries to generate the result as compact as possible, but we can change that by overriding a few methods and add a blank line so we get a more readable result.</p>
+                <p>If you look at the HTML result you get from the <Link to={routePath.onlineParser()}>Online Parser</Link> you will notice that it looks a bit different than what our endpoint returns. The HtmlWriterVisitor that is provided with the library tries to generate the result as compact as possible, but we can change that by overriding a few methods and add a blank line so we get a more readable result.</p>
 
                 <p>The <a href="https://msdn.microsoft.com/en-us/library/system.text.stringbuilder.aspx">StringBuilder</a> with which HTML is being generated is exposed through the <code>HtmlStringBuilder</code> protected property. We can append new lines and then call the base implementation. If you need to append text you should be using one of the <code>AppendHtmlSafe</code> overloads as special characters are encoded into HTML entities.</p>
 
