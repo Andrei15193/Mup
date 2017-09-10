@@ -1,26 +1,44 @@
-import ActionCategories from "constants/action-categories";
 import ViewMode from "constants/view-mode";
-import dependencyContainer from "dependency-container";
 
 import EventHandler from "./event-handler";
 
 export default class ParserStore {
-    constructor(dispatcher, request) {
-        this._request = request;
-
+    constructor(dispatcher) {
         this._view = ViewMode.edit;
         this._text = "";
         this._html = "";
         this._json = [];
         this._isLoading = false;
-        this._textChanged = true;
 
-        this.viewChanged = new EventHandler("viewChanged", this);
-        this.htmlChanged = new EventHandler("htmlChanged", this);
-        this.jsonChanged = new EventHandler("jsonChanged", this);
-        this.isLoadingChanged = new EventHandler("isLoadingChanged", this);
+        this._propertyChanged = new EventHandler("propertyChanged", this);
 
         dispatcher.register(this._handle.bind(this));
+    }
+
+    get propertyChanged() {
+        return this._propertyChanged;
+    }
+
+    get isLoading() {
+        return this._isLoading;
+    }
+
+    _setIsLoading(value) {
+        if (this._isLoading != value) {
+            this._isLoading = value;
+            this.propertyChanged.invoke(this, "isLoading");
+        }
+    }
+
+    get text() {
+        return this._text;
+    }
+
+    _setText(value) {
+        if (this._text != value) {
+            this._text = value;
+            this.propertyChanged.invoke(this, "text");
+        }
     }
 
     get view() {
@@ -28,28 +46,9 @@ export default class ParserStore {
     }
 
     _setView(value) {
-        if (value !== ViewMode.edit && this._textChanged && !this.isLoading) {
-            this.isLoading = true;
-
-            this._request
-                .postAsync("/api/creole", this._text)
-                .then((function (response) {
-                    this._setHtml(response.data.html);
-                    this._setJson(response.data.json);
-                }).bind(this))
-                .catch((function (error) {
-                    this._setHtml("Something went wrong...");
-                    this._setTextJson("Something went wrong...");
-                }).bind(this))
-                .then((function () {
-                    this._textChanged = false;
-                    this.isLoading = false;
-                    this._setView(value);
-                }).bind(this));
-        }
-        else {
+        if (this._view != value) {
             this._view = value;
-            this.viewChanged.invoke(this);
+            this.propertyChanged.invoke(this, "view");
         }
     }
 
@@ -58,8 +57,10 @@ export default class ParserStore {
     }
 
     _setHtml(value) {
-        this._html = value;
-        this.htmlChanged.invoke(this);
+        if (this._html != value) {
+            this._html = value;
+            this.propertyChanged.invoke(this, "html");
+        }
     }
 
     get json() {
@@ -67,40 +68,46 @@ export default class ParserStore {
     }
 
     _setJson(value) {
-        this._json = value;
-        this.jsonChanged.invoke(this);
-    }
-
-    get text() {
-        return this._text;
-    }
-
-    _setText(value) {
-        if (this._text !== value) {
-            this._text = value;
-            this._textChanged = true;
+        if (this._json != value) {
+            this._json = value;
+            this.propertyChanged.invoke(this, "json");
         }
-    }
-
-    get isLoading() {
-        return this._isLoading;
-    }
-
-    set isLoading(value) {
-        this._isLoading = value;
-        this.isLoadingChanged.invoke(this);
     }
 
     _handle(action) {
-        switch (action.category) {
-            case ActionCategories.parserView:
-                this._setView(action.data);
+        switch (action.type) {
+            case "edit":
+                this._setView(ViewMode.edit);
                 break;
 
-            case ActionCategories.parserText:
-                this._setText(action.data);
+            case "saveText":
+                this._setText(action.text);
+                break;
+
+            case "preview":
+            case "html":
+                this._parseText(action)
                 break;
         }
+    }
+
+    _parseText(action) {
+        this._setIsLoading(true);
+        action
+            .promise
+            .then((response) => {
+                const responseData = response.data;
+                this._setHtml(responseData.html);
+                this._setJson(responseData.json);
+            })
+            .catch((error) => {
+                this._setHtml("<p>Something went wrong...</p>");
+                this._setTextJson("Something went wrong...");
+            })
+            .then(() => {
+                this._setIsLoading(false);
+                this._setView(action.type == "preview" ? ViewMode.preview : ViewMode.html);
+            });
     }
 
     _setTextJson(text) {

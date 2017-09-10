@@ -16,11 +16,11 @@ export default {
     },
 
     get parserActions() {
-        return new ParserActions(this.dispatcher);
+        return new ParserActions(this.dispatcher, this.request);
     },
 
     get parserStore() {
-        return singleton("parser-store", () => new ParserStore(this.dispatcher, this.request), this);
+        return singleton("parser-store", () => new ParserStore(this.dispatcher), this);
     }
 }
 

@@ -9,20 +9,10 @@ import Style from "./editor.css";
 export default class Writer extends React.Component {
     constructor(props) {
         super(props);
-        this._store = DependencyContainer.parserStore;
         this._actions = DependencyContainer.parserActions;
+        const store = DependencyContainer.parserStore;
 
-        this.state = { text: this._store.text, isLoading: this._store.isLoading };
-
-        this._updateLoading = (() => this.setState({ isLoading: this._store.isLoading })).bind(this);
-    }
-
-    componentDidMount() {
-        this._store.isLoadingChanged.add(this._updateLoading);
-    }
-
-    componentWillUnmount() {
-        this._store.isLoadingChanged.remove(this._updateLoading);
+        this.state = { text: store.text };
     }
 
     render() {
@@ -30,19 +20,19 @@ export default class Writer extends React.Component {
             <div class={join(Bootstrap.formGroup, Style.writer)}>
                 <textarea
                     class={Bootstrap.formControl}
-                    disabled={this.state.isLoading}
+                    disabled={this.props.disabled}
                     value={this.state.text}
-                    onChange={this._handleChange.bind(this)}
-                    onBlur={this._handleBlur.bind(this)} />
+                    onChange={this._onChange.bind(this)}
+                    onBlur={this._onBlur.bind(this)} />
             </div>
         );
     }
 
-    _handleChange(event) {
+    _onChange(event) {
         this.setState({ text: event.target.value });
     }
 
-    _handleBlur(event) {
-        this._actions.updateText(this.state.text);
+    _onBlur(event) {
+        this._actions.save(event.target.value);
     }
 };

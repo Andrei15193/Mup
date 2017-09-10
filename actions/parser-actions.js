@@ -1,21 +1,35 @@
-import ActionCategories from "constants/action-categories";
-
-import Action from "./action";
-
 export default class ParserActions {
-    constructor(dispatcher) {
+    constructor(dispatcher, request) {
         this._dispatcher = dispatcher;
+        this._request = request;
     }
 
-    show(view) {
-        this._dispatcher.dispatch(new Action(ActionCategories.parserView, view));
+    edit() {
+        this._dispatcher.dispatch({
+            type: "edit"
+        });
     }
 
-    updateText(text) {
-        this._dispatcher.dispatch(new Action(ActionCategories.parserText, text));
+    preview(text) {
+        const promise = this._request.postAsync("/api/creole", text);
+        this._dispatcher.dispatch({
+            type: "preview",
+            promise: promise
+        });
     }
 
-    parse() {
-        this._dispatcher.dispatch(new Action(ActionCategories.parserParse));
+    html(text) {
+        const promise = this._request.postAsync("/api/creole", text);
+        this._dispatcher.dispatch({
+            type: "html",
+            promise: promise
+        });
+    }
+
+    save(text) {
+        this._dispatcher.dispatch({
+            type: "saveText",
+            text: text
+        });
     }
 };

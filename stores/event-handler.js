@@ -16,10 +16,10 @@ export default class EventHandler extends EventEmitter {
         this.removeListener(this._eventName, listener);
     }
 
-    invoke(owner) {
+    invoke(owner, eventArgs) {
         if (this._owner !== owner)
             throw new Error("Only the owner can emit an event.");
 
-        this.emit(this._eventName);
+        this.emit(this._eventName, eventArgs);
     }
 };

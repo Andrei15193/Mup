@@ -11,19 +11,25 @@ import Style from "./editor.css";
 export default class Editor extends React.Component {
     constructor(props) {
         super(props);
+        this._actions = DependencyContainer.parserActions;
         this._store = DependencyContainer.parserStore;
 
-        this.state = { view: this._store.view };
+        this.state = {
+            view: this._store.view,
+            text: this._store.text,
+            json: this._store.json,
+            isLoading: this._store.isLoading
+        };
 
-        this._updateView = (() => this.setState({ view: this._store.view })).bind(this);
+        this._propertyChanged = (propertyName) => this.setState({ [propertyName]: this._store[propertyName] });
     }
 
     componentDidMount() {
-        this._store.viewChanged.add(this._updateView);
+        this._store.propertyChanged.add(this._propertyChanged);
     }
 
     componentWillUnmount() {
-        this._store.viewChanged.remove(this._updateView);
+        this._store.propertyChanged.remove(this._propertyChanged);
     }
 
     render() {
@@ -37,16 +43,13 @@ export default class Editor extends React.Component {
     get _view() {
         switch (this.state.view) {
             case ViewMode.edit:
-                return <Writer />;
+                return <Writer text={this.state.text} disabled={this.state.isLoading} />;
 
             case ViewMode.preview:
-                return <Preview />;
+                return <Preview json={this.state.json} disabled={this.state.isLoading} />;
 
             case ViewMode.html:
-                return <HtmlPreview />;
-
-            case ViewMode.loading:
-                return <Loading />;
+                return <HtmlPreview html={this.state.html} disabled={this.state.isLoading} />;
         }
     }
 };

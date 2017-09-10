@@ -20,7 +20,3 @@
 .loading-bar > div {
     width: 100%;
 }
-
-.loading-bar-inactive {
-    display: none;
-}

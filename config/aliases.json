@@ -5,7 +5,6 @@
     "images/logo": "./images/logo.png",
     "route-path": "./route-path",
     "dependency-container": "./dependency-container",
-    "constants/action-categories": "./constants/action-categories",
     "constants/view-mode": "./constants/view-mode",
     "config/api": "./config/api.${config}.json",
     "view/common/bootstrap": "./view/common/bootstrap",

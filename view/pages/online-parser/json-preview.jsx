@@ -8,7 +8,7 @@ import CSharpKeywords from "./keywords/c-sharp.json";
 import JavaScriptKeywords from "./keywords/javascript.json";
 import SqlKeywords from "./keywords/sql.json";
 
-export default class JsonPreview extends React.Component {
+export default class JsonPreview extends React.PureComponent {
     constructor(props) {
         super(props);
     }
