@@ -1,7 +1,7 @@
 import React from "react";
 import Page from "view/layout/page";
 
-export default class Home extends React.Component {
+export default class Home extends React.PureComponent {
     render() {
         return (
             <Page title="License">

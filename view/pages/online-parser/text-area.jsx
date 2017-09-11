@@ -1,18 +1,13 @@
 import React from "react";
 import join from "classnames";
 
-import DependencyContainer from "dependency-container";
 import Bootstrap from "css/bootstrap";
 
 import Style from "./editor.css";
 
-export default class Writer extends React.Component {
+export default class TextArea extends React.PureComponent {
     constructor(props) {
         super(props);
-        this._actions = DependencyContainer.parserActions;
-        const store = DependencyContainer.parserStore;
-
-        this.state = { text: store.text };
     }
 
     render() {
@@ -21,9 +16,8 @@ export default class Writer extends React.Component {
                 <textarea
                     class={Bootstrap.formControl}
                     disabled={this.props.disabled}
-                    value={this.state.text}
-                    onChange={this._onChange.bind(this)}
-                    onBlur={this._onBlur.bind(this)} />
+                    value={this.props.text}
+                    onChange={(event) => this.props.onChange(event.target.value)} />
             </div>
         );
     }

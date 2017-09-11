@@ -5,7 +5,7 @@ import Page from "view/layout/page";
 import Factories from "./documentation/factories";
 
 export default withRouter(
-    class Documentation extends React.Component {
+    class Documentation extends React.PureComponent {
         constructor(props) {
             super(props);
         }

@@ -1,10 +1,7 @@
-import ViewMode from "constants/view-mode";
-
 import EventHandler from "./event-handler";
 
 export default class ParserStore {
     constructor(dispatcher) {
-        this._view = ViewMode.edit;
         this._text = "";
         this._html = "";
         this._json = [];
@@ -34,24 +31,6 @@ export default class ParserStore {
         return this._text;
     }
 
-    _setText(value) {
-        if (this._text != value) {
-            this._text = value;
-            this.propertyChanged.invoke(this, "text");
-        }
-    }
-
-    get view() {
-        return this._view;
-    }
-
-    _setView(value) {
-        if (this._view != value) {
-            this._view = value;
-            this.propertyChanged.invoke(this, "view");
-        }
-    }
-
     get html() {
         return this._html;
     }
@@ -76,16 +55,11 @@ export default class ParserStore {
 
     _handle(action) {
         switch (action.type) {
-            case "edit":
-                this._setView(ViewMode.edit);
+            case "save":
+                this._text = action.text;
                 break;
 
-            case "saveText":
-                this._setText(action.text);
-                break;
-
-            case "preview":
-            case "html":
+            case "parse":
                 this._parseText(action)
                 break;
         }
@@ -106,7 +80,6 @@ export default class ParserStore {
             })
             .then(() => {
                 this._setIsLoading(false);
-                this._setView(action.type == "preview" ? ViewMode.preview : ViewMode.html);
             });
     }
 

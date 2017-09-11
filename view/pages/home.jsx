@@ -5,7 +5,7 @@ import Description from "./home/description";
 import GetInvolved from "./home/get-involved";
 import LanguageStatus from "./home/language-status";
 
-export default class Home extends React.Component {
+export default class Home extends React.PureComponent {
     render() {
         return (
             <Page title="Home">

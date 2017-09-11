@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import routePath from "route-path";
 import Page from "view/layout/page";
 
-export default class GettingStarted extends React.Component {
+export default class GettingStarted extends React.PureComponent {
     constructor(props) {
         super(props);
     }
