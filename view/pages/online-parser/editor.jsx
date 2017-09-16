@@ -1,4 +1,5 @@
 import React from "react";
+import join from "classnames";
 
 import ViewMode from "constants/view-mode";
 import DependencyContainer from "dependency-container";
@@ -77,7 +78,11 @@ export default class Editor extends React.Component {
     get _view() {
         switch (this.state.view) {
             case ViewMode.edit:
-                return <TextArea text={this.state.text} disabled={this.state.isLoading} onChange={this._onTextChanaged.bind(this)} />;
+                return (
+                    <div class={join(Bootstrap.panel, Bootstrap.panelDefault, Style.editor)}>
+                        <TextArea text={this.state.text} disabled={this.state.isLoading} onChange={this._onTextChanaged.bind(this)} />
+                    </div>
+                );
 
             case ViewMode.preview:
                 return <Preview json={this.state.json} disabled={this.state.isLoading} />;

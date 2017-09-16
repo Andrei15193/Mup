@@ -12,7 +12,7 @@ export default class TextArea extends React.PureComponent {
 
     render() {
         return (
-            <div class={join(Bootstrap.formGroup, Style.writer)}>
+            <div class={join(Bootstrap.formGroup, Style.textArea)}>
                 <textarea
                     class={Bootstrap.formControl}
                     disabled={this.props.disabled}

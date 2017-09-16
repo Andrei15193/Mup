@@ -1,5 +1,5 @@
 {
-    "css/bootstrap": "./lib/Bootstrap/css/bootstrap.css",
+    "css/bootstrap": "./lib/Bootstrap/css/bootswatch.paper.css",
     "js/bootstrap": "./lib/Bootstrap/js/bootstrap.min.js",
     "js/jquery": "./lib/jQuery/3.2.1/jquery.min.js",
     "images/logo": "./images/logo.png",
