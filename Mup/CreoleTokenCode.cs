@@ -17,6 +17,7 @@
         WhiteSpace,
         Hash,
         Pipe,
-        Tilde
+        Tilde,
+        Punctuation
     }
 }

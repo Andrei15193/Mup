@@ -37,6 +37,8 @@ namespace Mup
 
                 new KeyValuePair<CreoleTokenCode, Func<char, bool>>(Tilde, character => (character == '~')),
 
+                new KeyValuePair<CreoleTokenCode, Func<char, bool>>(Punctuation, char.IsPunctuation),
+
                 new KeyValuePair<CreoleTokenCode, Func<char, bool>>(Text, character => true)
             };
 

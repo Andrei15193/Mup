@@ -437,11 +437,11 @@ namespace Mup
                 var processed = false;
                 if (_currentToken.Code == BraceOpen && _currentToken.Length >= (_PreformattedCharacterRepeatCount + (_IsEscaped(_currentToken) ? 1 : 0)))
                     processed = _TryProcessPreformattedText();
+                if (_hyperlinkStartMark == null && _imageStartMark == null && _currentToken.Code == Text && _IsProtocol(_currentToken))
+                    processed = _TryProcessInlineHyperlink();
 
                 if (!processed)
-                    if (_richTextBlocks.Count > 0 && (_richTextBlocks.Peek() == InlineHyperlink || _richTextBlocks.Peek() == EscapedInlineHyperlink))
-                        _ProcessInlineHyperlink();
-                    else if (_hyperlinkStartMark != null && _hyperlinkTextSeparatorMark == null)
+                    if (_hyperlinkStartMark != null && _hyperlinkTextSeparatorMark == null)
                         _ProcessHyperlinkDestination();
                     else if (_imageStartMark != null)
                         _ProcessImage();
@@ -469,17 +469,13 @@ namespace Mup
                                 _BeginHyperlink();
                                 break;
 
-                            case BracketClose when (_currentToken.Length >= _HyperlinkCharacterRepeatCount):
+                            case BracketClose when (_hyperlinkStartMark != null && _currentToken.Length >= _HyperlinkCharacterRepeatCount):
                                 _EndHyperlink();
                                 break;
 
                             case BraceOpen when (_imageStartMark == null && !_IsEscaped(_currentToken) && _currentToken.Length == _ImageCharacterRepeatCount):
                             case BraceOpen when (_imageStartMark == null && _IsEscaped(_currentToken) && _currentToken.Length == (_ImageCharacterRepeatCount + 1)):
                                 _BeginImage();
-                                break;
-
-                            case Text when (_IsProtocol(_currentToken) && _hyperlinkStartMark == null):
-                                _BeginInlineHyperlink();
                                 break;
 
                             case Dash:
@@ -858,72 +854,75 @@ namespace Mup
                 });
             }
 
-            private void _BeginInlineHyperlink()
+            private bool _TryProcessInlineHyperlink()
             {
-                if (_IsEscaped(_currentToken))
-                {
-                    _marks.Add(new ElementMark
-                    {
-                        Code = PlainText,
-                        Start = _currentToken.Start,
-                        Length = _currentToken.Length
-                    });
-                    _richTextBlocks.Push(EscapedInlineHyperlink);
-                }
-                else
-                {
-                    _marks.Add(new ElementMark
-                    {
-                        Code = HyperlinkStart,
-                        Start = _currentToken.Start
-                    });
-                    _marks.Add(new ElementMark
-                    {
-                        Code = HyperlinkDestination,
-                        Start = _currentToken.Start,
-                        Length = _currentToken.Length
-                    });
-                    _richTextBlocks.Push(InlineHyperlink);
-                }
-            }
+                var startToken = _currentToken;
+                var endToken = _currentToken;
 
-            private void _ProcessInlineHyperlink()
-            {
-                switch (_currentToken.Code)
+                var foundInlineHyperlinkEnd = false;
+                while (!foundInlineHyperlinkEnd)
                 {
-                    case WhiteSpace:
-                        if (_richTextBlocks.Peek() == InlineHyperlink)
-                            _EndInlineHyperlink();
-                        _marks.Add(new ElementMark
+                    if (endToken.Next == null)
+                        foundInlineHyperlinkEnd = true;
+                    else if (endToken.Next.Code == Dash
+                        || endToken.Next.Code == Slash
+                        || (endToken.Next.Code == Punctuation && _GetCharacters(endToken.Next).All(character => character == '.' || character == '?' || character == ':'))
+                        || endToken.Next.Code == Text
+                        || endToken.Next.Code == Tilde)
+                        endToken = endToken.Next;
+                    else
+                        foundInlineHyperlinkEnd = true;
+                }
+                if (foundInlineHyperlinkEnd)
+                {
+                    if (_richTextBlocks.Contains(Emphasis) && endToken.Code == Slash && endToken.Length >= _EmphasisCharacterRepeatCount)
+                        endToken = endToken.Previous;
+
+                    var start = startToken.Start;
+                    var length = (endToken.End - startToken.Start);
+                    var url = _text.Substring(startToken.Start, length);
+                    if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                    {
+                        if (_IsEscaped(startToken))
                         {
-                            Code = PlainText,
-                            Start = _currentToken.Start,
-                            Length = _currentToken.Length
-                        });
-                        break;
-
-                    default:
-                        _marks[_marks.Count - 1].Length += _currentToken.Length;
-                        break;
+                            _marks.Add(new ElementMark
+                            {
+                                Code = PlainText,
+                                Start = start,
+                                Length = length
+                            });
+                        }
+                        else
+                        {
+                            _marks.Add(new ElementMark
+                            {
+                                Code = HyperlinkStart,
+                                Start = start
+                            });
+                            _marks.Add(new ElementMark
+                            {
+                                Code = HyperlinkDestination,
+                                Start = start,
+                                Length = length
+                            });
+                            _marks.Add(new ElementMark
+                            {
+                                Code = PlainText,
+                                Start = start,
+                                Length = length
+                            });
+                            _marks.Add(new ElementMark
+                            {
+                                Code = HyperlinkEnd,
+                                Start = length
+                            });
+                        }
+                        _currentToken = endToken;
+                        return true;
+                    }
                 }
-            }
 
-            private void _EndInlineHyperlink()
-            {
-                var hyperlinkDestination = _marks[_marks.Count - 1];
-                if (hyperlinkDestination.Code == HyperlinkDestination)
-                    _marks.Add(new ElementMark
-                    {
-                        Code = PlainText,
-                        Start = hyperlinkDestination.Start,
-                        Length = hyperlinkDestination.Length
-                    });
-                _marks.Add(new ElementMark
-                {
-                    Code = HyperlinkEnd,
-                    Start = _currentToken.Start
-                });
-                _richTextBlocks.Pop();
+                return false;
             }
 
             private void _BeginHyperlink()
@@ -1372,9 +1371,6 @@ namespace Mup
 
             private void _ClearRichText()
             {
-                if (_richTextBlocks.Count > 0 && _richTextBlocks.Peek() == InlineHyperlink)
-                    _EndInlineHyperlink();
-
                 _ClearStrong();
                 _ClearEmphasis();
                 _ClearHyperlink();
@@ -1548,12 +1544,9 @@ namespace Mup
             private bool _IsProtocol(IToken<CreoleTokenCode> token)
             {
                 var index = _currentToken.Start;
-                var end = (_currentToken.End - 1);
+                var end = _currentToken.End;
 
-                if (_text[end] != _ProtocolSchemeSeparator)
-                    return false;
-
-                var protocolLength = (_currentToken.Length - 1);
+                var protocolLength = _currentToken.Length;
                 var candidateProtocols = _inlineHyperlinkProtocols.Where(protocol => protocol.Length == protocolLength).ToList();
                 while (candidateProtocols.Count > 0 && index < end)
                 {
@@ -1594,6 +1587,12 @@ namespace Mup
                     for (var index = token.Start; index < token.End; index++)
                         if (_text[index] == _LineFeed)
                             yield return new CharacterMatch(_LineFeed, index);
+            }
+
+            private IEnumerable<char> _GetCharacters(IToken<CreoleTokenCode> token)
+            {
+                for (var index = token.Start; index < token.End; index++)
+                    yield return _text[index];
             }
 
             private struct CharacterMatch
