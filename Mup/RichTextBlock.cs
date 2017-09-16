@@ -5,8 +5,6 @@
         Strong,
         Emphasis,
         Hyperlink,
-        InlineHyperlink,
-        EscapedInlineHyperlink,
         Image,
         Preformatted
     }
