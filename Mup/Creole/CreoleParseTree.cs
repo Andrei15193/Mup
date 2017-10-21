@@ -5,11 +5,11 @@ using Mup.Creole.Elements;
 
 namespace Mup.Creole
 {
-    internal class CreoleDocument : IParseTree
+    internal class CreoleParseTree : IParseTree
     {
         private readonly IEnumerable<CreoleElement> _elements;
 
-        internal CreoleDocument(IEnumerable<CreoleElement> elements)
+        internal CreoleParseTree(IEnumerable<CreoleElement> elements)
         {
             _elements = elements;
         }
