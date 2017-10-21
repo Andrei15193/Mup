@@ -1,6 +1,8 @@
 import React from "react";
 import Page from "view/layout/page";
 
+import GnuLesserGeneralPublicLicense from "./licenses/gnu-lesser-general-public-license";
+
 export default class Home extends React.PureComponent {
     render() {
         return (
@@ -19,9 +21,9 @@ export default class Home extends React.PureComponent {
                     of <strong>merchantability</strong> or <strong>fitness for a particular purpose</strong>. See the <strong>GNU Lesser General Public License</strong> for more details.
                 </p>
 
-                <p>
-                    You should have received a copy of the <strong>GNU Lesser General Public License</strong> along with this program. If not, see <a href="https://www.gnu.org/licenses/" target="_blank">www.gnu.org/licenses</a>.
-                </p>
+                <hr />
+
+                <GnuLesserGeneralPublicLicense />
             </Page>
         );
     }
