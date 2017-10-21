@@ -7,7 +7,7 @@ const Phases = {
     "released": "Released"
 };
 
-export default class Phase extends React.Component {
+export default class Phase extends React.PureComponent {
     constructor(props) {
         super(props);
     }

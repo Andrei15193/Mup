@@ -4,24 +4,25 @@ import Language from "../language";
 import Phase from "../phase";
 import Version from "../version";
 import Elements from "../elements";
+import ElementStatus from "../element-status";
 
 const SupportedElements = [
-    "headings",
-    "paragraphs",
-    "lists",
-    "blockquotes",
-    "inline code",
-    "code blocks",
-    "horizontal rules",
-    "emphasis (italics)",
-    "strong (bold)",
-    "inline hyperlinks",
-    "hyperlinks",
-    "images",
-    "line breaks"
+    { name: "headings", status: ElementStatus.Planned },
+    { name: "paragraphs", status: ElementStatus.Planned },
+    { name: "lists", status: ElementStatus.Planned },
+    { name: "block quotes", status: ElementStatus.Planned },
+    { name: "inline code", status: ElementStatus.Planned },
+    { name: "code blocks", status: ElementStatus.Planned },
+    { name: "horizontal rules", status: ElementStatus.Planned },
+    { name: "emphasis (italics)", status: ElementStatus.Planned },
+    { name: "strong (bold)", status: ElementStatus.Planned },
+    { name: "inline hyperlinks", status: ElementStatus.Planned },
+    { name: "hyperlinks", status: ElementStatus.Planned },
+    { name: "images", status: ElementStatus.Planned },
+    { name: "line breaks", status: ElementStatus.Planned }
 ];
 
-export default class CommonMarkStatus extends React.Component {
+export default class CommonMarkStatus extends React.PureComponent {
     constructor(props) {
         super(props);
     }

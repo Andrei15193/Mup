@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-export default class Language extends React.Component {
+export default class Language extends React.PureComponent {
     constructor(props) {
         super(props);
     }

@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import Style from "./license.css";
 
@@ -14,7 +13,7 @@ export default class GnuLesserGeneralPublicLicense extends React.PureComponent {
                 <h3>GNU LESSER GENERAL PUBLIC LICENSE <small>Version 3, 29 June 2007</small></h3>
 
                 <p>
-                    Copyright (C) 2007 Free Software Foundation, Inc. <Link to="https://fsf.org/">https://fsf.org/</Link>
+                    Copyright (C) 2007 Free Software Foundation, Inc. <a href="https://fsf.org/" target="_blank">https://fsf.org/</a>
                 </p>
 
                 <p>

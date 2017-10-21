@@ -6,7 +6,7 @@ import routePath from "route-path";
 
 import Bootstrap from "css/bootstrap";
 
-export default class GetInvolved extends React.Component {
+export default class GetInvolved extends React.PureComponent {
     constructor(props) {
         super(props);
     }

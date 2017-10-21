@@ -6,7 +6,7 @@ import Bootstrap from "css/bootstrap";
 import CreoleStatus from "./language-status/creole-status";
 import CommonMarkStatus from "./language-status/common-mark-status";
 
-export default class LanguageStatus extends React.Component {
+export default class LanguageStatus extends React.PureComponent {
     constructor(props) {
         super(props);
     }

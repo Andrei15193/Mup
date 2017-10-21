@@ -1,6 +1,6 @@
 import React from "react";
 
-export default class Description extends React.Component {
+export default class Description extends React.PureComponent {
     constructor(props) {
         super(props);
     }

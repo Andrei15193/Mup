@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 
-export default class Version extends React.Component {
+export default class Version extends React.PureComponent {
     static get propTypes() {
         return {
             major: PropTypes.number.isRequired,
