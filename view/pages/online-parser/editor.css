@@ -4,6 +4,7 @@
 }
 
 .text-area > textarea {
+    line-height: normal;
     height: 100% !important;
     resize: none;
     padding: 15px;

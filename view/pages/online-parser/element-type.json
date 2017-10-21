@@ -20,6 +20,6 @@
     "LineBreak": "lineBreak",
     "Hyperlink": "hyperlink",
     "Image": "image",
-    "PreformattedText": "preformattedtext",
+    "Code": "code",
     "Text": "text"
 }

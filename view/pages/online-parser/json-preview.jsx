@@ -261,7 +261,7 @@ export default class JsonPreview extends React.PureComponent {
                     <img key={this._counter++} src={element.source} alt={element.alternative} />
                 );
 
-            case ElementType.PreformattedText:
+            case ElementType.Code:
                 return (
                     <code key={this._counter++}>
                         {element.content}
