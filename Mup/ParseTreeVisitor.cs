@@ -562,19 +562,19 @@ namespace Mup
 
         /// <summary>Asynchronously visits an image.</summary>
         /// <param name="source">The source of the image.</param>
-        /// <param name="alternative">The alternative text of the image.</param>
+        /// <param name="alternativeText">The alternative text for the image.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
         /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
-        protected internal virtual Task VisitImageAsync(string source, string alternative, CancellationToken cancellationToken)
+        protected internal virtual Task VisitImageAsync(string source, string alternativeText, CancellationToken cancellationToken)
         {
-            VisitImage(source, alternative);
+            VisitImage(source, alternativeText);
             return _completedTask;
         }
 
         /// <summary>Visits an image.</summary>
         /// <param name="source">The source of the image.</param>
-        /// <param name="alternative">The alternative text of the image.</param>
-        protected internal virtual void VisitImage(string source, string alternative)
+        /// <param name="alternativeText">The alternative text for the image.</param>
+        protected internal virtual void VisitImage(string source, string alternativeText)
         {
         }
 
@@ -592,19 +592,19 @@ namespace Mup
         {
         }
 
-        /// <summary>Asynchronously visits a preformatted text inside a block (e.g.: paragraph, list item or table).</summary>
-        /// <param name="preformattedText">The preformatted text.</param>
+        /// <summary>Asynchronously visits a code fragment inside a block (e.g.: paragraph, list item or table).</summary>
+        /// <param name="fragment">The preformatted text.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
         /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
-        protected internal virtual Task VisitPreformattedTextAsync(string preformattedText, CancellationToken cancellationToken)
+        protected internal virtual Task VisitCodeFragmentAsync(string fragment, CancellationToken cancellationToken)
         {
-            VisitPreformattedText(preformattedText);
+            VisitCodeFragment(fragment);
             return _completedTask;
         }
 
-        /// <summary>Visits a preformatted text inside a block (e.g.: paragraph, list item or table).</summary>
-        /// <param name="preformattedText">The preformatted text.</param>
-        protected internal virtual void VisitPreformattedText(string preformattedText)
+        /// <summary>Visits a code fragment inside a block (e.g.: paragraph, list item or table).</summary>
+        /// <param name="fragment">The preformatted text.</param>
+        protected internal virtual void VisitCodeFragment(string fragment)
         {
         }
 

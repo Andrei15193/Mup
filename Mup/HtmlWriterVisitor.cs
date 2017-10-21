@@ -210,16 +210,16 @@ namespace Mup
 
         /// <summary>Visits an image.</summary>
         /// <param name="source">The source of the image.</param>
-        /// <param name="alternative">The alternative text of the image.</param>
-        protected internal override void VisitImage(string source, string alternative)
+        /// <param name="alternativeText">The alternative text for the image.</param>
+        protected internal override void VisitImage(string source, string alternativeText)
         {
             HtmlStringBuilder.Append("<img src=\"");
             AppendHtmlSafe(source);
             HtmlStringBuilder.Append('"');
-            if (!string.IsNullOrWhiteSpace(alternative))
+            if (!string.IsNullOrWhiteSpace(alternativeText))
             {
                 HtmlStringBuilder.Append(" alt=\"");
-                AppendHtmlSafe(alternative);
+                AppendHtmlSafe(alternativeText);
                 HtmlStringBuilder.Append('"');
             }
             HtmlStringBuilder.Append(">");
@@ -229,12 +229,12 @@ namespace Mup
         protected internal override void VisitLineBreak()
             => HtmlStringBuilder.Append("<br>");
 
-        /// <summary>Visits a preformatted text inside a block (e.g.: paragraph, list item or table).</summary>
-        /// <param name="preformattedText">The preformatted text.</param>
-        protected internal override void VisitPreformattedText(string preformattedText)
+        /// <summary>Visits a code fragment inside a block (e.g.: paragraph, list item or table).</summary>
+        /// <param name="fragment">The preformatted text.</param>
+        protected internal override void VisitCodeFragment(string fragment)
         {
             HtmlStringBuilder.Append("<code>");
-            AppendHtmlSafe(preformattedText);
+            AppendHtmlSafe(fragment);
             HtmlStringBuilder.Append("</code>");
         }
 

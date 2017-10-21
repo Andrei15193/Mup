@@ -161,7 +161,7 @@ namespace Mup
                     case PreformattedTextEnd:
                         var preformattedText = _preformattedTextBuilder.ToString();
                         _preformattedTextBuilder = null;
-                        await visitor.VisitPreformattedTextAsync(preformattedText, cancellationToken).ConfigureAwait(false);
+                        await visitor.VisitCodeFragmentAsync(preformattedText, cancellationToken).ConfigureAwait(false);
                         break;
 
                     case Heading1Start:

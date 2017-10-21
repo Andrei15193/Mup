@@ -138,7 +138,7 @@ namespace Mup.Tests
         protected internal override void VisitHyperlinkEnding()
             => _marks.Add(HyperlinkEnd);
 
-        protected internal override void VisitImage(string source, string alternative)
+        protected internal override void VisitImage(string source, string alternativeText)
         {
             _marks.Add(ImageStart);
             _marks.Add(ImageSource);
@@ -149,7 +149,7 @@ namespace Mup.Tests
         protected internal override void VisitLineBreak()
             => _marks.Add(LineBreak);
 
-        protected internal override void VisitPreformattedText(string preformattedText)
+        protected internal override void VisitCodeFragment(string preformattedText)
         {
             _marks.Add(PreformattedTextStart);
             _marks.Add(PlainText);
