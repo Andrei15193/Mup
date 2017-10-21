@@ -3,7 +3,8 @@ import join from "classnames";
 
 import Bootstrap from "css/bootstrap";
 
-import CreoleStatus from "./language-status/creole";
+import CreoleStatus from "./language-status/creole-status";
+import CommonMarkStatus from "./language-status/common-mark-status";
 
 export default class LanguageStatus extends React.Component {
     constructor(props) {
@@ -25,6 +26,7 @@ export default class LanguageStatus extends React.Component {
                     </thead>
                     <tbody>
                         <CreoleStatus />
+                        <CommonMarkStatus />
                     </tbody>
                 </table>
             </div>
