@@ -19,7 +19,7 @@ const SupportedElements = [
     "hyperlinks",
     "images",
     "line breaks",
-    "add ins"
+    "plugins"
 ];
 
 export default class CreoleStatus extends React.Component {
