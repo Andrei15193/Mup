@@ -122,6 +122,13 @@ export default class extends React.PureComponent {
                         </tr>
                         <tr>
                             <td>
+                                <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor.VisitCodeFragment(System.String)" })}>VisitCodeFragment(string)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits a code fragment inside a block (e.g.: paragraph, list item or table).</td>
+                        </tr>
+                        <tr>
+                            <td>
                                 <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor.VisitEmphasisBeginning()" })}>VisitEmphasisBeginning()</Link>
                             </td>
                             <td>protected</td>
@@ -308,13 +315,6 @@ export default class extends React.PureComponent {
                             </td>
                             <td>protected</td>
                             <td>Visits a preformatted block.</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor.VisitPreformattedText(System.String)" })}>VisitPreformattedText(string)</Link>
-                            </td>
-                            <td>protected</td>
-                            <td>Visits a preformatted text inside a block (e.g.: paragraph, list item or table).</td>
                         </tr>
                         <tr>
                             <td>

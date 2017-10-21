@@ -63,6 +63,20 @@ export default class extends React.PureComponent {
                         </tr>
                         <tr>
                             <td>
+                                <Link to={routePath.documentation({ "member": "Mup.ParseTreeVisitor.VisitCodeFragment(System.String)" })}>VisitCodeFragment(string)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits a code fragment inside a block (e.g.: paragraph, list item or table).</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={routePath.documentation({ "member": "Mup.ParseTreeVisitor.VisitCodeFragmentAsync(System.String,System.Threading.CancellationToken)" })}>VisitCodeFragmentAsync(string, CancellationToken)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Asynchronously visits a code fragment inside a block (e.g.: paragraph, list item or table).</td>
+                        </tr>
+                        <tr>
+                            <td>
                                 <Link to={routePath.documentation({ "member": "Mup.ParseTreeVisitor.VisitEmphasisBeginning()" })}>VisitEmphasisBeginning()</Link>
                             </td>
                             <td>protected</td>
@@ -438,20 +452,6 @@ export default class extends React.PureComponent {
                             </td>
                             <td>protected</td>
                             <td>Asynchronously visits a preformatted block.</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <Link to={routePath.documentation({ "member": "Mup.ParseTreeVisitor.VisitPreformattedText(System.String)" })}>VisitPreformattedText(string)</Link>
-                            </td>
-                            <td>protected</td>
-                            <td>Visits a preformatted text inside a block (e.g.: paragraph, list item or table).</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <Link to={routePath.documentation({ "member": "Mup.ParseTreeVisitor.VisitPreformattedTextAsync(System.String,System.Threading.CancellationToken)" })}>VisitPreformattedTextAsync(string, CancellationToken)</Link>
-                            </td>
-                            <td>protected</td>
-                            <td>Asynchronously visits a preformatted text inside a block (e.g.: paragraph, list item or table).</td>
                         </tr>
                         <tr>
                             <td>

@@ -58,7 +58,7 @@ import MupHtmlWriterVisitorVisitHyperlinkBeginningSystemString from "./Mup/html-
 import MupHtmlWriterVisitorVisitHyperlinkEnding from "./Mup/html-writer-visitor-visit-hyperlink-ending().jsx";
 import MupHtmlWriterVisitorVisitImageSystemStringSystemString from "./Mup/html-writer-visitor-visit-image(system-string-system-string).jsx";
 import MupHtmlWriterVisitorVisitLineBreak from "./Mup/html-writer-visitor-visit-line-break().jsx";
-import MupHtmlWriterVisitorVisitPreformattedTextSystemString from "./Mup/html-writer-visitor-visit-preformatted-text(system-string).jsx";
+import MupHtmlWriterVisitorVisitCodeFragmentSystemString from "./Mup/html-writer-visitor-visit-code-fragment(system-string).jsx";
 import MupHtmlWriterVisitorVisitHorizontalRule from "./Mup/html-writer-visitor-visit-horizontal-rule().jsx";
 import MupHtmlWriterVisitorVisitTextSystemString from "./Mup/html-writer-visitor-visit-text(system-string).jsx";
 import MupHtmlWriterVisitorAppendHtmlSafeSystemString from "./Mup/html-writer-visitor-append-html-safe(system-string).jsx";
@@ -166,8 +166,8 @@ import MupParseTreeVisitorVisitImageAsyncSystemStringSystemStringSystemThreading
 import MupParseTreeVisitorVisitImageSystemStringSystemString from "./Mup/parse-tree-visitor-visit-image(system-string-system-string).jsx";
 import MupParseTreeVisitorVisitLineBreakAsyncSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-line-break-async(system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitLineBreak from "./Mup/parse-tree-visitor-visit-line-break().jsx";
-import MupParseTreeVisitorVisitPreformattedTextAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-preformatted-text-async(system-string-system-threading-cancellation-token).jsx";
-import MupParseTreeVisitorVisitPreformattedTextSystemString from "./Mup/parse-tree-visitor-visit-preformatted-text(system-string).jsx";
+import MupParseTreeVisitorVisitCodeFragmentAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-code-fragment-async(system-string-system-threading-cancellation-token).jsx";
+import MupParseTreeVisitorVisitCodeFragmentSystemString from "./Mup/parse-tree-visitor-visit-code-fragment(system-string).jsx";
 import MupParseTreeVisitorVisitTextAsyncSystemStringSystemThreadingCancellationToken from "./Mup/parse-tree-visitor-visit-text-async(system-string-system-threading-cancellation-token).jsx";
 import MupParseTreeVisitorVisitTextSystemString from "./Mup/parse-tree-visitor-visit-text(system-string).jsx";
 import MupParseTreeVisitor$1 from "./Mup/parse-tree-visitor`1.jsx";
@@ -232,7 +232,7 @@ const Factories = {
     "mup.htmlwritervisitor.visithyperlinkending()": () => <MupHtmlWriterVisitorVisitHyperlinkEnding />,
     "mup.htmlwritervisitor.visitimage(system.string,system.string)": () => <MupHtmlWriterVisitorVisitImageSystemStringSystemString />,
     "mup.htmlwritervisitor.visitlinebreak()": () => <MupHtmlWriterVisitorVisitLineBreak />,
-    "mup.htmlwritervisitor.visitpreformattedtext(system.string)": () => <MupHtmlWriterVisitorVisitPreformattedTextSystemString />,
+    "mup.htmlwritervisitor.visitcodefragment(system.string)": () => <MupHtmlWriterVisitorVisitCodeFragmentSystemString />,
     "mup.htmlwritervisitor.visithorizontalrule()": () => <MupHtmlWriterVisitorVisitHorizontalRule />,
     "mup.htmlwritervisitor.visittext(system.string)": () => <MupHtmlWriterVisitorVisitTextSystemString />,
     "mup.htmlwritervisitor.appendhtmlsafe(system.string)": () => <MupHtmlWriterVisitorAppendHtmlSafeSystemString />,
@@ -340,8 +340,8 @@ const Factories = {
     "mup.parsetreevisitor.visitimage(system.string,system.string)": () => <MupParseTreeVisitorVisitImageSystemStringSystemString />,
     "mup.parsetreevisitor.visitlinebreakasync(system.threading.cancellationtoken)": () => <MupParseTreeVisitorVisitLineBreakAsyncSystemThreadingCancellationToken />,
     "mup.parsetreevisitor.visitlinebreak()": () => <MupParseTreeVisitorVisitLineBreak />,
-    "mup.parsetreevisitor.visitpreformattedtextasync(system.string,system.threading.cancellationtoken)": () => <MupParseTreeVisitorVisitPreformattedTextAsyncSystemStringSystemThreadingCancellationToken />,
-    "mup.parsetreevisitor.visitpreformattedtext(system.string)": () => <MupParseTreeVisitorVisitPreformattedTextSystemString />,
+    "mup.parsetreevisitor.visitcodefragmentasync(system.string,system.threading.cancellationtoken)": () => <MupParseTreeVisitorVisitCodeFragmentAsyncSystemStringSystemThreadingCancellationToken />,
+    "mup.parsetreevisitor.visitcodefragment(system.string)": () => <MupParseTreeVisitorVisitCodeFragmentSystemString />,
     "mup.parsetreevisitor.visittextasync(system.string,system.threading.cancellationtoken)": () => <MupParseTreeVisitorVisitTextAsyncSystemStringSystemThreadingCancellationToken />,
     "mup.parsetreevisitor.visittext(system.string)": () => <MupParseTreeVisitorVisitTextSystemString />,
     "mup.parsetreevisitor<tresult>": () => <MupParseTreeVisitor$1 />,

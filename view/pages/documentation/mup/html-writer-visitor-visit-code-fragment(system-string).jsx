@@ -21,15 +21,14 @@ export default class extends React.PureComponent {
                     <li>
                         <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor" })}>HtmlWriterVisitor</Link>
                     </li>
-                    <li class={Bootstrap.active}>VisitImage(string, string)</li>
+                    <li class={Bootstrap.active}>VisitCodeFragment(string)</li>
                 </ol>
-                <h2>VisitImage(string, string) Method</h2>
-                <p>Visits an image.</p>
-                <pre><code><span class={Bootstrap.textPrimary}>protected</span> <span class={Bootstrap.textPrimary}>override</span> <span class={Bootstrap.textPrimary}>void</span> VisitImage(<span class={Bootstrap.textPrimary}>string</span> source, <span class={Bootstrap.textPrimary}>string</span> alternativeText)</code></pre>
+                <h2>VisitCodeFragment(string) Method</h2>
+                <p>Visits a code fragment inside a block (e.g.: paragraph, list item or table).</p>
+                <pre><code><span class={Bootstrap.textPrimary}>protected</span> <span class={Bootstrap.textPrimary}>override</span> <span class={Bootstrap.textPrimary}>void</span> VisitCodeFragment(<span class={Bootstrap.textPrimary}>string</span> fragment)</code></pre>
                 <h3>Parameters</h3>
                 <ul>
-                    <li><strong>source</strong>: The source of the image.</li>
-                    <li><strong>alternativeText</strong>: The alternative text for the image.</li>
+                    <li><strong>fragment</strong>: The preformatted text.</li>
                 </ul>
             </div>
         );
