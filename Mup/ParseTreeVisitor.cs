@@ -593,7 +593,7 @@ namespace Mup
         }
 
         /// <summary>Asynchronously visits a code fragment inside a block (e.g.: paragraph, list item or table).</summary>
-        /// <param name="fragment">The preformatted text.</param>
+        /// <param name="fragment">The code fragment.</param>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
         /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal virtual Task VisitCodeFragmentAsync(string fragment, CancellationToken cancellationToken)
@@ -603,7 +603,7 @@ namespace Mup
         }
 
         /// <summary>Visits a code fragment inside a block (e.g.: paragraph, list item or table).</summary>
-        /// <param name="fragment">The preformatted text.</param>
+        /// <param name="fragment">The code fragment.</param>
         protected internal virtual void VisitCodeFragment(string fragment)
         {
         }
