@@ -163,7 +163,7 @@ namespace Mup
             {
                 var currentToken = _tokens.FirstOrDefault();
                 if (currentToken == null)
-                    return new CreoleDocument(Enumerable.Empty<CreoleElement>());
+                    return new CreoleParseTree(Enumerable.Empty<CreoleElement>());
 
                 var blockElements = new List<CreoleElement>();
                 do
@@ -172,14 +172,14 @@ namespace Mup
                     blockElements.Add(factoryResult.Element);
                     currentToken = factoryResult.End.Next;
                 } while (currentToken != null);
-                return new CreoleDocument(blockElements);
+                return new CreoleParseTree(blockElements);
             }
 
             internal async Task<IParseTree> ParseAsync(CancellationToken cancellationToken)
             {
                 var currentToken = _tokens.FirstOrDefault();
                 if (currentToken == null)
-                    return new CreoleDocument(Enumerable.Empty<CreoleElement>());
+                    return new CreoleParseTree(Enumerable.Empty<CreoleElement>());
 
                 var blockElements = new List<CreoleElement>();
                 do
@@ -191,7 +191,7 @@ namespace Mup
                     await Task.Yield();
                     cancellationToken.ThrowIfCancellationRequested();
                 } while (currentToken != null);
-                return new CreoleDocument(blockElements);
+                return new CreoleParseTree(blockElements);
             }
 
             private CreoleFactoryResult _CreateBlockElementFrom(CreoleToken token)
