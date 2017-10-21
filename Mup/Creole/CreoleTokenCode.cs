@@ -1,4 +1,4 @@
-﻿namespace Mup
+﻿namespace Mup.Creole
 {
     internal enum CreoleTokenCode
     {

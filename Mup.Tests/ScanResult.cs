@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mup.Scanner;
 
-namespace Mup
+namespace Mup.Tests
 {
     internal class ScanResult<TTokenCode>
         where TTokenCode : struct
     {
-        internal ScanResult(string text, IEnumerable<IToken<TTokenCode>> tokens)
+        internal ScanResult(string text, IEnumerable<Token<TTokenCode>> tokens)
         {
             Text = (text ?? throw new ArgumentNullException(nameof(text)));
             Tokens = (tokens ?? throw new ArgumentNullException(nameof(tokens)));
@@ -18,6 +19,6 @@ namespace Mup
 
         internal string Text { get; }
 
-        internal IEnumerable<IToken<TTokenCode>> Tokens { get; }
+        internal IEnumerable<Token<TTokenCode>> Tokens { get; }
     }
 }
