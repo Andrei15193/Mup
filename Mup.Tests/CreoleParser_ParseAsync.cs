@@ -356,6 +356,8 @@ namespace Mup.Tests
         [InlineData("# no [[ hyperlink", "<ol><li>no [[ hyperlink</li></ol>")]
         [InlineData("# no {{ image", "<ol><li>no {{ image</li></ol>")]
         [InlineData("# no {{{ code", "<ol><li>no {{{ code</li></ol>")]
+        [InlineData("* list 1\n\n*list 2", "<ul><li>list 1</li></ul><ul><li>list 2</li></ul>")]
+        [InlineData("# list 1\n\n#list 2", "<ol><li>list 1</li></ol><ol><li>list 2</li></ol>")]
         public async Task ParseListsToHtml(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
