@@ -61,8 +61,27 @@ namespace Mup.Creole.ElementFactories
                         {
                             var contentStart = token;
 
-                            while (token.Next != null && !ContainsLineFeed(token))
-                                token = token.Next;
+                            var isInListItem = true;
+                            while (token.Next != null && isInListItem)
+                            {
+                                switch (FindLineFeeds(token).Take(2).Count())
+                                {
+                                    case 1:
+                                        if (token.Next.Code != Asterisk && token.Next.Code != Hash)
+                                            token = token.Next;
+                                        else
+                                            isInListItem = false;
+                                        break;
+
+                                    case 2:
+                                        isInListItem = false;
+                                        break;
+
+                                    default:
+                                        token = token.Next;
+                                        break;
+                                }
+                            }
 
                             listElementInfos.Peek().ItemInfos.Add(new ListItemElementInfo(_GetListItemContent(contentStart, token)));
 
