@@ -61,7 +61,7 @@ namespace Mup.Creole.ElementFactories
 
                             listElementInfos.Peek().ItemInfos.Add(new ListItemElementInfo(_GetListItemContent(contentStart, token)));
 
-                            if (token.Next != null && (token.Next.Code == Asterisk || token.Next.Code == Hash))
+                            if (token.Next != null && (token.Next.Code == Asterisk || token.Next.Code == Hash) && !FindLineFeeds(token).Skip(1).Any())
                             {
                                 token = token.Next;
                                 isValidList = true;
