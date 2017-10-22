@@ -358,6 +358,14 @@ namespace Mup.Tests
         [InlineData("# no {{{ code", "<ol><li>no {{{ code</li></ol>")]
         [InlineData("* list 1\n\n*list 2", "<ul><li>list 1</li></ul><ul><li>list 2</li></ul>")]
         [InlineData("# list 1\n\n#list 2", "<ol><li>list 1</li></ol><ol><li>list 2</li></ol>")]
+        [InlineData("*item 1\n***invalid sub-item", "<ul><li>item 1</li></ul><p>***invalid sub-item</p>")]
+        [InlineData("*item 1\n###invalid sub-item", "<ul><li>item 1</li></ul><p>###invalid sub-item</p>")]
+        [InlineData("#item 1\n***invalid sub-item", "<ol><li>item 1</li></ol><p>***invalid sub-item</p>")]
+        [InlineData("#item 1\n###invalid sub-item", "<ol><li>item 1</li></ol><p>###invalid sub-item</p>")]
+        [InlineData("*item 1\n*** invalid sub-item", "<ul><li>item 1</li></ul><p>*** invalid sub-item</p>")]
+        [InlineData("*item 1\n### invalid sub-item", "<ul><li>item 1</li></ul><p>### invalid sub-item</p>")]
+        [InlineData("#item 1\n*** invalid sub-item", "<ol><li>item 1</li></ol><p>*** invalid sub-item</p>")]
+        [InlineData("#item 1\n### invalid sub-item", "<ol><li>item 1</li></ol><p>### invalid sub-item</p>")]
         public async Task ParseListsToHtml(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());

@@ -35,7 +35,12 @@ namespace Mup.Creole.ElementFactories
                     }
 
                     if (listLevel > listElementInfos.Count + 1)
+                    {
                         isValidList = false;
+                        do
+                            token = token.Previous;
+                        while (token.Code != WhiteSpace);
+                    }
                     else
                     {
                         if (listLevel > listElementInfos.Count)
