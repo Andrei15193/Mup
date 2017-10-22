@@ -62,9 +62,9 @@ namespace Mup.Creole.ElementFactories
                 {
                     var gapRanges = _GetGapRanges(hyperlinkElementInfo.ContentStart, hyperlinkElementInfo.ContentEnd, hyperlinkElementInfo.Children);
                     if (canContainEmphasis)
-                        fontStyleElementInfos = _GetCrossRangeElementInfos(_CreateEmphasisElementInfo, CreoleTokenCode.Slash, gapRanges);
+                        fontStyleElementInfos = _GetCrossRangeElementInfos(_CreateEmphasisElementInfo, Slash, gapRanges);
                     else if (canContainStrong)
-                        fontStyleElementInfos = _GetCrossRangeElementInfos(_CreateStrongElementInfo, CreoleTokenCode.Asterisk, gapRanges);
+                        fontStyleElementInfos = _GetCrossRangeElementInfos(_CreateStrongElementInfo, Asterisk, gapRanges);
                 }
 
                 if (fontStyleElementInfos != null)
@@ -144,6 +144,7 @@ namespace Mup.Creole.ElementFactories
                         {
                             yield return elementInfoFactory(elementInfoStart, token);
                             elementInfoStart = null;
+                            token = token.Next;
                         }
                         else
                             token = token.Next;
