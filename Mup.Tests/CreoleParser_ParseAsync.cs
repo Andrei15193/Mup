@@ -476,6 +476,8 @@ namespace Mup.Tests
 
         [InlineData("test <<test>> test", "<p>test <!-- test --> test</p>")]
         [InlineData("test\n\n<<test>>\n\ntest", "<p>test</p><!-- test --><p>test</p>")]
+
+        [InlineData("plain **bold 1*** plain ****bold 2***** plain", "<p>plain <strong>bold 1</strong>* plain **<strong>bold 2</strong>*** plain</p>")]
         public async Task ParsesRichTextToHtml(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
