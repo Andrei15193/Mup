@@ -25,7 +25,7 @@ export default class extends React.PureComponent {
                 </ol>
                 <h2>InlineHyperlinkProtocols Property</h2>
                 <p>The protocols to consider when parsing inline hyperlinks (e.g.: http, https, ftp and so on). The defauts are <code>http</code> and <code>https</code>.</p>
-                <pre><code><span class={Bootstrap.textPrimary}>public</span> IEnumerable&lt;<span class={Bootstrap.textPrimary}>string</span>&gt; InlineHyperlinkProtocols {"{"} {"}"}</code></pre>
+                <pre><code><span class={Bootstrap.textPrimary}>public</span> IEnumerable&lt;<span class={Bootstrap.textPrimary}>string</span>&gt; InlineHyperlinkProtocols {"{"} <span class={Bootstrap.textPrimary}>get</span>; <span class={Bootstrap.textPrimary}>set</span>; {"}"}</code></pre>
                 <h3>Exceptions</h3>
                 <ul>
                     <li><strong><a href="https://msdn.microsoft.com/en-us/library/system.argumentnullexception.aspx">ArgumentNullException</a></strong>: Thrown when the value is set to <code>null</code>.</li>

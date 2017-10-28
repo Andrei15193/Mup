@@ -32,7 +32,7 @@ export default class extends React.PureComponent {
                 </ul>
                 <h3>Exceptions</h3>
                 <ul>
-                    <li><strong><a href="https://msdn.microsoft.com/en-us/library/system.argumentnullexception.aspx">ArgumentNullException</a></strong>: Thrown when options is null.</li>
+                    <li><strong><a href="https://msdn.microsoft.com/en-us/library/system.argumentnullexception.aspx">ArgumentNullException</a></strong>: Thrown when options are null.</li>
                 </ul>
             </div>
         );

@@ -25,7 +25,7 @@ export default class extends React.PureComponent {
                 </ol>
                 <h2>Options Property</h2>
                 <p>The options used by the parser.</p>
-                <pre><code><span class={Bootstrap.textPrimary}>public</span> CreoleParserOptions Options {"{"} {"}"}</code></pre>
+                <pre><code><span class={Bootstrap.textPrimary}>public</span> CreoleParserOptions Options {"{"} <span class={Bootstrap.textPrimary}>get</span>; {"}"}</code></pre>
             </div>
         );
     }
