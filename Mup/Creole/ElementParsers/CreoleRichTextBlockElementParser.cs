@@ -177,11 +177,8 @@ namespace Mup.Creole.ElementParsers
             for (var token = start; token != end.Next; token = token.Next)
                 if (hyperlinkElementInfo != null)
                 {
-                    if (hyperlinkElementInfo.ContentStart == null)
-                        if (token.Code == WhiteSpace)
-                            hyperlinkElementInfo = null;
-                        else if (token.Code == Pipe)
-                            hyperlinkElementInfo.ContentStart = token.Next;
+                    if (hyperlinkElementInfo.ContentStart == null && token.Code == Pipe)
+                        hyperlinkElementInfo.ContentStart = token.Next;
 
                     if (token.Previous.Code == BracketClose && token.Code == BracketClose)
                     {
@@ -230,11 +227,8 @@ namespace Mup.Creole.ElementParsers
             for (var token = start; token != end.Next; token = token.Next)
                 if (imageElementInfo != null)
                 {
-                    if (imageElementInfo.ContentStart == null)
-                        if (token.Code == WhiteSpace)
-                            imageElementInfo = null;
-                        else if (token.Code == Pipe)
-                            imageElementInfo.ContentStart = token.Next;
+                    if (imageElementInfo.ContentStart == null && token.Code == Pipe)
+                        imageElementInfo.ContentStart = token.Next;
 
                     if (token.Previous.Code == BraceClose && token.Code == BraceClose)
                     {
@@ -246,7 +240,7 @@ namespace Mup.Creole.ElementParsers
                         imageElementInfo = null;
                     }
                 }
-                else if (token.Code == BraceOpen && token.Next?.Code == BraceOpen && token.Next?.Next?.Code != BraceOpen)
+                else if (token.Code == BraceOpen && token.Next?.Code == BraceOpen && token.Next?.Next?.Code != BraceOpen && token.Previous?.Code != BraceOpen)
                     imageElementInfo = new ElementInfo(Image)
                     {
                         Start = token

@@ -462,6 +462,8 @@ namespace Mup.Tests
         [InlineData("[[http://example.com/~~|//emphasis// and **strong**]]", "<p><a href=\"http://example.com/~\"><em>emphasis</em> and <strong>strong</strong></a></p>")]
         [InlineData("[[http://example.com/~~|//no emphasis]]//", "<p><a href=\"http://example.com/~\">//no emphasis</a>//</p>")]
         [InlineData("[[http://example.com/~~|**no strong]]**", "<p><a href=\"http://example.com/~\">**no strong</a>**</p>")]
+        [InlineData("[[this is a link]]", "<p><a href=\"this is a link\">this is a link</a></p>")]
+        [InlineData("[[this is a link|with a different name]]", "<p><a href=\"this is a link\">with a different name</a></p>")]
 
         [InlineData("{{http://example.com/image.jpg}}", "<p><img src=\"http://example.com/image.jpg\"></p>")]
         [InlineData("~{{http://example.com/image.jpg}}", "<p>{{<a href=\"http://example.com/image.jpg\">http://example.com/image.jpg</a>}}</p>")]
@@ -470,6 +472,8 @@ namespace Mup.Tests
         [InlineData("{{http://example.com/image.jpg|//no emphasised alternative text//}}", "<p><img src=\"http://example.com/image.jpg\" alt=\"//no emphasised alternative text//\"></p>")]
         [InlineData("{http://example.com/image.jpg}}", "<p>{<a href=\"http://example.com/image.jpg\">http://example.com/image.jpg</a>}}</p>")]
         [InlineData("{{http://example.com/image.jpg}", "<p>{{<a href=\"http://example.com/image.jpg\">http://example.com/image.jpg</a>}</p>")]
+        [InlineData("{{this is a link}}", "<p><img src=\"this is a link\"></p>")]
+        [InlineData("{{this is a link|with an alternative text}}", "<p><img src=\"this is a link\" alt=\"with an alternative text\"></p>")]
 
         [InlineData(@"line\\break", @"<p>line<br>break</p>")]
         [InlineData(@"line~\\break", @"<p>line\\break</p>")]
