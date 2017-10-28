@@ -5,8 +5,8 @@ namespace Mup.Creole.ElementFactories
 {
     internal class CreoleHorizontalRuleElementFactory : CreoleElementFactory
     {
-        internal CreoleHorizontalRuleElementFactory(string text)
-            : base(text)
+        internal CreoleHorizontalRuleElementFactory(CreoleParserContext context)
+            : base(context)
         {
         }
 

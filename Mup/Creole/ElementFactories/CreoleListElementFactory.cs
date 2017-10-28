@@ -7,8 +7,8 @@ namespace Mup.Creole.ElementFactories
 {
     internal class CreoleListElementFactory : CreoleRichTextBlockElementFactory
     {
-        internal CreoleListElementFactory(string text, IEnumerable<string> inlineHyperlinkProtocols)
-            : base(text, inlineHyperlinkProtocols)
+        internal CreoleListElementFactory(CreoleParserContext context)
+            : base(context)
         {
         }
 

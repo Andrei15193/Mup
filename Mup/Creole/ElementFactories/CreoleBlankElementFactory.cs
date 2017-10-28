@@ -5,8 +5,8 @@ namespace Mup.Creole.ElementFactories
 {
     internal class CreoleBlankElementFactory : CreoleElementFactory
     {
-        internal CreoleBlankElementFactory(string text)
-            : base(text)
+        internal CreoleBlankElementFactory(CreoleParserContext context)
+            : base(context)
         {
         }
 

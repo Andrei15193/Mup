@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -7,8 +6,8 @@ namespace Mup.Creole.ElementFactories
 {
     internal class CreoleParagraphElementFactory : CreoleRichTextBlockElementFactory
     {
-        internal CreoleParagraphElementFactory(string text, IEnumerable<string> inlineHyperlinkProtocols)
-            : base(text, inlineHyperlinkProtocols)
+        internal CreoleParagraphElementFactory(CreoleParserContext context)
+            : base(context)
         {
         }
 
