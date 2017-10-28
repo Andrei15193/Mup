@@ -28,7 +28,7 @@ export default class extends React.PureComponent {
                 <pre><code><span class={Bootstrap.textPrimary}>protected</span> <span class={Bootstrap.textPrimary}>virtual</span> Task VisitCodeFragmentAsync(<span class={Bootstrap.textPrimary}>string</span> fragment, CancellationToken cancellationToken)</code></pre>
                 <h3>Parameters</h3>
                 <ul>
-                    <li><strong>fragment</strong>: The preformatted text.</li>
+                    <li><strong>fragment</strong>: The code fragment.</li>
                     <li><strong>cancellationToken</strong>: A token that can be used to signal a cancellation request.</li>
                 </ul>
                 <h3>Returns</h3>

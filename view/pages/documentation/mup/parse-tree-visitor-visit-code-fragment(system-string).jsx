@@ -28,7 +28,7 @@ export default class extends React.PureComponent {
                 <pre><code><span class={Bootstrap.textPrimary}>protected</span> <span class={Bootstrap.textPrimary}>virtual</span> <span class={Bootstrap.textPrimary}>void</span> VisitCodeFragment(<span class={Bootstrap.textPrimary}>string</span> fragment)</code></pre>
                 <h3>Parameters</h3>
                 <ul>
-                    <li><strong>fragment</strong>: The preformatted text.</li>
+                    <li><strong>fragment</strong>: The code fragment.</li>
                 </ul>
             </div>
         );
