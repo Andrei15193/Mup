@@ -1,10 +1,10 @@
 ﻿using Mup.Creole.Elements;
 
-namespace Mup.Creole.ElementFactories
+namespace Mup.Creole.ElementParsers
 {
-    internal class CreoleFactoryResult
+    internal class CreoleElementParserResult
     {
-        internal CreoleFactoryResult(CreoleToken start, CreoleToken end, CreoleElement element)
+        internal CreoleElementParserResult(CreoleToken start, CreoleToken end, CreoleElement element)
         {
             Start = start;
             End = end;

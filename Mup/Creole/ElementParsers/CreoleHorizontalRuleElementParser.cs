@@ -1,18 +1,18 @@
 ﻿using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 
-namespace Mup.Creole.ElementFactories
+namespace Mup.Creole.ElementParsers
 {
-    internal class CreoleHorizontalRuleElementFactory : CreoleElementFactory
+    internal class CreoleHorizontalRuleElementParser : CreoleElementParser
     {
-        internal CreoleHorizontalRuleElementFactory(CreoleParserContext context)
+        internal CreoleHorizontalRuleElementParser(CreoleParserContext context)
             : base(context)
         {
         }
 
-        internal override CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end)
+        internal override CreoleElementParserResult TryCreateFrom(CreoleToken start, CreoleToken end)
         {
-            CreoleFactoryResult result = null;
+            CreoleElementParserResult result = null;
 
             if (start.Code == Dash)
             {
@@ -27,7 +27,7 @@ namespace Mup.Creole.ElementFactories
                 if (dashCount >= 4 && (start.Next == end || ContainsLineFeed(start.Next)))
                 {
                     var endToken = start;
-                    result = new CreoleFactoryResult(startToken, endToken, new CreoleHorizontalRuleElement());
+                    result = new CreoleElementParserResult(startToken, endToken, new CreoleHorizontalRuleElement());
                 }
             }
 

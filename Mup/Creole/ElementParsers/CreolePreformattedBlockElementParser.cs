@@ -3,20 +3,20 @@ using System.Text;
 using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 
-namespace Mup.Creole.ElementFactories
+namespace Mup.Creole.ElementParsers
 {
-    internal class CreolePreformattedBlockElementFactory : CreoleElementFactory
+    internal class CreolePreformattedBlockElementParser : CreoleElementParser
     {
         private bool _canCreate = true;
 
-        internal CreolePreformattedBlockElementFactory(CreoleParserContext context)
+        internal CreolePreformattedBlockElementParser(CreoleParserContext context)
             : base(context)
         {
         }
 
-        internal override CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end)
+        internal override CreoleElementParserResult TryCreateFrom(CreoleToken start, CreoleToken end)
         {
-            CreoleFactoryResult result = null;
+            CreoleElementParserResult result = null;
 
             if (_canCreate && _IsBeginningOfPreformattedBlock(start))
             {
@@ -30,7 +30,7 @@ namespace Mup.Creole.ElementFactories
                 {
                     var preformattedText = _GetPreformattedText(startToken.Next.Next, endToken.Previous.Previous);
                     var preformattedElement = new CreolePreformattedBlockElement(preformattedText);
-                    result = new CreoleFactoryResult(startToken, endToken, preformattedElement);
+                    result = new CreoleElementParserResult(startToken, endToken, preformattedElement);
                 }
                 else
                     _canCreate = false;

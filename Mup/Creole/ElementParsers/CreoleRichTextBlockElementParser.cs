@@ -5,21 +5,18 @@ using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 using static Mup.RichTextElementType;
 
-namespace Mup.Creole.ElementFactories
+namespace Mup.Creole.ElementParsers
 {
-    internal class CreoleRichTextParser
+    internal abstract class CreoleRichTextBlockElementParser : CreoleElementParser
     {
-        private readonly CreoleParserContext _context;
-
-        internal CreoleRichTextParser(CreoleParserContext context)
+        internal CreoleRichTextBlockElementParser(CreoleParserContext context)
+            : base(context)
         {
-            _context = context;
         }
 
-        internal IEnumerable<CreoleElement> Parse(CreoleToken start, CreoleToken end)
+        protected IEnumerable<CreoleElement> CreateRichTextElementsFrom(CreoleToken start, CreoleToken end)
         {
-            var hyperlinkElementInfos = _GetHyperlinkElementInfos(start, end)
-                .ToList();
+            var hyperlinkElementInfos = new List<ElementInfo>(_GetHyperlinkElementInfos(start, end));
             var codeElementInfos = _GetCodeElementInfos(start, end);
             var imageElementInfos = _GetImageElementInfos(start, end);
             var pluginElementInfos = _GetPluginElementInfos(start, end);
@@ -309,7 +306,7 @@ namespace Mup.Creole.ElementFactories
 
         private bool _IsInlineHyperlinkProtocol(CreoleToken token)
         {
-            using (var inlineHyperlinkProtocol = _context.InlineHyperlinkProtocols.GetEnumerator())
+            using (var inlineHyperlinkProtocol = Context.InlineHyperlinkProtocols.GetEnumerator())
             {
                 var foundMatch = false;
 
@@ -319,7 +316,7 @@ namespace Mup.Creole.ElementFactories
                     if (protocol.Length == token.Length)
                     {
                         var protocolIndex = 0;
-                        while (protocolIndex < protocol.Length && char.ToLowerInvariant(_context.Text[token.StartIndex + protocolIndex]) == char.ToLowerInvariant(protocol[protocolIndex]))
+                        while (protocolIndex < protocol.Length && char.ToLowerInvariant(Context.Text[token.StartIndex + protocolIndex]) == char.ToLowerInvariant(protocol[protocolIndex]))
                             protocolIndex++;
                         foundMatch = (protocolIndex == protocol.Length);
                     }
@@ -354,7 +351,7 @@ namespace Mup.Creole.ElementFactories
             else
                 return null;
 
-            if (token != end && token.Code == Punctuation && token.Length == 1 && _context.Text[token.StartIndex] == ':')
+            if (token != end && token.Code == Punctuation && token.Length == 1 && Context.Text[token.StartIndex] == ':')
                 token = token.Next;
             else
                 return null;
@@ -381,7 +378,7 @@ namespace Mup.Creole.ElementFactories
                         else
                             token = token.Next;
                         break;
-                    case Punctuation when (token.Previous.Code == CreoleTokenCode.Text && token.Next?.Code == CreoleTokenCode.Text && token.Length == 1 && _context.Text[token.StartIndex] == '.'):
+                    case Punctuation when (token.Previous.Code == CreoleTokenCode.Text && token.Next?.Code == CreoleTokenCode.Text && token.Length == 1 && Context.Text[token.StartIndex] == '.'):
                         containsDot = true;
                         if (token.Next == end)
                             processingDomainName = false;
@@ -397,7 +394,7 @@ namespace Mup.Creole.ElementFactories
             if (!containsDot)
                 return null;
             if (token.Code == Punctuation && token.Next != end && token.Next?.Next != end)
-                if (token.Length == 1 && _context.Text[token.StartIndex] == ':' && _IsNumber(token.Next))
+                if (token.Length == 1 && Context.Text[token.StartIndex] == ':' && _IsNumber(token.Next))
                     token = token.Next.Next;
                 else
                     return new ElementInfo(InlineHyperlink)
@@ -432,7 +429,7 @@ namespace Mup.Creole.ElementFactories
             var index = token.StartIndex;
             while (index < token.EndIndex && isDigit)
             {
-                var character = _context.Text[index];
+                var character = Context.Text[index];
                 if ('0' <= character && character <= '9')
                     index++;
                 else
@@ -449,7 +446,7 @@ namespace Mup.Creole.ElementFactories
             var index = token.StartIndex;
             while (index < token.EndIndex && isEnglishLetter)
             {
-                var character = char.ToLowerInvariant(_context.Text[index]);
+                var character = char.ToLowerInvariant(Context.Text[index]);
                 if ('a' <= character && character <= 'z')
                     index++;
                 else
@@ -604,7 +601,7 @@ namespace Mup.Creole.ElementFactories
             {
                 if (previousTextStart != elementInfo.Start)
                 {
-                    var plainText = _context.Text.Substring(previousTextStart, elementInfo.Start);
+                    var plainText = Context.Text.Substring(previousTextStart, elementInfo.Start);
                     elements.Add(new CreoleTextElement(plainText));
                 }
 
@@ -616,7 +613,7 @@ namespace Mup.Creole.ElementFactories
             }
             if (previousTextStart != end.Next)
             {
-                var plainText = _context.Text.Substring(previousTextStart, end.Next);
+                var plainText = Context.Text.Substring(previousTextStart, end.Next);
                 elements.Add(new CreoleTextElement(plainText));
             }
 
@@ -668,12 +665,12 @@ namespace Mup.Creole.ElementFactories
             if (elementInfo.ContentStart != null)
             {
                 var childElements = _CreateElements(elementInfo.ContentStart, elementInfo.Children, elementInfo.ContentEnd);
-                var destination = _context.Text.Substring(elementInfo.Start.Next.Next, elementInfo.ContentStart.Previous);
+                var destination = Context.Text.Substring(elementInfo.Start.Next.Next, elementInfo.ContentStart.Previous);
                 return new CreoleHyperlinkElement(destination, childElements);
             }
             else
             {
-                var destination = _context.Text.Substring(elementInfo.Start.Next.Next, elementInfo.End.Previous);
+                var destination = Context.Text.Substring(elementInfo.Start.Next.Next, elementInfo.End.Previous);
                 return new CreoleHyperlinkElement(destination, new[] { new CreoleTextElement(destination) });
             }
         }
@@ -682,13 +679,13 @@ namespace Mup.Creole.ElementFactories
         {
             if (elementInfo.ContentStart != null)
             {
-                var alternativeText = _context.Text.Substring(elementInfo.ContentStart, elementInfo.ContentEnd.Next);
-                var source = _context.Text.Substring(elementInfo.Start.Next.Next, elementInfo.ContentStart.Previous);
+                var alternativeText = Context.Text.Substring(elementInfo.ContentStart, elementInfo.ContentEnd.Next);
+                var source = Context.Text.Substring(elementInfo.Start.Next.Next, elementInfo.ContentStart.Previous);
                 return new CreoleImageElement(source, alternativeText);
             }
             else
             {
-                var source = _context.Text.Substring(elementInfo.Start.Next.Next, elementInfo.End.Previous);
+                var source = Context.Text.Substring(elementInfo.Start.Next.Next, elementInfo.End.Previous);
                 return new CreoleImageElement(source);
             }
         }
@@ -697,19 +694,19 @@ namespace Mup.Creole.ElementFactories
         {
             if (elementInfo.Start.Code == Tilde)
             {
-                var escapedUrl = _context.Text.Substring(elementInfo.Start.Next, elementInfo.End.Next);
+                var escapedUrl = Context.Text.Substring(elementInfo.Start.Next, elementInfo.End.Next);
                 return new CreoleTextElement(escapedUrl);
             }
             else
             {
-                var destination = _context.Text.Substring(elementInfo.Start, elementInfo.End.Next);
+                var destination = Context.Text.Substring(elementInfo.Start, elementInfo.End.Next);
                 return new CreoleHyperlinkElement(destination, new[] { new CreoleTextElement(destination) });
             }
         }
 
         private CreoleElement _CreateCodeElement(ElementInfo elementInfo)
         {
-            var code = _context.Text.Substring(elementInfo.ContentStart, elementInfo.ContentEnd.Next);
+            var code = Context.Text.Substring(elementInfo.ContentStart, elementInfo.ContentEnd.Next);
             return new CreoleCodeElement(code);
         }
 
@@ -730,11 +727,11 @@ namespace Mup.Creole.ElementFactories
 
         private CreoleElement _CreatePluginElement(ElementInfo elementInfo)
         {
-            var pluginText = _context.Text.Substring(elementInfo.ContentStart, elementInfo.ContentEnd.Next);
+            var pluginText = Context.Text.Substring(elementInfo.ContentStart, elementInfo.ContentEnd.Next);
             return new CreolePluginElement(pluginText);
         }
 
-        internal sealed class ElementInfo
+        private sealed class ElementInfo
         {
             internal ElementInfo(RichTextElementType type)
             {

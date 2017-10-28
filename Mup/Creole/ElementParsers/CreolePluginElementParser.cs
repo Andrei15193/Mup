@@ -1,20 +1,20 @@
 ﻿using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 
-namespace Mup.Creole.ElementFactories
+namespace Mup.Creole.ElementParsers
 {
-    internal class CreolePluginElementFactory : CreoleElementFactory
+    internal class CreolePluginElementParser : CreoleElementParser
     {
         private bool _canCreate = true;
 
-        internal CreolePluginElementFactory(CreoleParserContext context)
+        internal CreolePluginElementParser(CreoleParserContext context)
             : base(context)
         {
         }
 
-        internal override CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end)
+        internal override CreoleElementParserResult TryCreateFrom(CreoleToken start, CreoleToken end)
         {
-            CreoleFactoryResult result = null;
+            CreoleElementParserResult result = null;
 
             if (_canCreate && start.Code == AngleOpen && start.Next?.Code == AngleOpen)
             {
@@ -32,7 +32,7 @@ namespace Mup.Creole.ElementFactories
                     var pluginTextEndIndex = endToken.Previous.Previous.EndIndex;
                     var pluginTextLength = (pluginTextEndIndex - pluginTextStartIndex);
                     var pluginText = Context.Text.Substring(pluginTextStartIndex, pluginTextLength);
-                    result = new CreoleFactoryResult(startToken, endToken, new CreolePluginElement(pluginText));
+                    result = new CreoleElementParserResult(startToken, endToken, new CreolePluginElement(pluginText));
                 }
             }
 
