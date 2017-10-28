@@ -2,16 +2,16 @@
 using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 
-namespace Mup.Creole.ElementFactories
+namespace Mup.Creole.ElementParsers
 {
-    internal abstract class CreoleElementFactory
+    internal abstract class CreoleElementParser
     {
-        protected CreoleElementFactory(CreoleParserContext context)
+        protected CreoleElementParser(CreoleParserContext context)
         {
             Context = context;
         }
 
-        internal abstract CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end);
+        internal abstract CreoleElementParserResult TryCreateFrom(CreoleToken start, CreoleToken end);
 
         protected static IEnumerable<CreoleTextElement> EmptyContent { get; } = new[] { new CreoleTextElement(string.Empty) };
 

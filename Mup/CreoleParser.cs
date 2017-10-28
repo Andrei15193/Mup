@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Mup.Creole;
-using Mup.Creole.ElementFactories;
+using Mup.Creole.ElementParsers;
 using Mup.Creole.Elements;
 using Mup.Creole.Scanner;
 using static Mup.Creole.CreoleTokenCode;
@@ -140,22 +140,22 @@ namespace Mup
         {
             private readonly CreoleParserContext _context;
             private readonly IEnumerable<CreoleToken> _tokens;
-            private readonly CreoleParagraphElementFactory _paragraphFactory;
-            private readonly IEnumerable<CreoleElementFactory> _blockElementFactoriesExceptParagraph;
+            private readonly CreoleParagraphElementParser _paragraphParser;
+            private readonly IEnumerable<CreoleElementParser> _blockElementParsersExceptParagraph;
 
             internal CreoleMarkupParser(CreoleScanResult scanResult, IEnumerable<string> inlineHyperlinkProtocols)
             {
                 _context = new CreoleParserContext(scanResult.Text, inlineHyperlinkProtocols);
                 _tokens = scanResult.Tokens;
-                _paragraphFactory = new CreoleParagraphElementFactory(_context);
-                _blockElementFactoriesExceptParagraph = new CreoleElementFactory[]
+                _paragraphParser = new CreoleParagraphElementParser(_context);
+                _blockElementParsersExceptParagraph = new CreoleElementParser[]
                 {
-                    new CreoleHeadingElementFactory(_context),
-                    new CreolePluginElementFactory(_context),
-                    new CreolePreformattedBlockElementFactory(_context),
-                    new CreoleHorizontalRuleElementFactory(_context),
-                    new CreoleTableElementFactory(_context),
-                    new CreoleListElementFactory(_context)
+                    new CreoleHeadingElementParser(_context),
+                    new CreolePluginElementParser(_context),
+                    new CreolePreformattedBlockElementParser(_context),
+                    new CreoleHorizontalRuleElementParser(_context),
+                    new CreoleTableElementParser(_context),
+                    new CreoleListElementParser(_context)
                 };
             }
 
@@ -169,11 +169,11 @@ namespace Mup
                 {
                     if (_IsBlankLine(token.Next))
                     {
-                        var paragraphFactoryResult = _paragraphFactory.TryCreateFrom(paragraphStart, token);
-                        if (paragraphFactoryResult != null)
+                        var paragraphParseResult = _paragraphParser.TryCreateFrom(paragraphStart, token);
+                        if (paragraphParseResult != null)
                         {
-                            blockElements.Add(paragraphFactoryResult.Element);
-                            token = paragraphFactoryResult.End;
+                            blockElements.Add(paragraphParseResult.Element);
+                            token = paragraphParseResult.End;
                             paragraphStart = token.Next;
                         }
                     }
@@ -181,17 +181,17 @@ namespace Mup
                         || (token.Previous.Code == WhiteSpace && token.Previous.Previous == null)
                         || _IsNewLine(token.Previous))
                     {
-                        var factoryResult = _TryCreateBlockElementExceptParagpraphFrom(token);
-                        if (factoryResult != null)
+                        var elementParseResult = _TryCreateBlockElementExceptParagpraphFrom(token);
+                        if (elementParseResult != null)
                         {
-                            if (factoryResult.Start.Previous != null)
+                            if (elementParseResult.Start.Previous != null)
                             {
-                                var paragraphFactoryResult = _paragraphFactory.TryCreateFrom(paragraphStart, factoryResult.Start.Previous);
-                                if (paragraphFactoryResult != null)
-                                    blockElements.Add(paragraphFactoryResult.Element);
+                                var paragraphParseResult = _paragraphParser.TryCreateFrom(paragraphStart, elementParseResult.Start.Previous);
+                                if (paragraphParseResult != null)
+                                    blockElements.Add(paragraphParseResult.Element);
                             }
-                            blockElements.Add(factoryResult.Element);
-                            token = factoryResult.End;
+                            blockElements.Add(elementParseResult.Element);
+                            token = elementParseResult.End;
                             paragraphStart = token.Next;
                         }
                     }
@@ -200,7 +200,7 @@ namespace Mup
                 }
                 if (paragraphStart != null)
                 {
-                    var paragraphElement = _paragraphFactory.TryCreateFrom(paragraphStart, null);
+                    var paragraphElement = _paragraphParser.TryCreateFrom(paragraphStart, null);
                     if (paragraphElement != null)
                         blockElements.Add(paragraphElement.Element);
                 }
@@ -218,11 +218,11 @@ namespace Mup
                 {
                     if (_IsBlankLine(token.Next))
                     {
-                        var paragraphFactoryResult = _paragraphFactory.TryCreateFrom(paragraphStart, token);
-                        if (paragraphFactoryResult != null)
+                        var paragraphParseResult = _paragraphParser.TryCreateFrom(paragraphStart, token);
+                        if (paragraphParseResult != null)
                         {
-                            blockElements.Add(paragraphFactoryResult.Element);
-                            token = paragraphFactoryResult.End;
+                            blockElements.Add(paragraphParseResult.Element);
+                            token = paragraphParseResult.End;
                             paragraphStart = token.Next;
 
                             await Task.Yield();
@@ -233,17 +233,17 @@ namespace Mup
                         || (token.Previous.Code == WhiteSpace && token.Previous.Previous == null)
                         || _IsNewLine(token.Previous))
                     {
-                        var factoryResult = _TryCreateBlockElementExceptParagpraphFrom(token);
-                        if (factoryResult != null)
+                        var elementParseResult = _TryCreateBlockElementExceptParagpraphFrom(token);
+                        if (elementParseResult != null)
                         {
-                            if (factoryResult.Start.Previous != null)
+                            if (elementParseResult.Start.Previous != null)
                             {
-                                var paragraphFactoryResult = _paragraphFactory.TryCreateFrom(paragraphStart, factoryResult.Start.Previous);
-                                if (paragraphFactoryResult != null)
-                                    blockElements.Add(paragraphFactoryResult.Element);
+                                var paragraphParseResult = _paragraphParser.TryCreateFrom(paragraphStart, elementParseResult.Start.Previous);
+                                if (paragraphParseResult != null)
+                                    blockElements.Add(paragraphParseResult.Element);
                             }
-                            blockElements.Add(factoryResult.Element);
-                            token = factoryResult.End;
+                            blockElements.Add(elementParseResult.Element);
+                            token = elementParseResult.End;
                             paragraphStart = token.Next;
 
                             await Task.Yield();
@@ -255,7 +255,7 @@ namespace Mup
                 }
                 if (paragraphStart != null)
                 {
-                    var paragraphElement = _paragraphFactory.TryCreateFrom(paragraphStart, null);
+                    var paragraphElement = _paragraphParser.TryCreateFrom(paragraphStart, null);
                     if (paragraphElement != null)
                         blockElements.Add(paragraphElement.Element);
 
@@ -266,15 +266,15 @@ namespace Mup
                 return new CreoleParseTree(blockElements);
             }
 
-            private CreoleFactoryResult _TryCreateBlockElementExceptParagpraphFrom(CreoleToken token)
+            private CreoleElementParserResult _TryCreateBlockElementExceptParagpraphFrom(CreoleToken token)
             {
-                CreoleFactoryResult factoryResult = null;
+                CreoleElementParserResult elementParseResult = null;
 
-                using (var blockElementFactory = _blockElementFactoriesExceptParagraph.GetEnumerator())
-                    while (factoryResult == null && blockElementFactory.MoveNext())
-                        factoryResult = blockElementFactory.Current.TryCreateFrom(token, null);
+                using (var blockElementParser = _blockElementParsersExceptParagraph.GetEnumerator())
+                    while (elementParseResult == null && blockElementParser.MoveNext())
+                        elementParseResult = blockElementParser.Current.TryCreateFrom(token, null);
 
-                return factoryResult;
+                return elementParseResult;
             }
 
             private CreoleToken _GetFirstNonWhiteSpaceToken()

@@ -1,18 +1,18 @@
 ﻿using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 
-namespace Mup.Creole.ElementFactories
+namespace Mup.Creole.ElementParsers
 {
-    internal class CreoleParagraphElementFactory : CreoleRichTextBlockElementFactory
+    internal class CreoleParagraphElementParser : CreoleRichTextBlockElementParser
     {
-        internal CreoleParagraphElementFactory(CreoleParserContext context)
+        internal CreoleParagraphElementParser(CreoleParserContext context)
             : base(context)
         {
         }
 
-        internal override CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end)
+        internal override CreoleElementParserResult TryCreateFrom(CreoleToken start, CreoleToken end)
         {
-            CreoleFactoryResult result = null;
+            CreoleElementParserResult result = null;
 
             if (start.Code == WhiteSpace)
                 start = start.Next;
@@ -32,7 +32,7 @@ namespace Mup.Creole.ElementFactories
                 {
                     var richTextElements = CreateRichTextElementsFrom(start, end);
                     var paragraphElement = new CreoleParagraphElement(richTextElements);
-                    result = new CreoleFactoryResult(start, end, paragraphElement);
+                    result = new CreoleElementParserResult(start, end, paragraphElement);
                 }
             }
 

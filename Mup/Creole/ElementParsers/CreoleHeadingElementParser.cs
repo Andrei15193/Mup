@@ -3,18 +3,18 @@ using static System.Math;
 using static System.String;
 using static Mup.Creole.CreoleTokenCode;
 
-namespace Mup.Creole.ElementFactories
+namespace Mup.Creole.ElementParsers
 {
-    internal class CreoleHeadingElementFactory : CreoleElementFactory
+    internal class CreoleHeadingElementParser : CreoleElementParser
     {
-        internal CreoleHeadingElementFactory(CreoleParserContext context)
+        internal CreoleHeadingElementParser(CreoleParserContext context)
             : base(context)
         {
         }
 
-        internal override CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end)
+        internal override CreoleElementParserResult TryCreateFrom(CreoleToken start, CreoleToken end)
         {
-            CreoleFactoryResult result = null;
+            CreoleElementParserResult result = null;
 
             if (start.Code == Equal)
             {
@@ -39,7 +39,7 @@ namespace Mup.Creole.ElementFactories
                     {
                         var headingElement = _GetHeadingElement(headingLevel, headingText);
 
-                        result = new CreoleFactoryResult(startToken, (endToken.Next ?? endToken), headingElement);
+                        result = new CreoleElementParserResult(startToken, (endToken.Next ?? endToken), headingElement);
                     }
                 }
             }
