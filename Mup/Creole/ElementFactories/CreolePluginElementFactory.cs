@@ -7,8 +7,8 @@ namespace Mup.Creole.ElementFactories
     {
         private bool _canCreate = true;
 
-        internal CreolePluginElementFactory(string text)
-            : base(text)
+        internal CreolePluginElementFactory(CreoleParserContext context)
+            : base(context)
         {
         }
 
@@ -31,7 +31,7 @@ namespace Mup.Creole.ElementFactories
                     var pluginTextStartIndex = start.Next.Next.StartIndex;
                     var pluginTextEndIndex = end.Previous.Previous.EndIndex;
                     var pluginTextLength = (pluginTextEndIndex - pluginTextStartIndex);
-                    var pluginText = Text.Substring(pluginTextStartIndex, pluginTextLength);
+                    var pluginText = Context.Text.Substring(pluginTextStartIndex, pluginTextLength);
                     result = new CreoleFactoryResult(start, end, new CreolePluginElement(pluginText));
                 }
             }

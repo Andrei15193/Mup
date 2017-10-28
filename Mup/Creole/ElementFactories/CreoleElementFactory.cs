@@ -1,18 +1,21 @@
 ﻿using System.Collections.Generic;
+using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 
 namespace Mup.Creole.ElementFactories
 {
     internal abstract class CreoleElementFactory
     {
-        protected CreoleElementFactory(string text)
+        protected CreoleElementFactory(CreoleParserContext context)
         {
-            Text = text;
+            Context = context;
         }
 
         internal abstract CreoleFactoryResult TryCreateFrom(CreoleToken token);
 
-        protected string Text { get; }
+        protected static IEnumerable<CreoleTextElement> EmptyContent { get; } = new[] { new CreoleTextElement(string.Empty) };
+
+        protected CreoleParserContext Context { get; }
 
         protected bool ContainsLineFeed(CreoleToken token)
         {
@@ -20,7 +23,7 @@ namespace Mup.Creole.ElementFactories
                 return false;
 
             var index = token.StartIndex;
-            while (index < token.EndIndex && Text[index] != '\n')
+            while (index < token.EndIndex && Context.Text[index] != '\n')
                 index++;
             return (index < token.EndIndex);
         }
@@ -30,20 +33,20 @@ namespace Mup.Creole.ElementFactories
                 && (token.Next == null || ContainsLineFeed(token.Next)));
 
         protected bool IsAtBeginningOfLine(CreoleToken token)
-            => (token.Previous == null || Text[token.StartIndex - 1] == '\n');
+            => (token.Previous == null || Context.Text[token.StartIndex - 1] == '\n');
 
         protected bool IsAtEndOfLine(CreoleToken token)
             => (token.Next == null
-                || Text[token.Next.StartIndex] == '\n'
+                || Context.Text[token.Next.StartIndex] == '\n'
                 || (token.Next.Length >= 2
-                    && Text[token.Next.StartIndex] == '\r'
-                    && Text[token.Next.StartIndex + 1] == '\n'));
+                    && Context.Text[token.Next.StartIndex] == '\r'
+                    && Context.Text[token.Next.StartIndex + 1] == '\n'));
 
         protected IEnumerable<CharacterMatch> FindLineFeeds(CreoleToken token)
         {
             if (token?.Code == WhiteSpace)
                 for (var index = token.StartIndex; index < token.EndIndex; index++)
-                    if (Text[index] == '\n')
+                    if (Context.Text[index] == '\n')
                         yield return new CharacterMatch('\n', index);
         }
 

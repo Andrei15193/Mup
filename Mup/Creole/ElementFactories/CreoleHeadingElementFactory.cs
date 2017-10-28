@@ -7,8 +7,8 @@ namespace Mup.Creole.ElementFactories
 {
     internal class CreoleHeadingElementFactory : CreoleElementFactory
     {
-        internal CreoleHeadingElementFactory(string text)
-            : base(text)
+        internal CreoleHeadingElementFactory(CreoleParserContext context)
+            : base(context)
         {
         }
 
@@ -76,17 +76,16 @@ namespace Mup.Creole.ElementFactories
 
         private string _GetHeadingText(CreoleToken startToken, CreoleToken endToken)
         {
-            var headerTextStartIndex = _GetHeaderStartIndex(startToken);
-            var headerTextEndIndex = _GetHeaderEndIndex(endToken);
-            var headerTextLength = (headerTextEndIndex - headerTextStartIndex);
-            var headerText = Text.Substring(headerTextStartIndex, headerTextLength);
+            var headerTextStart = _GetHeaderStart(startToken);
+            var headerTextEnd = _GetHeaderEnd(endToken);
+            var headerText = Context.Text.Substring(headerTextStart, headerTextEnd.Next);
             return headerText;
         }
 
-        private static int _GetHeaderStartIndex(CreoleToken startToken)
-            => (startToken.Code == WhiteSpace ? startToken.Next.StartIndex : startToken.StartIndex);
+        private static CreoleToken _GetHeaderStart(CreoleToken startToken)
+            => (startToken.Code == WhiteSpace ? startToken.Next : startToken);
 
-        private int _GetHeaderEndIndex(CreoleToken endToken)
+        private static CreoleToken _GetHeaderEnd(CreoleToken endToken)
         {
             var endContentToken = endToken;
 
@@ -95,7 +94,7 @@ namespace Mup.Creole.ElementFactories
             if (endContentToken.Code == WhiteSpace)
                 endContentToken = endContentToken.Previous;
 
-            return endContentToken.EndIndex;
+            return endContentToken;
         }
     }
 }

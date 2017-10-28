@@ -9,8 +9,8 @@ namespace Mup.Creole.ElementFactories
     {
         private bool _canCreate = true;
 
-        internal CreolePreformattedBlockElementFactory(string text)
-            : base(text)
+        internal CreolePreformattedBlockElementFactory(CreoleParserContext context)
+            : base(context)
         {
         }
 
@@ -65,7 +65,7 @@ namespace Mup.Creole.ElementFactories
             else if (start.Next.Next == end)
             {
                 var preformattedTextLength = (preformattedTextEndIndex - preformattedTextStartIndex);
-                var preformattedText = Text.Substring(preformattedTextStartIndex, preformattedTextLength);
+                var preformattedText = Context.Text.Substring(preformattedTextStartIndex, preformattedTextLength);
                 return preformattedText;
             }
             else
@@ -74,7 +74,7 @@ namespace Mup.Creole.ElementFactories
                 foreach (var token in CreoleTokenHelper.Enumerate(start.Next, end))
                     if (!(token.Code == Tilde && IsAtBeginningOfLine(token) && token.Length == 1
                         && token.Next?.Code == BraceClose && token.Next.Length == 3 && IsAtEndOfLine(token.Next)))
-                        preformattedTextBuilder.Append(Text, token.StartIndex, token.Length);
+                        preformattedTextBuilder.Append(Context.Text, token.StartIndex, token.Length);
                 _TrimUntilNewLines(preformattedTextBuilder);
 
                 var preformattedText = preformattedTextBuilder.ToString();
@@ -100,7 +100,7 @@ namespace Mup.Creole.ElementFactories
         private int _IndexOfNextLineFeed(int startIndex)
         {
             var index = startIndex;
-            while (Text[index] != '\n')
+            while (Context.Text[index] != '\n')
                 index++;
             return index;
         }
@@ -108,7 +108,7 @@ namespace Mup.Creole.ElementFactories
         private int _IndexOfPreviousLineFeed(int startIndex)
         {
             var index = startIndex;
-            while (Text[index] != '\n')
+            while (Context.Text[index] != '\n')
                 index--;
             return index;
         }
