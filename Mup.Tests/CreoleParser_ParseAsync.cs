@@ -431,6 +431,9 @@ namespace Mup.Tests
         [InlineData("slash with ~///emphasised// text", "<p>slash with /<em>emphasised</em> text</p>")]
         [InlineData("slash with //emphasised~/// text", "<p>slash with <em>emphasised/</em> text</p>")]
 
+        [InlineData("**//strong and emphasised//**", "<p><strong><em>strong and emphasised</em></strong></p>")]
+        [InlineData("//**emphasised and strong**//", "<p><em><strong>emphasised and strong</strong></em></p>")]
+
         [InlineData("http://example.com", "<p><a href=\"http://example.com\">http://example.com</a></p>")]
         [InlineData("http://example.com:8080", "<p><a href=\"http://example.com:8080\">http://example.com:8080</a></p>")]
         [InlineData("http://example.com:8080/test", "<p><a href=\"http://example.com:8080/test\">http://example.com:8080/test</a></p>")]

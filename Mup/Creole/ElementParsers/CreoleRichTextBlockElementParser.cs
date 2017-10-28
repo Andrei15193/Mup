@@ -87,6 +87,12 @@ namespace Mup.Creole.ElementParsers
 
         private static void _MergeToBase(LinkedList<ElementInfo> baseElementInfos, IEnumerable<ElementInfo> elementInfos)
         {
+            _MergeElements(baseElementInfos, elementInfos);
+            _CreateHierarchy(baseElementInfos);
+        }
+
+        private static void _MergeElements(LinkedList<ElementInfo> baseElementInfos, IEnumerable<ElementInfo> elementInfos)
+        {
             var baseElementInfo = baseElementInfos.First;
 
             if (baseElementInfo == null)
@@ -100,14 +106,26 @@ namespace Mup.Creole.ElementParsers
                     {
                         baseElementInfos.AddBefore(baseElementInfo, elementInfo);
                         while (baseElementInfo != null && elementInfo.Contains(baseElementInfo.Value))
-                        {
-                            elementInfo.Children.AddLast(baseElementInfo.Value);
-                            baseElementInfo.Value.Parent = elementInfo;
-                            var nodeToRemove = baseElementInfo;
                             baseElementInfo = baseElementInfo.Next;
-                            baseElementInfos.Remove(nodeToRemove);
-                        }
                     }
+        }
+
+        private static void _CreateHierarchy(LinkedList<ElementInfo> elementInfos)
+        {
+            var parentElementInfoNode = elementInfos.Last?.Previous;
+
+            while (parentElementInfoNode != null)
+            {
+                var parentElementInfo = parentElementInfoNode.Value;
+                while (parentElementInfoNode.Next != null && parentElementInfo.Contains(parentElementInfoNode.Next.Value))
+                {
+                    var childElementInfoNode = parentElementInfoNode.Next;
+                    var childElementInfo = childElementInfoNode.Value;
+                    parentElementInfo.Children.AddFirst(childElementInfo);
+                    elementInfos.Remove(childElementInfoNode);
+                }
+                parentElementInfoNode = parentElementInfoNode.Previous;
+            }
         }
 
         private IEnumerable<CreoleTokenRange> _GetGapRanges(CreoleToken start, CreoleToken end, IEnumerable<ElementInfo> elementInfos)
@@ -563,6 +581,17 @@ namespace Mup.Creole.ElementParsers
                     }
                     else
                     {
+                        if (left.Contains(right))
+                        {
+                            yield return left;
+                            yield return right;
+                        }
+                        else if (right.Contains(left))
+                        {
+                            yield return right;
+                            yield return left;
+                        }
+
                         leftHasValue = leftEnumerator.MoveNext();
                         rightHasValue = rightEnumerator.MoveNext();
                     }
