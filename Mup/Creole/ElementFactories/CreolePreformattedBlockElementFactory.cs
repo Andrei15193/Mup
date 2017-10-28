@@ -14,23 +14,23 @@ namespace Mup.Creole.ElementFactories
         {
         }
 
-        internal override CreoleFactoryResult TryCreateFrom(CreoleToken token)
+        internal override CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end)
         {
             CreoleFactoryResult result = null;
 
-            if (_canCreate && _IsBeginningOfPreformattedBlock(token))
+            if (_canCreate && _IsBeginningOfPreformattedBlock(start))
             {
-                var start = token;
-                var end = token.Next.Next.Next;
+                var startToken = start;
+                var endToken = start.Next.Next.Next;
 
-                while (end != null && !_IsEndingOfPreformattedBlock(end))
-                    end = end.Next;
+                while (endToken != end && !_IsEndingOfPreformattedBlock(endToken))
+                    endToken = endToken.Next;
 
-                if (end != null)
+                if (endToken != end)
                 {
-                    var preformattedText = _GetPreformattedText(start.Next.Next, end.Previous.Previous);
+                    var preformattedText = _GetPreformattedText(startToken.Next.Next, endToken.Previous.Previous);
                     var preformattedElement = new CreolePreformattedBlockElement(preformattedText);
-                    result = new CreoleFactoryResult(start, end, preformattedElement);
+                    result = new CreoleFactoryResult(startToken, endToken, preformattedElement);
                 }
                 else
                     _canCreate = false;

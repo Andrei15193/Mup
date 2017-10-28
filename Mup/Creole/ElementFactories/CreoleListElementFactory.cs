@@ -12,34 +12,34 @@ namespace Mup.Creole.ElementFactories
         {
         }
 
-        internal override CreoleFactoryResult TryCreateFrom(CreoleToken token)
+        internal override CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end)
         {
             CreoleFactoryResult result = null;
 
-            if ((token.Code == Asterisk || token.Code == Hash) && token.Next != null && token.Next.Code != token.Code)
+            if ((start.Code == Asterisk || start.Code == Hash) && start.Next != end && start.Next.Code != start.Code)
             {
-                var start = token;
+                var startToken = start;
                 var listElementInfos = new Stack<ListElementInfo>();
                 var isValidList = true;
 
                 while (isValidList)
                 {
                     var listLevel = 0;
-                    var itemStart = token;
+                    var itemStart = start;
                     var isOrderedList = (itemStart.Code == Hash);
 
-                    while (token.Next != null && token.Code == itemStart.Code)
+                    while (start.Next != end && start.Code == itemStart.Code)
                     {
                         listLevel++;
-                        token = token.Next;
+                        start = start.Next;
                     }
 
                     if (listLevel > listElementInfos.Count + 1)
                     {
                         isValidList = false;
                         do
-                            token = token.Previous;
-                        while (token.Code != WhiteSpace);
+                            start = start.Previous;
+                        while (start.Code != WhiteSpace);
                     }
                     else
                     {
@@ -55,20 +55,20 @@ namespace Mup.Creole.ElementFactories
                         if (listElementInfos.Peek().IsOrdered != isOrderedList)
                         {
                             isValidList = false;
-                            token = itemStart.Previous;
+                            start = itemStart.Previous;
                         }
                         else
                         {
-                            var contentStart = token;
+                            var contentStart = start;
 
                             var isInListItem = true;
-                            while (token.Next != null && isInListItem)
+                            while (start.Next != end && isInListItem)
                             {
-                                switch (FindLineFeeds(token).Take(2).Count())
+                                switch (FindLineFeeds(start).Take(2).Count())
                                 {
                                     case 1:
-                                        if (token.Next.Code != Asterisk && token.Next.Code != Hash)
-                                            token = token.Next;
+                                        if (start.Next.Code != Asterisk && start.Next.Code != Hash)
+                                            start = start.Next;
                                         else
                                             isInListItem = false;
                                         break;
@@ -78,16 +78,16 @@ namespace Mup.Creole.ElementFactories
                                         break;
 
                                     default:
-                                        token = token.Next;
+                                        start = start.Next;
                                         break;
                                 }
                             }
 
-                            listElementInfos.Peek().ItemInfos.Add(new ListItemElementInfo(_GetListItemContent(contentStart, token)));
+                            listElementInfos.Peek().ItemInfos.Add(new ListItemElementInfo(_GetListItemContent(contentStart, start)));
 
-                            if (token.Next != null && (token.Next.Code == Asterisk || token.Next.Code == Hash) && !FindLineFeeds(token).Skip(1).Any())
+                            if (start.Next != end && (start.Next.Code == Asterisk || start.Next.Code == Hash) && !FindLineFeeds(start).Skip(1).Any())
                             {
-                                token = token.Next;
+                                start = start.Next;
                                 isValidList = true;
                             }
                             else
@@ -102,7 +102,7 @@ namespace Mup.Creole.ElementFactories
                     listElementInfos.Peek().ItemInfos.Last().Content.Add(listElement);
                 }
 
-                result = new CreoleFactoryResult(start, token, _CreateListElement(listElementInfos.Pop()));
+                result = new CreoleFactoryResult(startToken, start, _CreateListElement(listElementInfos.Pop()));
             }
 
             return result;

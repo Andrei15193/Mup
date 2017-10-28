@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Mup.Creole;
 using Mup.Creole.ElementFactories;
 using Mup.Creole.Elements;
 using Mup.Creole.Scanner;
+using static Mup.Creole.CreoleTokenCode;
 
 namespace Mup
 {
@@ -138,72 +138,182 @@ namespace Mup
 
         private class CreoleMarkupParser
         {
+            private readonly CreoleParserContext _context;
             private readonly IEnumerable<CreoleToken> _tokens;
-            private readonly IEnumerable<CreoleElementFactory> _blockElementFactories;
+            private readonly CreoleParagraphElementFactory _paragraphFactory;
+            private readonly IEnumerable<CreoleElementFactory> _blockElementFactoriesExceptParagraph;
 
             internal CreoleMarkupParser(CreoleScanResult scanResult, IEnumerable<string> inlineHyperlinkProtocols)
             {
-                var context = new CreoleParserContext(scanResult.Text, inlineHyperlinkProtocols);
-
+                _context = new CreoleParserContext(scanResult.Text, inlineHyperlinkProtocols);
                 _tokens = scanResult.Tokens;
-                _blockElementFactories = new CreoleElementFactory[]
+                _paragraphFactory = new CreoleParagraphElementFactory(_context);
+                _blockElementFactoriesExceptParagraph = new CreoleElementFactory[]
                 {
-                    new CreoleHeadingElementFactory(context),
-                    new CreolePluginElementFactory(context),
-                    new CreolePreformattedBlockElementFactory(context),
-                    new CreoleHorizontalRuleElementFactory(context),
-                    new CreoleTableElementFactory(context),
-                    new CreoleListElementFactory(context),
-                    new CreoleParagraphElementFactory(context),
-                    new CreoleBlankElementFactory(context)
+                    new CreoleHeadingElementFactory(_context),
+                    new CreolePluginElementFactory(_context),
+                    new CreolePreformattedBlockElementFactory(_context),
+                    new CreoleHorizontalRuleElementFactory(_context),
+                    new CreoleTableElementFactory(_context),
+                    new CreoleListElementFactory(_context)
                 };
             }
 
             internal IParseTree Parse()
             {
-                var currentToken = _tokens.FirstOrDefault();
-                if (currentToken == null)
-                    return new CreoleParseTree(Enumerable.Empty<CreoleElement>());
+                var token = _GetFirstNonWhiteSpaceToken();
+                var paragraphStart = token;
 
                 var blockElements = new List<CreoleElement>();
-                do
+                while (token != null)
                 {
-                    var factoryResult = _CreateBlockElementFrom(currentToken);
-                    blockElements.Add(factoryResult.Element);
-                    currentToken = factoryResult.End.Next;
-                } while (currentToken != null);
+                    if (_IsBlankLine(token.Next))
+                    {
+                        var paragraphFactoryResult = _paragraphFactory.TryCreateFrom(paragraphStart, token);
+                        if (paragraphFactoryResult != null)
+                        {
+                            blockElements.Add(paragraphFactoryResult.Element);
+                            token = paragraphFactoryResult.End;
+                            paragraphStart = token.Next;
+                        }
+                    }
+                    else if (token.Previous == null
+                        || (token.Previous.Code == WhiteSpace && token.Previous.Previous == null)
+                        || _IsNewLine(token.Previous))
+                    {
+                        var factoryResult = _TryCreateBlockElementExceptParagpraphFrom(token);
+                        if (factoryResult != null)
+                        {
+                            if (factoryResult.Start.Previous != null)
+                            {
+                                var paragraphFactoryResult = _paragraphFactory.TryCreateFrom(paragraphStart, factoryResult.Start.Previous);
+                                if (paragraphFactoryResult != null)
+                                    blockElements.Add(paragraphFactoryResult.Element);
+                            }
+                            blockElements.Add(factoryResult.Element);
+                            token = factoryResult.End;
+                            paragraphStart = token.Next;
+                        }
+                    }
+
+                    token = token.Next;
+                }
+                if (paragraphStart != null)
+                {
+                    var paragraphElement = _paragraphFactory.TryCreateFrom(paragraphStart, null);
+                    if (paragraphElement != null)
+                        blockElements.Add(paragraphElement.Element);
+                }
+
                 return new CreoleParseTree(blockElements);
             }
 
             internal async Task<IParseTree> ParseAsync(CancellationToken cancellationToken)
             {
-                var currentToken = _tokens.FirstOrDefault();
-                if (currentToken == null)
-                    return new CreoleParseTree(Enumerable.Empty<CreoleElement>());
+                var token = _GetFirstNonWhiteSpaceToken();
+                var paragraphStart = token;
 
                 var blockElements = new List<CreoleElement>();
-                do
+                while (token != null)
                 {
-                    var factoryResult = _CreateBlockElementFrom(currentToken);
-                    blockElements.Add(factoryResult.Element);
-                    currentToken = factoryResult.End.Next;
+                    if (_IsBlankLine(token.Next))
+                    {
+                        var paragraphFactoryResult = _paragraphFactory.TryCreateFrom(paragraphStart, token);
+                        if (paragraphFactoryResult != null)
+                        {
+                            blockElements.Add(paragraphFactoryResult.Element);
+                            token = paragraphFactoryResult.End;
+                            paragraphStart = token.Next;
+
+                            await Task.Yield();
+                            cancellationToken.ThrowIfCancellationRequested();
+                        }
+                    }
+                    else if (token.Previous == null
+                        || (token.Previous.Code == WhiteSpace && token.Previous.Previous == null)
+                        || _IsNewLine(token.Previous))
+                    {
+                        var factoryResult = _TryCreateBlockElementExceptParagpraphFrom(token);
+                        if (factoryResult != null)
+                        {
+                            if (factoryResult.Start.Previous != null)
+                            {
+                                var paragraphFactoryResult = _paragraphFactory.TryCreateFrom(paragraphStart, factoryResult.Start.Previous);
+                                if (paragraphFactoryResult != null)
+                                    blockElements.Add(paragraphFactoryResult.Element);
+                            }
+                            blockElements.Add(factoryResult.Element);
+                            token = factoryResult.End;
+                            paragraphStart = token.Next;
+
+                            await Task.Yield();
+                            cancellationToken.ThrowIfCancellationRequested();
+                        }
+                    }
+
+                    token = token.Next;
+                }
+                if (paragraphStart != null)
+                {
+                    var paragraphElement = _paragraphFactory.TryCreateFrom(paragraphStart, null);
+                    if (paragraphElement != null)
+                        blockElements.Add(paragraphElement.Element);
 
                     await Task.Yield();
                     cancellationToken.ThrowIfCancellationRequested();
-                } while (currentToken != null);
+                }
+
                 return new CreoleParseTree(blockElements);
             }
 
-            private CreoleFactoryResult _CreateBlockElementFrom(CreoleToken token)
+            private CreoleFactoryResult _TryCreateBlockElementExceptParagpraphFrom(CreoleToken token)
             {
                 CreoleFactoryResult factoryResult = null;
-                using (var blockElementFactory = _blockElementFactories.GetEnumerator())
-                    do
-                    {
-                        blockElementFactory.MoveNext();
-                        factoryResult = blockElementFactory.Current.TryCreateFrom(token);
-                    } while (factoryResult == null);
+
+                using (var blockElementFactory = _blockElementFactoriesExceptParagraph.GetEnumerator())
+                    while (factoryResult == null && blockElementFactory.MoveNext())
+                        factoryResult = blockElementFactory.Current.TryCreateFrom(token, null);
+
                 return factoryResult;
+            }
+
+            private CreoleToken _GetFirstNonWhiteSpaceToken()
+            {
+                CreoleToken firstNonWhiteSpaceToken = null;
+                using (var token = _tokens.GetEnumerator())
+                    if (token.MoveNext())
+                    {
+                        firstNonWhiteSpaceToken = token.Current;
+                        while (token.MoveNext() && firstNonWhiteSpaceToken.Code == WhiteSpace)
+                            firstNonWhiteSpaceToken = token.Current;
+                    }
+                return firstNonWhiteSpaceToken;
+            }
+
+            private bool _IsNewLine(CreoleToken token)
+                => _ContainsLineFeeds(token, 1);
+
+            private bool _IsBlankLine(CreoleToken token)
+                => _ContainsLineFeeds(token, 2);
+
+            private bool _ContainsLineFeeds(CreoleToken token, int minCount)
+            {
+                var containsBlankLine = false;
+
+                if (token?.Code == WhiteSpace)
+                {
+                    var index = token.StartIndex;
+                    var lineFeedCount = 0;
+                    while (index < token.EndIndex && lineFeedCount < minCount)
+                    {
+                        if (_context.Text[index] == '\n')
+                            lineFeedCount++;
+                        index++;
+                    }
+                    containsBlankLine = (lineFeedCount >= minCount);
+                }
+
+                return containsBlankLine;
             }
         }
     }

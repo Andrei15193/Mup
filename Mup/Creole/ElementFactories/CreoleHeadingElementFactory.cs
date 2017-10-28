@@ -12,26 +12,26 @@ namespace Mup.Creole.ElementFactories
         {
         }
 
-        internal override CreoleFactoryResult TryCreateFrom(CreoleToken token)
+        internal override CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end)
         {
             CreoleFactoryResult result = null;
 
-            if (token.Code == Equal)
+            if (start.Code == Equal)
             {
-                var startToken = token;
+                var startToken = start;
                 var headingContentStart = startToken.Next;
 
                 var headingLevel = 1;
-                while (headingContentStart != null && headingContentStart.Code == Equal && headingLevel < 6)
+                while (headingContentStart != end && headingContentStart.Code == Equal && headingLevel < 6)
                 {
                     headingLevel++;
                     headingContentStart = headingContentStart.Next;
                 }
 
                 var endToken = headingContentStart;
-                if (endToken != null && !(endToken.Code == WhiteSpace && ContainsLineFeed(endToken)))
+                if (endToken != end && !(endToken.Code == WhiteSpace && ContainsLineFeed(endToken)))
                 {
-                    while (endToken.Next != null && !ContainsLineFeed(endToken.Next))
+                    while (endToken.Next != end && !ContainsLineFeed(endToken.Next))
                         endToken = endToken.Next;
 
                     var headingText = _GetHeadingText(headingContentStart, endToken);

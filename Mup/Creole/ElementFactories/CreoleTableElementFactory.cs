@@ -12,20 +12,22 @@ namespace Mup.Creole.ElementFactories
         {
         }
 
-        internal override CreoleFactoryResult TryCreateFrom(CreoleToken token)
+        internal override CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end)
         {
             CreoleFactoryResult result = null;
 
-            if (_IsTableBeginning(token))
+            if (_IsTableBeginning(start, end))
             {
+                var token = start;
                 var tableStart = token;
+                var tableEnd = token;
                 var rows = new List<CreoleTableRowElement>();
                 do
                 {
                     var cells = new List<CreoleTableCellElement>();
                     var cellStart = token;
                     token = token.Next;
-                    while (token.Next != null && !ContainsLineFeed(token.Next))
+                    while (token.Next != end && !ContainsLineFeed(token.Next))
                     {
                         if (token.Code == Pipe)
                         {
@@ -38,11 +40,10 @@ namespace Mup.Creole.ElementFactories
                     cells.Add(_CreateCell(cellStart, token));
                     rows.Add(new CreoleTableRowElement(cells));
 
-                    if (token.Next?.Next != null)
+                    tableEnd = token;
+                    if (token.Next?.Next != end)
                         token = token.Next.Next;
-                } while (_IsTableRowBeginning(token));
-
-                var tableEnd = (token.Next != null ? token.Previous : token);
+                } while (_IsTableRowBeginning(token, end));
                 result = new CreoleFactoryResult(tableStart, tableEnd, new CreoleTableElement(rows));
             }
 
@@ -80,10 +81,10 @@ namespace Mup.Creole.ElementFactories
                 return CreateRichTextElementsFrom(contentStart, contentEnd);
         }
 
-        private bool _IsTableBeginning(CreoleToken token)
-            => (token.Code == Pipe && token.Next != null && !ContainsLineFeed(token.Next));
+        private bool _IsTableBeginning(CreoleToken token, CreoleToken end)
+            => (token.Code == Pipe && token.Next != end && !ContainsLineFeed(token.Next));
 
-        private bool _IsTableRowBeginning(CreoleToken token)
-            => (_IsTableBeginning(token) && (FindLineFeeds(token.Previous).Take(2).Count() == 1));
+        private bool _IsTableRowBeginning(CreoleToken token, CreoleToken end)
+            => (_IsTableBeginning(token, end) && (FindLineFeeds(token.Previous).Take(2).Count() == 1));
     }
 }

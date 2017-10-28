@@ -10,24 +10,24 @@ namespace Mup.Creole.ElementFactories
         {
         }
 
-        internal override CreoleFactoryResult TryCreateFrom(CreoleToken token)
+        internal override CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end)
         {
             CreoleFactoryResult result = null;
 
-            if (token.Code == Dash)
+            if (start.Code == Dash)
             {
                 var dashCount = 1;
-                var start = token;
-                while (token.Next?.Code == Dash)
+                var startToken = start;
+                while (start.Next != end && start.Next.Code == Dash)
                 {
                     dashCount++;
-                    token = token.Next;
+                    start = start.Next;
                 }
 
-                if (dashCount >= 4 && (token.Next == null || ContainsLineFeed(token.Next)))
+                if (dashCount >= 4 && (start.Next == end || ContainsLineFeed(start.Next)))
                 {
-                    var end = token;
-                    result = new CreoleFactoryResult(start, end, new CreoleHorizontalRuleElement());
+                    var endToken = start;
+                    result = new CreoleFactoryResult(startToken, endToken, new CreoleHorizontalRuleElement());
                 }
             }
 

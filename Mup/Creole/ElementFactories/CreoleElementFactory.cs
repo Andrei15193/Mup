@@ -11,7 +11,7 @@ namespace Mup.Creole.ElementFactories
             Context = context;
         }
 
-        internal abstract CreoleFactoryResult TryCreateFrom(CreoleToken token);
+        internal abstract CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end);
 
         protected static IEnumerable<CreoleTextElement> EmptyContent { get; } = new[] { new CreoleTextElement(string.Empty) };
 

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Mup.Creole.Elements;
+﻿using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 
 namespace Mup.Creole.ElementFactories
@@ -11,21 +10,30 @@ namespace Mup.Creole.ElementFactories
         {
         }
 
-        internal override CreoleFactoryResult TryCreateFrom(CreoleToken token)
+        internal override CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end)
         {
             CreoleFactoryResult result = null;
 
-            if (token.Code != WhiteSpace)
+            if (start.Code == WhiteSpace)
+                start = start.Next;
+
+            if (start != null)
             {
-                var start = token;
-                var end = token;
+                if (end == null)
+                {
+                    end = start;
+                    while (end.Next != null)
+                        end = end.Next;
+                }
+                if (end.Code == WhiteSpace)
+                    end = end.Previous;
 
-                while (end.Next != null && !FindLineFeeds(end.Next).Skip(1).Any())
-                    end = end.Next;
-
-                var richTextElements = CreateRichTextElementsFrom(start, end);
-                var paragraphElement = new CreoleParagraphElement(richTextElements);
-                result = new CreoleFactoryResult(start, (end.Next ?? end), paragraphElement);
+                if (end != null && start.StartIndex <= end.StartIndex)
+                {
+                    var richTextElements = CreateRichTextElementsFrom(start, end);
+                    var paragraphElement = new CreoleParagraphElement(richTextElements);
+                    result = new CreoleFactoryResult(start, end, paragraphElement);
+                }
             }
 
             return result;
