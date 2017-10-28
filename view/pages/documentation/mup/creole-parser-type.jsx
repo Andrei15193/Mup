@@ -63,7 +63,7 @@ export default class extends React.PureComponent {
                             <td>
                                 <Link to={routePath.documentation({ "member": "Mup.CreoleParser.Options" })}>Options</Link>
                             </td>
-                            <td>public set</td>
+                            <td>public get</td>
                             <td>The options used by the parser.</td>
                         </tr>
                     </tbody>
