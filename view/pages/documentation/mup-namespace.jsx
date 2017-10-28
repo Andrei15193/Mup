@@ -46,6 +46,12 @@ export default class extends React.PureComponent {
                         </tr>
                         <tr>
                             <td>
+                                <Link to={routePath.documentation({ member: "Mup.CreoleParserOptions" })}>CreoleParserOptions</Link>
+                            </td>
+                            <td>Specifies options for the <Link to={routePath.documentation({ member: "Mup.CreoleParser" })}>CreoleParser</Link>.</td>
+                        </tr>
+                        <tr>
+                            <td>
                                 <Link to={routePath.documentation({ member: "Mup.HtmlWriterVisitor" })}>HtmlWriterVisitor</Link>
                             </td>
                             <td>A <Link to={routePath.documentation({ member: "Mup.ParseTreeVisitor<TResult>" })}>ParseTreeVisitor&lt;TResult&gt;</Link> implementation for generating HTML from an <Link to={routePath.documentation({ member: "Mup.IParseTree" })}>IParseTree</Link>.</td>

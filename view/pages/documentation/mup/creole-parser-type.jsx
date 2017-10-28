@@ -40,6 +40,13 @@ export default class extends React.PureComponent {
                             <td>public</td>
                             <td>Initializes a new instance of the <Link to={routePath.documentation({ member: "Mup.CreoleParser" })}>CreoleParser</Link> class.</td>
                         </tr>
+                        <tr>
+                            <td>
+                                <Link to={routePath.documentation({ "member": "Mup.CreoleParser.CreoleParser(Mup.CreoleParserOptions)" })}>CreoleParser(CreoleParserOptions)</Link>
+                            </td>
+                            <td>public</td>
+                            <td>Initializes a new instance of the <Link to={routePath.documentation({ member: "Mup.CreoleParser" })}>CreoleParser</Link> class.</td>
+                        </tr>
                     </tbody>
                 </table>
                 <h3>Properties</h3>
@@ -54,10 +61,10 @@ export default class extends React.PureComponent {
                     <tbody>
                         <tr>
                             <td>
-                                <Link to={routePath.documentation({ "member": "Mup.CreoleParser.InlineHyperlinkProtocols" })}>InlineHyperlinkProtocols</Link>
+                                <Link to={routePath.documentation({ "member": "Mup.CreoleParser.Options" })}>Options</Link>
                             </td>
-                            <td>protected get</td>
-                            <td>Gets the protocols for which inline hyperlinks are generated.</td>
+                            <td>public set</td>
+                            <td>The options used by the parser.</td>
                         </tr>
                     </tbody>
                 </table>
