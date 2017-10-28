@@ -12,27 +12,27 @@ namespace Mup.Creole.ElementFactories
         {
         }
 
-        internal override CreoleFactoryResult TryCreateFrom(CreoleToken token)
+        internal override CreoleFactoryResult TryCreateFrom(CreoleToken start, CreoleToken end)
         {
             CreoleFactoryResult result = null;
 
-            if (_canCreate && token.Code == AngleOpen && token.Next?.Code == AngleOpen)
+            if (_canCreate && start.Code == AngleOpen && start.Next?.Code == AngleOpen)
             {
-                var start = token;
-                var end = token.Next.Next;
+                var startToken = start;
+                var endToken = start.Next.Next;
 
-                while (end != null && !(end.Code == AngleClose && end.Previous.Code == AngleClose && IsAtEndOfLine(end)))
-                    end = end.Next;
+                while (endToken != end && !(endToken.Code == AngleClose && endToken.Previous.Code == AngleClose && IsAtEndOfLine(endToken)))
+                    endToken = endToken.Next;
 
-                if (end == null)
+                if (endToken == end)
                     _canCreate = false;
                 else
                 {
-                    var pluginTextStartIndex = start.Next.Next.StartIndex;
-                    var pluginTextEndIndex = end.Previous.Previous.EndIndex;
+                    var pluginTextStartIndex = startToken.Next.Next.StartIndex;
+                    var pluginTextEndIndex = endToken.Previous.Previous.EndIndex;
                     var pluginTextLength = (pluginTextEndIndex - pluginTextStartIndex);
                     var pluginText = Context.Text.Substring(pluginTextStartIndex, pluginTextLength);
-                    result = new CreoleFactoryResult(start, end, new CreolePluginElement(pluginText));
+                    result = new CreoleFactoryResult(startToken, endToken, new CreolePluginElement(pluginText));
                 }
             }
 

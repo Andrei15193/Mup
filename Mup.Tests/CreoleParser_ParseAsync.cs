@@ -240,7 +240,7 @@ namespace Mup.Tests
         [InlineData("\r----", new object[] { HorizontalRule })]
         [InlineData("\n----", new object[] { HorizontalRule })]
         [InlineData("--------", new object[] { HorizontalRule })]
-        [InlineData("paragraph 1\n----\nparagraph 2", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
+        [InlineData("paragraph 1\n----\nparagraph 2", new object[] { ParagraphStart, PlainText, ParagraphEnd, HorizontalRule, ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("~----", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         public async Task ParsesHorizontalRules(string text, object[] marks)
         {
@@ -263,6 +263,9 @@ namespace Mup.Tests
         [InlineData("= plain text {{image}}", "<h1>plain text {{image}}</h1>")]
         [InlineData("= plain text {{image|with title}}", "<h1>plain text {{image|with title}}</h1>")]
         [InlineData("= plain text <<plug in>>", "<h1>plain text &lt;&lt;plug in&gt;&gt;</h1>")]
+        [InlineData("paragraph\n= heading", "<p>paragraph</p><h1>heading</h1>")]
+        [InlineData("paragraph 1\n= heading\nparagraph 2", "<p>paragraph 1</p><h1>heading</h1><p>paragraph 2</p>")]
+        [InlineData("= heading\nparagraph", "<h1>heading</h1><p>paragraph</p>")]
         public async Task ParseHeadingsToHtml(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
@@ -293,6 +296,9 @@ namespace Mup.Tests
         [InlineData("~{{{image}}}", "<p>{<img src=\"image\">}</p>")]
         [InlineData("{{{\ntest", "<p>{{{\ntest</p>")]
         [InlineData("{{{\n\n{{{\nThis is a nowiki markup block showing nowiki markup usage in a wiki (complicated stuff ;)\n~}}}\n\n}}}", "<pre><code>\n{{{\nThis is a nowiki markup block showing nowiki markup usage in a wiki (complicated stuff ;)\n}}}\n</code></pre>")]
+        [InlineData("paragraph\n{{{\ncode\n}}}", "<p>paragraph</p><pre><code>code</code></pre>")]
+        [InlineData("paragraph 1\n{{{\ncode\n}}}\nparagraph 2", "<p>paragraph 1</p><pre><code>code</code></pre><p>paragraph 2</p>")]
+        [InlineData("{{{\ncode\n}}}\nparagraph", "<pre><code>code</code></pre><p>paragraph</p>")]
         public async Task ParsePreforamattedBlocksToHtml(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
@@ -319,6 +325,9 @@ namespace Mup.Tests
         [InlineData("|cell| |", "<table><tbody><tr><td>cell</td><td></td></tr></tbody></table>")]
         [InlineData("||cell|", "<table><tbody><tr><td></td><td>cell</td></tr></tbody></table>")]
         [InlineData("||cell", "<table><tbody><tr><td></td><td>cell</td></tr></tbody></table>")]
+        [InlineData("paragraph\n|cell", "<p>paragraph</p><table><tbody><tr><td>cell</td></tr></tbody></table>")]
+        [InlineData("paragraph 1\n|cell\nparagraph 2", "<p>paragraph 1</p><table><tbody><tr><td>cell</td></tr></tbody></table><p>paragraph 2</p>")]
+        [InlineData("|cell\nparagraph", "<table><tbody><tr><td>cell</td></tr></tbody></table><p>paragraph</p>")]
         public async Task ParseTablesToHtml(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
@@ -366,6 +375,12 @@ namespace Mup.Tests
         [InlineData("*item 1\n### invalid sub-item", "<ul><li>item 1</li></ul><p>### invalid sub-item</p>")]
         [InlineData("#item 1\n*** invalid sub-item", "<ol><li>item 1</li></ol><p>*** invalid sub-item</p>")]
         [InlineData("#item 1\n### invalid sub-item", "<ol><li>item 1</li></ol><p>### invalid sub-item</p>")]
+        [InlineData("paragraph 1\n*item 1\n\nparagraph 2", "<p>paragraph 1</p><ul><li>item 1</li></ul><p>paragraph 2</p>")]
+        [InlineData("paragraph\n*item 1", "<p>paragraph</p><ul><li>item 1</li></ul>")]
+        [InlineData("*item 1\n\nparagraph", "<ul><li>item 1</li></ul><p>paragraph</p>")]
+        [InlineData("paragraph 1\n#item 1\n\nparagraph 2", "<p>paragraph 1</p><ol><li>item 1</li></ol><p>paragraph 2</p>")]
+        [InlineData("paragraph\n#item 1", "<p>paragraph</p><ol><li>item 1</li></ol>")]
+        [InlineData("#item 1\n\nparagraph", "<ol><li>item 1</li></ol><p>paragraph</p>")]
         public async Task ParseListsToHtml(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
@@ -493,7 +508,7 @@ namespace Mup.Tests
         [InlineData("\r----", "<hr>")]
         [InlineData("\n----", "<hr>")]
         [InlineData("--------", "<hr>")]
-        [InlineData("paragraph 1\n----\nsame paragraph", "<p>paragraph 1\n----\nsame paragraph</p>")]
+        [InlineData("paragraph 1\n----\nparagraph 2", "<p>paragraph 1</p><hr><p>paragraph 2</p>")]
         [InlineData("~----", "<p>----</p>")]
         public async Task ParsesHorizontalRuleToHtml(string text, string expectedHtml)
         {
@@ -510,6 +525,9 @@ namespace Mup.Tests
         [InlineData("<<<plug in>>>", "<!-- &lt;plug in&gt; -->")]
         [InlineData("~<<plain text>>", "<p>&lt;&lt;plain text&gt;&gt;</p>")]
         [InlineData("<<test", "<p>&lt;&lt;test</p>")]
+        [InlineData("paragraph\n<<plug in>>", "<p>paragraph</p><!-- plug in -->")]
+        [InlineData("paragraph 1\n<<plug in>>\nparagraph 2", "<p>paragraph 1</p><!-- plug in --><p>paragraph 2</p>")]
+        [InlineData("<<plug in>>\nparagraph", "<!-- plug in --><p>paragraph</p>")]
         public async Task ParsesPluginsToHtml(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
