@@ -104,9 +104,12 @@ namespace Mup.Creole.ElementParsers
                         baseElementInfos.AddLast(elementInfo);
                     else
                     {
-                        baseElementInfos.AddBefore(baseElementInfo, elementInfo);
-                        while (baseElementInfo != null && elementInfo.Contains(baseElementInfo.Value))
+                        while (baseElementInfo != null && baseElementInfo.Value.Start.StartIndex < elementInfo.Start.StartIndex)
                             baseElementInfo = baseElementInfo.Next;
+                        if (baseElementInfo != null)
+                            baseElementInfos.AddBefore(baseElementInfo, elementInfo);
+                        else
+                            baseElementInfos.AddLast(elementInfo);
                     }
         }
 
