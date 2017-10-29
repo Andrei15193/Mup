@@ -464,6 +464,8 @@ namespace Mup.Tests
         [InlineData("[[http://example.com/~~|**no strong]]**", "<p><a href=\"http://example.com/~\">**no strong</a>**</p>")]
         [InlineData("[[this is a link]]", "<p><a href=\"this is a link\">this is a link</a></p>")]
         [InlineData("[[this is a link|with a different name]]", "<p><a href=\"this is a link\">with a different name</a></p>")]
+        [InlineData("//**[[Important page]]**//", "<p><em><strong><a href=\"Important page\">Important page</a></strong></em></p>")]
+        [InlineData("//[[Important page|this link is italicized]]//\n**[[Important page]]**\n//**[[Important page]]**//", "<p><em><a href=\"Important page\">this link is italicized</a></em>\n<strong><a href=\"Important page\">Important page</a></strong>\n<em><strong><a href=\"Important page\">Important page</a></strong></em></p>")]
 
         [InlineData("{{http://example.com/image.jpg}}", "<p><img src=\"http://example.com/image.jpg\"></p>")]
         [InlineData("~{{http://example.com/image.jpg}}", "<p>{{<a href=\"http://example.com/image.jpg\">http://example.com/image.jpg</a>}}</p>")]
