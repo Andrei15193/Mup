@@ -6,7 +6,7 @@ namespace Mup
     /// <summary>Specifies options for the <see cref="CreoleParser"/>.</summary>
     public sealed class CreoleParserOptions
     {
-        private static IReadOnlyCollection<string> _defaultInlineHyperlinkProtocols = new[] { "http", "https", "ftp" };
+        private static IReadOnlyCollection<string> _defaultInlineHyperlinkProtocols = new[] { "http", "https", "ftp", "ftps" };
 
         private IReadOnlyCollection<string> _inlineHyperlinkProtocols;
 
@@ -16,7 +16,7 @@ namespace Mup
             _inlineHyperlinkProtocols = _defaultInlineHyperlinkProtocols;
         }
 
-        /// <summary>The protocols to consider when parsing inline hyperlinks (e.g.: http, https and so on). The defauts are <c>http</c>, <c>https</c> and <c>ftp</c>.</summary>
+        /// <summary>The protocols to consider when parsing inline hyperlinks (e.g.: http, https and so on). The defauts are <c>http</c>, <c>https</c>, <c>ftp</c> and <c>ftps</c>.</summary>
         /// <exception cref="ArgumentNullException">Thrown when the value is set to <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown when the given collection contains <c>null</c>, empty or white space elements.</exception>
         public IEnumerable<string> InlineHyperlinkProtocols
