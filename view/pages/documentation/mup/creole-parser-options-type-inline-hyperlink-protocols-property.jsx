@@ -24,7 +24,7 @@ export default class extends React.PureComponent {
                     <li class={Bootstrap.active}>InlineHyperlinkProtocols</li>
                 </ol>
                 <h2>InlineHyperlinkProtocols Property</h2>
-                <p>The protocols to consider when parsing inline hyperlinks (e.g.: http, https, ftp and so on). The defauts are <code>http</code> and <code>https</code>.</p>
+                <p>The protocols to consider when parsing inline hyperlinks (e.g.: http, https and so on). The defauts are <code>http</code>, <code>https</code> and <code>ftp</code>.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>public</span> IEnumerable&lt;<span class={Bootstrap.textPrimary}>string</span>&gt; InlineHyperlinkProtocols {"{"} <span class={Bootstrap.textPrimary}>get</span>; <span class={Bootstrap.textPrimary}>set</span>; {"}"}</code></pre>
                 <h3>Exceptions</h3>
                 <ul>

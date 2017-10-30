@@ -57,7 +57,7 @@ export default class extends React.PureComponent {
                                 <Link to={routePath.documentation({ "member": "Mup.CreoleParserOptions.InlineHyperlinkProtocols" })}>InlineHyperlinkProtocols</Link>
                             </td>
                             <td>public get; public set</td>
-                            <td>The protocols to consider when parsing inline hyperlinks (e.g.: http, https, ftp and so on). The defauts are <code>http</code> and <code>https</code>.</td>
+                            <td>The protocols to consider when parsing inline hyperlinks (e.g.: http, https and so on). The defauts are <code>http</code>, <code>https</code> and <code>ftp</code>.</td>
                         </tr>
                     </tbody>
                 </table>
