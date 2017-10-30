@@ -184,6 +184,9 @@ namespace Mup.Tests
         [InlineData("~~~http://example.com/ with no // emphasis", new object[] { ParagraphStart, PlainText, PlainText, PlainText, ParagraphEnd })]
         [InlineData("tcp://example.com", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("//http://example.com//", new object[] { ParagraphStart, EmphasisStart, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, EmphasisEnd, ParagraphEnd })]
+        [InlineData("http://example.com/", new object[] { ParagraphStart, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, ParagraphEnd })]
+        [InlineData("http://example.com//", new object[] { ParagraphStart, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ParagraphEnd })]
+        [InlineData("http://example.com///", new object[] { ParagraphStart, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ParagraphEnd })]
 
         [InlineData("[[http://example.com]]", new object[] { ParagraphStart, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, ParagraphEnd })]
         [InlineData("~[[http://example.com]]", new object[] { ParagraphStart, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ParagraphEnd })]
@@ -447,6 +450,12 @@ namespace Mup.Tests
         [InlineData("~~~http://example.com", "<p>~http://example.com</p>")]
         [InlineData("tcp://example.com", "<p>tcp://example.com</p>")]
         [InlineData("//http://example.com//", "<p><em><a href=\"http://example.com\">http://example.com</a></em></p>")]
+        [InlineData("http://example.com/", "<p><a href=\"http://example.com/\">http://example.com/</a></p>")]
+        [InlineData("http://example.com//", "<p><a href=\"http://example.com\">http://example.com</a>//</p>")]
+        [InlineData("http://example.com~//", "<p><a href=\"http://example.com//\">http://example.com//</a></p>")]
+        [InlineData("http://example.com/~/", "<p><a href=\"http://example.com//\">http://example.com//</a></p>")]
+        [InlineData("http://example.com///", "<p><a href=\"http://example.com/\">http://example.com/</a>//</p>")]
+        [InlineData("http://example.com////", "<p><a href=\"http://example.com/\">http://example.com/</a>///</p>")]
 
         [InlineData("[[http://example.com]]", "<p><a href=\"http://example.com\">http://example.com</a></p>")]
         [InlineData("[[http://example.com/~~]]", "<p><a href=\"http://example.com/~\">http://example.com/~</a></p>")]

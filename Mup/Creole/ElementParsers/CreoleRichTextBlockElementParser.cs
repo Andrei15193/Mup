@@ -361,7 +361,7 @@ namespace Mup.Creole.ElementParsers
         {
             var token = start;
 
-            if (token != end && token.Code == CreoleTokenCode.Text && _IsInlineHyperlinkProtocol(token))
+            if (token != end && token.Code == Text && _IsInlineHyperlinkProtocol(token))
                 token = token.Next;
             else
                 return null;
@@ -386,14 +386,14 @@ namespace Mup.Creole.ElementParsers
             while (processingDomainName)
                 switch (token.Code)
                 {
-                    case CreoleTokenCode.Text when (_IsEnglishLetter(token)):
-                    case Dash when (token.Previous.Code == CreoleTokenCode.Text && token.Next?.Code == CreoleTokenCode.Text):
+                    case Text when (_IsEnglishLetter(token)):
+                    case Dash when (token.Previous.Code == Text && token.Next?.Code == Text):
                         if (token.Next == end)
                             processingDomainName = false;
                         else
                             token = token.Next;
                         break;
-                    case Punctuation when (token.Previous.Code == CreoleTokenCode.Text && token.Next?.Code == CreoleTokenCode.Text && token.Length == 1 && Context.Text[token.StartIndex] == '.'):
+                    case Punctuation when (token.Previous.Code == Text && token.Next?.Code == Text && token.Length == 1 && Context.Text[token.StartIndex] == '.'):
                         containsDot = true;
                         if (token.Next == end)
                             processingDomainName = false;
@@ -427,8 +427,11 @@ namespace Mup.Creole.ElementParsers
 
             while (token.Next != end && token.Next.Code != WhiteSpace)
                 token = token.Next;
-            while (token.Code != CreoleTokenCode.Text && token.Code != Tilde)
+            while (token.Code != Text && token.Code != Tilde)
                 token = token.Previous;
+
+            if (token.Next?.Code == Slash && (token.Next.Next?.Code != Slash || token.Next.Next.Next?.Code == Slash))
+                token = token.Next;
 
             return new ElementInfo(InlineHyperlink)
             {
