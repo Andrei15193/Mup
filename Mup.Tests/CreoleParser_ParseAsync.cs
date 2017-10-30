@@ -182,7 +182,7 @@ namespace Mup.Tests
         [InlineData("~http://example.com/ with no // emphasis", new object[] { ParagraphStart, PlainText, PlainText, ParagraphEnd })]
         [InlineData("~~http://example.com", new object[] { ParagraphStart, PlainText, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, ParagraphEnd })]
         [InlineData("~~~http://example.com/ with no // emphasis", new object[] { ParagraphStart, PlainText, PlainText, PlainText, ParagraphEnd })]
-        [InlineData("tcp://example.com", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
+        [InlineData("not://example.com", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         [InlineData("//http://example.com//", new object[] { ParagraphStart, EmphasisStart, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, EmphasisEnd, ParagraphEnd })]
         [InlineData("http://example.com/", new object[] { ParagraphStart, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, ParagraphEnd })]
         [InlineData("http://example.com//", new object[] { ParagraphStart, HyperlinkStart, HyperlinkDestination, PlainText, HyperlinkEnd, PlainText, ParagraphEnd })]
@@ -456,6 +456,7 @@ namespace Mup.Tests
         [InlineData("http://example.com/~/", "<p><a href=\"http://example.com//\">http://example.com//</a></p>")]
         [InlineData("http://example.com///", "<p><a href=\"http://example.com/\">http://example.com/</a>//</p>")]
         [InlineData("http://example.com////", "<p><a href=\"http://example.com/\">http://example.com/</a>///</p>")]
+        [InlineData("http://example", "<p><a href=\"http://example\">http://example</a></p>")]
 
         [InlineData("[[http://example.com]]", "<p><a href=\"http://example.com\">http://example.com</a></p>")]
         [InlineData("[[http://example.com/~~]]", "<p><a href=\"http://example.com/~\">http://example.com/~</a></p>")]
@@ -547,6 +548,500 @@ namespace Mup.Tests
         [InlineData("paragraph 1\n<<plug in>>\nparagraph 2", "<p>paragraph 1</p><!-- plug in --><p>paragraph 2</p>")]
         [InlineData("<<plug in>>\nparagraph", "<!-- plug in --><p>paragraph</p>")]
         public async Task ParsesPluginsToHtml(string text, string expectedHtml)
+        {
+            var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
+
+            Assert.Equal(expectedHtml, actualHtml);
+        }
+
+        [Trait("Class", nameof(CreoleParser))]
+        [Trait("WebSite", "www.wikicreole.org")]
+        [Theory(DisplayName = (_method + nameof(CreoleSiteTestsCase)))]
+        [InlineData(
+            "**//bold italics**//\n" +
+            "//**bold italics//**",
+            "<p>**//bold italics**//\n" +
+            "//**bold italics//**</p>")]
+        [InlineData(
+            "",
+            "")]
+        [InlineData(
+            "**bold**",
+            "<p><strong>bold</strong></p>")]
+        [InlineData(
+            "//italics//",
+            "<p><em>italics</em></p>")]
+        [InlineData(
+            "Bold and italics should //be\n" +
+            "able// to cross lines.\n" +
+            "\n" +
+            "But, should //not be...\n" +
+            "\n" +
+            "...able// to cross paragraphs.",
+            "<p>Bold and italics should <em>be\n" +
+            "able</em> to cross lines.</p>"
+            + "<p>But, should //not be...</p>"
+            + "<p>...able// to cross paragraphs.</p>")]
+        [InlineData(
+            "**//bold italics//**\n" +
+            "//**bold italics**//\n" +
+            "//This is **also** good.//",
+            "<p><strong><em>bold italics</em></strong>\n" +
+            "<em><strong>bold italics</strong></em>\n" +
+            "<em>This is <strong>also</strong> good.</em></p>")]
+        [InlineData(
+            "= Level 1 (largest) =\n" +
+            "== Level 2 ==\n" +
+            "=== Level 3 ===\n" +
+            "==== Level 4 ====\n" +
+            "===== Level 5 =====\n" +
+            "====== Level 6 ======\n" +
+            "=== Also level 3\n" +
+            "=== Also level 3 =\n" +
+            "=== Also level 3 ==\n" +
+            "=== **not** //parsed// ===",
+            "<h1>Level 1 (largest)</h1>"
+            + "<h2>Level 2</h2>"
+            + "<h3>Level 3</h3>"
+            + "<h4>Level 4</h4>"
+            + "<h5>Level 5</h5>"
+            + "<h6>Level 6</h6>"
+            + "<h3>Also level 3</h3>"
+            + "<h3>Also level 3</h3>"
+            + "<h3>Also level 3</h3>"
+            + "<h3>**not** //parsed//</h3>")]
+        [InlineData(
+            "[[link]]\n" +
+            "[[MyBigPage|Go to my page]]\n" +
+            "[[http://www.wikicreole.org/]]\n" +
+            "http://www.rawlink.org/, http://www.another.rawlink.org\n" +
+            "[[http://www.wikicreole.org/|Visit the WikiCreole website]]\n" +
+            "[[Weird Stuff|**Weird** //Stuff//]]\n" +
+            "[[Ohana:WikiFamily]]",
+            "<p><a href=\"link\">link</a>\n" +
+            "<a href=\"MyBigPage\">Go to my page</a>\n" +
+            "<a href=\"http://www.wikicreole.org/\">http://www.wikicreole.org/</a>\n" +
+            "<a href=\"http://www.rawlink.org/\">http://www.rawlink.org/</a>, <a href=\"http://www.another.rawlink.org\">http://www.another.rawlink.org</a>\n" +
+            "<a href=\"http://www.wikicreole.org/\">Visit the WikiCreole website</a>\n" +
+            "<a href=\"Weird Stuff\"><strong>Weird</strong> <em>Stuff</em></a>\n" +
+            "<a href=\"Ohana:WikiFamily\">Ohana:WikiFamily</a></p>")]
+        [InlineData(
+            @"This is the first line,\\and this is the second.",
+            "<p>This is the first line,<br>and this is the second.</p>")]
+        [InlineData(
+            "This is my text.\n" +
+            "\n" +
+            "This is more text.",
+            "<p>This is my text.</p>"
+            + "<p>This is more text.</p>")]
+        [InlineData(
+            "* Item 1\n" +
+            "* Item 2\n" +
+            "** Item 2.1\n" +
+            "* Item 3",
+            "<ul>" +
+                "<li>Item 1</li>" +
+                "<li>" +
+                    "Item 2" +
+                    "<ul>" +
+                        "<li>Item 2.1</li>" +
+                    "</ul>" +
+                "</li>" +
+                "<li>Item 3</li>" +
+            "</ul>")]
+        [InlineData(
+            "# Item 1\n" +
+            "## Item 1.1\n" +
+            "# Item 2\n" +
+            "\n" +
+            " # Blanks\n" +
+            "    ## are also\n" +
+            "  # allowed.",
+            "<ol>" +
+                "<li>" +
+                    "Item 1" +
+                    "<ol>" +
+                    "<li>Item 1.1</li>" +
+                    "</ol>" +
+                "</li>" +
+                "<li>Item 2</li>" +
+            "</ol>" +
+            "<ol>" +
+                "<li>" +
+                    "Blanks" +
+                    "<ol>" +
+                        "<li>are also</li>" +
+                    "</ol>" +
+                "</li>" +
+                "<li>allowed.</li>" +
+            "</ol>")]
+        [InlineData(
+            "Text\n" +
+            "\n" +
+            "----\n" +
+            "\n" +
+            "Text",
+            "<p>Text</p>" +
+            "<hr>" +
+            "<p>Text</p>")]
+        [InlineData(
+            "{{myimage.png|this is my image}}",
+            "<p><img src=\"myimage.png\" alt=\"this is my image\"></p>")]
+        [InlineData(
+            "{{{\n" +
+            "//This// does **not** get [[formatted]] \n" +
+            "}}}",
+            "<pre><code>//This// does **not** get [[formatted]] </code></pre>")]
+        [InlineData(
+            "Some examples of markup are: {{{** <i>this</i> ** }}}, this is also inline literal markup: {{{{{if (a>b) { b = a; }}}}}}.",
+            "<p>Some examples of markup are: <code>** &lt;i&gt;this&lt;/i&gt; ** </code>, this is also inline literal markup: <code>{{if (a&gt;b) { b = a; }}}</code>.</p>")]
+        [InlineData(
+            "{{{\n" +
+            "if (x != NULL) {\n" +
+            "  for (i = 0; i < size; i++) {\n" +
+            "    if (x[i] > 0) {\n" +
+            "      x[i]--;\n" +
+            "  }}}\n" +
+            "}}}",
+            "<pre><code>if (x != NULL) {\n" +
+            "  for (i = 0; i &lt; size; i++) {\n" +
+            "    if (x[i] &gt; 0) {\n" +
+            "      x[i]--;\n" +
+            "  }}}</code></pre>")]
+        [InlineData(
+            "~#1\n" +
+            "http://www.foo.com/~bar/\n" +
+            "~http://www.foo.com/\n" +
+            "CamelCaseLink\n" +
+            "~CamelCaseLink",
+            "<p>#1\n" +
+            "<a href=\"http://www.foo.com/~bar/\">http://www.foo.com/~bar/</a>\n" +
+            "http://www.foo.com/\n" +
+            "CamelCaseLink\n" +
+            "~CamelCaseLink</p>")]
+        [InlineData(
+            "//[[Important page|this link is italicized]]//\n" +
+            "**[[Important page]]**\n" +
+            "//**[[Important page]]**//",
+            "<p><em><a href=\"Important page\">this link is italicized</a></em>\n" +
+            "<strong><a href=\"Important page\">Important page</a></strong>\n" +
+            "<em><strong><a href=\"Important page\">Important page</a></strong></em></p>")]
+        [InlineData(
+            "* **bold** item\n" +
+            "* //italic// item\n" +
+            "# item about a [[certain page]]\n" +
+            "# {{{ //this// is **not** [[processed]] }}}",
+            "<ul>" +
+                "<li><strong>bold</strong> item</li>" +
+                "<li><em>italic</em> item</li>" +
+            "</ul>" +
+            "<ol>" +
+                "<li>item about a <a href=\"certain page\">certain page</a></li>" +
+                "<li><code> //this// is **not** [[processed]] </code></li>" +
+            "</ol>")]
+        [InlineData(
+            "|=Heading Col 1 |=Heading Col 2         |\n" +
+            @"|Cell 1.1       |Two lines\\in Cell 1.2 |" + "\n" +
+            "|Cell 2.1       |Cell 2.2               |",
+            "<table><tbody>" +
+            "<tr><th>Heading Col 1</th><th>Heading Col 2</th></tr>" +
+            "<tr><td>Cell 1.1</td><td>Two lines<br>in Cell 1.2</td></tr>" +
+            "<tr><td>Cell 2.1</td><td>Cell 2.2</td></tr>" +
+            "</tbody></table>")]
+        [InlineData(
+            "<<CurrentTimePlugin format='yyyy.MM.dd'>>",
+            "<!-- CurrentTimePlugin format=&#39;yyyy.MM.dd&#39; -->")]
+        [InlineData(
+            "= Top-level heading (1)\n" +
+            "== This a test for creole 0.1 (2)\n" +
+            "=== This is a Subheading (3)\n" +
+            "==== Subsub (4)\n" +
+            "===== Subsubsub (5)\n" +
+            "\n" +
+            "The ending equal signs should not be displayed:\n" +
+            "\n" +
+            "= Top-level heading (1) =\n" +
+            "== This a test for creole 0.1 (2) ==\n" +
+            "=== This is a Subheading (3) ===\n" +
+            "==== Subsub (4) ====\n" +
+            "===== Subsubsub (5) =====\n" +
+            "\n" +
+            "\n" +
+            "You can make things **bold** or //italic// or **//both//** or //**both**//.\n" +
+            "\n" +
+            "Character formatting extends across line breaks: **bold,\n" +
+            "this is still bold. This line deliberately does not end in star-star.\n" +
+            "\n" +
+            "Not bold. Character formatting does not cross paragraph boundaries.\n" +
+            "\n" +
+            "You can use [[internal links]] or [[http://www.wikicreole.org|external links]],\n" +
+            "give the link a [[internal links|different]] name.\n" +
+            "\n" +
+            "Here's another sentence: This wisdom is taken from [[Ward Cunningham's]]\n" +
+            "[[http://www.c2.com/doc/wikisym/WikiSym2006.pdf|Presentation at the Wikisym 06]].\n" +
+            "\n" +
+            "Here's a external link without a description: [[http://www.wikicreole.org]]\n" +
+            "\n" +
+            "Be careful that italic links are rendered properly:  //[[http://my.book.example/|My Book Title]]// \n" +
+            "\n" +
+            "Free links without braces should be rendered as well, like http://www.wikicreole.org/ and http://www.wikicreole.org/users/~example. \n" +
+            "\n" +
+            "Creole1.0 specifies that http://bar and ftp://bar should not render italic,\n" +
+            "something like foo://bar should render as italic.\n" +
+            "\n" +
+            "You can use this to draw a line to separate the page:\n" +
+            "----\n" +
+            "\n" +
+            "You can use lists, start it at the first column for now, please...\n" +
+            "\n" +
+            "unnumbered lists are like\n" +
+            "* item a\n" +
+            "* item b\n" +
+            "* **bold item c**\n" +
+            "\n" +
+            "blank space is also permitted before lists like:\n" +
+            "  *   item a\n" +
+            " * item b\n" +
+            "* item c\n" +
+            " ** item c.a\n" +
+            "\n" +
+            "or you can number them\n" +
+            "# [[item 1]]\n" +
+            "# item 2\n" +
+            "# // italic item 3 //\n" +
+            "    ## item 3.1\n" +
+            "  ## item 3.2\n" +
+            "\n" +
+            "up to five levels\n" +
+            "* 1\n" +
+            "** 2\n" +
+            "*** 3\n" +
+            "**** 4\n" +
+            "***** 5\n" +
+            "\n" +
+            "* You can have\n" +
+            "multiline list items\n" +
+            "* this is a second multiline\n" +
+            "list item\n" +
+            "\n" +
+            "You can use nowiki syntax if you would like do stuff like this:\n" +
+            "\n" +
+            "{{{\n" +
+            "Guitar Chord C:\n" +
+            "\n" +
+            "||---|---|---|\n" +
+            "||-0-|---|---|\n" +
+            "||---|---|---|\n" +
+            "||---|-0-|---|\n" +
+            "||---|---|-0-|\n" +
+            "||---|---|---|\n" +
+            "}}}\n" +
+            "\n" +
+            "You can also use it inline nowiki {{{ in a sentence }}} like this.\n" +
+            "\n" +
+            "= Escapes =\n" +
+            "Normal Link: http://wikicreole.org/ - now same link, but escaped: ~http://wikicreole.org/ \n" +
+            "\n" +
+            "Normal asterisks: ~**not bold~**\n" +
+            "\n" +
+            "a tilde alone: ~\n" +
+            "\n" +
+            "a tilde escapes itself: ~~xxx\n" +
+            "\n" +
+            "=== Creole 0.2 ===\n" +
+            "\n" +
+            "This should be a flower with the ALT text \"this is a flower\" if your wiki supports ALT text on images:\n" +
+            "\n" +
+            "{{Red-Flower.jpg|here is a red flower}}\n" +
+            "\n" +
+            "=== Creole 0.4 ===\n" +
+            "\n" +
+            "Tables are done like this:\n" +
+            "\n" +
+            "|=header col1|=header col2| \n" +
+            "|col1|col2| \n" +
+            "|you         |can         | \n" +
+            "|also        |align\\\\ it. | \n" +
+            "\n" +
+            "You can format an address by simply forcing linebreaks:\n" +
+            "\n" +
+            "My contact dates:\\\\\n" +
+            "Pone: xyz\\\\\n" +
+            "Fax: +45\\\\\n" +
+            "Mobile: abc\n" +
+            "\n" +
+            "=== Creole 0.5 ===\n" +
+            "\n" +
+            "|= Header title               |= Another header title     |\n" +
+            "| {{{ //not italic text// }}} | {{{ **not bold text** }}} |\n" +
+            "| //italic text//             | **  bold text **          |\n" +
+            "\n" +
+            "=== Creole 1.0 ===\n" +
+            "\n" +
+            "If interwiki links are setup in your wiki, this links to the WikiCreole page about Creole 1.0 test cases: [[WikiCreole:Creole1.0TestCases]].\n",
+            "<h1>Top-level heading (1)</h1>" +
+            "<h2>This a test for creole 0.1 (2)</h2>" +
+            "<h3>This is a Subheading (3)</h3>" +
+            "<h4>Subsub (4)</h4>" +
+            "<h5>Subsubsub (5)</h5>" +
+            "<p>The ending equal signs should not be displayed:</p>" +
+            "<h1>Top-level heading (1)</h1>" +
+            "<h2>This a test for creole 0.1 (2)</h2>" +
+            "<h3>This is a Subheading (3)</h3>" +
+            "<h4>Subsub (4)</h4>" +
+            "<h5>Subsubsub (5)</h5>" +
+            "<p>You can make things <strong>bold</strong> or <em>italic</em> or <strong><em>both</em></strong> or <em><strong>both</strong></em>.</p>" +
+            "<p>Character formatting extends across line breaks: **bold,\n" +
+            "this is still bold. This line deliberately does not end in star-star.</p>" +
+            "<p>Not bold. Character formatting does not cross paragraph boundaries.</p>" +
+            "<p>You can use <a href=\"internal links\">internal links</a> or <a href=\"http://www.wikicreole.org\">external links</a>,\n" +
+            "give the link a <a href=\"internal links\">different</a> name.</p>" +
+            "<p>Here&#39;s another sentence: This wisdom is taken from <a href=\"Ward Cunningham&#39;s\">Ward Cunningham&#39;s</a>\n" +
+            "<a href=\"http://www.c2.com/doc/wikisym/WikiSym2006.pdf\">Presentation at the Wikisym 06</a>.</p>" +
+            "<p>Here&#39;s a external link without a description: <a href=\"http://www.wikicreole.org\">http://www.wikicreole.org</a></p>" +
+            "<p>Be careful that italic links are rendered properly:  <em><a href=\"http://my.book.example/\">My Book Title</a></em></p>" +
+            "<p>Free links without braces should be rendered as well, like <a href=\"http://www.wikicreole.org/\">http://www.wikicreole.org/</a> and <a href=\"http://www.wikicreole.org/users/~example\">http://www.wikicreole.org/users/~example</a>.</p>" +
+            "<p>Creole1.0 specifies that <a href=\"http://bar\">http://bar</a> and <a href=\"ftp://bar\">ftp://bar</a> should not render italic,\n" +
+            "something like foo://bar should render as italic.</p>" +
+            "<p>You can use this to draw a line to separate the page:</p>" +
+            "<hr>" +
+            "<p>You can use lists, start it at the first column for now, please...</p>" +
+            "<p>unnumbered lists are like</p>" +
+            "<ul>" +
+                "<li>item a</li>" +
+                "<li>item b</li>" +
+                "<li><strong>bold item c</strong></li>" +
+            "</ul>" +
+            "<p>blank space is also permitted before lists like:</p>" +
+            "<ul>" +
+                "<li>item a</li>" +
+                "<li>item b</li>" +
+                "<li>" +
+                    "item c" +
+                    "<ul>" +
+                        "<li>item c.a</li>" +
+                    "</ul>" +
+                "</li>" +
+            "</ul>" +
+            "<p>or you can number them</p>" +
+            "<ol>" +
+                "<li><a href=\"item 1\">item 1</a></li>" +
+                "<li>item 2</li>" +
+                "<li>" +
+                    "<em> italic item 3 </em>" +
+                    "<ol>" +
+                        "<li>item 3.1</li>" +
+                        "<li>item 3.2</li>" +
+                    "</ol>" +
+                "</li>" +
+            "</ol>" +
+            "<p>up to five levels</p>" +
+            "<ul>" +
+                "<li>" +
+                    "1" +
+                    "<ul>" +
+                        "<li>" +
+                            "2" +
+                            "<ul>" +
+                                "<li>" +
+                                    "3" +
+                                    "<ul>" +
+                                        "<li>" +
+                                            "4" +
+                                            "<ul>" +
+                                                "<li>5</li>" +
+                                            "</ul>" +
+                                        "</li>" +
+                                    "</ul>" +
+                                "</li>" +
+                            "</ul>" +
+                        "</li>" +
+                    "</ul>" +
+                "</li>" +
+            "</ul>" +
+            "<ul>" +
+                "<li>" +
+                    "You can have\n" +
+                    "multiline list items" +
+                "</li>" +
+                "<li>" +
+                    "this is a second multiline\n" +
+                    "list item" +
+                "</li>" +
+            "</ul>" +
+            "<p>You can use nowiki syntax if you would like do stuff like this:</p>" +
+            "<pre><code>Guitar Chord C:\n" +
+            "\n" +
+            "||---|---|---|\n" +
+            "||-0-|---|---|\n" +
+            "||---|---|---|\n" +
+            "||---|-0-|---|\n" +
+            "||---|---|-0-|\n" +
+            "||---|---|---|</code></pre>" +
+            "<p>You can also use it inline nowiki <code> in a sentence </code> like this.</p>" +
+            "<h1>Escapes</h1>" +
+            "<p>Normal Link: <a href=\"http://wikicreole.org/\">http://wikicreole.org/</a> - now same link, but escaped: http://wikicreole.org/</p>" +
+            "<p>Normal asterisks: **not bold**</p>" +
+            "<p>a tilde alone: ~</p>" +
+            "<p>a tilde escapes itself: ~xxx</p>" +
+            "<h3>Creole 0.2</h3>" +
+            "<p>This should be a flower with the ALT text &quot;this is a flower&quot; if your wiki supports ALT text on images:</p>" +
+            "<p><img src=\"Red-Flower.jpg\" alt=\"here is a red flower\"></p>" +
+            "<h3>Creole 0.4</h3>" +
+            "<p>Tables are done like this:</p>" +
+            "<table><tbody>" +
+                "<tr><th>header col1</th><th>header col2</th></tr>" +
+                "<tr><td>col1</td><td>col2</td></tr>" +
+                "<tr><td>you</td><td>can</td></tr>" +
+                "<tr><td>also</td><td>align<br> it.</td></tr>" +
+            "</tbody></table>" +
+            "<p>You can format an address by simply forcing linebreaks:</p>" +
+            "<p>My contact dates:<br>\n" +
+            "Pone: xyz<br>\n" +
+            "Fax: +45<br>\n" +
+            "Mobile: abc</p>" +
+            "<h3>Creole 0.5</h3>" +
+            "<table><tbody>" +
+                "<tr><th>Header title</th><th>Another header title</th></tr>" +
+                "<tr><td><code> //not italic text// </code></td><td><code> **not bold text** </code></td></tr>" +
+                "<tr><td><em>italic text</em></td><td><strong>  bold text </strong></td></tr>" +
+            "</tbody></table>" +
+            "<h3>Creole 1.0</h3>" +
+            "<p>If interwiki links are setup in your wiki, this links to the WikiCreole page about Creole 1.0 test cases: <a href=\"WikiCreole:Creole1.0TestCases\">WikiCreole:Creole1.0TestCases</a>.</p>")]
+        [InlineData(
+            "* Item 1\n" +
+            "with **multiple** lines.\n" +
+            "* Item 2\n" +
+            "** Item 2.1\n" +
+            "has also\n" +
+            "multiple\n" +
+            "lines.\n" +
+            "* Item 3",
+            "<ul>" +
+                "<li>" +
+                    "Item 1\n" +
+                    "with <strong>multiple</strong> lines." +
+                "</li>" +
+                "<li>" +
+                    "Item 2" +
+                    "<ul>" +
+                        "<li>" +
+                            "Item 2.1\n" +
+                            "has also\n" +
+                            "multiple\n" +
+                            "lines." +
+                        "</li>" +
+                    "</ul>" +
+                "</li>" +
+                "<li>Item 3</li>" +
+            "</ul>")]
+        [InlineData(
+            "= Broken markup\n" +
+            "\n" +
+            "[[ {{ -- ** __ // foo | * - # \"Â§$%&/( (( ",
+            "<h1>Broken markup</h1>" +
+            "<p>[[ {{ -- ** __ // foo | * - # &quot;Â§$%&amp;/( ((</p>")]
+        public async Task CreoleSiteTestsCase(string text, string expectedHtml)
         {
             var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
 

@@ -360,84 +360,51 @@ namespace Mup.Creole.ElementParsers
         private ElementInfo _TryGetInlineHyperlinkElementInfoAt(CreoleToken start, CreoleToken end)
         {
             var token = start;
+            ElementInfo result;
 
-            if (token != end && token.Code == Text && _IsInlineHyperlinkProtocol(token))
-                token = token.Next;
-            else
-                return null;
-
-            if (token != end && token.Code == Punctuation && token.Length == 1 && Context.Text[token.StartIndex] == ':')
-                token = token.Next;
-            else
-                return null;
-
-            var slashCount = 0;
-            while (slashCount < 2 && token.Next != end && token.Code == Slash)
+            if (_Matches(start, end, Text, Punctuation, Slash, Slash, Text)
+                && token.Next.Code == Punctuation && token.Next.Length == 1 && Context.Text[token.Next.StartIndex] == ':'
+                && _IsInlineHyperlinkProtocol(token))
             {
-                slashCount++;
-                token = token.Next;
-            }
+                token = token.Next.Next.Next.Next;
 
-            if (slashCount != 2)
-                return null;
+                while (token.Next != end && token.Next.Code != WhiteSpace)
+                    token = token.Next;
+                while (token.Code != Text && token.Code != Tilde)
+                    token = token.Previous;
 
-            var processingDomainName = (token != end);
-            var containsDot = false;
-            while (processingDomainName)
-                switch (token.Code)
+                if (token.Next?.Code == Slash && (token.Next.Next?.Code != Slash || token.Next.Next.Next?.Code == Slash))
+                    token = token.Next;
+
+                result = new ElementInfo(InlineHyperlink)
                 {
-                    case Text when (_IsEnglishLetter(token)):
-                    case Dash when (token.Previous.Code == Text && token.Next?.Code == Text):
-                        if (token.Next == end)
-                            processingDomainName = false;
-                        else
-                            token = token.Next;
-                        break;
-                    case Punctuation when (token.Previous.Code == Text && token.Next?.Code == Text && token.Length == 1 && Context.Text[token.StartIndex] == '.'):
-                        containsDot = true;
-                        if (token.Next == end)
-                            processingDomainName = false;
-                        else
-                            token = token.Next;
-                        break;
-
-                    default:
-                        processingDomainName = false;
-                        break;
-                }
-
-            if (!containsDot)
-                return null;
-            if (token.Code == Punctuation && token.Next != end && token.Next?.Next != end)
-                if (token.Length == 1 && Context.Text[token.StartIndex] == ':' && _IsNumber(token.Next))
-                    token = token.Next.Next;
-                else
-                    return new ElementInfo(InlineHyperlink)
-                    {
-                        Start = start,
-                        End = token.Previous
-                    };
-
-            if (token.Code == WhiteSpace)
-                return new ElementInfo(InlineHyperlink)
-                {
-                    Start = start,
-                    End = token.Previous
+                    Start = (start.Previous?.Code == Tilde ? start.Previous : start),
+                    End = token
                 };
+            }
+            else
+                result = null;
 
-            while (token.Next != end && token.Next.Code != WhiteSpace)
-                token = token.Next;
-            while (token.Code != Text && token.Code != Tilde)
-                token = token.Previous;
+            return result;
+        }
 
-            if (token.Next?.Code == Slash && (token.Next.Next?.Code != Slash || token.Next.Next.Next?.Code == Slash))
-                token = token.Next;
-
-            return new ElementInfo(InlineHyperlink)
-            {
-                Start = (start.Previous?.Code == Tilde ? start.Previous : start),
-                End = token
-            };
+        private bool _Matches(CreoleToken start, CreoleToken end, params CreoleTokenCode[] tokenCodes)
+        {
+            var isMatch = (start != end);
+            if (isMatch)
+                using (var tokenCode = tokenCodes.AsEnumerable().GetEnumerator())
+                {
+                    var token = start;
+                    while (isMatch && tokenCode.MoveNext())
+                        if (token == null)
+                            isMatch = false;
+                        else
+                        {
+                            isMatch = (token != end && token.Code == tokenCode.Current);
+                            token = token.Next;
+                        }
+                }
+            return isMatch;
         }
 
         private bool _IsNumber(CreoleToken token)
