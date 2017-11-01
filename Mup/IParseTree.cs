@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Mup
 {
-    /// <summary>A common interface for the result of all markup parsers.</summary>
+    /// <summary>A common interface for the result of any markup parser.</summary>
     public interface IParseTree
     {
         /// <summary>Accepts a <paramref name="visitor"/> which can be used to generate output from the parse tree.</summary>
