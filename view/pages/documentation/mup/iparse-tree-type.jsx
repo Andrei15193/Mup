@@ -21,7 +21,7 @@ export default class extends React.PureComponent {
                     <li class={Bootstrap.active}>IParseTree</li>
                 </ol>
                 <h2>IParseTree Interface</h2>
-                <p>A common interface for the result of all markup parsers.</p>
+                <p>A common interface for the result of any markup parser.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>public</span> <span class={Bootstrap.textPrimary}>interface</span> IParseTree</code></pre>
                 <h3>Methods</h3>
                 <table class={join(Bootstrap.table, Bootstrap.tableHover)}>

@@ -31,7 +31,7 @@ export default class extends React.PureComponent {
                     <li><strong>cancellationToken</strong>: A token that can be used to signal a cancellation request.</li>
                 </ul>
                 <h3>Returns</h3>
-                <p>Returns the result after the entire parse tree has been visited wrapped in a <a href="https://msdn.microsoft.com/en-us/library/dd321424.aspx">Task&lt;TResult&gt;</a>.</p>
+                <p>Returns the result after the entire parse tree has been visited wrapped in a <a href="https://msdn.microsoft.com/en-us/library/dd321424.aspx" target="_blank">Task&lt;TResult&gt;</a>.</p>
             </div>
         );
     }

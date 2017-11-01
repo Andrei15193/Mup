@@ -32,10 +32,10 @@ export default class extends React.PureComponent {
                     <li><strong>visitor</strong>: The visitor to use for traversing the resulting parse tree.</li>
                 </ul>
                 <h3>Returns</h3>
-                <p>Returns a <a href="https://msdn.microsoft.com/en-us/library/system.threading.tasks.task.aspx">Task</a> representing the asynchronous operation.</p>
+                <p>Returns a <a href="https://msdn.microsoft.com/en-us/library/system.threading.tasks.task.aspx" target="_blank">Task</a> representing the asynchronous operation.</p>
                 <h3>Exceptions</h3>
                 <ul>
-                    <li><strong><a href="https://msdn.microsoft.com/en-us/library/system.argumentnullexception.aspx">ArgumentNullException</a></strong>: Thrown when either parseTask or visitor are null.</li>
+                    <li><strong><a href="https://msdn.microsoft.com/en-us/library/system.argumentnullexception.aspx" target="_blank">ArgumentNullException</a></strong>: Thrown when either parseTask or visitor are null.</li>
                 </ul>
             </div>
         );

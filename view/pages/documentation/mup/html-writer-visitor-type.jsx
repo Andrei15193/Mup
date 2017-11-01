@@ -22,6 +22,7 @@ export default class extends React.PureComponent {
                 </ol>
                 <h2>HtmlWriterVisitor Class</h2>
                 <p>A <Link to={routePath.documentation({ member: "Mup.ParseTreeVisitor<TResult>" })}>ParseTreeVisitor&lt;TResult&gt;</Link> implementation for generating HTML from an <Link to={routePath.documentation({ member: "Mup.IParseTree" })}>IParseTree</Link>.</p>
+                <p>Extends <Link to={routePath.documentation({ "member": "Mup.ParseTreeVisitor<TResult>" })}>ParseTreeVisitor&lt;string&gt;</Link>.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>public</span> <span class={Bootstrap.textPrimary}>class</span> HtmlWriterVisitor : ParseTreeVisitor&lt;<span class={Bootstrap.textPrimary}>string</span>&gt;</code></pre>
                 <h3>Constructors</h3>
                 <table class={join(Bootstrap.table, Bootstrap.tableHover)}>
@@ -57,7 +58,7 @@ export default class extends React.PureComponent {
                                 <Link to={routePath.documentation({ "member": "Mup.HtmlWriterVisitor.HtmlStringBuilder" })}>HtmlStringBuilder</Link>
                             </td>
                             <td>protected get</td>
-                            <td>Gets the <a href="https://msdn.microsoft.com/en-us/library/system.text.stringbuilder.aspx">StringBuilder</a> where the HTML is being written.</td>
+                            <td>Gets the <a href="https://msdn.microsoft.com/en-us/library/system.text.stringbuilder.aspx" target="_blank">StringBuilder</a> where the HTML is being written.</td>
                         </tr>
                     </tbody>
                 </table>

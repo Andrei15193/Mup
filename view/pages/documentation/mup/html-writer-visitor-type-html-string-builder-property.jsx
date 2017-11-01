@@ -24,7 +24,7 @@ export default class extends React.PureComponent {
                     <li class={Bootstrap.active}>HtmlStringBuilder</li>
                 </ol>
                 <h2>HtmlStringBuilder Property</h2>
-                <p>Gets the <a href="https://msdn.microsoft.com/en-us/library/system.text.stringbuilder.aspx">StringBuilder</a> where the HTML is being written.</p>
+                <p>Gets the <a href="https://msdn.microsoft.com/en-us/library/system.text.stringbuilder.aspx" target="_blank">StringBuilder</a> where the HTML is being written.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>protected</span> StringBuilder HtmlStringBuilder {"{"} <span class={Bootstrap.textPrimary}>get</span>; {"}"}</code></pre>
             </div>
         );

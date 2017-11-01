@@ -33,7 +33,7 @@ export default class extends React.PureComponent {
                     <li><strong>cancellationToken</strong>: A token that can be used to signal a cancellation request.</li>
                 </ul>
                 <h3>Returns</h3>
-                <p>Returns a <a href="https://msdn.microsoft.com/en-us/library/system.threading.tasks.task.aspx">Task</a> representing the asynchronous operation.</p>
+                <p>Returns a <a href="https://msdn.microsoft.com/en-us/library/system.threading.tasks.task.aspx" target="_blank">Task</a> representing the asynchronous operation.</p>
             </div>
         );
     }

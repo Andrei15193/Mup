@@ -68,9 +68,9 @@ protected virtual void Visit{Element}()
 
                 <p>For our little web project we will be using .NET Core for convenience and because it is cross-platform, you do not really need to run Windows to go though this example. Besides, the library is cross-platform itself.</p>
 
-                <p>Now let us finally get on with it, create a folder where you usually have your projects, I will call mine <code>mup-example</code>, go to that folder and run <code>netcore new webapi</code> in the command line. I use <a href="https://code.visualstudio.com/">Visual Studio Code</a> which has an integrated terminal so I can do my code editing and use the command line from one place.</p>
+                <p>Now let us finally get on with it, create a folder where you usually have your projects, I will call mine <code>mup-example</code>, go to that folder and run <code>netcore new webapi</code> in the command line. I use <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> which has an integrated terminal so I can do my code editing and use the command line from one place.</p>
 
-                <p>Now that we have our demo project created, we will start by adding a <a href="https://www.nuget.org/">NuGet</a> dependency towards the <a href="https://www.nuget.org/packages/Mup">Mup package</a>. Open <em>mup-example.csproj</em> (assuming you have the same folder name as I do, otherwise the <em>.csproj</em> file will have the same name as the folder in which you created your .NET Core application) and add the following line: <code>&lt;PackageReference Include=&quot;Mup&quot; Version=&quot;0.0.6-beta&quot; /&gt;</code>. The <em>.csproj</em> file should look something like this:</p>
+                <p>Now that we have our demo project created, we will start by adding a <a href="https://www.nuget.org/" target="_blank">NuGet</a> dependency towards the <a href="https://www.nuget.org/packages/Mup" target="_blank">Mup package</a>. Open <em>mup-example.csproj</em> (assuming you have the same folder name as I do, otherwise the <em>.csproj</em> file will have the same name as the folder in which you created your .NET Core application) and add the following line: <code>&lt;PackageReference Include=&quot;Mup&quot; Version=&quot;0.0.6-beta&quot; /&gt;</code>. The <em>.csproj</em> file should look something like this:</p>
 
                 <pre><code>
 {`<Project Sdk="Microsoft.NET.Sdk.Web">
@@ -98,7 +98,7 @@ protected virtual void Visit{Element}()
 </Project>`}
                 </code></pre>
 
-                <p>Next we will create our controller that will be using Mup to parse Creole and return HTML. Under <em>Controllers</em> create a new <a href="file:">file:</a> <em>CreoleController.cs</em>, the controller will have just one method for handing <strong>POST</strong> requests on the <strong>api/creole</strong> endpoint:</p>
+                <p>Next we will create our controller that will be using Mup to parse Creole and return HTML. Under <em>Controllers</em> create a new file: <em>CreoleController.cs</em>, the controller will have just one method for handing <strong>POST</strong> requests on the <strong>api/creole</strong> endpoint:</p>
 
                 <pre><code>
 {`using System.Threading;
@@ -125,7 +125,7 @@ namespace mup_example.Controllers
 }`}
                 </code></pre>
 
-                <p>Time to test this, run the application and open a Web API testing tool so we can make some requests! I use <a href="https://www.getpostman.com/">Postman</a> for this as I can create collections and keep my requests organized and synced across devices (or just use Cloud storage for backup, fewer things to worry about).</p>
+                <p>Time to test this, run the application and open a Web API testing tool so we can make some requests! I use <a href="https://www.getpostman.com/" target="_blank">Postman</a> for this as I can create collections and keep my requests organized and synced across devices (or just use Cloud storage for backup, fewer things to worry about).</p>
 
                 <p>Usually the .NET Core App will run on port 5000 locally, when you start the application in debug mode it will automatically open your favourite browser and in the address bar you can grab the base URL for your request. For me it is: <code>http://localhost:5000/</code>. If a 404 error shows when you start the application it is alright, the application only exposes HTTP endpoints and no static content (like <em>index.html</em>).</p>
 
@@ -151,13 +151,13 @@ This is a test"`}
 }`}
                 </code></pre>
 
-                <p>If you look at the base class for <code>HtmlWriterVisitor</code> you will notice that it does not extend <code>ParseTreeVisitor</code> directly, it inherits <code>ParseTreeVisitor&lt;TResult&gt;</code> which in turn inherits <code>ParseTreeVisitor</code>. The difference between the two visitor base classes is that the former provides an in-memory result after visiting the entire parse tree while the latter provides a more indirect result (e.g.: writing to a file or to a network stream). The <code>HtmlWriterVisitor</code> provides a <a href="https://msdn.microsoft.com/en-us/library/system.string.aspx">string</a> containing the HTML corresponding to the given Creole text.</p>
+                <p>If you look at the base class for <code>HtmlWriterVisitor</code> you will notice that it does not extend <code>ParseTreeVisitor</code> directly, it inherits <code>ParseTreeVisitor&lt;TResult&gt;</code> which in turn inherits <code>ParseTreeVisitor</code>. The difference between the two visitor base classes is that the former provides an in-memory result after visiting the entire parse tree while the latter provides a more indirect result (e.g.: writing to a file or to a network stream). The <code>HtmlWriterVisitor</code> provides a <a href="https://msdn.microsoft.com/en-us/library/system.string.aspx" target="_blank">string</a> containing the HTML corresponding to the given Creole text.</p>
 
                 <p>Depending on your needs you will inherit from one or the other, the only thing that <code>ParseTreeVisitor&lt;TResult&gt;</code> adds is an abstract method for providing the result and a virtual asynchronous counterpart.</p>
 
                 <p>If you look at the HTML result you get from the <Link to={routePath.onlineParser()}>Online Parser</Link> you will notice that it looks a bit different than what our endpoint returns. The HtmlWriterVisitor that is provided with the library tries to generate the result as compact as possible, but we can change that by overriding a few methods and add a blank line so we get a more readable result.</p>
 
-                <p>The <a href="https://msdn.microsoft.com/en-us/library/system.text.stringbuilder.aspx">StringBuilder</a> with which HTML is being generated is exposed through the <code>HtmlStringBuilder</code> protected property. We can append new lines and then call the base implementation. If you need to append text you should be using one of the <code>AppendHtmlSafe</code> overloads as special characters are encoded into HTML entities.</p>
+                <p>The <a href="https://msdn.microsoft.com/en-us/library/system.text.stringbuilder.aspx" target="_blank">StringBuilder</a> with which HTML is being generated is exposed through the <code>HtmlStringBuilder</code> protected property. We can append new lines and then call the base implementation. If you need to append text you should be using one of the <code>AppendHtmlSafe</code> overloads as special characters are encoded into HTML entities.</p>
 
                 <p>We want to generate paragraphs that are separated by blank lines with the exception of the first one. We do not want an empty line before the first paragraph in our HTML. First we will write a custom visitor which inherits from <code>HtmlWriterVisitor</code>, we don&#39;t need to reinvent the wheel, we&#39;ll just override the methods that we want to change.</p>
 

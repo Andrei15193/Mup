@@ -21,7 +21,8 @@ export default class extends React.PureComponent {
                     <li class={Bootstrap.active}>ParseTreeVisitor&lt;TResult&gt;</li>
                 </ol>
                 <h2>ParseTreeVisitor&lt;TResult&gt; Class</h2>
-                <p>Base class for all parse tree visitors that eventually provide a result that is stored in memory (e.g. a <a href="https://msdn.microsoft.com/en-us/library/system.string.aspx">string</a> or a <a href="https://msdn.microsoft.com/en-us/library/system.io.memorystream.aspx">MemoryStream</a>).</p>
+                <p>Base class for all parse tree visitors that eventually provide a result that is stored in memory (e.g. a <a href="https://msdn.microsoft.com/en-us/library/system.string.aspx" target="_blank">string</a> or a <a href="https://msdn.microsoft.com/en-us/library/system.io.memorystream.aspx" target="_blank">MemoryStream</a>).</p>
+                <p>Extends <Link to={routePath.documentation({ "member": "Mup.ParseTreeVisitor" })}>ParseTreeVisitor</Link>.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>public</span> <span class={Bootstrap.textPrimary}>abstract</span> <span class={Bootstrap.textPrimary}>class</span> ParseTreeVisitor&lt;TResult&gt; : ParseTreeVisitor</code></pre>
                 <h3>Generic Parameters</h3>
                 <ul>

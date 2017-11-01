@@ -22,6 +22,7 @@ export default class extends React.PureComponent {
                 </ol>
                 <h2>CreoleParserOptions Class</h2>
                 <p>Specifies options for the <Link to={routePath.documentation({ member: "Mup.CreoleParser" })}>CreoleParser</Link>.</p>
+                <p>Extends <a href="https://msdn.microsoft.com/en-us/library/system.object.aspx" target="_blank">Object</a>.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>public</span> <span class={Bootstrap.textPrimary}>sealed</span> <span class={Bootstrap.textPrimary}>class</span> CreoleParserOptions</code></pre>
                 <h3>Constructors</h3>
                 <table class={join(Bootstrap.table, Bootstrap.tableHover)}>

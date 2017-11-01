@@ -28,8 +28,8 @@ export default class extends React.PureComponent {
                 <pre><code><span class={Bootstrap.textPrimary}>public</span> IEnumerable&lt;<span class={Bootstrap.textPrimary}>string</span>&gt; InlineHyperlinkProtocols {"{"} <span class={Bootstrap.textPrimary}>get</span>; <span class={Bootstrap.textPrimary}>set</span>; {"}"}</code></pre>
                 <h3>Exceptions</h3>
                 <ul>
-                    <li><strong><a href="https://msdn.microsoft.com/en-us/library/system.argumentnullexception.aspx">ArgumentNullException</a></strong>: Thrown when the value is set to <code>null</code>.</li>
-                    <li><strong><a href="https://msdn.microsoft.com/en-us/library/system.argumentexception.aspx">ArgumentException</a></strong>: Thrown when the given collection contains <code>null</code>, empty or white space elements.</li>
+                    <li><strong><a href="https://msdn.microsoft.com/en-us/library/system.argumentnullexception.aspx" target="_blank">ArgumentNullException</a></strong>: Thrown when the value is set to <code>null</code>.</li>
+                    <li><strong><a href="https://msdn.microsoft.com/en-us/library/system.argumentexception.aspx" target="_blank">ArgumentException</a></strong>: Thrown when the given collection contains <code>null</code>, empty or white space elements.</li>
                 </ul>
             </div>
         );

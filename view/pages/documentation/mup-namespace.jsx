@@ -36,7 +36,7 @@ export default class extends React.PureComponent {
                             <td>
                                 <Link to={routePath.documentation({ member: "Mup.IParseTree" })}>IParseTree</Link>
                             </td>
-                            <td>A common interface for the result of all markup parsers.</td>
+                            <td>A common interface for the result of any markup parser.</td>
                         </tr>
                         <tr>
                             <td>
@@ -72,7 +72,7 @@ export default class extends React.PureComponent {
                             <td>
                                 <Link to={routePath.documentation({ member: "Mup.ParseTreeVisitor<TResult>" })}>ParseTreeVisitor&lt;TResult&gt;</Link>
                             </td>
-                            <td>Base class for all parse tree visitors that eventually provide a result that is stored in memory (e.g. a <a href="https://msdn.microsoft.com/en-us/library/system.string.aspx">string</a> or a <a href="https://msdn.microsoft.com/en-us/library/system.io.memorystream.aspx">MemoryStream</a>).</td>
+                            <td>Base class for all parse tree visitors that eventually provide a result that is stored in memory (e.g. a <a href="https://msdn.microsoft.com/en-us/library/system.string.aspx" target="_blank">string</a> or a <a href="https://msdn.microsoft.com/en-us/library/system.io.memorystream.aspx" target="_blank">MemoryStream</a>).</td>
                         </tr>
                     </tbody>
                 </table>

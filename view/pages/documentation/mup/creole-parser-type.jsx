@@ -22,6 +22,7 @@ export default class extends React.PureComponent {
                 </ol>
                 <h2>CreoleParser Class</h2>
                 <p>A markup parser implementation for Creole.</p>
+                <p>Extends <a href="https://msdn.microsoft.com/en-us/library/system.object.aspx" target="_blank">Object</a>. Implementes <Link to={routePath.documentation({ "member": "Mup.IMarkupParser" })}>IMarkupParser</Link>.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>public</span> <span class={Bootstrap.textPrimary}>class</span> CreoleParser : IMarkupParser</code></pre>
                 <h3>Constructors</h3>
                 <table class={join(Bootstrap.table, Bootstrap.tableHover)}>

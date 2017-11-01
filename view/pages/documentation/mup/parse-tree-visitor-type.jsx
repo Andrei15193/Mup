@@ -22,6 +22,7 @@ export default class extends React.PureComponent {
                 </ol>
                 <h2>ParseTreeVisitor Class</h2>
                 <p>Base class of all parse tree visitors.</p>
+                <p>Extends <a href="https://msdn.microsoft.com/en-us/library/system.object.aspx" target="_blank">Object</a>.</p>
                 <pre><code><span class={Bootstrap.textPrimary}>public</span> <span class={Bootstrap.textPrimary}>abstract</span> <span class={Bootstrap.textPrimary}>class</span> ParseTreeVisitor</code></pre>
                 <h3>Methods</h3>
                 <table class={join(Bootstrap.table, Bootstrap.tableHover)}>
