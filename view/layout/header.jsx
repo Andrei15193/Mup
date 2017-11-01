@@ -17,7 +17,7 @@ export default class Header extends React.Component {
         return (
             <Content>
                 <h1>
-                    <img src={Logo} alt="logo" /> <abbr title="MarkUp Parser">Mup</abbr> <small>Markup for Everyone</small> <PrimaryLabel text="Preview" />
+                    <img src={Logo} alt="logo" /> <abbr title="MarkUp Parser">Mup</abbr> <small>Markup for Everyone</small>
                 </h1>
             </Content>
         );
