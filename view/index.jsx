@@ -6,6 +6,7 @@ import ReactDOM from "react-dom";
 
 import IndexPage from "./index.html";
 import Style from "./index.css";
+import Favicon from "./favicon.ico";
 import App from "./app";
 
 const rootElement = document.getElementById("root");

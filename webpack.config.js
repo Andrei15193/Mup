@@ -46,9 +46,9 @@ module.exports = {
                 options: config.html
             },
             {
-                test: /\.(png|svg|jpg|gif)$/,
+                test: /\.(png|svg|jpg|gif|ico)$/,
                 exclude: /node_modules/,
-                loader: "file-loader"
+                loader: "file-loader?name=[name].[ext]"
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
