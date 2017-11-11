@@ -31,8 +31,8 @@ module.exports = {
                 exclude: [/node_modules/, /lib/],
                 loader: "babel-loader",
                 query: {
-                    presets: ["react", "es2015"],
-                    plugins: ["react-html-attrs"]
+                    presets: ["react", "babel-preset-env"],
+                    plugins: ["transform-runtime", "react-html-attrs"]
                 }
             },
             {
