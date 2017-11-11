@@ -60,7 +60,7 @@ protected virtual void Visit{Element}()
 
                 <p>The synchronous method always gets called from its asynchronous counterpart which in turn is called when visiting the corresponding element. If you are implementing a visitor that outputs to something in-memory (you are simply writing to a StringBuilder) you can just override the synchronous methods and not bother yourself with asynchrony at all.</p>
 
-                <p><strong>NOTE!</strong> When overriding the asynchronous method then the synchronous counterpart will not be invoked anymore unless called explicitly or calling the base implementation (e.g. <code>base.Visit{Element}Async(cancellationToken)</code> or <code>Visit{Element}()</code>).</p>
+                <p><strong>NOTE!</strong> When overriding the asynchronous method then the synchronous counterpart will not be invoked anymore unless called explicitly or calling the base implementation (e.g. <code>{`base.Visit{Element}Async(cancellationToken)`}</code> or <code>{`Visit{Element}()`}</code>).</p>
 
                 <h2>Using the Library</h2>
 

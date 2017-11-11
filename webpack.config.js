@@ -13,7 +13,7 @@ const config = require(resolve("./config/build.${config}.json", BUILD_PARAMETERS
 
 module.exports = {
     context: __dirname,
-    entry: path.join(__dirname, "view", "index.jsx"),
+    entry: ["babel-polyfill", path.join(__dirname, "view", "index.jsx")],
     output: {
         path: path.join(__dirname, "build"),
         publicPath: "./",
