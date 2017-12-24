@@ -1,26 +1,35 @@
 import { Dispatcher } from "flux";
 
-import apiConfig from "config/api";
-
-import ParserActions from "./actions/parser-actions";
-import ParserStore from "./stores/parser-store";
-import Request from "./request";
+import Config from "mup/config";
+import Request from "mup/actions/request";
+import EditorActions from "mup/actions/editor-actions";
+import ParseActions from "mup/actions/parse-actions";
+import EditorStore from "mup/stores/editor-store";
+import PreviewStore from "mup/stores/preview-store";
 
 export default {
     get request() {
-        return singleton("request", () => new Request(apiConfig));
+        return singleton("request", () => new Request(Config.axios));
     },
 
     get dispatcher() {
         return singleton("dispatcher", () => new Dispatcher());
     },
 
-    get parserActions() {
-        return new ParserActions(this.dispatcher, this.request);
+    get editorActions() {
+        return new EditorActions(this.dispatcher, this.request);
     },
 
-    get parserStore() {
-        return singleton("parser-store", () => new ParserStore(this.dispatcher), this);
+    get parserActions() {
+        return new ParseActions(this.dispatcher, this.request);
+    },
+
+    get editorStore() {
+        return singleton("editor-store", () => new EditorStore(this.dispatcher), this);
+    },
+
+    get previewStore() {
+        return singleton("preview-store", () => new PreviewStore(this.dispatcher), this);
     }
 }
 
@@ -32,7 +41,7 @@ function singleton(key, value, context) {
         result = singletons[key];
     else {
         if (typeof (value) === "function")
-            result = value.apply(context);
+            result = value.call(context);
         else
             result = value;
         singletons[key] = result;

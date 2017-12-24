@@ -1,0 +1,417 @@
+// This is a generated file.
+import React from "react";
+import { Link } from "react-router-dom";
+
+import Routes from "mup/routes";
+import Style from "mup/style";
+
+export default class extends React.PureComponent {
+    constructor(props) {
+       super(props);
+    }
+
+    render () {
+        return (
+            <div>
+                <nav aria-label="breadcrumb" role="navigation">
+                    <ol className={Style.breadcrumb}>
+                        <li className={Style.breadcrumbItem}>
+                            <Link to={Routes.documentation({ member: "Mup" })}>Mup</Link>
+                        </li>
+                        <li className={[Style.breadcrumbItem, Style.active].join(" ")} aria-current="page">HtmlWriterVisitor</li>
+                    </ol>
+                </nav>
+                <h2>HtmlWriterVisitor Class</h2>
+                <p>A <Link to={Routes.documentation({ member: "Mup.ParseTreeVisitor<TResult>" })}>ParseTreeVisitor&lt;TResult&gt;</Link> implementation for generating HTML from an <Link to={Routes.documentation({ member: "Mup.IParseTree" })}>IParseTree</Link>.</p>
+                <p>Extends <Link to={Routes.documentation({ member: "Mup.ParseTreeVisitor<TResult>" })}>ParseTreeVisitor&lt;string&gt;</Link>.</p>
+                <pre><code><span className={Style.textPrimary}>public</span> <span className={Style.textPrimary}>class</span> HtmlWriterVisitor : ParseTreeVisitor&lt;<span className={Style.textPrimary}>string</span>&gt;</code></pre>
+                <h3>Constructors</h3>
+                <table className={[Style.table, Style.tableHover].join(" ")}>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Access Modifier</th>
+                            <th>Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.HtmlWriterVisitor()" })}>HtmlWriterVisitor()</Link>
+                            </td>
+                            <td>public</td>
+                            <td>Initializes a new instance of the <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor" })}>HtmlWriterVisitor</Link> class.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Properties</h3>
+                <table className={[Style.table, Style.tableHover].join(" ")}>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Access Modifier</th>
+                            <th>Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.HtmlStringBuilder" })}>HtmlStringBuilder</Link>
+                            </td>
+                            <td>protected get</td>
+                            <td>Gets the <a href="https://msdn.microsoft.com/en-us/library/system.text.stringbuilder.aspx" target="_blank">StringBuilder</a> where the HTML is being written.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Methods</h3>
+                <table className={[Style.table, Style.tableHover].join(" ")}>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Access Modifier</th>
+                            <th>Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.AppendHtmlSafe(System.Char)" })}>AppendHtmlSafe(char)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Appends the HTML encoded character. Encoding is done only for special characters.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.AppendHtmlSafe(System.String)" })}>AppendHtmlSafe(string)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Appends the HTML encoded text. Encoding is done only for special characters.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.BeginVisit()" })}>BeginVisit()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Initializes the visitor. This method is called before any visit method.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.BeginVisitAsync(System.Threading.CancellationToken)" })}>BeginVisitAsync(CancellationToken)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Asynchronously initializes the visitor. This method is called before any visit method.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.EndVisit()" })}>EndVisit()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Completes the visit operation. This method is called after all visit methods.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.EndVisitAsync(System.Threading.CancellationToken)" })}>EndVisitAsync(CancellationToken)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Asynchronously completes the visit operation. This method is called after all visit methods.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.GetResult()" })}>GetResult()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Gets the visitor result. This method is called only after the visit operation completes.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitCodeFragment(System.String)" })}>VisitCodeFragment(string)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits a code fragment inside a block (e.g.: paragraph, list item or table).</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitEmphasisBeginning()" })}>VisitEmphasisBeginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of an emphasised element.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitEmphasisEnding()" })}>VisitEmphasisEnding()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of an emphasised element.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHeading1Beginning()" })}>VisitHeading1Beginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a level 1 heading.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHeading1Ending()" })}>VisitHeading1Ending()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a level 1 heading.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHeading2Beginning()" })}>VisitHeading2Beginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a level 2 heading.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHeading2Ending()" })}>VisitHeading2Ending()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a level 2 heading.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHeading3Beginning()" })}>VisitHeading3Beginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a level 3 heading.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHeading3Ending()" })}>VisitHeading3Ending()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a level 3 heading.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHeading4Beginning()" })}>VisitHeading4Beginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a level 4 heading.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHeading4Ending()" })}>VisitHeading4Ending()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a level 4 heading.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHeading5Beginning()" })}>VisitHeading5Beginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a level 5 heading.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHeading5Ending()" })}>VisitHeading5Ending()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a level 5 heading.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHeading6Beginning()" })}>VisitHeading6Beginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a level 6 heading.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHeading6Ending()" })}>VisitHeading6Ending()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a level 6 heading.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHorizontalRule()" })}>VisitHorizontalRule()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits a horizontal rule.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHyperlinkBeginning(System.String)" })}>VisitHyperlinkBeginning(string)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a hyperlink.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitHyperlinkEnding()" })}>VisitHyperlinkEnding()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a hyperlink.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitImage(System.String,System.String)" })}>VisitImage(string, string)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits an image.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitLineBreak()" })}>VisitLineBreak()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits a line break.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitListItemBeginning()" })}>VisitListItemBeginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a list item.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitListItemEnding()" })}>VisitListItemEnding()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a list item.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitOrderedListBeginning()" })}>VisitOrderedListBeginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of an ordered list.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitOrderedListEnding()" })}>VisitOrderedListEnding()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of an ordered list.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitParagraphBeginning()" })}>VisitParagraphBeginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a paragraph.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitParagraphEnding()" })}>VisitParagraphEnding()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a paragraph.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitPlugin(System.String)" })}>VisitPlugin(string)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits a plugin.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitPreformattedBlock(System.String)" })}>VisitPreformattedBlock(string)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits a preformatted block.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitStrongBeginning()" })}>VisitStrongBeginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a strong element.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitStrongEnding()" })}>VisitStrongEnding()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a strong element.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitTableBeginning()" })}>VisitTableBeginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a table.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitTableCellBeginning()" })}>VisitTableCellBeginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a table cell.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitTableCellEnding()" })}>VisitTableCellEnding()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a table cell.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitTableEnding()" })}>VisitTableEnding()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a table.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitTableHeaderCellBeginning()" })}>VisitTableHeaderCellBeginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a table header cell.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitTableHeaderCellEnding()" })}>VisitTableHeaderCellEnding()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a table header cell.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitTableRowBeginning()" })}>VisitTableRowBeginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of a table row.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitTableRowEnding()" })}>VisitTableRowEnding()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of a table row.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitText(System.String)" })}>VisitText(string)</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits plain text. This method may be called multiple times consecutively.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitUnorderedListBeginning()" })}>VisitUnorderedListBeginning()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the beginning of an unordered list.</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Link to={Routes.documentation({ member: "Mup.HtmlWriterVisitor.VisitUnorderedListEnding()" })}>VisitUnorderedListEnding()</Link>
+                            </td>
+                            <td>protected</td>
+                            <td>Visits the ending of an unordered list.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+};

@@ -1,118 +1,103 @@
-const IS_PRODUCTION = (process.argv.indexOf("-p") !== -1);
-const BUILD_PARAMETERS = {
-    isProduction: IS_PRODUCTION,
-    config: (IS_PRODUCTION ? "release" : "debug")
-};
+const isProduction = !!process.argv.find(item => item == "-p");
 
 const path = require("path");
-const UglifyJsPlugin = require("webpack").optimize.UglifyJsPlugin;
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const UglifyJsWebpackPlugin = require("uglifyjs-webpack-plugin");
 
-const aliases = require('./config/aliases.json');
-const config = require(resolve("./config/build.${config}.json", BUILD_PARAMETERS));
+const imports = require("./webpack.imports").call({
+    isProduction: isProduction
+});
+const aliases = Object
+    .getOwnPropertyNames(imports)
+    .reduce((result, name) => Object.defineProperty(
+        result,
+        name,
+        {
+            enumerable: true,
+            value: path.resolve(__dirname, imports[name])
+        }), {});
 
 module.exports = {
-    context: __dirname,
-    entry: ["babel-polyfill", path.join(__dirname, "view", "index.jsx")],
-    output: {
-        path: path.join(__dirname, "build"),
-        publicPath: "./",
-        filename: "app.min.js?[hash]"
-    },
+    entry: "./app.jsx",
     resolve: {
         extensions: [".js", ".jsx", ".json"],
-        alias: mapAliases(__dirname, aliases, BUILD_PARAMETERS)
+        alias: aliases
     },
-    devtool: config.devtool,
+    devtool: (isProduction ? false : "source-map"),
+    output: {
+        path: path.join(__dirname, "build"),
+        filename: "app.js"
+    },
     module: {
-        loaders: [
+        rules: [
             {
-                test: /\.(js|jsx)$/,
-                exclude: [/node_modules/, /lib/],
-                loader: "babel-loader",
-                query: {
-                    presets: ["react", "babel-preset-env"],
-                    plugins: ["transform-runtime", "react-html-attrs"]
+                test: /\.js(x?)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader"
                 }
             },
             {
-                test: /\.css$/,
-                exclude: /node_modules/,
-                loader: "style-loader!css-loader?camelCase&modules=true&localIdentName=[name]__[local]___[hash:base64:5]"
+                test: /\.png$/,
+                use: "file-loader"
             },
             {
-                test: /\.html$/,
-                loader: "html-loader",
-                options: config.html
-            },
-            {
-                test: /\.(png|svg|jpg|gif|ico)$/,
-                exclude: /node_modules/,
-                loader: "file-loader?name=[name].[ext]"
-            },
-            {
-                test: /\.(woff|woff2|eot|ttf|otf)$/,
-                include: path.join(__dirname, "lib"),
-                loader: "file-loader"
-            },
-            {
-                test: /\.js$/,
-                include: path.join(__dirname, "lib"),
-                loader: "file-loader?name=[name].[ext]"
+                test: /\.scss$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        {
+                            loader: "css-loader",
+                            options: {
+                                camelCase: true,
+                                localIdentName: (isProduction ? "[hash:base64]" : "[path][name]__[local]__[hash:base64:5]"),
+                                minimize: isProduction,
+                                modules: true
+                            }
+                        },
+                        {
+                            loader: "postcss-loader",
+                            options: {
+                                plugins: () => [
+                                    require("precss"),
+                                    require("autoprefixer")
+                                ]
+                            }
+                        },
+                        {
+                            loader: "sass-loader"
+                        }
+                    ]
+                })
             }
         ]
     },
     plugins: [
-        new UglifyJsPlugin({
-            compress: config.uglifyJs.compress,
-            beautify: config.uglifyJs.beautify,
-            sourceMap: config.uglifyJs.sourceMap,
-            warningsFilter: getWarningsFilter(config.uglifyJs.warnings)
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            "window.jQuery": "jquery",
+            Popper: ["popper.js", "default"]
+        }),
+        new ExtractTextPlugin({
+            filename: 'style.css'
+        }),
+        new UglifyJsWebpackPlugin({
+            sourceMap: !isProduction
         }),
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, "view", "index.html")
+            title: "Mup - Markup for Everyone",
+            hash: true,
+            favicon: aliases["mup/images/favicon"],
+            minify: {
+                collapseBooleanAttributes: isProduction,
+                collapseWhitespace: isProduction,
+                quoteCharacter: "\"",
+                removeComments: true,
+                removeScriptTypeAttributes: true
+            }
         })
-    ]
+    ].filter(plugin => !!plugin)
 };
-
-function mapAliases(rootFolder, aliases, parameters) {
-    var result = {};
-    Object
-        .getOwnPropertyNames(aliases)
-        .forEach(function (aliasKey) {
-            var alias = aliases[aliasKey];
-            Object.defineProperty(
-                result,
-                aliasKey,
-                {
-                    enumerable: true,
-                    writable: false,
-                    configurable: false,
-                    value: path.join(rootFolder, resolve(alias, parameters))
-                });
-        });
-    return result;
-}
-
-function resolve(path, parameters) {
-    if (parameters) {
-        const allowedParameterNamePattern = /\w+/;
-        const parameterSubstitutionPattern = new RegExp("\\$\\{("
-            + Object
-                .getOwnPropertyNames(parameters)
-                .filter(parameterName => allowedParameterNamePattern.test(parameterName))
-                .join("|")
-            + ")\\}", "gi");
-        path = path.replace(parameterSubstitutionPattern, (match, parameterName) => parameters[parameterName]);
-    }
-    return path;
-}
-
-function getWarningsFilter(warningsConfig) {
-    if (warningsConfig.exclude && warningsConfig.exclude.length > 0) {
-        var regExp = new RegExp("(\/|^)(" + warningsConfig.exclude.join("|") + ")(\/|$)");
-        return regExp.test.bind(regExp);
-    }
-    else
-        return () => false;
-}
