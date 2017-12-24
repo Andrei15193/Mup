@@ -274,3 +274,4 @@ build/
 .vscode
 *.swp
 *.swo
+package-lock.json
