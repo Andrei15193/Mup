@@ -8,6 +8,11 @@ namespace Mup
     {
         private static readonly Task _completedTask = Task.FromResult<object>(null);
 
+        /// <summary>Initializes a new instance of the <see cref="ParseTreeVisitor" /> class.</summary>
+        protected ParseTreeVisitor()
+        {
+        }
+
         /// <summary>Asynchronously initializes the visitor. This method is called before any visit method.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
         /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
@@ -631,6 +636,11 @@ namespace Mup
     public abstract class ParseTreeVisitor<TResult>
         : ParseTreeVisitor
     {
+        /// <summary>Initializes a new instance of the <see cref="ParseTreeVisitor{TResult}" /> class.</summary>
+        protected ParseTreeVisitor()
+        {
+        }
+
         /// <summary>Asynchronously gets the visitor result. This method is called only after the visit operation completes.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
         /// <returns>Returns the result after the entire parse tree has been visited wrapped in a <see cref="Task{TResult}"/>.</returns>
