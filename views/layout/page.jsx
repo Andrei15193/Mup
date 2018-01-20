@@ -21,7 +21,6 @@ export default class Page extends React.PureComponent {
                     <ul className={[Style.nav, Style.navPills, Style.pAuto].join(" ")}>
                         <NavItem exact path={Routes.home()}>Home</NavItem>
                         <NavItem path={Routes.onlineParser()}>Online Parser</NavItem>
-                        <NavItem path={Routes.gettingStarted()}>Getting Started</NavItem>
                         <NavItem path={Routes.documentation()}>Documentation</NavItem>
                         <NavItem path={Routes.license()}>License</NavItem>
                     </ul>
@@ -29,10 +28,12 @@ export default class Page extends React.PureComponent {
                 <div className={[Style.px3, Style.py4, Style.flexFill].join(" ")}>
                     {this.props.children}
                 </div>
-                <p className={Style.textCenter}>
-                    Mup Copyright &copy; 2017 Andrei Fangli<br />
-                    <a href="http://www.mup-project.net/">www.mup-project.net</a>
-                </p>
+                <div>
+                    <p className={Style.textCenter}>
+                        Mup Copyright &copy; 2017 Andrei Fangli<br />
+                        <a href="http://www.mup-project.net/">www.mup-project.net</a>
+                    </p>
+                </div>
             </div>
         );
     }

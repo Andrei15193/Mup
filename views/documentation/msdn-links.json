@@ -1,0 +1,14 @@
+{
+    "system.object": "https://msdn.microsoft.com/en-gb/library/system.object.aspx",
+    "system.char": "https://msdn.microsoft.com/en-gb/library/system.char.aspx",
+    "system.int32": "https://msdn.microsoft.com/en-gb/library/system.int32.aspx",
+    "system.string": "https://msdn.microsoft.com/en-gb/library/system.string.aspx",
+    "system.text.stringbuilder": "https://msdn.microsoft.com/en-gb/library/system.text.stringbuilder.aspx",
+    "system.argumentexception": "https://msdn.microsoft.com/en-gb/library/system.argumentexception.aspx",
+    "system.argumentnullexception": "https://msdn.microsoft.com/en-gb/library/system.argumentnullexception.aspx",
+    "system.threading.cancellationtoken": "https://msdn.microsoft.com/en-gb/library/system.threading.cancellationtoken.aspx",
+    "system.threading.tasks.task": "https://msdn.microsoft.com/en-gb/library/system.threading.tasks.task.aspx",
+    "system.threading.tasks.task<tresult>": "https://msdn.microsoft.com/en-gb/library/dd321424.aspx",
+    "system.io.memorystream": "https://msdn.microsoft.com/en-gb/library/system.io.memorystream.aspx",
+    "system.io.textreader": "https://msdn.microsoft.com/en-gb/library/system.io.textreader.aspx"
+}

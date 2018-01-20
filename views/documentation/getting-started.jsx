@@ -4,17 +4,17 @@ import { Link } from "react-router-dom";
 import { Page } from "mup/views/layout";
 import Routes from "mup/routes";
 
-export default class GettingStarted extends React.PureComponent {
+export class GettingStarted extends React.PureComponent {
     constructor(props) {
         super(props);
     }
 
     render() {
         return (
-            <Page>
-                <h1>Getting Started</h1>
+            <div>
+                <h2>Getting Started</h2>
 
-                <h2>Introduction</h2>
+                <h3>Introduction</h3>
 
                 <p>The library has a few core types that make it work: IParser, IParseTree and ParseTreeVisitor.</p>
 
@@ -49,7 +49,7 @@ export default class GettingStarted extends React.PureComponent {
                 <p>The pattern after each method pair is defined as follows:</p>
 
                 <pre><code>
-{`protected virtual async Task Visit{Element}Async(CancellationToken cancellationToken)
+                    {`protected virtual async Task Visit{Element}Async(CancellationToken cancellationToken)
 {
     Visist{Element}();
     return CompletedTask;
@@ -64,7 +64,7 @@ protected virtual void Visit{Element}()
 
                 <p><strong>NOTE!</strong> When overriding the asynchronous method then the synchronous counterpart will not be invoked anymore unless called explicitly or calling the base implementation (e.g. <code>{`base.Visit{Element}Async(cancellationToken)`}</code> or <code>{`Visit{Element}()`}</code>).</p>
 
-                <h2>Using the Library</h2>
+                <h3>Using the Library</h3>
 
                 <p>To exemplify how easy it is to get starting with Mup we will build a small web application that exposes just one endpoint which parses the body of a request and returns the HTML, similar to what this site uses for the <Link to={Routes.onlineParser()}>Online Parser</Link> (if you haven&#39;t tried it, you should definitely give it a go, it&#39;s really cool).</p>
 
@@ -75,7 +75,7 @@ protected virtual void Visit{Element}()
                 <p>Now that we have our demo project created, we will start by adding a <a href="https://www.nuget.org/" target="_blank">NuGet</a> dependency towards the <a href="https://www.nuget.org/packages/Mup" target="_blank">Mup package</a>. Open <em>mup-example.csproj</em> (assuming you have the same folder name as I do, otherwise the <em>.csproj</em> file will have the same name as the folder in which you created your .NET Core application) and add the following line: <code>&lt;PackageReference Include=&quot;Mup&quot; Version=&quot;1.0.0&quot; /&gt;</code>. The <em>.csproj</em> file should look something like this:</p>
 
                 <pre><code>
-{`<Project Sdk="Microsoft.NET.Sdk.Web">
+                    {`<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
@@ -103,7 +103,7 @@ protected virtual void Visit{Element}()
                 <p>Next we will create our controller that will be using Mup to parse Creole and return HTML. Under <em>Controllers</em> create a new file: <em>CreoleController.cs</em>, the controller will have just one method for handing <strong>POST</strong> requests on the <strong>api/creole</strong> endpoint:</p>
 
                 <pre><code>
-{`using System.Threading;
+                    {`using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Mup;
@@ -134,19 +134,19 @@ namespace mup_example.Controllers
                 <p>Now to make our request, append to the base URL the route we have defined for parsing Creole text: <code>http://localhost:5000/api/creole</code>, keep in mind that it is a <strong>POST</strong> request and in the body add the following:</p>
 
                 <pre><code>
-{`"== Hey There!
+                    {`"== Hey There!
 
 This is a test"`}
                 </code></pre>
 
                 <p>When you call the API you should get <code>&lt;h2&gt;Hey There!&lt;/h2&gt;&lt;p&gt;This is a test&lt;/p&gt;</code>.</p>
 
-                <h2>Customizing the Result</h2>
+                <h3>Customizing the Result</h3>
 
                 <p>As you can see, we have quite a few lines for using the Core feature that Mup offers, fear not as we can turn it into a one line! We can make use of extension methods to combine the asynchronous methods into one so we get rid of the boilerplate code:</p>
 
                 <pre><code>
-{`public async Task<IActionResult> Parse([FromBody] string text, CancellationToken cancellationToken)
+                    {`public async Task<IActionResult> Parse([FromBody] string text, CancellationToken cancellationToken)
 {
     string html = await new CreoleParser().ParseAsync(text, cancellationToken).With(new HtmlWriterVisitor());
     return Ok(html);
@@ -164,7 +164,7 @@ This is a test"`}
                 <p>We want to generate paragraphs that are separated by blank lines with the exception of the first one. We do not want an empty line before the first paragraph in our HTML. First we will write a custom visitor which inherits from <code>HtmlWriterVisitor</code>, we don&#39;t need to reinvent the wheel, we&#39;ll just override the methods that we want to change.</p>
 
                 <pre><code>
-{`public class PrettyHtmlWriterVisitor : HtmlWriterVisitor
+                    {`public class PrettyHtmlWriterVisitor : HtmlWriterVisitor
 {
     protected override void VisitParagraphBeginning()
     {
@@ -183,7 +183,7 @@ This is a test"`}
                 <p>And now to update the controller action:</p>
 
                 <pre><code>
-{`public async Task<IActionResult> Parse([FromBody] string text, CancellationToken cancellationToken)
+                    {`public async Task<IActionResult> Parse([FromBody] string text, CancellationToken cancellationToken)
 {
     string html = await new CreoleParser().ParseAsync(text, cancellationToken).With(new PrettyHtmlWriterVisitor());
     return Ok(html);
@@ -193,7 +193,7 @@ This is a test"`}
                 <p>That&#39;s it! Let&#39;s take this for a test run. Update the body for the request to the following:</p>
 
                 <pre><code>
-{`"paragraph 1
+                    {`"paragraph 1
 
 paragraph 2"`}
                 </code></pre>
@@ -201,13 +201,11 @@ paragraph 2"`}
                 <p>When we call the endpoint we will be receiving the following HTML:</p>
 
                 <pre><code>
-{`<p>paragraph 1</p>
+                    {`<p>paragraph 1</p>
 
 <p>paragraph 2</p>`}
                 </code></pre>
-
-                <p>This page has been generated using the Creole parser, if you want to learn more about the library head over to the <strong><Link to={Routes.documentation()}>Documentation</Link></strong> tab.</p>
-            </Page>
+            </div>
         );
     }
 };

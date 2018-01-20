@@ -24,3 +24,7 @@ pre {
 p {
     text-align: justify;
 }
+
+td.documentationTable > p:last-of-type{
+    margin-bottom: 0;
+}
