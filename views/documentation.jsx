@@ -408,21 +408,21 @@ class PropertyAccessor extends React.PureComponent {
     render() {
         const propertyDefinition = this.props.definition;
         if (this.props.includeAccessModifier)
-            if (propertyDefinition.get && propertyDefinition.set)
+            if (propertyDefinition.get && propertyDefinition.get.access !== "private" && propertyDefinition.set && propertyDefinition.set.access !== "private")
                 return [
-                    <AccessModifier key="1" access={propertyDefinition.get.access} />,
+                    <AccessModifier key="getter" access={propertyDefinition.get.access} />,
                     " get; ",
-                    <AccessModifier key="2" access={propertyDefinition.set.access} />,
+                    <AccessModifier key="setter" access={propertyDefinition.set.access} />,
                     " set"
                 ];
-            else if (propertyDefinition.get)
+            else if (propertyDefinition.get && propertyDefinition.get.access !== "private")
                 return [
-                    <AccessModifier key="1" access={propertyDefinition.get.access} />,
+                    <AccessModifier key="getter" access={propertyDefinition.get.access} />,
                     " get"
                 ];
             else
                 return [
-                    <AccessModifier key="1" access={propertyDefinition.set.access} />,
+                    <AccessModifier key="setter" access={propertyDefinition.set.access} />,
                     " set"
                 ];
         else
