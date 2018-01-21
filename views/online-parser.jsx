@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Page } from "mup/views/layout";
-import DependencyContainer from "mup/dependency-container";
+import { Page } from "./layout";
+import { DependencyContainer } from "../dependency-container";
 import Style from "mup/style";
 import JsonPreview from "./online-parser/json-preview";
 

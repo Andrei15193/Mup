@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import Style from "mup/style";
-import { Page } from "mup/views/layout";
 import { Routes } from "../../routes";
 
 export class GettingStarted extends React.PureComponent {

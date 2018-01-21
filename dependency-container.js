@@ -1,15 +1,13 @@
 import { Dispatcher } from "flux";
 
 import Config from "mup/config";
-import Request from "mup/actions/request";
-import EditorActions from "mup/actions/editor-actions";
-import ParseActions from "mup/actions/parse-actions";
-import EditorStore from "mup/stores/editor-store";
-import PreviewStore from "mup/stores/preview-store";
+import { Api } from "./services/api";
+import { EditorActions, ParseActions } from "./actions";
+import { EditorStore, PreviewStore } from "./stores";
 
-export default {
-    get request() {
-        return singleton("request", () => new Request(Config.axios));
+export const DependencyContainer = {
+    get api() {
+        return singleton("api", () => new Api(Config.axios));
     },
 
     get dispatcher() {
@@ -17,11 +15,11 @@ export default {
     },
 
     get editorActions() {
-        return new EditorActions(this.dispatcher, this.request);
+        return new EditorActions(this.dispatcher, this.api);
     },
 
     get parserActions() {
-        return new ParseActions(this.dispatcher, this.request);
+        return new ParseActions(this.dispatcher, this.api);
     },
 
     get editorStore() {

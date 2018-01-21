@@ -6,24 +6,14 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const UglifyJsWebpackPlugin = require("uglifyjs-webpack-plugin");
 
-const imports = require("./webpack.imports").call({
-    isProduction: isProduction
-});
-const aliases = Object
-    .getOwnPropertyNames(imports)
-    .reduce((result, name) => Object.defineProperty(
-        result,
-        name,
-        {
-            enumerable: true,
-            value: path.resolve(__dirname, imports[name])
-        }), {});
-
 module.exports = {
     entry: "./app.jsx",
     resolve: {
         extensions: [".js", ".jsx", ".json"],
-        alias: aliases
+        alias: {
+            "mup/style": path.join(__dirname, "./views/style.scss"),
+            "mup/config": path.join(__dirname, (isProduction ? "./webpack.config.js.release" : "./webpack.config.js.debug"))
+        }
     },
     devtool: (isProduction ? false : "source-map"),
     output: {
@@ -90,7 +80,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: "Mup - Markup for Everyone",
             hash: true,
-            favicon: aliases["mup/images/favicon"],
+            favicon: "./images/favicon.ico",
             minify: {
                 collapseBooleanAttributes: isProduction,
                 collapseWhitespace: isProduction,

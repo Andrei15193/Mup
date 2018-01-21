@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Page } from "mup/views/layout";
+import { Page } from "./layout";
 import LicenseStyle from "./license.scss";
 
 export default class License extends React.PureComponent {

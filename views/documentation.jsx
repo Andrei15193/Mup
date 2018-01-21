@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { Page } from "mup/views/layout";
+import { Page } from "./layout";
 import { Routes } from "../routes";
 import Style from "mup/style";
 import { DocumentationView, FriendlyNames, LinkTo } from "./documentation/documentation-view";
@@ -16,7 +16,7 @@ export class Documentation extends React.PureComponent {
     render() {
         const documentationComponent = getDocumentationComponentFor(this.props.match.params.member);
         return (
-            <Page >
+            <Page>
                 <h1>Documentation</h1>
                 {documentationComponent}
             </Page>

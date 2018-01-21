@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-export default class Request {
+export class Api {
     constructor(apiConfig) {
         this._axios = Axios.create(apiConfig);
     }

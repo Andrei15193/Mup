@@ -1,11 +1,12 @@
 import React from "react";
+import { NavLink, withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
 
-import LogoUrl from "mup/images/logo";
 import Style from "mup/style";
-import { Routes } from "../../routes";
-import NavItem from "./nav-item";
+import { Routes } from "../routes";
+import LogoUrl from "../images/logo.png";
 
-export default class Page extends React.PureComponent {
+export class Page extends React.PureComponent {
     constructor(props) {
         super(props);
     }
@@ -38,3 +39,39 @@ export default class Page extends React.PureComponent {
         );
     }
 };
+
+const NavItem =  withRouter(
+    class extends React.PureComponent {
+        static get propTypes() {
+            return {
+                path: PropTypes.string.isRequired,
+                exact: PropTypes.bool.isRequired
+            };
+        }
+
+        static get defaultProps() {
+            return {
+                exact: false
+            };
+        }
+
+        constructor(props) {
+            super(props);
+        }
+
+        render() {
+            return (
+                <li className={Style.navItem}>
+                    <NavLink
+                        className={Style.navLink}
+                        activeClassName={Style.active}
+                        to={this.props.path}
+                        exact={this.props.exact}
+                        onClick={(event => (event.target.className.includes(Style.active) && event.preventDefault()))}>
+                        {this.props.children}
+                    </NavLink>
+                </li>
+            );
+        }
+    }
+);

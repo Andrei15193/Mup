@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Page } from "mup/views/layout";
+import { Page } from "./layout";
 import Description from "./home/description";
 import WikiLanguages from "./home/wiki-languages";
 

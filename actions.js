@@ -1,9 +1,22 @@
-import { ActionData, ActionState } from "mup/action-data";
+import { ActionState, ActionData } from "./action-data";
 
-export default class ParseActions {
-    constructor(dispatcher, request) {
+export class EditorActions {
+    constructor(dispatcher) {
         this.dispatcher = dispatcher;
-        this.request = request;
+    }
+
+    updateText(text) {
+        this.dispatcher.dispatch(
+            new ActionData("update", ActionState.completed, {
+                text: text
+            }));
+    }
+};
+
+export class ParseActions {
+    constructor(dispatcher, api) {
+        this.dispatcher = dispatcher;
+        this.api = api;
         this.cache = {
             text: null,
             json: null,
@@ -14,9 +27,9 @@ export default class ParseActions {
     parseAsync(text) {
         if (this.cache.text !== text) {
             this.dispatcher.dispatch(new ActionData("parse", ActionState.excuting));
-            return this.request.postAsync("/api/creole", text)
+            return this.api.postAsync("/api/creole", text)
                 .then(response =>
-                    new ActionData("parse", ActionState.completed, {
+                    new ActionDataata("parse", ActionState.completed, {
                         json: response.data.json,
                         html: response.data.html
                     }))

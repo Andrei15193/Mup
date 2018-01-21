@@ -1,8 +1,27 @@
 import EventEmitter from "events";
 
-import { ActionState } from "mup/action-data";
+import { ActionState } from "./action-data";
 
-export default class PreviewStore extends EventEmitter {
+export class EditorStore extends EventEmitter {
+    constructor(dispatcher) {
+        super();
+        this._text = "";
+        dispatcher.register(this.handle.bind(this));
+    }
+
+    get text() {
+        return this._text;
+    }
+
+    handle(data) {
+        if (data.action === "update" && data.state === ActionState.completed) {
+            this._text = data.text;
+            this.emit("propertyChanged", "text");
+        }
+    }
+};
+
+export class PreviewStore extends EventEmitter {
     constructor(dispatcher) {
         super();
         this._json = [];

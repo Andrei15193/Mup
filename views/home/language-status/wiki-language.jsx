@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-
-import { Badge, BadgeType } from "mup/views/common";
+import { Badge, BadgeType } from "../../common";
 
 export const Phase = {
     "Planned": "Planned",
