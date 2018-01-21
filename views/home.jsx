@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import Style from "mup/style";
-
 import { Page } from "./layout";
 
 export class Home extends React.PureComponent {
@@ -201,85 +200,22 @@ class Element extends React.PureComponent {
 
     render() {
         return (
-            <Badge type={this.getBadgeTypeFrom(this.props.status)}>
+            <span className={[Style.badge, this.getBadgeColorClassName()].join(" ")}>
                 {this.props.name}
-            </Badge>
+            </span>
         )
     }
 
-    getBadgeTypeFrom(elementStatus) {
-        switch (elementStatus) {
+    getBadgeColorClassName(badgeType) {
+        switch (this.props.status) {
             case ElementStatus.InProgress:
-                return BadgeType.Info;
-
-            case ElementStatus.Done:
-                return BadgeType.Success;
-
-            default:
-                return BadgeType.Secondary;
-        }
-    }
-}
-
-const BadgeType = {
-    "Primary": "primary",
-    "Secondary": "secondary",
-    "Success": "success",
-    "Danger": "danger",
-    "Warning": "warning",
-    "Info": "info",
-    "Light": "light",
-    "Dark": "dark"
-};
-
-class Badge extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <span className={this.getClassNames().join(" ")}>
-                {this.props.children}
-            </span>
-        );
-    }
-
-    getClassNames() {
-        const classNames = [Style.badge];
-
-        const specializedBadgeClassName = this.getSpecializedBadgeClassName(this.props.type);
-        if (specializedBadgeClassName)
-            classNames.push(specializedBadgeClassName);
-
-        return classNames;
-    }
-
-    getSpecializedBadgeClassName(badgeType) {
-        switch (badgeType) {
-            case BadgeType.Primary:
-                return Style.badgePrimary;
-
-            case BadgeType.Secondary:
-                return Style.badgeSecondary;
-
-            case BadgeType.Success:
-                return Style.badgeSuccess;
-
-            case BadgeType.Danger:
-                return Style.badgeDanger;
-
-            case BadgeType.Warning:
-                return Style.badgeWarning;
-
-            case BadgeType.Info:
                 return Style.badgeInfo;
 
-            case BadgeType.Light:
-                return Style.badgeLight;
+            case ElementStatus.Done:
+                return Style.badgeSuccess;
 
-            case BadgeType.Dark:
-                return Style.badgeDark;
+            default:
+                return Style.badgeSecondary;
         }
     }
 }
