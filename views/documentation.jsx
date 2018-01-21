@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { Page } from "mup/views/layout";
-import Routes from "mup/routes";
+import { Routes } from "../routes";
 import Style from "mup/style";
 import { DocumentationView, FriendlyNames, LinkTo } from "./documentation/documentation-view";
 import { definitions as MupDefinitions } from "./documentation/mup";

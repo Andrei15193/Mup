@@ -2,7 +2,7 @@ import React from "react";
 
 import LogoUrl from "mup/images/logo";
 import Style from "mup/style";
-import Routes from "mup/routes";
+import { Routes } from "../../routes";
 import NavItem from "./nav-item";
 
 export default class Page extends React.PureComponent {

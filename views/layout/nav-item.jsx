@@ -4,8 +4,6 @@ import { NavLink, withRouter } from "react-router-dom";
 
 import Style from "mup/style";
 
-import Routes, { RoutePaths } from "mup/routes";
-
 export default withRouter(
     class NavItem extends React.PureComponent {
         static get propTypes() {

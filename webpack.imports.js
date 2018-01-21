@@ -3,7 +3,6 @@ module.exports = function () {
         "mup/style": "./views/style.scss",
         "mup/images/logo": "./images/logo.png",
         "mup/images/favicon": "./images/favicon.ico",
-        "mup/routes": "./routes",
         "mup/dependency-container": "./dependency-container",
         "mup/config": (this.isProduction ? "./webpack.imports.js.release" : "./webpack.imports.js.debug"),
         "mup/action-data": "./action-data",

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import "bootstrap";
 
-import { RoutePaths } from "mup/routes";
+import { RoutePaths } from "./routes";
 import Home from "./views/home";
 import OnlineParser from "./views/online-parser";
 import { Documentation } from "./views/documentation";

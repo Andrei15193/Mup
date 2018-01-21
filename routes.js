@@ -5,23 +5,17 @@ export const RoutePaths = {
     "license": "/license"
 };
 
-export default Object
-    .getOwnPropertyNames(RoutePaths)
-    .reduce((routes, routeName) => {
-        const routePath = RoutePaths[routeName].toString();
-        return Object.defineProperty(
-            routes,
-            routeName,
-            {
-                enumerable: true,
-                value: (params => fillParameters(routePath, params))
-            });
-    }, {});
+export const Routes = {
+    home: fillParameters.bind({ route: RoutePaths.home }),
+    onlineParser: fillParameters.bind({ route: RoutePaths.onlineParser }),
+    documentation: fillParameters.bind({ route: RoutePaths.documentation }),
+    license: fillParameters.bind({ route: RoutePaths.license })
+};
 
-function fillParameters(route, params) {
+function fillParameters(params) {
     const routeParamsRegex = new RegExp("(^|/):([_a-zA-Z][_a-zA-Z0-9]*)(\\?)?(?=/|$)", "gi");
 
-    const result = route.replace(routeParamsRegex, function (match, prefix, paramName, isOptional) {
+    const result = this.route.replace(routeParamsRegex, function (match, prefix, paramName, isOptional) {
         const paramValue = (params ? params[paramName] : undefined);
         if (paramValue !== undefined && paramValue !== null)
             return (prefix + paramValue.toString().replace("/", "%2F"));

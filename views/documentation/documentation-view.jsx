@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom"
 
-import Routes from "mup/routes";
+import { Routes } from "../../routes";
 import Style from "mup/style";
 import MsdnLinks from "./msdn-links";
 
