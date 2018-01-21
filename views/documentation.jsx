@@ -190,7 +190,7 @@ class Method extends React.PureComponent {
                         </li>
                     </ol>
                 </nav>
-                <h2><MemberName definition={definition} /> Method</h2>
+                <h2><MemberName definition={definition} /> {definition.type === "constructor" ? "Constructor" : "Method"}</h2>
                 <DocumentationView elements={definition.documentation.summary} />
                 <MethodInheritanceSummary definition={definition} />
                 <GenericParametersSummary definition={definition} />
@@ -790,7 +790,7 @@ class PropertyInheritanceSummary extends React.PureComponent {
     }
 }
 
-class PropertyAccessorSummary extends React.PureComponent{    
+class PropertyAccessorSummary extends React.PureComponent {
     constructor(props) {
         super(props);
     }
