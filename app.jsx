@@ -5,9 +5,9 @@ import "bootstrap";
 
 import { RoutePaths } from "./routes";
 import { Home } from "./views/home";
-import OnlineParser from "./views/online-parser";
+import { OnlineParser } from "./views/online-parser";
 import { Documentation } from "./views/documentation";
-import License from "./views/license";
+import { License } from "./views/license";
 
 class App extends React.PureComponent {
     constructor(props) {

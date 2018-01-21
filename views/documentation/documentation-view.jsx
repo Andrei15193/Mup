@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom"
 
-import { Routes } from "../../routes";
 import Style from "mup/style";
-import MsdnLinks from "./msdn-links";
+import { Routes } from "../../routes";
+import MsdnLinks from "./msdn-links.json";
 
 export class DocumentationView extends React.PureComponent {
     constructor(props) {

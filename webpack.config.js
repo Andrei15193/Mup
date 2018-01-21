@@ -9,10 +9,10 @@ const UglifyJsWebpackPlugin = require("uglifyjs-webpack-plugin");
 module.exports = {
     entry: "./app.jsx",
     resolve: {
-        extensions: [".js", ".jsx", ".json"],
+        extensions: [".js", ".jsx"],
         alias: {
             "mup/style": path.join(__dirname, "./views/style.scss"),
-            "mup/config": path.join(__dirname, (isProduction ? "./webpack.config.js.release" : "./webpack.config.js.debug"))
+            "mup/config": path.join(__dirname, (isProduction ? "./webpack.config.js.release.json" : "./webpack.config.js.debug.json"))
         }
     },
     devtool: (isProduction ? false : "source-map"),

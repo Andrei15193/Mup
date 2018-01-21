@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import Style from "mup/style";
 import { Page } from "./layout";
 import { Routes } from "../routes";
-import Style from "mup/style";
 import { DocumentationView, FriendlyNames, LinkTo } from "./documentation/documentation-view";
-import { definitions as MupDefinitions } from "./documentation/mup";
+import { definitions as MupDefinitions } from "./documentation/mup.json";
 import { GettingStarted } from "./documentation/getting-started";
 
 export class Documentation extends React.PureComponent {

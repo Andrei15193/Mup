@@ -1,9 +1,9 @@
 import React from "react";
 
+import Style from "mup/style";
 import { Page } from "./layout";
 import { DependencyContainer } from "../dependency-container";
-import Style from "mup/style";
-import JsonPreview from "./online-parser/json-preview";
+import { JsonPreview } from "./online-parser/json-preview";
 
 const Views = {
     edit: "edit",
@@ -11,7 +11,7 @@ const Views = {
     html: "html"
 };
 
-export default class OnlineParser extends React.Component {
+export class OnlineParser extends React.Component {
     constructor(props) {
         super(props);
 

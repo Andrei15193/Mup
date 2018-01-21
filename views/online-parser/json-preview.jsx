@@ -31,7 +31,7 @@ const ElementType = {
     text: "text"
 };
 
-export default class JsonPreview extends React.PureComponent {
+export class JsonPreview extends React.PureComponent {
     constructor(props) {
         super(props);
     }

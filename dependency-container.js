@@ -1,13 +1,13 @@
 import { Dispatcher } from "flux";
 
-import Config from "mup/config";
+import { axios as AxiosConfig } from "mup/config";
 import { Api } from "./services/api";
 import { EditorActions, ParseActions } from "./actions";
 import { EditorStore, PreviewStore } from "./stores";
 
 export const DependencyContainer = {
     get api() {
-        return singleton("api", () => new Api(Config.axios));
+        return singleton("api", () => new Api(AxiosConfig));
     },
 
     get dispatcher() {

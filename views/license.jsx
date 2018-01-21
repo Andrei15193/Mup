@@ -3,7 +3,7 @@ import React from "react";
 import { Page } from "./layout";
 import LicenseStyle from "./license.scss";
 
-export default class License extends React.PureComponent {
+export class License extends React.PureComponent {
     constructor(props) {
         super(props);
     }
