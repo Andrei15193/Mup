@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import Style from "mup/style";
 import { Page } from "mup/views/layout";
 import Routes from "mup/routes";
 
@@ -49,13 +50,13 @@ export class GettingStarted extends React.PureComponent {
                 <p>The pattern after each method pair is defined as follows:</p>
 
                 <pre><code>
-                    {`protected virtual async Task Visit{Element}Async(CancellationToken cancellationToken)
+                    <Keyword>protected</Keyword> <Keyword>virtual</Keyword> <Keyword>async</Keyword>{` Task Visit`}<em>{`{Element}`}</em>{`Async(CancellationToken cancellationToken)
 {
-    Visist{Element}();
-    return CompletedTask;
+    Visit`}<em>{`{Element}`}</em>{`();
+    `}<Keyword>return</Keyword>{` CompletedTask;
 }
 
-protected virtual void Visit{Element}()
+`}<Keyword>protected</Keyword> <Keyword>virtual</Keyword> <Keyword>void</Keyword>{` Visit`}<em>{`{Element}`}</em>{`()
 {
 }`}
                 </code></pre>
@@ -75,53 +76,53 @@ protected virtual void Visit{Element}()
                 <p>Now that we have our demo project created, we will start by adding a <a href="https://www.nuget.org/" target="_blank">NuGet</a> dependency towards the <a href="https://www.nuget.org/packages/Mup" target="_blank">Mup package</a>. Open <em>mup-example.csproj</em> (assuming you have the same folder name as I do, otherwise the <em>.csproj</em> file will have the same name as the folder in which you created your .NET Core application) and add the following line: <code>&lt;PackageReference Include=&quot;Mup&quot; Version=&quot;1.0.0&quot; /&gt;</code>. The <em>.csproj</em> file should look something like this:</p>
 
                 <pre><code>
-                    {`<Project Sdk="Microsoft.NET.Sdk.Web">
+                    <Tag>{`<Project`}</Tag> <AttributeName>Sdk</AttributeName>=<AttributeValue>"Microsoft.NET.Sdk.Web"</AttributeValue><Tag>{`>`}</Tag>{`
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
-    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
-  </PropertyGroup>
+  `}<Tag>{`<PropertyGroup>`}</Tag>{`
+    `}<Tag>{`<TargetFramework>`}</Tag>netcoreapp1.1<Tag>{`</TargetFramework>`}</Tag>{`
+    `}<Tag>{`<PackageTargetFallback>`}</Tag>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;<Tag>{`</PackageTargetFallback>`}</Tag>{`
+  `}<Tag>{`</PropertyGroup>`}</Tag>{`
 
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
+  `}<Tag>{`<ItemGroup>`}</Tag>{`
+    `}<Tag>{`<Folder`}</Tag> <AttributeName>Include</AttributeName>=<AttributeValue>"wwwroot\"</AttributeValue> <Tag>{`/>`}</Tag>{`
+  `}<Tag>{`</ItemGroup>`}</Tag>{`
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.3" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.2" />
-    <PackageReference Include="Mup" Version="1.0.0" />
-  </ItemGroup>
+  `}<Tag>{`<ItemGroup>`}</Tag>{`
+    `}<Tag>{`<PackageReference`}</Tag> <AttributeName>Include</AttributeName>=<AttributeValue>"Microsoft.AspNetCore"</AttributeValue> <AttributeName>Version</AttributeName>=<AttributeValue>"1.1.2"</AttributeValue> <Tag>{`/>`}</Tag>{`
+    `}<Tag>{`<PackageReference`}</Tag> <AttributeName>Include</AttributeName>=<AttributeValue>"Microsoft.AspNetCore.Mvc"</AttributeValue> <AttributeName>Version</AttributeName>=<AttributeValue>"1.1.3"</AttributeValue> <Tag>{`/>`}</Tag>{`
+    `}<Tag>{`<PackageReference`}</Tag> <AttributeName>Include</AttributeName>=<AttributeValue>"Microsoft.Extensions.Logging.Debug"</AttributeValue> <AttributeName>Version</AttributeName>=<AttributeValue>"1.1.2"</AttributeValue> <Tag>{`/>`}</Tag>{`
+    `}<strong><Tag>{`<PackageReference`}</Tag> <AttributeName>Include</AttributeName>=<AttributeValue>"Mup"</AttributeValue> <AttributeName>Version</AttributeName>=<AttributeValue>"1.0.0"</AttributeValue> <Tag>{`/>`}</Tag></strong>{`
+  `}<Tag>{`</ItemGroup>`}</Tag>{`
 
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
-  </ItemGroup>
+  `}<Tag>{`<ItemGroup>`}</Tag>{`
+    `}<Tag>{`<DotNetCliToolReference`}</Tag> <AttributeName>Include</AttributeName>=<AttributeValue>"Microsoft.VisualStudio.Web.CodeGeneration.Tools"</AttributeValue> <AttributeName>Version</AttributeName>=<AttributeValue>"1.0.1"</AttributeValue> <Tag>{`/>`}</Tag>{`
+  `}<Tag>{`</ItemGroup>`}</Tag>{`
 
-</Project>`}
+`}<Tag>{`</Project>`}</Tag>
                 </code></pre>
 
                 <p>Next we will create our controller that will be using Mup to parse Creole and return HTML. Under <em>Controllers</em> create a new file: <em>CreoleController.cs</em>, the controller will have just one method for handing <strong>POST</strong> requests on the <strong>api/creole</strong> endpoint:</p>
 
                 <pre><code>
-                    {`using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Mup;
+                    <Keyword>{`using`}</Keyword>{` System.Threading;
+`}<Keyword>using</Keyword>{` System.Threading.Tasks;
+`}<Keyword>using</Keyword>{` Microsoft.AspNetCore.Mvc;
+`}<Keyword>using</Keyword>{` Mup;
 
-namespace mup_example.Controllers
+`}<Keyword>{`namespace`}</Keyword>{` mup_example.Controllers
 {
-    [Route("api/creole")]
-    public class CreoleParserController : Controller
+    [Route(`}<StringLiteral>{`"api/creole"`}</StringLiteral>{`)]
+    `}<Keyword>public</Keyword> <Keyword>class</Keyword>{` CreoleParserController : Controller
     {
-        // POST api/creole
+        `}<Comment>// POST api/creole</Comment>{`
         [HttpPost]
-        public async Task<IActionResult> Parse([FromBody] string text, CancellationToken cancellationToken)
+        `}<Keyword>public</Keyword> <Keyword>async</Keyword>{` Task<IActionResult> Parse([FromBody] `}<Keyword>string</Keyword>{` text, CancellationToken cancellationToken)
         {
-            CreoleParser parser = new CreoleParser();
-            IParseTree parseTree = await parser.ParseAsync(text, cancellationToken);
-            HtmlWriterVisitor htmlWriterVisitor = new HtmlWriterVisitor();
-            string html = await parseTree.AcceptAsync(htmlWriterVisitor, cancellationToken);
-            return Ok(html);
+            CreoleParser parser = `}<Keyword>new</Keyword>{` CreoleParser();
+            IParseTree parseTree = `}<Keyword>await</Keyword>{` parser.ParseAsync(text, cancellationToken);
+            HtmlWriterVisitor htmlWriterVisitor = `}<Keyword>new</Keyword>{` HtmlWriterVisitor();
+            `}<Keyword>string</Keyword>{` html = `}<Keyword>await</Keyword>{` parseTree.AcceptAsync(htmlWriterVisitor, cancellationToken);
+            `}<Keyword>return</Keyword>{` Ok(html);
         }
     }
 }`}
@@ -134,9 +135,9 @@ namespace mup_example.Controllers
                 <p>Now to make our request, append to the base URL the route we have defined for parsing Creole text: <code>http://localhost:5000/api/creole</code>, keep in mind that it is a <strong>POST</strong> request and in the body add the following:</p>
 
                 <pre><code>
-                    {`"== Hey There!
+                    <StringLiteral>{`"== Hey There!
 
-This is a test"`}
+This is a test"`}</StringLiteral>
                 </code></pre>
 
                 <p>When you call the API you should get <code>&lt;h2&gt;Hey There!&lt;/h2&gt;&lt;p&gt;This is a test&lt;/p&gt;</code>.</p>
@@ -146,10 +147,10 @@ This is a test"`}
                 <p>As you can see, we have quite a few lines for using the Core feature that Mup offers, fear not as we can turn it into a one line! We can make use of extension methods to combine the asynchronous methods into one so we get rid of the boilerplate code:</p>
 
                 <pre><code>
-                    {`public async Task<IActionResult> Parse([FromBody] string text, CancellationToken cancellationToken)
+                    <Keyword>public</Keyword> <Keyword>async</Keyword>{` Task<IActionResult> Parse([FromBody] `}<Keyword>string</Keyword>{` text, CancellationToken cancellationToken)
 {
-    string html = await new CreoleParser().ParseAsync(text, cancellationToken).With(new HtmlWriterVisitor());
-    return Ok(html);
+    `}<Keyword>string</Keyword>{` html = `}<Keyword>await</Keyword> <Keyword>new</Keyword>{` CreoleParser().ParseAsync(text, cancellationToken).With(`}<Keyword>new</Keyword>{` HtmlWriterVisitor());
+    `}<Keyword>return</Keyword>{` Ok(html);
 }`}
                 </code></pre>
 
@@ -164,17 +165,17 @@ This is a test"`}
                 <p>We want to generate paragraphs that are separated by blank lines with the exception of the first one. We do not want an empty line before the first paragraph in our HTML. First we will write a custom visitor which inherits from <code>HtmlWriterVisitor</code>, we don&#39;t need to reinvent the wheel, we&#39;ll just override the methods that we want to change.</p>
 
                 <pre><code>
-                    {`public class PrettyHtmlWriterVisitor : HtmlWriterVisitor
+                    <Keyword>public</Keyword> <Keyword>class</Keyword>{` PrettyHtmlWriterVisitor : HtmlWriterVisitor
 {
-    protected override void VisitParagraphBeginning()
+    `}<Keyword>protected</Keyword> <Keyword>override</Keyword> <Keyword>void</Keyword>{` VisitParagraphBeginning()
     {
         AddBlankLineIfNecessary();
-        base.VisitParagraphBeginning();
+        `}<Keyword>base</Keyword>{`.VisitParagraphBeginning();
     }
 
-    private void AddBlankLineIfNecessary()
+    `}<Keyword>private</Keyword> <Keyword>void</Keyword>{` AddBlankLineIfNecessary()
     {
-        if (HtmlStringBuilder.Length > 0)
+        `}<Keyword>if</Keyword>{` (HtmlStringBuilder.Length > 0)
             HtmlStringBuilder.AppendLine().AppendLine();
     }
 }`}
@@ -183,29 +184,113 @@ This is a test"`}
                 <p>And now to update the controller action:</p>
 
                 <pre><code>
-                    {`public async Task<IActionResult> Parse([FromBody] string text, CancellationToken cancellationToken)
+                    <Keyword>public</Keyword> <Keyword>async</Keyword>{` Task<IActionResult> Parse([FromBody] `}<Keyword>string</Keyword>{` text, CancellationToken cancellationToken)
 {
-    string html = await new CreoleParser().ParseAsync(text, cancellationToken).With(new PrettyHtmlWriterVisitor());
-    return Ok(html);
+    `}<Keyword>string</Keyword>{` html = `}<Keyword>await</Keyword> <Keyword>new</Keyword>{` CreoleParser().ParseAsync(text, cancellationToken).With(`}<Keyword>new</Keyword>{` PrettyHtmlWriterVisitor());
+    `}<Keyword>return</Keyword>{` Ok(html);
 }`}
                 </code></pre>
 
                 <p>That&#39;s it! Let&#39;s take this for a test run. Update the body for the request to the following:</p>
 
                 <pre><code>
-                    {`"paragraph 1
+                    <StringLiteral>{`"paragraph 1
 
-paragraph 2"`}
+paragraph 2"`}</StringLiteral>
                 </code></pre>
 
                 <p>When we call the endpoint we will be receiving the following HTML:</p>
 
                 <pre><code>
-                    {`<p>paragraph 1</p>
+                    <Tag>{`<p>`}</Tag>paragraph 1<Tag>{`</p>`}</Tag>{`
 
-<p>paragraph 2</p>`}
+`}<Tag>{`<p>`}</Tag>paragraph 2<Tag>{`</p>`}</Tag>
                 </code></pre>
             </div>
         );
     }
 };
+
+class Keyword extends React.PureComponent {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <span className={Style.textPrimary}>
+                {this.props.children}
+            </span>
+        );
+    }
+}
+
+class StringLiteral extends React.PureComponent {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <span className={Style.textDanger}>
+                {this.props.children}
+            </span>
+        );
+    }
+}
+
+class Comment extends React.PureComponent {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <span className={Style.textMuted}>
+                {this.props.children}
+            </span>
+        );
+    }
+}
+
+class Tag extends React.PureComponent {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <span className={Style.textSecondary}>
+                {this.props.children}
+            </span>
+        );
+    }
+}
+
+class AttributeName extends React.PureComponent {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <span className={Style.textPrimary}>
+                {this.props.children}
+            </span>
+        );
+    }
+}
+
+class AttributeValue extends React.PureComponent {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <span className={Style.textDanger}>
+                {this.props.children}
+            </span>
+        );
+    }
+}

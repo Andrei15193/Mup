@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import { Page } from "mup/views/layout";
 import Routes from "mup/routes";
 import Style from "mup/style";
-import { Documentation, FriendlyNames, LinkTo } from "./documentation/documentation";
+import { DocumentationView, FriendlyNames, LinkTo } from "./documentation/documentation-view";
 import { definitions as MupDefinitions } from "./documentation/mup";
 import { GettingStarted } from "./documentation/getting-started";
 
-export default class extends React.PureComponent {
+export class Documentation extends React.PureComponent {
     constructor(props) {
         super(props);
     }
@@ -93,7 +93,7 @@ class MupNamespace extends React.PureComponent {
                                     </Link>
                                 </td>
                                 <td className={Style.documentationTable}>
-                                    <Documentation elements={MupDefinitions[typeId].documentation.summary} />
+                                    <DocumentationView elements={MupDefinitions[typeId].documentation.summary} />
                                 </td>
                             </tr>
                         )}
@@ -125,7 +125,7 @@ class Interface extends React.PureComponent {
                     </ol>
                 </nav>
                 <h2><MemberName definition={definition} /> Interface</h2>
-                <Documentation elements={definition.documentation.summary} />
+                <DocumentationView elements={definition.documentation.summary} />
                 <TypeInheritanceSummary definition={definition} />
                 <PropertiesList properties={definition.properties} />
                 <MethodsList methods={definition.methods} />
@@ -154,7 +154,7 @@ class Class extends React.PureComponent {
                     </ol>
                 </nav>
                 <h2><MemberName definition={definition} /> Class</h2>
-                <Documentation elements={definition.documentation.summary} />
+                <DocumentationView elements={definition.documentation.summary} />
                 <TypeInheritanceSummary definition={definition} />
                 <GenericParametersSummary definition={definition} />
                 <ConstructorsList includeAccessModifier constructors={definition.constructors} />
@@ -191,7 +191,7 @@ class Method extends React.PureComponent {
                     </ol>
                 </nav>
                 <h2><MemberName definition={definition} /> Method</h2>
-                <Documentation elements={definition.documentation.summary} />
+                <DocumentationView elements={definition.documentation.summary} />
                 <MethodInheritanceSummary definition={definition} />
                 <GenericParametersSummary definition={definition} />
                 <ParametersSummary definition={definition} />
@@ -228,7 +228,7 @@ class Property extends React.PureComponent {
                     </ol>
                 </nav>
                 <h2><MemberName definition={definition} /> Property</h2>
-                <Documentation elements={definition.documentation.summary} />
+                <DocumentationView elements={definition.documentation.summary} />
                 <PropertyInheritanceSummary definition={definition} />
                 <PropertyAccessorSummary definition={definition} />
                 <ParametersSummary definition={definition} />
@@ -326,7 +326,7 @@ class ConstructorsList extends React.PureComponent {
                                         </td>
                                         {this.props.includeAccessModifier ? <td><AccessModifier access={constructorDefinition.access} /></td> : null}
                                         <td className={Style.documentationTable}>
-                                            <Documentation elements={constructorDefinition.documentation.summary} />
+                                            <DocumentationView elements={constructorDefinition.documentation.summary} />
                                         </td>
                                     </tr>
                                 );
@@ -380,7 +380,7 @@ class PropertiesList extends React.PureComponent {
                                             <PropertyAccessor includeAccessModifier={includeAccessModifier} definition={propertyDefinition} />
                                         </td>
                                         <td className={Style.documentationTable}>
-                                            <Documentation elements={propertyDefinition.documentation.summary} />
+                                            <DocumentationView elements={propertyDefinition.documentation.summary} />
                                         </td>
                                     </tr>
                                 );
@@ -472,7 +472,7 @@ class MethodsList extends React.PureComponent {
                                         </td>
                                         {this.props.includeAccessModifier ? <td><AccessModifier access={methodDefinition.access} /></td> : null}
                                         <td className={Style.documentationTable}>
-                                            <Documentation elements={methodDefinition.documentation.summary} />
+                                            <DocumentationView elements={methodDefinition.documentation.summary} />
                                         </td>
                                     </tr>
                                 );
@@ -616,7 +616,7 @@ class GenericParametersSummary extends React.PureComponent {
                             genericParameter => (
                                 <li key={genericParameter.name}>
                                     <strong>{genericParameter.name}</strong>
-                                    <Documentation elements={definition.documentation.genericParameters[genericParameter.name]} />
+                                    <DocumentationView elements={definition.documentation.genericParameters[genericParameter.name]} />
                                     <GenericParameterConstraints definition={genericParameter} />
                                 </li>
                             )
@@ -837,7 +837,7 @@ class ParametersSummary extends React.PureComponent {
                                     <div>
                                         <strong>{parameter.name}</strong> <LinkTo reference={parameter.type} />
                                     </div>
-                                    <Documentation elements={definition.documentation.parameters[parameter.name]} />
+                                    <DocumentationView elements={definition.documentation.parameters[parameter.name]} />
                                 </li>
                             )
                         )}
@@ -864,7 +864,7 @@ class ReturnsSummary extends React.PureComponent {
                         {" "}
                         <LinkTo reference={definition.return.type} />
                     </h3>
-                    <Documentation elements={definition.documentation.returns} />
+                    <DocumentationView elements={definition.documentation.returns} />
                 </div>
             );
         else
@@ -891,7 +891,7 @@ class ExceptionsList extends React.PureComponent {
                             exception => (
                                 <li key={exception.type.id}>
                                     <strong><LinkTo reference={exception.type} /></strong>
-                                    <Documentation elements={exception.description} />
+                                    <DocumentationView elements={exception.description} />
                                 </li>
                             )
                         )}

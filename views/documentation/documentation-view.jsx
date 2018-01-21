@@ -5,7 +5,7 @@ import Routes from "mup/routes";
 import Style from "mup/style";
 import MsdnLinks from "./msdn-links";
 
-export class Documentation extends React.PureComponent {
+export class DocumentationView extends React.PureComponent {
     constructor(props) {
         super(props);
     }

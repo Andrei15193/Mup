@@ -6,7 +6,7 @@ import "bootstrap";
 import { RoutePaths } from "mup/routes";
 import Home from "./views/home";
 import OnlineParser from "./views/online-parser";
-import Documentation from "./views/documentation";
+import { Documentation } from "./views/documentation";
 import License from "./views/license";
 
 class App extends React.PureComponent {
