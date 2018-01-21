@@ -7,7 +7,10 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const UglifyJsWebpackPlugin = require("uglifyjs-webpack-plugin");
 
 module.exports = {
-    entry: "./app.jsx",
+    entry: [
+        "babel-polyfill",
+        "./app.jsx"
+    ],
     resolve: {
         extensions: [".js", ".jsx"],
         alias: {
