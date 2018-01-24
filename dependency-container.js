@@ -5,29 +5,27 @@ import { Api } from "./services/api";
 import { EditorActions, ParseActions } from "./actions";
 import { EditorStore, PreviewStore } from "./stores";
 
+const dispatcher = new Dispatcher();
+
 export const DependencyContainer = {
     get api() {
         return singleton("api", () => new Api(AxiosConfig));
     },
 
-    get dispatcher() {
-        return singleton("dispatcher", () => new Dispatcher());
-    },
-
     get editorActions() {
-        return new EditorActions(this.dispatcher, this.api);
+        return new EditorActions(dispatcher, this.api);
     },
 
     get parserActions() {
-        return new ParseActions(this.dispatcher, this.api);
+        return new ParseActions(dispatcher, this.api);
     },
 
     get editorStore() {
-        return singleton("editor-store", () => new EditorStore(this.dispatcher), this);
+        return new EditorStore(dispatcher);
     },
 
     get previewStore() {
-        return singleton("preview-store", () => new PreviewStore(this.dispatcher), this);
+        return new PreviewStore(dispatcher);
     }
 }
 

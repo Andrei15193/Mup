@@ -29,11 +29,11 @@ export class ParseActions {
             this.dispatcher.dispatch(new ActionData("parse", ActionState.excuting));
             return this.api.postAsync("/api/creole", text)
                 .then(response =>
-                    new ActionDataata("parse", ActionState.completed, {
+                    new ActionData("parse", ActionState.completed, {
                         json: response.data.json,
                         html: response.data.html
                     }))
-                .catch(error =>
+                .catch(() =>
                     new ActionData("parse", ActionState.faulted, {
                         json: "Something went wrong...",
                         html: "<p>Something went wrong...</p>"

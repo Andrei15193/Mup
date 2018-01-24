@@ -31,13 +31,13 @@ export class OnlineParser extends React.Component {
     }
 
     componentWillMount() {
-        this.editorStore.on("propertyChanged", this.storePropertyChanged);
-        this.previewStore.on("propertyChanged", this.storePropertyChanged);
+        this.editorStore.onPropertyChanged.add(this.storePropertyChanged);
+        this.previewStore.onPropertyChanged.add(this.storePropertyChanged);
     }
 
     componentWillUnmount() {
-        this.editorStore.removeListener("propertyChanged", this.storePropertyChanged);
-        this.previewStore.removeListener("propertyChanged", this.storePropertyChanged);
+        this.editorStore.onPropertyChanged.remove(this.storePropertyChanged);
+        this.previewStore.onPropertyChanged.remove(this.storePropertyChanged);
     }
 
     render() {
