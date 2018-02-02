@@ -357,7 +357,15 @@
                     "genericArguments": [
                         {
                             "name": "TResult",
-                            "value": "TResult"
+                            "value": {
+                                "id": "mup.iparsetree",
+                                "name": "IParseTree",
+                                "genericArguments": [],
+                                "declaringAssembly": {
+                                    "name": "Mup",
+                                    "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                }
+                            }
                         }
                     ],
                     "declaringAssembly": {
@@ -595,7 +603,15 @@
                     "genericArguments": [
                         {
                             "name": "TResult",
-                            "value": "TResult"
+                            "value": {
+                                "id": "mup.iparsetree",
+                                "name": "IParseTree",
+                                "genericArguments": [],
+                                "declaringAssembly": {
+                                    "name": "Mup",
+                                    "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                }
+                            }
                         }
                     ],
                     "declaringAssembly": {
@@ -795,7 +811,15 @@
                     "genericArguments": [
                         {
                             "name": "TResult",
-                            "value": "TResult"
+                            "value": {
+                                "id": "mup.iparsetree",
+                                "name": "IParseTree",
+                                "genericArguments": [],
+                                "declaringAssembly": {
+                                    "name": "Mup",
+                                    "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                }
+                            }
                         }
                     ],
                     "declaringAssembly": {
@@ -1033,7 +1057,15 @@
                     "genericArguments": [
                         {
                             "name": "TResult",
-                            "value": "TResult"
+                            "value": {
+                                "id": "mup.iparsetree",
+                                "name": "IParseTree",
+                                "genericArguments": [],
+                                "declaringAssembly": {
+                                    "name": "Mup",
+                                    "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                }
+                            }
                         }
                     ],
                     "declaringAssembly": {
@@ -1247,7 +1279,15 @@
                     "genericArguments": [
                         {
                             "name": "TResult",
-                            "value": "TResult"
+                            "value": {
+                                "id": "mup.iparsetree",
+                                "name": "IParseTree",
+                                "genericArguments": [],
+                                "declaringAssembly": {
+                                    "name": "Mup",
+                                    "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                }
+                            }
                         }
                     ],
                     "declaringAssembly": {
@@ -1540,7 +1580,15 @@
                     "genericArguments": [
                         {
                             "name": "TResult",
-                            "value": "TResult"
+                            "value": {
+                                "id": "mup.iparsetree",
+                                "name": "IParseTree",
+                                "genericArguments": [],
+                                "declaringAssembly": {
+                                    "name": "Mup",
+                                    "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                }
+                            }
                         }
                     ],
                     "declaringAssembly": {
@@ -2119,7 +2167,15 @@
                 "genericArguments": [
                     {
                         "name": "T",
-                        "value": "T"
+                        "value": {
+                            "id": "system.string",
+                            "name": "String",
+                            "genericArguments": [],
+                            "declaringAssembly": {
+                                "name": "System.Private.CoreLib",
+                                "fullName": "System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e"
+                            }
+                        }
                     }
                 ],
                 "declaringAssembly": {
@@ -2261,7 +2317,15 @@
                 "genericArguments": [
                     {
                         "name": "TResult",
-                        "value": "TResult"
+                        "value": {
+                            "id": "system.string",
+                            "name": "String",
+                            "genericArguments": [],
+                            "declaringAssembly": {
+                                "name": "System.Private.CoreLib",
+                                "fullName": "System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e"
+                            }
+                        }
                     }
                 ],
                 "declaringAssembly": {
@@ -5383,7 +5447,15 @@
                     "genericArguments": [
                         {
                             "name": "TResult",
-                            "value": "TResult"
+                            "value": {
+                                "id": "mup.iparsetree",
+                                "name": "IParseTree",
+                                "genericArguments": [],
+                                "declaringAssembly": {
+                                    "name": "Mup",
+                                    "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                }
+                            }
                         }
                     ],
                     "declaringAssembly": {
@@ -5580,7 +5652,15 @@
                     "genericArguments": [
                         {
                             "name": "TResult",
-                            "value": "TResult"
+                            "value": {
+                                "id": "mup.iparsetree",
+                                "name": "IParseTree",
+                                "genericArguments": [],
+                                "declaringAssembly": {
+                                    "name": "Mup",
+                                    "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                }
+                            }
                         }
                     ],
                     "declaringAssembly": {
@@ -5774,7 +5854,15 @@
                     "genericArguments": [
                         {
                             "name": "TResult",
-                            "value": "TResult"
+                            "value": {
+                                "id": "mup.iparsetree",
+                                "name": "IParseTree",
+                                "genericArguments": [],
+                                "declaringAssembly": {
+                                    "name": "Mup",
+                                    "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                }
+                            }
                         }
                     ],
                     "declaringAssembly": {
@@ -5971,7 +6059,15 @@
                     "genericArguments": [
                         {
                             "name": "TResult",
-                            "value": "TResult"
+                            "value": {
+                                "id": "mup.iparsetree",
+                                "name": "IParseTree",
+                                "genericArguments": [],
+                                "declaringAssembly": {
+                                    "name": "Mup",
+                                    "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                }
+                            }
                         }
                     ],
                     "declaringAssembly": {
@@ -6179,7 +6275,15 @@
                     "genericArguments": [
                         {
                             "name": "TResult",
-                            "value": "TResult"
+                            "value": {
+                                "id": "mup.iparsetree",
+                                "name": "IParseTree",
+                                "genericArguments": [],
+                                "declaringAssembly": {
+                                    "name": "Mup",
+                                    "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                }
+                            }
                         }
                     ],
                     "declaringAssembly": {
@@ -6431,7 +6535,15 @@
                     "genericArguments": [
                         {
                             "name": "TResult",
-                            "value": "TResult"
+                            "value": {
+                                "id": "mup.iparsetree",
+                                "name": "IParseTree",
+                                "genericArguments": [],
+                                "declaringAssembly": {
+                                    "name": "Mup",
+                                    "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                }
+                            }
                         }
                     ],
                     "declaringAssembly": {
@@ -7764,7 +7876,15 @@
                         "genericArguments": [
                             {
                                 "name": "TResult",
-                                "value": "TResult"
+                                "value": {
+                                    "id": "mup.iparsetree",
+                                    "name": "IParseTree",
+                                    "genericArguments": [],
+                                    "declaringAssembly": {
+                                        "name": "Mup",
+                                        "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                    }
+                                }
                             }
                         ],
                         "declaringAssembly": {
@@ -8021,7 +8141,15 @@
                         "genericArguments": [
                             {
                                 "name": "TResult",
-                                "value": "TResult"
+                                "value": {
+                                    "id": "mup.iparsetree",
+                                    "name": "IParseTree",
+                                    "genericArguments": [],
+                                    "declaringAssembly": {
+                                        "name": "Mup",
+                                        "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                    }
+                                }
                             }
                         ],
                         "declaringAssembly": {
@@ -8269,7 +8397,15 @@
                         "genericArguments": [
                             {
                                 "name": "TResult",
-                                "value": "TResult"
+                                "value": {
+                                    "id": "mup.iparsetree",
+                                    "name": "IParseTree",
+                                    "genericArguments": [],
+                                    "declaringAssembly": {
+                                        "name": "Mup",
+                                        "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                    }
+                                }
                             }
                         ],
                         "declaringAssembly": {
@@ -8569,7 +8705,15 @@
                         "genericArguments": [
                             {
                                 "name": "TResult",
-                                "value": "TResult"
+                                "value": {
+                                    "id": "mup.iparsetree",
+                                    "name": "IParseTree",
+                                    "genericArguments": [],
+                                    "declaringAssembly": {
+                                        "name": "Mup",
+                                        "fullName": "Mup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7decbb6e3931b449"
+                                    }
+                                }
                             }
                         ],
                         "declaringAssembly": {
