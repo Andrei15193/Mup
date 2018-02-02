@@ -71,7 +71,8 @@ export const FriendlyNames = {
     "system.double": "double",
     "system.decimal": "decimal",
     "system.string": "string",
-    "system.char": "char"
+    "system.char": "char",
+    "system.object": "object"
 }
 
 export class LinkTo extends React.PureComponent {
