@@ -25,6 +25,7 @@ p {
     text-align: justify;
 }
 
-td.documentationTable > p:last-of-type{
+td.documentationTable > p:last-of-type,
+.cheatSheet > pre:last-of-type {
     margin-bottom: 0;
 }

@@ -44,7 +44,7 @@ export class OnlineParser extends React.Component {
         return (
             <Page>
                 <div className={[Style.dFlex, Style.alignItemsCenter].join(" ")}>
-                    <h1>Creole Parser</h1>
+                    <h1>Creole</h1>
                     <div className={[Style.btnGroup, Style.mlAuto].join(" ")} role="group" aria-label="toolbar">
                         <button type="button" onClick={onEditClicked.bind(this)} className={[Style.btn, getButtonColorClassNameFor.call(this, Views.edit), (this.state.isBusy ? Style.disabled : undefined)].join(" ")}>Edit</button>
                         <button type="button" onClick={onPreviewClicked.bind(this)} className={[Style.btn, getButtonColorClassNameFor.call(this, Views.preview)].join(" ")}>Preview</button>
@@ -65,6 +65,57 @@ export class OnlineParser extends React.Component {
     }
 };
 
+class CreoleCheatSheet extends React.PureComponent {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div className={[Style.mr3, Style.textNowrap, Style.cheatSheet].join(" ")}>
+                <pre><code>
+{`//emphasis//
+**strong**`}
+                </code></pre>
+                <pre><code>
+{`* bullet item 1
+* bullet item 2
+** sub-bullet item 2.1`}
+                </code></pre>
+                <pre><code>
+{`# numbered item 1
+# numbered item 2
+## sub-numbered item 2.1`}
+                </code></pre>
+                <pre><code>
+{`[[link url]]
+[[link url|display text]]`}
+                </code></pre>
+                <pre><code>
+{`{{image url}}
+{{image url|alternative text}}`}
+                </code></pre>
+                <pre><code>
+{`= Large Heading
+== Medium Heading
+=== Small Heading`}
+                </code></pre>
+                <pre><code>
+{`|=Table |=Header|
+|First  |Row    |
+|Second |Row    |`}
+                </code></pre>
+                <pre><code>
+{`{{{
+there //is// no **wiki**
+format [[here]]
+}}}`}
+                </code></pre>
+            </div>
+        );
+    }
+}
+
 function onEditClicked() {
     if (!this.state.isBusy)
         this.setState({ view: Views.edit });
@@ -72,16 +123,14 @@ function onEditClicked() {
 
 function onPreviewClicked() {
     this.setState({ view: Views.preview });
-    if (!this.state.isBusy) {
+    if (!this.state.isBusy)
         this.parserActions.parseAsync(this.state.text);
-    }
 }
 
 function onHtmlClicked() {
     this.setState({ view: Views.html });
-    if (!this.state.isBusy) {
+    if (!this.state.isBusy)
         this.parserActions.parseAsync(this.state.text);
-    }
 }
 
 function getButtonColorClassNameFor(view) {
@@ -94,7 +143,10 @@ function getActiveView() {
             return (
                 <form className={Style.flexFill}>
                     <div className={[Style.formGroup, Style.flexFill].join(" ")}>
-                        <textarea className={[Style.resizeNone, Style.formControl, Style.rounded, Style.px3, Style.py1, Style.flexFill].join(" ")} onChange={event => this.editorActions.updateText(event.target.value)} value={this.state.text}></textarea>
+                        <div className={[Style.flex, Style.flexRow, Style.flexFill, Style.alignItemsStretch].join(" ")}>
+                            <CreoleCheatSheet />
+                            <textarea className={[Style.resizeNone, Style.formControl, Style.rounded, Style.px3, Style.py1].join(" ")} onChange={event => this.editorActions.updateText(event.target.value)} value={this.state.text}></textarea>
+                        </div>
                     </div>
                 </form>
             );
