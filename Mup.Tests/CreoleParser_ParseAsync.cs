@@ -34,8 +34,10 @@ namespace Mup.Tests
         [InlineData("= plain text <<plug in>>", new object[] { Heading1Start, PlainText, Heading1End })]
         public async Task ParsesHeadings(string text, object[] marks)
         {
-            var actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
+            var actualMarks = _parser.Parse(text).Accept(new ElementMarkVisitor());
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
 
+            actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
             Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
@@ -45,8 +47,10 @@ namespace Mup.Tests
         [InlineData("paragraph 1\n\nparagraph 2", new object[] { ParagraphStart, PlainText, ParagraphEnd, ParagraphStart, PlainText, ParagraphEnd })]
         public async Task ParsesParagraphs(string text, object[] marks)
         {
-            var actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
+            var actualMarks = _parser.Parse(text).Accept(new ElementMarkVisitor());
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
 
+            actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
             Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
@@ -61,8 +65,10 @@ namespace Mup.Tests
         [InlineData("{{{\ntest", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         public async Task ParsesPreforamattedBlocks(string text, object[] marks)
         {
-            var actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
+            var actualMarks = _parser.Parse(text).Accept(new ElementMarkVisitor());
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
 
+            actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
             Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
@@ -76,8 +82,10 @@ namespace Mup.Tests
         [InlineData("<<test", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         public async Task ParsesPlugins(string text, object[] marks)
         {
-            var actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
+            var actualMarks = _parser.Parse(text).Accept(new ElementMarkVisitor());
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
 
+            actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
             Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
@@ -96,8 +104,10 @@ namespace Mup.Tests
         [InlineData("|//no emphasis", new object[] { TableStart, TableRowStart, TableCellStart, PlainText, TableCellEnd, TableRowEnd, TableEnd })]
         public async Task ParsesTables(string text, object[] marks)
         {
-            var actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
+            var actualMarks = _parser.Parse(text).Accept(new ElementMarkVisitor());
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
 
+            actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
             Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
@@ -136,8 +146,10 @@ namespace Mup.Tests
         [InlineData("# no {{{ code", new object[] { OrderedListStart, ListItemStart, PlainText, ListItemEnd, OrderedListEnd })]
         public async Task ParsesLists(string text, object[] marks)
         {
-            var actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
+            var actualMarks = _parser.Parse(text).Accept(new ElementMarkVisitor());
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
 
+            actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
             Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
@@ -150,8 +162,10 @@ namespace Mup.Tests
         [InlineData("~~~~~plain text", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         public async Task ParsesEscapeCharacters(string text, object[] marks)
         {
-            var actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
+            var actualMarks = _parser.Parse(text).Accept(new ElementMarkVisitor());
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
 
+            actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
             Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
@@ -230,8 +244,10 @@ namespace Mup.Tests
         [InlineData("//**mixed emphasis strong//**", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         public async Task ParsesRichText(string text, object[] marks)
         {
-            var actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
+            var actualMarks = _parser.Parse(text).Accept(new ElementMarkVisitor());
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
 
+            actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
             Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks.ToArray());
         }
 
@@ -247,8 +263,10 @@ namespace Mup.Tests
         [InlineData("~----", new object[] { ParagraphStart, PlainText, ParagraphEnd })]
         public async Task ParsesHorizontalRules(string text, object[] marks)
         {
-            var actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
+            var actualMarks = _parser.Parse(text).Accept(new ElementMarkVisitor());
+            Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
 
+            actualMarks = await _parser.ParseAsync(text).With(new ElementMarkVisitor());
             Assert.Equal(marks.Cast<ElementMarkCode>().ToArray(), actualMarks);
         }
 
@@ -271,8 +289,10 @@ namespace Mup.Tests
         [InlineData("= heading\nparagraph", "<h1>heading</h1><p>paragraph</p>")]
         public async Task ParseHeadingsToHtml(string text, string expectedHtml)
         {
-            var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
+            var actualHtml = _parser.Parse(text).Accept(new HtmlWriterVisitor());
+            Assert.Equal(expectedHtml, actualHtml);
 
+            actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
             Assert.Equal(expectedHtml, actualHtml);
         }
 
@@ -282,8 +302,10 @@ namespace Mup.Tests
         [InlineData("paragraph 1\n\nparagraph 2", "<p>paragraph 1</p><p>paragraph 2</p>")]
         public async Task ParseParagraphsToHtml(string text, string expectedHtml)
         {
-            var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
+            var actualHtml = _parser.Parse(text).Accept(new HtmlWriterVisitor());
+            Assert.Equal(expectedHtml, actualHtml);
 
+            actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
             Assert.Equal(expectedHtml, actualHtml);
         }
 
@@ -304,8 +326,10 @@ namespace Mup.Tests
         [InlineData("{{{\ncode\n}}}\nparagraph", "<pre><code>code</code></pre><p>paragraph</p>")]
         public async Task ParsePreforamattedBlocksToHtml(string text, string expectedHtml)
         {
-            var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
+            var actualHtml = _parser.Parse(text).Accept(new HtmlWriterVisitor());
+            Assert.Equal(expectedHtml, actualHtml);
 
+            actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
             Assert.Equal(expectedHtml, actualHtml);
         }
 
@@ -333,8 +357,10 @@ namespace Mup.Tests
         [InlineData("|cell\nparagraph", "<table><tbody><tr><td>cell</td></tr></tbody></table><p>paragraph</p>")]
         public async Task ParseTablesToHtml(string text, string expectedHtml)
         {
-            var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
+            var actualHtml = _parser.Parse(text).Accept(new HtmlWriterVisitor());
+            Assert.Equal(expectedHtml, actualHtml);
 
+            actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
             Assert.Equal(expectedHtml, actualHtml);
         }
 
@@ -386,8 +412,10 @@ namespace Mup.Tests
         [InlineData("#item 1\n\nparagraph", "<ol><li>item 1</li></ol><p>paragraph</p>")]
         public async Task ParseListsToHtml(string text, string expectedHtml)
         {
-            var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
+            var actualHtml = _parser.Parse(text).Accept(new HtmlWriterVisitor());
+            Assert.Equal(expectedHtml, actualHtml);
 
+            actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
             Assert.Equal(expectedHtml, actualHtml);
         }
 
@@ -400,8 +428,10 @@ namespace Mup.Tests
         [InlineData("~~~~~plain text", "<p>~~~plain text</p>")]
         public async Task ParsesEscapeCharactersToHtml(string text, string expectedHtml)
         {
-            var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
+            var actualHtml = _parser.Parse(text).Accept(new HtmlWriterVisitor());
+            Assert.Equal(expectedHtml, actualHtml);
 
+            actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
             Assert.Equal(expectedHtml, actualHtml);
         }
 
@@ -492,6 +522,8 @@ namespace Mup.Tests
         [InlineData(@"line~~\\break", @"<p>line~<br>break</p>")]
         [InlineData(@"line~\\\break", @"<p>line\<br>break</p>")]
         [InlineData(@"double line\\\\break", @"<p>double line<br><br>break</p>")]
+        [InlineData(@"line break\\", @"<p>line break<br></p>")]
+        [InlineData(@"line break\", @"<p>line break\</p>")]
 
         [InlineData("plain {{{no wiki}}} text", "<p>plain <code>no wiki</code> text</p>")]
         [InlineData("plain {{{no escape ~~}}} text", "<p>plain <code>no escape ~</code> text</p>")]
@@ -514,8 +546,10 @@ namespace Mup.Tests
         [InlineData("plain **bold 1*** plain ****bold 2***** plain", "<p>plain <strong>bold 1</strong>* plain **<strong>bold 2</strong>*** plain</p>")]
         public async Task ParsesRichTextToHtml(string text, string expectedHtml)
         {
-            var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
+            var actualHtml = _parser.Parse(text).Accept(new HtmlWriterVisitor());
+            Assert.Equal(expectedHtml, actualHtml);
 
+            actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
             Assert.Equal(expectedHtml, actualHtml);
         }
 
@@ -531,8 +565,10 @@ namespace Mup.Tests
         [InlineData("~----", "<p>----</p>")]
         public async Task ParsesHorizontalRuleToHtml(string text, string expectedHtml)
         {
-            var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
+            var actualHtml = _parser.Parse(text).Accept(new HtmlWriterVisitor());
+            Assert.Equal(expectedHtml, actualHtml);
 
+            actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
             Assert.Equal(expectedHtml, actualHtml);
         }
 
@@ -549,8 +585,10 @@ namespace Mup.Tests
         [InlineData("<<plug in>>\nparagraph", "<!-- plug in --><p>paragraph</p>")]
         public async Task ParsesPluginsToHtml(string text, string expectedHtml)
         {
-            var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
+            var actualHtml = _parser.Parse(text).Accept(new HtmlWriterVisitor());
+            Assert.Equal(expectedHtml, actualHtml);
 
+            actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
             Assert.Equal(expectedHtml, actualHtml);
         }
 
@@ -1043,8 +1081,10 @@ namespace Mup.Tests
             "<p>[[ {{ -- ** __ // foo | * - # &quot;Â§$%&amp;/( ((</p>")]
         public async Task CreoleSiteTestsCase(string text, string expectedHtml)
         {
-            var actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
+            var actualHtml = _parser.Parse(text).Accept(new HtmlWriterVisitor());
+            Assert.Equal(expectedHtml, actualHtml);
 
+            actualHtml = await _parser.ParseAsync(text).With(new HtmlWriterVisitor());
             Assert.Equal(expectedHtml, actualHtml);
         }
     }
