@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.0</TargetFramework>
-    <Version>1.0.0</Version>
+    <TargetFrameworks>net20;net45;netstandard1.0;netcoreapp1.0</TargetFrameworks>
+    <Version>1.1.0-beta</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Andrei Fangli</Authors>
     <Title>Mup</Title>
@@ -22,6 +22,17 @@
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Mup.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateFullPaths>True</GenerateFullPaths>
+    <DefineConstants Condition="'$(Configuration)'=='Debug'">$(DefineConstants);DEBUG</DefineConstants>
+    <DefineConstants Condition="'$(Configuration)'=='Release'">$(DefineConstants);RELEASE</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='net20'">$(DefineConstants);net20</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='net45'">$(DefineConstants);net45</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='netcoreapp1.0'">$(DefineConstants);netcoreapp10</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='net20' OR '$(TargetFramework)'=='net45'">$(DefineConstants);net</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='netstandard1.0' OR '$(TargetFramework)'=='net45' OR '$(TargetFramework)'=='netcoreapp1.0'">$(DefineConstants);netstandard10</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">

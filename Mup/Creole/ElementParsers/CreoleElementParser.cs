@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -13,7 +14,12 @@ namespace Mup.Creole.ElementParsers
 
         internal abstract CreoleElementParserResult TryCreateFrom(CreoleToken start, CreoleToken end);
 
-        protected static IEnumerable<CreoleTextElement> EmptyContent { get; } = new[] { new CreoleTextElement(string.Empty) };
+#if netstandard10
+        protected static IEnumerable<CreoleTextElement> EmptyContent { get; }
+#else
+        protected static IEnumerable<CreoleElement> EmptyContent { get; }
+#endif
+            = new[] { new CreoleTextElement(string.Empty) };
 
         protected CreoleParserContext Context { get; }
 
@@ -48,6 +54,40 @@ namespace Mup.Creole.ElementParsers
                 for (var index = token.StartIndex; index < token.EndIndex; index++)
                     if (Context.Text[index] == '\n')
                         yield return new CharacterMatch('\n', index);
+        }
+
+        protected T First<T>(IEnumerable<T> items)
+        {
+            using (var item = items.GetEnumerator())
+                if (item.MoveNext())
+                    return item.Current;
+                else
+                    throw new InvalidOperationException();
+        }
+
+        protected T Last<T>(IEnumerable<T> items)
+        {
+            T lastItem;
+            using (var item = items.GetEnumerator())
+                if (item.MoveNext())
+                    do
+                        lastItem = item.Current;
+                    while (item.MoveNext());
+                else
+                    throw new InvalidOperationException();
+            return lastItem;
+        }
+
+        protected bool HasOneElement<T>(IEnumerable<T> items)
+        => (CountUntil(items, 2) == 1);
+
+        protected int CountUntil<T>(IEnumerable<T> items, int count)
+        {
+            var itemCount = 0;
+            using (var item = items.GetEnumerator())
+                while (itemCount < count && item.MoveNext())
+                    itemCount++;
+            return itemCount;
         }
 
         protected struct CharacterMatch

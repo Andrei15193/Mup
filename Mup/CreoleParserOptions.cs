@@ -1,14 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+#if net20
+using static Mup.StringHelper;
+#else
+using static System.String;
+#endif
 
 namespace Mup
 {
     /// <summary>Specifies options for the <see cref="CreoleParser"/>.</summary>
     public sealed class CreoleParserOptions
     {
-        private static IReadOnlyCollection<string> _defaultInlineHyperlinkProtocols = new[] { "http", "https", "ftp", "ftps" };
+#if netstandard10
+        private static IReadOnlyCollection<string> _defaultInlineHyperlinkProtocols
+#else
+        private static IEnumerable<string> _defaultInlineHyperlinkProtocols
+#endif
+            = new[] { "http", "https", "ftp", "ftps" };
 
-        private IReadOnlyCollection<string> _inlineHyperlinkProtocols;
+#if netstandard10
+        private IReadOnlyCollection<string>
+#else
+        private IEnumerable<string>
+#endif
+            _inlineHyperlinkProtocols;
 
         /// <summary>Initializes a new instance of the <see cref="CreoleParserOptions"/> class.</summary>
         public CreoleParserOptions()
@@ -31,7 +46,7 @@ namespace Mup
                     throw new ArgumentNullException(nameof(InlineHyperlinkProtocols));
 
                 var copy = new List<string>(value);
-                if (copy.FindIndex(string.IsNullOrWhiteSpace) >= 0)
+                if (copy.FindIndex(IsNullOrWhiteSpace) >= 0)
                     throw new ArgumentException("Cannot contain null, empty or white space values.", nameof(InlineHyperlinkProtocols));
                 _inlineHyperlinkProtocols = copy;
             }

@@ -1,0 +1,108 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Restore",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "restore"
+            ],
+            "group": "none",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build",
+            "dependsOn": "Restore",
+            "type": "shell",
+            "command": "msbuild /t:build /p:Configuration=Debug ${workspaceFolder}/Mup.sln",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Test .NET Framework 2.0",
+            "dependsOn": "Build",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "test",
+                "${workspaceFolder}/Mup.Tests.Net20/Mup.Tests.Net20.csproj",
+                "--no-build"
+            ],
+            "group": "test",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Test .NET Framework 4.5",
+            "dependsOn": "Build",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "test",
+                "${workspaceFolder}/Mup.Tests.Net45/Mup.Tests.Net45.csproj",
+                "--no-build"
+            ],
+            "group": "test",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Test .NET Core",
+            "dependsOn": "Build",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "test",
+                "${workspaceFolder}/Mup.Tests.NetCore/Mup.Tests.NetCore.csproj",
+                "--no-build"
+            ],
+            "group": "test",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Test .NET Standard 1.0",
+            "dependsOn": "Build",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "test",
+                "${workspaceFolder}/Mup.Tests.NetStandard/Mup.Tests.NetStandard.csproj",
+                "--no-build"
+            ],
+            "group": "test",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Test",
+            "dependsOn": [
+                "Test .NET Framework 2.0",
+                "Test .NET Framework 4.5",
+                "Test .NET Core",
+                "Test .NET Standard 1.0"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Release",
+            "dependsOn": "Restore",
+            "type": "shell",
+            "command": "msbuild /t:build /p:Configuration=Release ${workspaceFolder}/Mup.sln",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Clean",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "clean"
+            ],
+            "group": "none",
+            "problemMatcher": []
+        }
+    ]
+}

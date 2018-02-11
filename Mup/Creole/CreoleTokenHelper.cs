@@ -11,7 +11,7 @@ namespace Mup.Creole
                 yield return token;
         }
 
-        internal static string Substring(this string text, CreoleToken start, CreoleToken end)
+        internal static string Substring(string text, CreoleToken start, CreoleToken end)
         {
             var stringBuilder = new StringBuilder();
             for (var token = start; token != end; token = token.Next)

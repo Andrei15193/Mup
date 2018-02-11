@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -49,7 +48,7 @@ namespace Mup.Creole.ElementParsers
                             while (listElementInfos.Count > listLevel)
                             {
                                 var listElement = _CreateListElement(listElementInfos.Pop());
-                                listElementInfos.Peek().ItemInfos.Last().Content.Add(listElement);
+                                Last(listElementInfos.Peek().ItemInfos).Content.Add(listElement);
                             }
 
                         if (listElementInfos.Peek().IsOrdered != isOrderedList)
@@ -63,8 +62,7 @@ namespace Mup.Creole.ElementParsers
 
                             var isInListItem = true;
                             while (start.Next != end && isInListItem)
-                            {
-                                switch (FindLineFeeds(start).Take(2).Count())
+                                switch (CountUntil(FindLineFeeds(start), 2))
                                 {
                                     case 1:
                                         if (start.Next.Code != Asterisk && start.Next.Code != Hash)
@@ -81,11 +79,10 @@ namespace Mup.Creole.ElementParsers
                                         start = start.Next;
                                         break;
                                 }
-                            }
 
                             listElementInfos.Peek().ItemInfos.Add(new ListItemElementInfo(_GetListItemContent(contentStart, start)));
 
-                            if (start.Next != end && (start.Next.Code == Asterisk || start.Next.Code == Hash) && !FindLineFeeds(start).Skip(1).Any())
+                            if (start.Next != end && (start.Next.Code == Asterisk || start.Next.Code == Hash) && HasOneElement(FindLineFeeds(start)))
                             {
                                 start = start.Next;
                                 isValidList = true;
@@ -99,7 +96,7 @@ namespace Mup.Creole.ElementParsers
                 while (listElementInfos.Count > 1)
                 {
                     var listElement = _CreateListElement(listElementInfos.Pop());
-                    listElementInfos.Peek().ItemInfos.Last().Content.Add(listElement);
+                    Last(listElementInfos.Peek().ItemInfos).Content.Add(listElement);
                 }
 
                 result = new CreoleElementParserResult(startToken, start, _CreateListElement(listElementInfos.Pop()));

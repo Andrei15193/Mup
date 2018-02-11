@@ -6,8 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Mup.Scanner;
 using Xunit;
+using static Mup.Tests.ScannerTestData;
 
-namespace Mup.Tests
+namespace Mup.Tests.NetStandard
 {
     public class Scanner_ScanAsync
     {
@@ -18,7 +19,7 @@ namespace Mup.Tests
         [Fact(DisplayName = (_textMethod + nameof(CannotScanFromNullText)))]
         public async Task CannotScanFromNullText()
         {
-            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Func<char, bool>>());
+            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Predicate<char>>());
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => scanner.ScanAsync(text: null, cancellationToken: CancellationToken.None));
         }
@@ -27,19 +28,17 @@ namespace Mup.Tests
         [Fact(DisplayName = (_readerMethod + nameof(CannotScanFromNullReader)))]
         public async Task CannotScanFromNullReader()
         {
-            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Func<char, bool>>());
+            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Predicate<char>>());
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => scanner.ScanAsync(reader: null, cancellationToken: CancellationToken.None));
         }
 
         [Trait("Class", nameof(CharacterRepeatScanner<int>))]
         [Theory(DisplayName = (_readerMethod + nameof(CannotHaveZeroOrNegativeBufferSize)))]
-        [InlineData(-1)]
-        [InlineData(-2)]
-        [InlineData(0)]
+        [MemberData(nameof(InvalidBufferSizeTestData), MemberType = typeof(ScannerTestData))]
         public async Task CannotHaveZeroOrNegativeBufferSize(int bufferSize)
         {
-            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Func<char, bool>>());
+            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Predicate<char>>());
 
             using (var stringReader = new StringReader(string.Empty))
                 await Assert.ThrowsAsync<ArgumentException>(() => scanner.ScanAsync(stringReader, bufferSize, CancellationToken.None));
@@ -47,14 +46,11 @@ namespace Mup.Tests
 
         [Trait("Class", nameof(CharacterRepeatScanner<int>))]
         [Theory(DisplayName = (_readerMethod + nameof(ScansFromTextReader)))]
-        [InlineData(10)]
-        [InlineData(2)]
-        [InlineData(1)]
-        [InlineData(100)]
+        [MemberData(nameof(BufferSizeTestData), MemberType = typeof(ScannerTestData))]
         public async Task ScansFromTextReader(int bufferSize)
         {
             var scanner = new CharacterRepeatScannerMock<int>(
-                new Dictionary<int, Func<char, bool>>
+                new Dictionary<int, Predicate<char>>
                 {
                     { 0, c => c == 'a' },
                     { 1, c => c == 'b' }
@@ -92,15 +88,12 @@ namespace Mup.Tests
         }
 
         [Trait("Class", nameof(CharacterRepeatScanner<int>))]
-        [Theory(DisplayName = (_readerMethod + nameof(ScansFromTextSynchronously)))]
-        [InlineData(10)]
-        [InlineData(2)]
-        [InlineData(1)]
-        [InlineData(100)]
+        [Theory(DisplayName = (_textMethod + nameof(ScansFromTextSynchronously)))]
+        [MemberData(nameof(BufferSizeTestData), MemberType = typeof(ScannerTestData))]
         public void ScansFromTextSynchronously(int bufferSize)
         {
             var scanner = new CharacterRepeatScannerMock<int>(
-                new Dictionary<int, Func<char, bool>>
+                new Dictionary<int, Predicate<char>>
                 {
                     { 0, c => c == 'a' },
                     { 1, c => c == 'b' }
@@ -136,14 +129,11 @@ namespace Mup.Tests
 
         [Trait("Class", nameof(CharacterRepeatScanner<int>))]
         [Theory(DisplayName = (_textMethod + nameof(ScansFromString)))]
-        [InlineData(10)]
-        [InlineData(2)]
-        [InlineData(1)]
-        [InlineData(100)]
+        [MemberData(nameof(BufferSizeTestData), MemberType = typeof(ScannerTestData))]
         public async Task ScansFromString(int sequenceLegth)
         {
             var scanner = new CharacterRepeatScannerMock<int>(
-                new Dictionary<int, Func<char, bool>>
+                new Dictionary<int, Predicate<char>>
                 {
                     { 0, c => c == 'a' },
                     { 1, c => c == 'b' }
@@ -179,18 +169,11 @@ namespace Mup.Tests
 
         [Trait("Class", nameof(CharacterRepeatScanner<int>))]
         [Theory(DisplayName = (_textMethod + nameof(ThrowsExceptionWithLineAndColumnInformationWhenNoPredicateMatches)))]
-        [InlineData("baaa\naaaa", 'b', 1, 1)]
-        [InlineData("aaaa\nbaaa", 'b', 2, 1)]
-        [InlineData("aaba\naaaa", 'b', 1, 3)]
-        [InlineData("aaaa\naaba", 'b', 2, 3)]
-        [InlineData("aaaa\r\nbaaa", 'b', 2, 1)]
-        [InlineData("aaaa\r\naaba", 'b', 2, 3)]
-        [InlineData("aaaa\n\rbaaa", 'b', 2, 2)]
-        [InlineData("aaaa\n\raaba", 'b', 2, 4)]
+        [MemberData(nameof(UnrecognizedCharacterTestData), MemberType = typeof(ScannerTestData))]
         public async Task ThrowsExceptionWithLineAndColumnInformationWhenNoPredicateMatches(string text, char breakCharacter, int expectedLine, int expectedColumn)
         {
             var scanner = new CharacterRepeatScannerMock<int>(
-                new Dictionary<int, Func<char, bool>>
+                new Dictionary<int, Predicate<char>>
                 {
                     { 0, c => c != breakCharacter }
                 });
@@ -205,7 +188,7 @@ namespace Mup.Tests
         [Fact(DisplayName = (_textMethod + nameof(CancelingAScanFromTextLeavesTheTaskIsCanceledState)))]
         public async Task CancelingAScanFromTextLeavesTheTaskIsCanceledState()
         {
-            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Func<char, bool>>());
+            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Predicate<char>>());
 
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
@@ -217,10 +200,10 @@ namespace Mup.Tests
         }
 
         [Trait("Class", nameof(CharacterRepeatScanner<int>))]
-        [Fact(DisplayName = (_textMethod + nameof(CancelingAScanFromReaderLeavesTheTaskIsCanceledState)))]
+        [Fact(DisplayName = (_readerMethod + nameof(CancelingAScanFromReaderLeavesTheTaskIsCanceledState)))]
         public async Task CancelingAScanFromReaderLeavesTheTaskIsCanceledState()
         {
-            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Func<char, bool>>());
+            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Predicate<char>>());
 
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
@@ -236,7 +219,7 @@ namespace Mup.Tests
         [Fact(DisplayName = (_textMethod + nameof(EmptyStringResultsInNotTokensFromText)))]
         public async Task EmptyStringResultsInNotTokensFromText()
         {
-            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Func<char, bool>>());
+            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Predicate<char>>());
             await scanner.ScanAsync(string.Empty, CancellationToken.None);
             var result = scanner.Result;
             Assert.False(result.Tokens.Any());
@@ -246,7 +229,7 @@ namespace Mup.Tests
         [Fact(DisplayName = (_readerMethod + nameof(EmptyStringResultsInNotTokensFromReader)))]
         public async Task EmptyStringResultsInNotTokensFromReader()
         {
-            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Func<char, bool>>());
+            var scanner = new CharacterRepeatScannerMock<int>(new Dictionary<int, Predicate<char>>());
             using (var stringReader = new StringReader(string.Empty))
             {
                 await scanner.ScanAsync(stringReader, CancellationToken.None);

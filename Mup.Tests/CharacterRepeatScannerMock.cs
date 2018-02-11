@@ -8,16 +8,16 @@ namespace Mup.Tests
         where TTokenCode : struct
     {
         private readonly ICollection<Token<TTokenCode>> _tokens = new List<Token<TTokenCode>>();
-        private readonly IEnumerable<KeyValuePair<TTokenCode, Func<char, bool>>> _predicates;
+        private readonly IEnumerable<KeyValuePair<TTokenCode, Predicate<char>>> _predicates;
 
-        internal CharacterRepeatScannerMock(IEnumerable<KeyValuePair<TTokenCode, Func<char, bool>>> predicates)
+        internal CharacterRepeatScannerMock(IEnumerable<KeyValuePair<TTokenCode, Predicate<char>>> predicates)
         {
             _predicates = predicates;
         }
 
         internal ScanResult<TTokenCode> Result { get; private set; }
 
-        protected override IEnumerable<KeyValuePair<TTokenCode, Func<char, bool>>> Predicates
+        protected override IEnumerable<KeyValuePair<TTokenCode, Predicate<char>>> Predicates
             => _predicates;
 
         protected override void TokenScanned(TTokenCode code, int start, int length)

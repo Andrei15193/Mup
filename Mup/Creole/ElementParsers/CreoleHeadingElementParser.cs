@@ -1,7 +1,12 @@
 ﻿using Mup.Creole.Elements;
 using static System.Math;
-using static System.String;
 using static Mup.Creole.CreoleTokenCode;
+using static Mup.Creole.CreoleTokenHelper;
+#if net20
+using static Mup.StringHelper;
+#else
+using static System.String;
+#endif
 
 namespace Mup.Creole.ElementParsers
 {
@@ -78,7 +83,7 @@ namespace Mup.Creole.ElementParsers
         {
             var headerTextStart = _GetHeaderStart(startToken);
             var headerTextEnd = _GetHeaderEnd(endToken);
-            var headerText = Context.Text.Substring(headerTextStart, headerTextEnd.Next);
+            var headerText = Substring(Context.Text, headerTextStart, headerTextEnd.Next);
             return headerText;
         }
 
