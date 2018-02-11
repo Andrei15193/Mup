@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Xunit;
+using static Mup.Tests.CreoleParseroptionsTestData;
 
-namespace Mup.Tests
+namespace Mup.Tests.Net45
 {
     public class CreoleParserOptions_InlineHyperlinkProtocols
     {
@@ -17,12 +18,7 @@ namespace Mup.Tests
 
         [Trait("Class", nameof(CreoleParserOptions))]
         [Theory(DisplayName = (_property + nameof(ThrowsExceptionWhenCollectionContainsNullEmptyOrWhiteSpace)))]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        [InlineData("\t")]
-        [InlineData("\n")]
-        [InlineData("\r")]
+        [MemberData(nameof(InvalidInlineProtocolsTestCases), MemberType = typeof(CreoleParseroptionsTestData))]
         public void ThrowsExceptionWhenCollectionContainsNullEmptyOrWhiteSpace(string value)
         {
             Assert.Throws<ArgumentException>(() => new CreoleParserOptions { InlineHyperlinkProtocols = new[] { value } });
@@ -30,9 +26,7 @@ namespace Mup.Tests
 
         [Trait("Class", nameof(CreoleParserOptions))]
         [Theory(DisplayName = (_property + nameof(SetsProtocols)))]
-        [InlineData("http")]
-        [InlineData("https")]
-        [InlineData("http,https")]
+        [MemberData(nameof(InlineProtocolsTestCases), MemberType = typeof(CreoleParseroptionsTestData))]
         public void SetsProtocols(string protocols)
         {
             var protocolsList = protocols.Split(',').Select(protocol => protocol.Trim()).ToList();

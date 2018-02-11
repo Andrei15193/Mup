@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Mup.Scanner
 {
@@ -9,7 +8,7 @@ namespace Mup.Scanner
     {
         private TokenBuilder _tokenBuilder;
 
-        protected abstract IEnumerable<KeyValuePair<TTokenCode, Func<char, bool>>> Predicates { get; }
+        protected abstract IEnumerable<KeyValuePair<TTokenCode, Predicate<char>>> Predicates { get; }
 
         protected abstract void TokenScanned(TTokenCode code, int start, int length);
 
@@ -21,7 +20,7 @@ namespace Mup.Scanner
 
         protected sealed override void Process(char character)
         {
-            var match = Predicates.FirstOrDefault(predicate => predicate.Value(character));
+            var match = TryGetMatchingPredicateFor(character);
             if (match.Value != null)
             {
                 if (_tokenBuilder == null || !_tokenBuilder.Code.Equals(match.Key))
@@ -48,7 +47,15 @@ namespace Mup.Scanner
                 TokenScanned(_tokenBuilder.Code, _tokenBuilder.Start, _tokenBuilder.Length);
         }
 
-        protected override int DefaultBuffer => 1;
+        private KeyValuePair<TTokenCode, Predicate<char>> TryGetMatchingPredicateFor(char character)
+        {
+            KeyValuePair<TTokenCode, Predicate<char>> matchingPredicate = new KeyValuePair<TTokenCode, Predicate<char>>(default(TTokenCode), null);
+            using (var predicate = Predicates.GetEnumerator())
+                while (matchingPredicate.Value == null && predicate.MoveNext())
+                    if (predicate.Current.Value(character))
+                        matchingPredicate = predicate.Current;
+            return matchingPredicate;
+        }
 
         private sealed class TokenBuilder
         {

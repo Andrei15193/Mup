@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if netstandard10
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -61,3 +62,4 @@ namespace Mup
         }
     }
 }
+#endif

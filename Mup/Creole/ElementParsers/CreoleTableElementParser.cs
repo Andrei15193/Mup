@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -85,6 +84,6 @@ namespace Mup.Creole.ElementParsers
             => (token.Code == Pipe && token.Next != end && !ContainsLineFeed(token.Next));
 
         private bool _IsTableRowBeginning(CreoleToken token, CreoleToken end)
-            => (_IsTableBeginning(token, end) && (FindLineFeeds(token.Previous).Take(2).Count() == 1));
+            => (_IsTableBeginning(token, end) && HasOneElement(FindLineFeeds(token.Previous)));
     }
 }

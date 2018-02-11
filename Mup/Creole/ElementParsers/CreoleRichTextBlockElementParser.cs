@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
+using static Mup.Creole.CreoleTokenHelper;
 using static Mup.RichTextElementType;
 
 namespace Mup.Creole.ElementParsers
@@ -66,7 +66,7 @@ namespace Mup.Creole.ElementParsers
             }
         }
 
-        private void _FillGaps(Func<CreoleToken, CreoleToken, IEnumerable<ElementInfo>> elementInfoGenerator, CreoleToken start, CreoleToken end, LinkedList<ElementInfo> elementInfos)
+        private void _FillGaps(ElementInfosFactory elementInfosFactory, CreoleToken start, CreoleToken end, LinkedList<ElementInfo> elementInfos)
         {
             var gapStart = start;
 
@@ -74,14 +74,14 @@ namespace Mup.Creole.ElementParsers
             while (elementInfoNode != null)
             {
                 var elementInfo = elementInfoNode.Value;
-                foreach (var generateElementInfo in elementInfoGenerator(gapStart, elementInfo.Start))
+                foreach (var generateElementInfo in elementInfosFactory(gapStart, elementInfo.Start))
                     elementInfos.AddBefore(elementInfoNode, generateElementInfo);
 
                 gapStart = elementInfo.End.Next;
                 elementInfoNode = elementInfoNode.Next;
             }
 
-            foreach (var generateElementInfo in elementInfoGenerator(gapStart, end.Next))
+            foreach (var generateElementInfo in elementInfosFactory(gapStart, end.Next))
                 elementInfos.AddLast(generateElementInfo);
         }
 
@@ -146,7 +146,7 @@ namespace Mup.Creole.ElementParsers
                 yield return new CreoleTokenRange(gapStart, end.Next);
         }
 
-        private IEnumerable<ElementInfo> _GetCrossRangeElementInfos(Func<CreoleToken, CreoleToken, ElementInfo> elementInfoFactory, CreoleTokenCode tokenCode, IEnumerable<CreoleTokenRange> creoleTokenRanges)
+        private IEnumerable<ElementInfo> _GetCrossRangeElementInfos(ElementInfoFactory elementInfoFactory, CreoleTokenCode tokenCode, IEnumerable<CreoleTokenRange> creoleTokenRanges)
         {
             CreoleToken elementInfoStart = null;
             foreach (var range in creoleTokenRanges)
@@ -298,7 +298,7 @@ namespace Mup.Creole.ElementParsers
             var emphasisElementInfos = _GetCrossRangeElementInfos(_CreateEmphasisElementInfo, Slash, gapRanges);
             var strongElementInfos = _GetCrossRangeElementInfos(_CreateStrongElementInfo, Asterisk, gapRanges);
 
-            return _OmitOverlapMerge(emphasisElementInfos, strongElementInfos).ToList();
+            return new List<ElementInfo>(_OmitOverlapMerge(emphasisElementInfos, strongElementInfos));
         }
 
         private ElementInfo _CreateEmphasisElementInfo(CreoleToken start, CreoleToken end)
@@ -392,7 +392,7 @@ namespace Mup.Creole.ElementParsers
         {
             var isMatch = (start != end);
             if (isMatch)
-                using (var tokenCode = tokenCodes.AsEnumerable().GetEnumerator())
+                using (var tokenCode = ((IEnumerable<CreoleTokenCode>)tokenCodes).GetEnumerator())
                 {
                     var token = start;
                     while (isMatch && tokenCode.MoveNext())
@@ -597,7 +597,7 @@ namespace Mup.Creole.ElementParsers
             {
                 if (previousTextStart != elementInfo.Start)
                 {
-                    var plainText = Context.Text.Substring(previousTextStart, elementInfo.Start);
+                    var plainText = Substring(Context.Text, previousTextStart, elementInfo.Start);
                     elements.Add(new CreoleTextElement(plainText));
                 }
 
@@ -609,7 +609,7 @@ namespace Mup.Creole.ElementParsers
             }
             if (previousTextStart != end.Next)
             {
-                var plainText = Context.Text.Substring(previousTextStart, end.Next);
+                var plainText = Substring(Context.Text, previousTextStart, end.Next);
                 elements.Add(new CreoleTextElement(plainText));
             }
 
@@ -661,12 +661,12 @@ namespace Mup.Creole.ElementParsers
             if (elementInfo.ContentStart != null)
             {
                 var childElements = _CreateElements(elementInfo.ContentStart, elementInfo.Children, elementInfo.ContentEnd);
-                var destination = Context.Text.Substring(elementInfo.Start.Next.Next, elementInfo.ContentStart.Previous);
+                var destination = Substring(Context.Text, elementInfo.Start.Next.Next, elementInfo.ContentStart.Previous);
                 return new CreoleHyperlinkElement(destination, childElements);
             }
             else
             {
-                var destination = Context.Text.Substring(elementInfo.Start.Next.Next, elementInfo.End.Previous);
+                var destination = Substring(Context.Text, elementInfo.Start.Next.Next, elementInfo.End.Previous);
                 return new CreoleHyperlinkElement(destination, new[] { new CreoleTextElement(destination) });
             }
         }
@@ -675,13 +675,13 @@ namespace Mup.Creole.ElementParsers
         {
             if (elementInfo.ContentStart != null)
             {
-                var alternativeText = Context.Text.Substring(elementInfo.ContentStart, elementInfo.ContentEnd.Next);
-                var source = Context.Text.Substring(elementInfo.Start.Next.Next, elementInfo.ContentStart.Previous);
+                var alternativeText = Substring(Context.Text, elementInfo.ContentStart, elementInfo.ContentEnd.Next);
+                var source = Substring(Context.Text, elementInfo.Start.Next.Next, elementInfo.ContentStart.Previous);
                 return new CreoleImageElement(source, alternativeText);
             }
             else
             {
-                var source = Context.Text.Substring(elementInfo.Start.Next.Next, elementInfo.End.Previous);
+                var source = Substring(Context.Text, elementInfo.Start.Next.Next, elementInfo.End.Previous);
                 return new CreoleImageElement(source);
             }
         }
@@ -690,19 +690,19 @@ namespace Mup.Creole.ElementParsers
         {
             if (elementInfo.Start.Code == Tilde)
             {
-                var escapedUrl = Context.Text.Substring(elementInfo.Start.Next, elementInfo.End.Next);
+                var escapedUrl = Substring(Context.Text, elementInfo.Start.Next, elementInfo.End.Next);
                 return new CreoleTextElement(escapedUrl);
             }
             else
             {
-                var destination = Context.Text.Substring(elementInfo.Start, elementInfo.End.Next);
+                var destination = Substring(Context.Text, elementInfo.Start, elementInfo.End.Next);
                 return new CreoleHyperlinkElement(destination, new[] { new CreoleTextElement(destination) });
             }
         }
 
         private CreoleElement _CreateCodeElement(ElementInfo elementInfo)
         {
-            var code = Context.Text.Substring(elementInfo.ContentStart, elementInfo.ContentEnd.Next);
+            var code = Substring(Context.Text, elementInfo.ContentStart, elementInfo.ContentEnd.Next);
             return new CreoleCodeElement(code);
         }
 
@@ -723,9 +723,12 @@ namespace Mup.Creole.ElementParsers
 
         private CreoleElement _CreatePluginElement(ElementInfo elementInfo)
         {
-            var pluginText = Context.Text.Substring(elementInfo.ContentStart, elementInfo.ContentEnd.Next);
+            var pluginText = Substring(Context.Text, elementInfo.ContentStart, elementInfo.ContentEnd.Next);
             return new CreolePluginElement(pluginText);
         }
+
+        private delegate ElementInfo ElementInfoFactory(CreoleToken start, CreoleToken end);
+        private delegate IEnumerable<ElementInfo> ElementInfosFactory(CreoleToken start, CreoleToken end);
 
         private sealed class ElementInfo
         {

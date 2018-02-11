@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 using Mup.Creole;
 using Mup.Creole.ElementParsers;
 using Mup.Creole.Elements;
 using Mup.Creole.Scanner;
 using static Mup.Creole.CreoleTokenCode;
+#if netstandard10
+using System.Threading.Tasks;
+#endif
 
 namespace Mup
 {
     /// <summary>A markup parser implementation for Creole.</summary>
-    public class CreoleParser
-        : IMarkupParser
+    public class CreoleParser : IMarkupParser
     {
         /// <summary>Initializes a new instance of the <see cref="CreoleParser"/> class.</summary>
         /// <param name="options">The options to use when parsing a block of text.</param>
@@ -45,6 +46,181 @@ namespace Mup
             return parseTree;
         }
 
+        /// <summary>Parses text from the given <paramref name="reader"/>.</summary>
+        /// <param name="reader">A text reader from which to parse text.</param>
+        /// <returns>Returns an <see cref="IParseTree"/> that can be traversed using a <see cref="ParseTreeVisitor"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is null.</exception>
+        public IParseTree Parse(TextReader reader)
+        {
+            var scanner = new CreoleScanner();
+            scanner.Scan(reader);
+            var scanResult = scanner.Result;
+            var parseTree = _Parse(scanResult);
+            return parseTree;
+        }
+
+        /// <summary>Parses text from the given <paramref name="reader"/>.</summary>
+        /// <param name="reader">A text reader from which to parse text.</param>
+        /// <param name="bufferSize">The buffer size to use when reading text from the reader.</param>
+        /// <returns>Returns an <see cref="IParseTree"/> that can be traversed using a <see cref="ParseTreeVisitor"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is null.</exception>
+        public IParseTree Parse(TextReader reader, int bufferSize)
+        {
+            var scanner = new CreoleScanner();
+            scanner.Scan(reader, bufferSize);
+            var scanResult = scanner.Result;
+            var parseTree = _Parse(scanResult);
+            return parseTree;
+        }
+
+        /// <summary>Begins to asynchronously parse the given <paramref name="text"/>.</summary>
+        /// <param name="text">The text to parse.</param>
+        /// <returns>Returns an <see cref="IAsyncResult"/> that can used to wait for the asynchronous operation to complete.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="text"/> is null.</exception>
+        public IAsyncResult BeginParse(string text)
+            => BeginParse(text, null, null);
+
+
+        /// <summary>Begins to asynchronously parse the given <paramref name="text"/>.</summary>
+        /// <param name="text">The text to parse.</param>
+        /// <param name="asyncState">A state object to associate with the resulting <see cref="IAsyncResult"/>.</param>
+        /// <returns>Returns an <see cref="IAsyncResult"/> that can used to wait for the asynchronous operation to complete.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="text"/> is null.</exception>
+        public IAsyncResult BeginParse(string text, object asyncState)
+            => BeginParse(text, null, asyncState);
+
+        /// <summary>Begins to asynchronously parse the given <paramref name="text"/>.</summary>
+        /// <param name="text">The text to parse.</param>
+        /// <param name="asyncCallback">A callback to invoke when the asynchronous operation completes.</param>
+        /// <returns>Returns an <see cref="IAsyncResult"/> that can used to wait for the asynchronous operation to complete.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="text"/> is null.</exception>
+        public IAsyncResult BeginParse(string text, AsyncCallback asyncCallback)
+            => BeginParse(text, asyncCallback, null);
+
+        /// <summary>Begins to asynchronously parse the given <paramref name="text"/>.</summary>
+        /// <param name="text">The text to parse.</param>
+        /// <param name="asyncCallback">A callback to invoke when the asynchronous operation completes.</param>
+        /// <param name="asyncState">A state object to associate with the resulting <see cref="IAsyncResult"/>.</param>
+        /// <returns>Returns an <see cref="IAsyncResult"/> that can used to wait for the asynchronous operation to complete.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="text"/> is null.</exception>
+        public IAsyncResult BeginParse(string text, AsyncCallback asyncCallback, object asyncState)
+        {
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+
+#if net20
+            return TaskAsyncOperationHelper.Run<IParseTree>(this, () => Parse(text), asyncCallback, asyncState);
+#else
+            return TaskAsyncOperationHelper.Run<IParseTree>(this, () => ParseAsync(text), asyncCallback, asyncState);
+#endif
+        }
+
+        /// <summary>Begins to asynchronously parse text from the given <paramref name="reader"/>.</summary>
+        /// <param name="reader">A text reader from which to parse text.</param>
+        /// <returns>Returns an <see cref="IAsyncResult"/> that can used to wait for the asynchronous operation to complete.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is null.</exception>
+        public IAsyncResult BeginParse(TextReader reader)
+            => BeginParse(reader, null, null);
+
+        /// <summary>Begins to asynchronously parse text from the given <paramref name="reader"/>.</summary>
+        /// <param name="reader">A text reader from which to parse text.</param>
+        /// <param name="asyncState">A state object to associate with the resulting <see cref="IAsyncResult"/>.</param>
+        /// <returns>Returns an <see cref="IAsyncResult"/> that can used to wait for the asynchronous operation to complete.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is null.</exception>
+        public IAsyncResult BeginParse(TextReader reader, object asyncState)
+            => BeginParse(reader, null, asyncState);
+
+        /// <summary>Begins to asynchronously parse text from the given <paramref name="reader"/>.</summary>
+        /// <param name="reader">A text reader from which to parse text.</param>
+        /// <param name="asyncCallback">A callback to invoke when the asynchronous operation completes.</param>
+        /// <returns>Returns an <see cref="IAsyncResult"/> that can used to wait for the asynchronous operation to complete.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is null.</exception>
+        public IAsyncResult BeginParse(TextReader reader, AsyncCallback asyncCallback)
+            => BeginParse(reader, asyncCallback, null);
+
+        /// <summary>Begins to asynchronously parse text from the given <paramref name="reader"/>.</summary>
+        /// <param name="reader">A text reader from which to parse text.</param>
+        /// <param name="asyncCallback">A callback to invoke when the asynchronous operation completes.</param>
+        /// <param name="asyncState">A state object to associate with the resulting <see cref="IAsyncResult"/>.</param>
+        /// <returns>Returns an <see cref="IAsyncResult"/> that can used to wait for the asynchronous operation to complete.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is null.</exception>
+        public IAsyncResult BeginParse(TextReader reader, AsyncCallback asyncCallback, object asyncState)
+        {
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+
+#if net20
+            return TaskAsyncOperationHelper.Run<IParseTree>(this, () => Parse(reader), asyncCallback, asyncState);
+#else
+            return TaskAsyncOperationHelper.Run<IParseTree>(this, () => ParseAsync(reader), asyncCallback, asyncState);
+#endif
+        }
+
+        /// <summary>Begins to asynchronously parse text from the given <paramref name="reader"/>.</summary>
+        /// <param name="reader">A text reader from which to parse text.</param>
+        /// <param name="bufferSize">The buffer size to use when reading text from the <paramref name="reader"/>.</param>
+        /// <returns>Returns an <see cref="IAsyncResult"/> that can used to wait for the asynchronous operation to complete.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="bufferSize"/> is negative or 0 (zero).</exception>
+        public IAsyncResult BeginParse(TextReader reader, int bufferSize)
+            => BeginParse(reader, bufferSize, null, null);
+
+        /// <summary>Begins to asynchronously parse text from the given <paramref name="reader"/>.</summary>
+        /// <param name="reader">A text reader from which to parse text.</param>
+        /// <param name="bufferSize">The buffer size to use when reading text from the <paramref name="reader"/>.</param>
+        /// <param name="asyncState">A state object to associate with the resulting <see cref="IAsyncResult"/>.</param>
+        /// <returns>Returns an <see cref="IAsyncResult"/> that can used to wait for the asynchronous operation to complete.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="bufferSize"/> is negative or 0 (zero).</exception>
+        public IAsyncResult BeginParse(TextReader reader, int bufferSize, object asyncState)
+            => BeginParse(reader, bufferSize, null, asyncState);
+
+        /// <summary>Begins to asynchronously parse text from the given <paramref name="reader"/>.</summary>
+        /// <param name="reader">A text reader from which to parse text.</param>
+        /// <param name="bufferSize">The buffer size to use when reading text from the <paramref name="reader"/>.</param>
+        /// <param name="asyncCallback">A callback to invoke when the asynchronous operation completes.</param>
+        /// <returns>Returns an <see cref="IAsyncResult"/> that can used to wait for the asynchronous operation to complete.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="bufferSize"/> is negative or 0 (zero).</exception>
+        public IAsyncResult BeginParse(TextReader reader, int bufferSize, AsyncCallback asyncCallback)
+            => BeginParse(reader, bufferSize, asyncCallback, null);
+
+        /// <summary>Begins to asynchronously parse text from the given <paramref name="reader"/>.</summary>
+        /// <param name="reader">A text reader from which to parse text.</param>
+        /// <param name="bufferSize">The buffer size to use when reading text from the <paramref name="reader"/>.</param>
+        /// <param name="asyncState">A state object to associate with the resulting <see cref="IAsyncResult"/>.</param>
+        /// <param name="asyncCallback">A callback to invoke when the asynchronous operation completes.</param>
+        /// <returns>Returns an <see cref="IAsyncResult"/> that can used to wait for the asynchronous operation to complete.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="bufferSize"/> is negative or 0 (zero).</exception>
+        public IAsyncResult BeginParse(TextReader reader, int bufferSize, AsyncCallback asyncCallback, object asyncState)
+        {
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+            if (bufferSize <= 0)
+                throw new ArgumentException("The buffer size must be greater than zero.", nameof(bufferSize));
+
+#if net20
+            return TaskAsyncOperationHelper.Run<IParseTree>(this, () => Parse(reader, bufferSize), asyncCallback, asyncState);
+#else
+            return TaskAsyncOperationHelper.Run<IParseTree>(this, () => ParseAsync(reader, bufferSize), asyncCallback, asyncState);
+#endif
+        }
+
+        /// <summary>Waits for the pending asynchronous parse operation to complete.</summary>
+        /// <param name="asyncResult">The pending asynchronous operation to wait for.</param>
+        /// <returns>Returns an <see cref="IParseTree"/> that can be traversed using a <see cref="ParseTreeVisitor"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="asyncResult"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="asyncResult"/> was not returned by one of the Begin methods of the current instance.</exception>
+        public IParseTree EndParse(IAsyncResult asyncResult)
+        {
+            if (asyncResult == null)
+                throw new ArgumentNullException(nameof(asyncResult));
+
+            return TaskAsyncOperationHelper.GetResult<IParseTree>(this, asyncResult);
+        }
+
+#if netstandard10
         /// <summary>Asynchronously parses the given <paramref name="text"/>.</summary>
         /// <param name="text">The text to parse.</param>
         /// <returns>Returns an <see cref="IParseTree"/> wrapped in a <see cref="Task{TResult}"/> that can eventually be traversed using a <see cref="ParseTreeVisitor"/>.</returns>
@@ -57,13 +233,20 @@ namespace Mup
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
         /// <returns>Returns an <see cref="IParseTree"/> wrapped in a <see cref="Task{TResult}"/> that can eventually be traversed using a <see cref="ParseTreeVisitor"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="text"/> is null.</exception>
-        public async Task<IParseTree> ParseAsync(string text, CancellationToken cancellationToken)
+        public Task<IParseTree> ParseAsync(string text, CancellationToken cancellationToken)
         {
-            var scanner = new CreoleScanner();
-            await scanner.ScanAsync(text, cancellationToken).ConfigureAwait(false);
-            var scanResult = scanner.Result;
-            var parseTree = await _ParseAsync(scanResult, cancellationToken).ConfigureAwait(false);
-            return parseTree;
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+            return Parse();
+
+            async Task<IParseTree> Parse()
+            {
+                var scanner = new CreoleScanner();
+                await scanner.ScanAsync(text, cancellationToken).ConfigureAwait(false);
+                var scanResult = scanner.Result;
+                var parseTree = await _ParseAsync(scanResult, cancellationToken).ConfigureAwait(false);
+                return parseTree;
+            }
         }
 
         /// <summary>Asynchronously parses text from the given <paramref name="reader"/>.</summary>
@@ -78,13 +261,20 @@ namespace Mup
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
         /// <returns>Returns an <see cref="IParseTree"/> wrapped in a <see cref="Task{TResult}"/> that can eventually be traversed using a <see cref="ParseTreeVisitor"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is null.</exception>
-        public async Task<IParseTree> ParseAsync(TextReader reader, CancellationToken cancellationToken)
+        public Task<IParseTree> ParseAsync(TextReader reader, CancellationToken cancellationToken)
         {
-            var scanner = new CreoleScanner();
-            await scanner.ScanAsync(reader, cancellationToken).ConfigureAwait(false);
-            var scanResult = scanner.Result;
-            var parseTree = await _ParseAsync(scanResult, cancellationToken).ConfigureAwait(false);
-            return parseTree;
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+            return Parse();
+
+            async Task<IParseTree> Parse()
+            {
+                var scanner = new CreoleScanner();
+                await scanner.ScanAsync(reader, cancellationToken).ConfigureAwait(false);
+                var scanResult = scanner.Result;
+                var parseTree = await _ParseAsync(scanResult, cancellationToken).ConfigureAwait(false);
+                return parseTree;
+            };
         }
 
         /// <summary>Asynchronously parses text from the given <paramref name="reader"/>.</summary>
@@ -103,14 +293,24 @@ namespace Mup
         /// <returns>Returns an <see cref="IParseTree"/> wrapped in a <see cref="Task{TResult}"/> that can eventually be traversed using a <see cref="ParseTreeVisitor"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is null.</exception>
         /// <exception cref="ArgumentException">Thrown when <paramref name="bufferSize"/> is negative or 0 (zero).</exception>
-        public async Task<IParseTree> ParseAsync(TextReader reader, int bufferSize, CancellationToken cancellationToken)
+        public Task<IParseTree> ParseAsync(TextReader reader, int bufferSize, CancellationToken cancellationToken)
         {
-            var scanner = new CreoleScanner();
-            await scanner.ScanAsync(reader, bufferSize, cancellationToken).ConfigureAwait(false);
-            var scanResult = scanner.Result;
-            var parseTree = await _ParseAsync(scanResult, cancellationToken).ConfigureAwait(false);
-            return parseTree;
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+            if (bufferSize <= 0)
+                throw new ArgumentException("The buffer size must be greater than zero.", nameof(bufferSize));
+            return Parse();
+
+            async Task<IParseTree> Parse()
+            {
+                var scanner = new CreoleScanner();
+                await scanner.ScanAsync(reader, bufferSize, cancellationToken).ConfigureAwait(false);
+                var scanResult = scanner.Result;
+                var parseTree = await _ParseAsync(scanResult, cancellationToken).ConfigureAwait(false);
+                return parseTree;
+            }
         }
+#endif
 
         private IParseTree _Parse(CreoleScanResult scanResult)
         {
@@ -119,12 +319,14 @@ namespace Mup
             return parseTree;
         }
 
+#if netstandard10
         private async Task<IParseTree> _ParseAsync(CreoleScanResult scanResult, CancellationToken cancellationToken)
         {
             var parser = new CreoleMarkupParser(scanResult, Options.InlineHyperlinkProtocols);
             var parseTree = await parser.ParseAsync(cancellationToken).ConfigureAwait(false);
             return parseTree;
         }
+#endif
 
         private class CreoleMarkupParser
         {
@@ -198,6 +400,7 @@ namespace Mup
                 return new CreoleParseTree(blockElements);
             }
 
+#if netstandard10
             internal async Task<IParseTree> ParseAsync(CancellationToken cancellationToken)
             {
                 var token = _GetFirstNonWhiteSpaceToken();
@@ -255,6 +458,7 @@ namespace Mup
 
                 return new CreoleParseTree(blockElements);
             }
+#endif
 
             private CreoleElementParserResult _TryCreateBlockElementExceptParagpraphFrom(CreoleToken token)
             {

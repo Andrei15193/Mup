@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -58,8 +57,8 @@ namespace Mup.Creole.ElementParsers
             if (start.Next == end)
                 return string.Empty;
 
-            var preformattedTextStartIndex = FindLineFeeds(start.Next).First().Index;
-            var preformattedTextEndIndex = FindLineFeeds(end.Previous).Last().Index;
+            var preformattedTextStartIndex = First(FindLineFeeds(start.Next)).Index;
+            var preformattedTextEndIndex = Last(FindLineFeeds(end.Previous)).Index;
             if (preformattedTextStartIndex == preformattedTextEndIndex)
                 return string.Empty;
             else if (start.Next.Next == end)

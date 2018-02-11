@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+#if netstandard10
 using System.Threading;
 using System.Threading.Tasks;
+#endif
 
 namespace Mup.Scanner
 {
@@ -21,6 +23,35 @@ namespace Mup.Scanner
             ScanCompleted(text);
         }
 
+        internal void Scan(TextReader reader)
+            =>Scan(reader, DefaultBuffer);
+
+        internal void Scan(TextReader reader, int bufferSize)
+        {
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+            if (bufferSize <= 0)
+                throw new ArgumentException("The buffer size must be greater than zero.", nameof(bufferSize));
+            _Reset();
+
+            int bufferLength;
+            var buffer = new char[bufferSize];
+            var textBuilder = new StringBuilder();
+            do
+            {
+                bufferLength = reader.Read(buffer, 0, bufferSize);
+
+                textBuilder.Append(buffer, 0, bufferLength);
+                for (var bufferIndex = 0; bufferIndex < bufferLength; bufferIndex++)
+                    _Process(buffer[bufferIndex]);
+            }
+            while (bufferLength > 0);
+
+            var text = textBuilder.ToString();
+            ScanCompleted(text);
+        }
+
+#if netstandard10
         internal async Task ScanAsync(string text, CancellationToken cancellationToken)
         {
             if (text == null)
@@ -71,6 +102,7 @@ namespace Mup.Scanner
             var text = textBuilder.ToString();
             ScanCompleted(text);
         }
+#endif
 
         protected int Line { get; private set; }
 

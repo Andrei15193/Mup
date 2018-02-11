@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <Version>1.1.0-beta</Version>
+    <IsPackable>False</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>Mup.Tests.Net45.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateFullPaths>True</GenerateFullPaths>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- <ProjectReference Include="..\Mup\Mup.csproj" /> -->
+    <Reference Include="Mup.dll">
+      <HintPath>..\Mup\bin\$(Configuration)\net45\Mup.dll</HintPath>
+    </Reference>
+
+    <!-- <ProjectReference Include="..\Mup\Mup.Tests.csproj" /> -->
+    <Reference Include="Mup.Tests.dll">
+      <HintPath>..\Mup.Tests\bin\$(Configuration)\net45\Mup.Tests.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

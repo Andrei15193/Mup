@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Mup.Scanner;
 
 namespace Mup.Tests
@@ -13,8 +12,10 @@ namespace Mup.Tests
             Text = (text ?? throw new ArgumentNullException(nameof(text)));
             Tokens = (tokens ?? throw new ArgumentNullException(nameof(tokens)));
 
-            if (tokens.Any(token => token == null))
-                throw new ArgumentException("Cannot contain null.", nameof(tokens));
+            using (var token = tokens.GetEnumerator())
+                while (token.MoveNext())
+                    if (token.Current == null)
+                        throw new ArgumentException("Cannot contain null.", nameof(tokens));
         }
 
         internal string Text { get; }

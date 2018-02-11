@@ -1,12 +1,18 @@
 ﻿using System.Text;
+#if netstandard10
 using System.Threading;
 using System.Threading.Tasks;
+#endif
+#if net20
+using static Mup.StringHelper;
+#else
+using static System.String;
+#endif
 
 namespace Mup
 {
     /// <summary>A <see cref="ParseTreeVisitor{TResult}"/> implementation for generating HTML from an <see cref="IParseTree"/>.</summary>
-    public class HtmlWriterVisitor
-        : ParseTreeVisitor<string>
+    public class HtmlWriterVisitor : ParseTreeVisitor<string>
     {
         private string _result = null;
 
@@ -23,11 +29,13 @@ namespace Mup
         protected internal override string GetResult()
             => _result;
 
+#if netstandard10
         /// <summary>Asynchronously initializes the visitor. This method is called before any visit method.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
         /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal sealed override Task BeginVisitAsync(CancellationToken cancellationToken)
             => base.BeginVisitAsync(cancellationToken);
+#endif
 
         /// <summary>Initializes the visitor. This method is called before any visit method.</summary>
         protected internal sealed override void BeginVisit()
@@ -36,11 +44,13 @@ namespace Mup
             HtmlStringBuilder = new StringBuilder();
         }
 
+#if netstandard10
         /// <summary>Asynchronously completes the visit operation. This method is called after all visit methods.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
         /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal sealed override Task EndVisitAsync(CancellationToken cancellationToken)
             => base.EndVisitAsync(cancellationToken);
+#endif
 
         /// <summary>Completes the visit operation. This method is called after all visit methods.</summary>
         protected internal sealed override void EndVisit()
@@ -216,7 +226,7 @@ namespace Mup
             HtmlStringBuilder.Append("<img src=\"");
             AppendHtmlSafe(source);
             HtmlStringBuilder.Append('"');
-            if (!string.IsNullOrWhiteSpace(alternativeText))
+            if (!IsNullOrWhiteSpace(alternativeText))
             {
                 HtmlStringBuilder.Append(" alt=\"");
                 AppendHtmlSafe(alternativeText);

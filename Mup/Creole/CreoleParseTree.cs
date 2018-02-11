@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Mup.Creole.Elements;
+#if netstandard10
 using System.Threading;
 using System.Threading.Tasks;
-using Mup.Creole.Elements;
+#endif
 
 namespace Mup.Creole
 {
@@ -14,6 +17,71 @@ namespace Mup.Creole
             _elements = elements;
         }
 
+#if net20
+        public void Accept(ParseTreeVisitor visitor)
+        {
+            visitor.BeginVisit();
+            foreach (var blockElement in _elements)
+                blockElement.Accept(visitor);
+            visitor.EndVisit();
+        }
+
+        public TResult Accept<TResult>(ParseTreeVisitor<TResult> visitor)
+        {
+            Accept((ParseTreeVisitor)visitor);
+
+            return visitor.GetResult();
+        }
+#endif
+
+        public IAsyncResult BeginAccept(ParseTreeVisitor visitor)
+            => BeginAccept(visitor, null, null);
+
+        public IAsyncResult BeginAccept(ParseTreeVisitor visitor, object asyncState)
+            => BeginAccept(visitor, null, asyncState);
+
+        public IAsyncResult BeginAccept(ParseTreeVisitor visitor, AsyncCallback asyncCallback)
+            => BeginAccept(visitor, asyncCallback, null);
+
+        public IAsyncResult BeginAccept(ParseTreeVisitor visitor, AsyncCallback asyncCallback, object asyncState)
+        {
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+
+#if net20
+            return TaskAsyncOperationHelper.Run(this, () => Accept(visitor), asyncCallback, asyncState);
+#else
+            return TaskAsyncOperationHelper.Run(this, () => AcceptAsync(visitor), asyncCallback, asyncState);
+#endif
+        }
+
+        public IAsyncResult BeginAccept<TResult>(ParseTreeVisitor<TResult> visitor)
+            => BeginAccept<TResult>(visitor, null, null);
+
+        public IAsyncResult BeginAccept<TResult>(ParseTreeVisitor<TResult> visitor, object asyncState)
+            => BeginAccept<TResult>(visitor, null, asyncState);
+
+        public IAsyncResult BeginAccept<TResult>(ParseTreeVisitor<TResult> visitor, AsyncCallback asyncCallback)
+            => BeginAccept<TResult>(visitor, asyncCallback, null);
+
+        public IAsyncResult BeginAccept<TResult>(ParseTreeVisitor<TResult> visitor, AsyncCallback asyncCallback, object asyncState)
+        {
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+
+#if net20
+            return TaskAsyncOperationHelper.Run<TResult>(this, () => Accept(visitor), asyncCallback, asyncState);
+#else
+            return TaskAsyncOperationHelper.Run<TResult>(this, () => AcceptAsync(visitor), asyncCallback, asyncState);
+#endif
+        }
+        public void EndAccept(IAsyncResult asyncResult)
+            => TaskAsyncOperationHelper.Wait(this, asyncResult);
+
+        public TResult EndAccept<TResult>(IAsyncResult asyncResult)
+            => TaskAsyncOperationHelper.GetResult<TResult>(this, asyncResult);
+
+#if netstandard10
         public void Accept(ParseTreeVisitor visitor)
             => Task.Run(() => AcceptAsync(visitor, CancellationToken.None)).Wait();
 
@@ -45,5 +113,6 @@ namespace Mup.Creole
             cancellationToken.ThrowIfCancellationRequested();
             return result;
         }
+#endif
     }
 }
