@@ -16,6 +16,7 @@
     <PackageIconUrl>https://mupstore.blob.core.windows.net/nuget/logo.png</PackageIconUrl>
     <Product>Mup</Product>
     <Company>Andrei Fangli</Company>
+    <PackageReleaseNotes>Added support for .NET 2.0. Added Begin/End asynchronous pattern variant (mostly for .NET 2.0).</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>
