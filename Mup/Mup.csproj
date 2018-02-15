@@ -1,28 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFrameworks>net20;net45;netstandard1.0;netcoreapp1.0</TargetFrameworks>
-    <Version>1.1.0-beta</Version>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Authors>Andrei Fangli</Authors>
-    <Title>Mup</Title>
-    <Description>Markup Parser (Mup) is an extensible .NET Standard Library (1.0) containing types for parsing and generating HTML from text using the Creole lightweight markup language.</Description>
-    <PackageId>Mup</PackageId>
-    <PackageTags>lightweight markup language parser creole net standard html portable library</PackageTags>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageProjectUrl>http://www.mup-project.net/</PackageProjectUrl>
-    <Copyright>Andrei Fangli</Copyright>
-    <PackageLicenseUrl>http://www.mup-project.net/#/license</PackageLicenseUrl>
-    <PackageIconUrl>https://mupstore.blob.core.windows.net/nuget/logo.png</PackageIconUrl>
-    <Product>Mup</Product>
-    <Company>Andrei Fangli</Company>
-    <PackageReleaseNotes>Added support for .NET 2.0. Added Begin/End asynchronous pattern variant (mostly for .NET 2.0).</PackageReleaseNotes>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Mup.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Mup</PackageId>
+    <PackageVersion>1.1.0-beta1</PackageVersion>
+    <Authors>Andrei15193</Authors>
+    <Description>Markup Parser (Mup) is an extensible .NET Standard Library (1.0) containing types for parsing and generating HTML from text using the Creole lightweight markup language.</Description>
+    <Title>Mup</Title>
+    <PackageProjectUrl>http://www.mup-project.net/</PackageProjectUrl>
+    <PackageLicenseUrl>http://www.mup-project.net/#license</PackageLicenseUrl>
+    <PackageIconUrl>https://mupstore.blob.core.windows.net/nuget/logo.png</PackageIconUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>Added support for .NET 2.0. Added Begin/End asynchronous pattern variant (mostly for .NET 2.0).</PackageReleaseNotes>
+    <Copyright>Andrei Fangli</Copyright>
+    <PackageTags>lightweight markup language parser creole net standard html portable library</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -37,9 +35,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <DocumentationFile>bin\Release\netstandard1.0\Mup.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Mup.xml</DocumentationFile>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <TreatSpecificWarningsAsErrors />
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
 </Project>
