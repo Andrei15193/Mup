@@ -25,20 +25,19 @@
 
   <PropertyGroup>
     <GenerateFullPaths>True</GenerateFullPaths>
-    <DefineConstants Condition="'$(Configuration)'=='Debug'">$(DefineConstants);DEBUG</DefineConstants>
-    <DefineConstants Condition="'$(Configuration)'=='Release'">$(DefineConstants);RELEASE</DefineConstants>
-    <DefineConstants Condition="'$(TargetFramework)'=='net20'">$(DefineConstants);net20</DefineConstants>
-    <DefineConstants Condition="'$(TargetFramework)'=='net45'">$(DefineConstants);net45</DefineConstants>
-    <DefineConstants Condition="'$(TargetFramework)'=='netcoreapp1.0'">$(DefineConstants);netcoreapp10</DefineConstants>
-    <DefineConstants Condition="'$(TargetFramework)'=='net20' OR '$(TargetFramework)'=='net45'">$(DefineConstants);net</DefineConstants>
-    <DefineConstants Condition="'$(TargetFramework)'=='netstandard1.0' OR '$(TargetFramework)'=='net45' OR '$(TargetFramework)'=='netcoreapp1.0'">$(DefineConstants);netstandard10</DefineConstants>
+    <DefineConstants Condition="'$(Configuration)'=='Debug'">DEBUG;$(DefineConstants)</DefineConstants>
+    <DefineConstants Condition="'$(Configuration)'=='Release'">RELEASE;$(DefineConstants)</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='net20'">net20;$(DefineConstants)</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='net45'">net45;$(DefineConstants)</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='netcoreapp1.0'">netcoreapp10;$(DefineConstants)</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='net20' OR '$(TargetFramework)'=='net45'">net;$(DefineConstants)</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='netstandard1.0' OR '$(TargetFramework)'=='net45' OR '$(TargetFramework)'=='netcoreapp1.0'">netstandard10;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <DocumentationFile>bin\Release\Mup.xml</DocumentationFile>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <TreatSpecificWarningsAsErrors />
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
 </Project>

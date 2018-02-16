@@ -95,6 +95,13 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "Pack",
+            "dependsOn": "Release",
+            "type": "shell",
+            "command": "mup\\pack.bat",
+            "problemMatcher": []
+        },
+        {
             "label": "Clean",
             "type": "process",
             "command": "dotnet",
