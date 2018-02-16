@@ -30,7 +30,7 @@ class Description extends React.PureComponent {
             <div>
                 <p>
                     Mup, which is short for <strong>M</strong>ark<strong>u</strong>p <strong>P</strong>arser, is a cross-platform library written in
-                    C#. It targets .NET Core 1.0 making it available for a wide variety of devices and applications.
+                    C#. It targets .NET Standard 1.0 making it available for a wide variety of devices and applications.
                 </p>
                 <p>
                     The main purpose of the library is to support
@@ -45,9 +45,8 @@ class Description extends React.PureComponent {
                     To keep it lightweight, the library only provides parsers for several languages (see below) and
                     an <abbr title="HyperText Markup Language">HTML</abbr> visitor which allows users to
                     generate <abbr title="HyperText Markup Language">HTML</abbr> from parsed text. With each increment (or major version if
-                    that helps), the library will bring a new parser into the fold and thus supporting more languages. The end goal is to support
-                    all <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language" target="_blank">Lightweight Markup Languages</a>,
-                    however that may take some time, thus the incremental approach.
+                    that helps), the library will bring a new parser into the fold and thus supporting more languages. The end goal is to support most,
+                    if not all, <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language" target="_blank">Lightweight Markup Languages</a>.
                 </p>
             </div>
         );

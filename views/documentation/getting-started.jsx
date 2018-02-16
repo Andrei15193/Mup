@@ -68,7 +68,7 @@ export class GettingStarted extends React.PureComponent {
 
                 <p>To exemplify how easy it is to get starting with Mup we will build a small web application that exposes just one endpoint which parses the body of a request and returns the HTML, similar to what this site uses for the <Link to={Routes.onlineParser()}>Online Parser</Link> (if you haven&#39;t tried it, you should definitely give it a go, it&#39;s really cool).</p>
 
-                <p>For our little web project we will be using .NET Core for convenience and because it is cross-platform, you do not really need to run Windows to go though this example. Besides, the library is cross-platform itself.</p>
+                <p>For our little web project we will be using .NET Core for convenience and because it is cross-platform, you do not really need to use Windows to go though this example. Besides, the library is cross-platform itself.</p>
 
                 <p>Now let us finally get on with it, create a folder where you usually have your projects, I will call mine <code>mup-example</code>, go to that folder and run <code>netcore new webapi</code> in the command line. I use <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> which has an integrated terminal so I can do my code editing and use the command line from one place.</p>
 
@@ -143,7 +143,7 @@ This is a test"`}</StringLiteral>
 
                 <h3>Customizing the Result</h3>
 
-                <p>As you can see, we have quite a few lines for using the Core feature that Mup offers, fear not as we can turn it into a one line! We can make use of extension methods to combine the asynchronous methods into one so we get rid of the boilerplate code:</p>
+                <p>As you can see, we have quite a few lines for using the core feature that Mup offers, fear not as we can turn it into a one line! We can make use of extension methods to combine the asynchronous methods into one so we get rid of the boilerplate code:</p>
 
                 <pre><code>
                     <Keyword>public</Keyword> <Keyword>async</Keyword>{` Task<IActionResult> Parse([FromBody] `}<Keyword>string</Keyword>{` text, CancellationToken cancellationToken)
