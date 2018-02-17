@@ -14,7 +14,7 @@ export class Documentation extends React.PureComponent {
     }
 
     render() {
-        const documentationComponent = getDocumentationComponentFor(this.props.match.params.member);
+        const documentationComponent = getDocumentationComponentFor(this.props.match.params.member, this.props.match.params.framework);
         return (
             <Page>
                 <h1>Documentation</h1>
@@ -24,36 +24,36 @@ export class Documentation extends React.PureComponent {
     }
 };
 
-function getDocumentationComponentFor(member) {
+function getDocumentationComponentFor(member, selectedFramework) {
     const memberId = (member && member.toLocaleLowerCase());
     if (memberId in MupDefinitions) {
         const definition = MupDefinitions[memberId];
         switch (definition.type) {
             case "interface":
                 return (
-                    <Interface definition={definition} />
+                    <Interface selectedFramework={selectedFramework} definition={definition} />
                 );
 
             case "class":
                 return (
-                    <Class definition={definition} />
+                    <Class selectedFramework={selectedFramework} definition={definition} />
                 );
 
             case "constructor":
             case "method":
                 return (
-                    <Method definition={definition} />
+                    <Method selectedFramework={selectedFramework} definition={definition} />
                 );
 
             case "property":
                 return (
-                    <Property definition={definition} />
+                    <Property selectedFramework={selectedFramework} definition={definition} />
                 );
         }
     }
 
     return (
-        <MupNamespace />
+        <MupNamespace selectedFramework={selectedFramework} />
     );
 }
 
@@ -77,6 +77,7 @@ class MupNamespace extends React.PureComponent {
                     </ol>
                 </nav>
                 <h2>Mup Namespace</h2>
+                <AvailableFrameworks memberId="mup" selected={this.props.selectedFramework}>{mupNamespace.availableFrameworks}</AvailableFrameworks>
                 <table className={[Style.table, Style.tableHover].join(" ")}>
                     <thead>
                         <tr>
@@ -85,18 +86,22 @@ class MupNamespace extends React.PureComponent {
                         </tr>
                     </thead>
                     <tbody>
-                        {types.map(typeId =>
-                            <tr key={typeId}>
-                                <td>
-                                    <Link to={Routes.documentation({ member: typeId })}>
-                                        <MemberName definition={MupDefinitions[typeId]} />
-                                    </Link>
-                                </td>
-                                <td className={Style.documentationTable}>
-                                    <DocumentationView elements={MupDefinitions[typeId].documentation.summary} />
-                                </td>
-                            </tr>
-                        )}
+                        {types
+                            .filter(typeId => (!this.props.selectedFramework || MupDefinitions[typeId].availableFrameworks.includes(this.props.selectedFramework)))
+                            .map(
+                                typeId => (
+                                    <tr key={typeId}>
+                                        <td>
+                                            <Link to={Routes.documentation({ member: typeId, framework: this.props.selectedFramework })}>
+                                                <MemberName definition={MupDefinitions[typeId]} />
+                                            </Link>
+                                        </td>
+                                        <td className={Style.documentationTable}>
+                                            <DocumentationView elements={MupDefinitions[typeId].documentation.summary} selectedFramework={this.props.selectedFramework} />
+                                        </td>
+                                    </tr>
+                                )
+                            )}
                     </tbody>
                 </table>
                 <GettingStarted />
@@ -117,7 +122,7 @@ class Interface extends React.PureComponent {
                 <nav aria-label="breadcrumb" role="navigation">
                     <ol className={Style.breadcrumb}>
                         <li className={Style.breadcrumbItem} aria-current="page">
-                            <Link to={Routes.documentation({ member: definition.namespaceId })}>{definition.namespace}</Link>
+                            <Link to={Routes.documentation({ member: definition.namespaceId, framework: this.props.selectedFramework })}>{definition.namespace}</Link>
                         </li>
                         <li className={[Style.breadcrumbItem, Style.active].join(" ")} aria-current="page">
                             <MemberName definition={definition} />
@@ -125,10 +130,11 @@ class Interface extends React.PureComponent {
                     </ol>
                 </nav>
                 <h2><MemberName definition={definition} /> Interface</h2>
-                <DocumentationView elements={definition.documentation.summary} />
-                <TypeInheritanceSummary definition={definition} />
-                <PropertiesList properties={definition.properties} />
-                <MethodsList methods={definition.methods} />
+                <DocumentationView elements={definition.documentation.summary} selectedFramework={this.props.selectedFramework} />
+                <TypeInheritanceSummary definition={definition} selectedFramework={this.props.selectedFramework} />
+                <AvailableFrameworks memberId={definition.id} selected={this.props.selectedFramework}>{definition.availableFrameworks}</AvailableFrameworks>
+                <PropertiesList selectedFramework={this.props.selectedFramework} properties={definition.properties} />
+                <MethodsList selectedFramework={this.props.selectedFramework} methods={definition.methods} />
             </div>
         );
     }
@@ -146,7 +152,7 @@ class Class extends React.PureComponent {
                 <nav aria-label="breadcrumb" role="navigation">
                     <ol className={Style.breadcrumb}>
                         <li className={Style.breadcrumbItem} aria-current="page">
-                            <Link to={Routes.documentation({ member: definition.namespaceId })}>{definition.namespace}</Link>
+                            <Link to={Routes.documentation({ member: definition.namespaceId, framework: this.props.selectedFramework })}>{definition.namespace}</Link>
                         </li>
                         <li className={[Style.breadcrumbItem, Style.active].join(" ")} aria-current="page">
                             <MemberName definition={definition} />
@@ -154,12 +160,13 @@ class Class extends React.PureComponent {
                     </ol>
                 </nav>
                 <h2><MemberName definition={definition} /> Class</h2>
-                <DocumentationView elements={definition.documentation.summary} />
-                <TypeInheritanceSummary definition={definition} />
-                <GenericParametersSummary definition={definition} />
-                <ConstructorsList includeAccessModifier constructors={definition.constructors} />
-                <PropertiesList includeAccessModifier properties={definition.properties} />
-                <MethodsList includeAccessModifier methods={definition.methods} />
+                <DocumentationView elements={definition.documentation.summary} selectedFramework={this.props.selectedFramework} />
+                <TypeInheritanceSummary definition={definition} selectedFramework={this.props.selectedFramework} />
+                <AvailableFrameworks memberId={definition.id} selected={this.props.selectedFramework}>{definition.availableFrameworks}</AvailableFrameworks>
+                <GenericParametersSummary definition={definition} selectedFramework={this.props.selectedFramework} />
+                <ConstructorsList includeAccessModifier selectedFramework={this.props.selectedFramework} constructors={definition.constructors} />
+                <PropertiesList includeAccessModifier selectedFramework={this.props.selectedFramework} properties={definition.properties} />
+                <MethodsList includeAccessModifier selectedFramework={this.props.selectedFramework} methods={definition.methods} />
             </div>
         );
     }
@@ -178,10 +185,10 @@ class Method extends React.PureComponent {
                 <nav aria-label="breadcrumb" role="navigation">
                     <ol className={Style.breadcrumb}>
                         <li className={Style.breadcrumbItem} aria-current="page">
-                            <Link to={Routes.documentation({ member: declaringTypeDefinition.namespaceId })}>{declaringTypeDefinition.namespace}</Link>
+                            <Link to={Routes.documentation({ member: declaringTypeDefinition.namespaceId, framework: this.props.selectedFramework })}>{declaringTypeDefinition.namespace}</Link>
                         </li>
                         <li className={Style.breadcrumbItem} aria-current="page">
-                            <Link to={Routes.documentation({ member: declaringTypeDefinition.id })}>
+                            <Link to={Routes.documentation({ member: declaringTypeDefinition.id, framework: this.props.selectedFramework })}>
                                 <MemberName definition={declaringTypeDefinition} />
                             </Link>
                         </li>
@@ -191,12 +198,13 @@ class Method extends React.PureComponent {
                     </ol>
                 </nav>
                 <h2><MemberName definition={definition} /> {definition.type === "constructor" ? "Constructor" : "Method"}</h2>
-                <DocumentationView elements={definition.documentation.summary} />
-                <MethodInheritanceSummary definition={definition} />
-                <GenericParametersSummary definition={definition} />
-                <ParametersSummary definition={definition} />
-                <ReturnsSummary definition={definition} />
-                <ExceptionsList definition={definition} />
+                <DocumentationView elements={definition.documentation.summary} selectedFramework={this.props.selectedFramework} />
+                <MethodInheritanceSummary definition={definition} selectedFramework={this.props.selectedFramework} />
+                <AvailableFrameworks memberId={definition.id} selected={this.props.selectedFramework}>{definition.availableFrameworks}</AvailableFrameworks>
+                <GenericParametersSummary definition={definition} selectedFramework={this.props.selectedFramework} />
+                <ParametersSummary definition={definition} selectedFramework={this.props.selectedFramework} />
+                <ReturnsSummary definition={definition} selectedFramework={this.props.selectedFramework} />
+                <ExceptionsList definition={definition} selectedFramework={this.props.selectedFramework} />
             </div>
         );
     }
@@ -215,10 +223,10 @@ class Property extends React.PureComponent {
                 <nav aria-label="breadcrumb" role="navigation">
                     <ol className={Style.breadcrumb}>
                         <li className={Style.breadcrumbItem} aria-current="page">
-                            <Link to={Routes.documentation({ member: declaringTypeDefinition.namespaceId })}>{declaringTypeDefinition.namespace}</Link>
+                            <Link to={Routes.documentation({ member: declaringTypeDefinition.namespaceId, framework: this.props.selectedFramework })}>{declaringTypeDefinition.namespace}</Link>
                         </li>
                         <li className={Style.breadcrumbItem} aria-current="page">
-                            <Link to={Routes.documentation({ member: declaringTypeDefinition.id })}>
+                            <Link to={Routes.documentation({ member: declaringTypeDefinition.id, framework: this.props.selectedFramework })}>
                                 <MemberName definition={declaringTypeDefinition} />
                             </Link>
                         </li>
@@ -227,12 +235,13 @@ class Property extends React.PureComponent {
                         </li>
                     </ol>
                 </nav>
-                <h2><MemberName definition={definition} /> Property</h2>
-                <DocumentationView elements={definition.documentation.summary} />
-                <PropertyInheritanceSummary definition={definition} />
-                <PropertyAccessorSummary definition={definition} />
-                <ParametersSummary definition={definition} />
-                <ExceptionsList definition={definition} />
+                <h2><MemberName definition={definition} /> Property (<LinkTo reference={definition.propertyType} selectedFramework={this.props.selectedFramework} />)</h2>
+                <DocumentationView elements={definition.documentation.summary} selectedFramework={this.props.selectedFramework} />
+                <PropertyInheritanceSummary definition={definition} selectedFramework={this.props.selectedFramework} />
+                <PropertyAccessorSummary definition={definition} selectedFramework={this.props.selectedFramework} />
+                <AvailableFrameworks memberId={definition.id} selected={this.props.selectedFramework}>{definition.availableFrameworks}</AvailableFrameworks>
+                <ParametersSummary definition={definition} selectedFramework={this.props.selectedFramework} />
+                <ExceptionsList definition={definition} selectedFramework={this.props.selectedFramework} />
             </div>
         );
     }
@@ -315,22 +324,24 @@ class ConstructorsList extends React.PureComponent {
                             </tr>
                         </thead>
                         <tbody>
-                            {constructors.map(constructorId => {
-                                const constructorDefinition = MupDefinitions[constructorId];
-                                return (
-                                    <tr key={constructorId}>
-                                        <td>
-                                            <Link to={Routes.documentation({ member: constructorId })}>
-                                                <MemberName definition={constructorDefinition} />
-                                            </Link>
-                                        </td>
-                                        {this.props.includeAccessModifier ? <td><AccessModifier access={constructorDefinition.access} /></td> : null}
-                                        <td className={Style.documentationTable}>
-                                            <DocumentationView elements={constructorDefinition.documentation.summary} />
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                            {constructors
+                                .filter(constructorId => (!this.props.selectedFramework || MupDefinitions[constructorId].availableFrameworks.includes(this.props.selectedFramework)))
+                                .map(constructorId => {
+                                    const constructorDefinition = MupDefinitions[constructorId];
+                                    return (
+                                        <tr key={constructorId}>
+                                            <td>
+                                                <Link to={Routes.documentation({ member: constructorId, framework: this.props.selectedFramework })}>
+                                                    <MemberName definition={constructorDefinition} />
+                                                </Link>
+                                            </td>
+                                            {this.props.includeAccessModifier ? <td><AccessModifier access={constructorDefinition.access} /></td> : null}
+                                            <td className={Style.documentationTable}>
+                                                <DocumentationView elements={constructorDefinition.documentation.summary} selectedFramework={this.props.selectedFramework} />
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                         </tbody>
                     </table>
                 </div>
@@ -367,24 +378,26 @@ class PropertiesList extends React.PureComponent {
                             </tr>
                         </thead>
                         <tbody>
-                            {properties.map(propertyId => {
-                                const propertyDefinition = MupDefinitions[propertyId];
-                                return (
-                                    <tr key={propertyId}>
-                                        <td>
-                                            <Link to={Routes.documentation({ member: propertyId })}>
-                                                <MemberName definition={propertyDefinition} />
-                                            </Link>
-                                        </td>
-                                        <td>
-                                            <PropertyAccessor includeAccessModifier={includeAccessModifier} definition={propertyDefinition} />
-                                        </td>
-                                        <td className={Style.documentationTable}>
-                                            <DocumentationView elements={propertyDefinition.documentation.summary} />
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                            {properties
+                                .filter(propertyId => (!this.props.selectedFramework || MupDefinitions[propertyId].availableFrameworks.includes(this.props.selectedFramework)))
+                                .map(propertyId => {
+                                    const propertyDefinition = MupDefinitions[propertyId];
+                                    return (
+                                        <tr key={propertyId}>
+                                            <td>
+                                                <Link to={Routes.documentation({ member: propertyId, framework: this.props.selectedFramework })}>
+                                                    <MemberName definition={propertyDefinition} />
+                                                </Link>
+                                            </td>
+                                            <td>
+                                                <PropertyAccessor includeAccessModifier={includeAccessModifier} definition={propertyDefinition} />
+                                            </td>
+                                            <td className={Style.documentationTable}>
+                                                <DocumentationView elements={propertyDefinition.documentation.summary} selectedFramework={this.props.selectedFramework} />
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                         </tbody>
                     </table>
                 </div>
@@ -461,22 +474,24 @@ class MethodsList extends React.PureComponent {
                             </tr>
                         </thead>
                         <tbody>
-                            {methods.map(methodId => {
-                                const methodDefinition = MupDefinitions[methodId];
-                                return (
-                                    <tr key={methodId}>
-                                        <td>
-                                            <Link to={Routes.documentation({ member: methodId })}>
-                                                <MemberName definition={methodDefinition} />
-                                            </Link>
-                                        </td>
-                                        {this.props.includeAccessModifier ? <td><AccessModifier access={methodDefinition.access} /></td> : null}
-                                        <td className={Style.documentationTable}>
-                                            <DocumentationView elements={methodDefinition.documentation.summary} />
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                            {methods
+                                .filter(methodId => (!this.props.selectedFramework || MupDefinitions[methodId].availableFrameworks.includes(this.props.selectedFramework)))
+                                .map(methodId => {
+                                    const methodDefinition = MupDefinitions[methodId];
+                                    return (
+                                        <tr key={methodId}>
+                                            <td>
+                                                <Link to={Routes.documentation({ member: methodId, framework: this.props.selectedFramework })}>
+                                                    <MemberName definition={methodDefinition} />
+                                                </Link>
+                                            </td>
+                                            {this.props.includeAccessModifier ? <td><AccessModifier access={methodDefinition.access} /></td> : null}
+                                            <td className={Style.documentationTable}>
+                                                <DocumentationView elements={methodDefinition.documentation.summary} selectedFramework={this.props.selectedFramework} />
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                         </tbody>
                     </table>
                 </div>
@@ -524,20 +539,20 @@ class TypeInheritanceSummary extends React.PureComponent {
             let isFirst = true;
             paragraphs.push(
                 <p key="inheritance">
-                    Extends <LinkTo reference={definition.base} />.
+                    Extends <LinkTo reference={definition.base} selectedFramework={this.props.selectedFramework} />.
                     Implements {definition.interfaces.map(
                         (interfaceReference, interfaceReferenceIndex) => {
                             if (isFirst) {
                                 isFirst = false;
                                 return (
-                                    <LinkTo key={interfaceReferenceIndex} reference={interfaceReference} />
+                                    <LinkTo key={interfaceReferenceIndex} reference={interfaceReference} selectedFramework={this.props.selectedFramework} />
                                 );
                             }
                             else
                                 return [
                                     ", ",
                                     (
-                                        <LinkTo key={interfaceReferenceIndex} reference={interfaceReference} />
+                                        <LinkTo key={interfaceReferenceIndex} reference={interfaceReference} selectedFramework={this.props.selectedFramework} />
                                     )
                                 ];
                         })}.
@@ -547,7 +562,7 @@ class TypeInheritanceSummary extends React.PureComponent {
         else if (definition.base)
             paragraphs.push(
                 <p key="inheritance">
-                    Extends <LinkTo reference={definition.base} />.
+                    Extends <LinkTo reference={definition.base} selectedFramework={this.props.selectedFramework} />.
                 </p>
             );
         else if (definition.interfaces.length > 0) {
@@ -559,14 +574,14 @@ class TypeInheritanceSummary extends React.PureComponent {
                             if (isFirst) {
                                 isFirst = false;
                                 return (
-                                    <LinkTo key={interfaceReferenceIndex} reference={interfaceReference} />
+                                    <LinkTo key={interfaceReferenceIndex} reference={interfaceReference} selectedFramework={this.props.selectedFramework} />
                                 );
                             }
                             else
                                 return [
                                     ", ",
                                     (
-                                        <LinkTo key={interfaceReferenceIndex} reference={interfaceReference} />
+                                        <LinkTo key={interfaceReferenceIndex} reference={interfaceReference} selectedFramework={this.props.selectedFramework} />
                                     )
                                 ];
                         })}.
@@ -616,8 +631,8 @@ class GenericParametersSummary extends React.PureComponent {
                             genericParameter => (
                                 <li key={genericParameter.name}>
                                     <strong>{genericParameter.name}</strong>
-                                    <DocumentationView elements={definition.documentation.genericParameters[genericParameter.name]} />
-                                    <GenericParameterConstraints definition={genericParameter} />
+                                    <DocumentationView elements={definition.documentation.genericParameters[genericParameter.name]} selectedFramework={this.props.selectedFramework} />
+                                    <GenericParameterConstraints definition={genericParameter} selectedFramework={this.props.selectedFramework} />
                                 </li>
                             )
                         )}
@@ -660,13 +675,13 @@ class GenericParameterConstraints extends React.PureComponent {
         if (definition.base)
             constraintDescriptions.push(
                 " extend ",
-                <LinkTo key="base" reference={definition.base} />
+                <LinkTo key="base" reference={definition.base} selectedFramework={this.props.selectedFramework} />
             );
         if (definition.interfaces.length > 0) {
             constraintDescriptions.push(" implement ");
             definition.interfaces.forEach(interfaceReference => {
                 constraintDescriptions.push(
-                    <LinkTo key={interfaceReference.id} reference={interfaceReference} />
+                    <LinkTo key={interfaceReference.id} reference={interfaceReference} selectedFramework={this.props.selectedFramework} />
                 );
             });
         }
@@ -798,13 +813,13 @@ class PropertyAccessorSummary extends React.PureComponent {
     render() {
         const definition = this.props.definition;
 
-        if ((definition.get || {}).access !== "private" && (definition.set || {}).access !== "private")
+        if (definition.get && definition.get.access !== "private" && definition.set && definition.set.access !== "private")
             return (
                 <p>
                     This property exposes a <AccessModifier access={definition.get.access} /> getter and setter.
                 </p>
             );
-        else if ((definition.get || {}).access !== "private")
+        else if (definition.get && definition.get.access !== "private")
             return (
                 <p>
                     This property exposes a <AccessModifier access={definition.get.access} /> getter.
@@ -835,9 +850,9 @@ class ParametersSummary extends React.PureComponent {
                             parameter => (
                                 <li key={parameter.name}>
                                     <div>
-                                        <strong>{parameter.name}</strong> <LinkTo reference={parameter.type} />
+                                        <strong>{parameter.name}</strong> <LinkTo reference={parameter.type} selectedFramework={this.props.selectedFramework} />
                                     </div>
-                                    <DocumentationView elements={definition.documentation.parameters[parameter.name]} />
+                                    <DocumentationView elements={definition.documentation.parameters[parameter.name]} selectedFramework={this.props.selectedFramework} />
                                 </li>
                             )
                         )}
@@ -862,9 +877,9 @@ class ReturnsSummary extends React.PureComponent {
                     <h3>
                         Returns
                         {" "}
-                        <LinkTo reference={definition.return.type} />
+                        <LinkTo reference={definition.return.type} selectedFramework={this.props.selectedFramework} />
                     </h3>
-                    <DocumentationView elements={definition.documentation.returns} />
+                    <DocumentationView elements={definition.documentation.returns} selectedFramework={this.props.selectedFramework} />
                 </div>
             );
         else
@@ -890,8 +905,8 @@ class ExceptionsList extends React.PureComponent {
                         {exceptions.map(
                             exception => (
                                 <li key={exception.type.id}>
-                                    <strong><LinkTo reference={exception.type} /></strong>
-                                    <DocumentationView elements={exception.description} />
+                                    <strong><LinkTo reference={exception.type} selectedFramework={this.props.selectedFramework} /></strong>
+                                    <DocumentationView elements={exception.description} selectedFramework={this.props.selectedFramework} />
                                 </li>
                             )
                         )}
@@ -900,5 +915,42 @@ class ExceptionsList extends React.PureComponent {
             );
         else
             return null;
+    }
+}
+
+const AvailableFrameworkDisplayName = {
+    "net20": ".NET Framework 2.0",
+    "net45": ".NET Framework 4.5",
+    "netcoreapp1.0": ".NET Core 1.0",
+    "netstandard1.0": ".NET Standard 1.0"
+}
+
+class AvailableFrameworks extends React.PureComponent {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        const elements = [];
+        React.Children.forEach(
+            this.props.children,
+            availableFramework => {
+                const isSelected = (availableFramework === this.props.selected);
+                const badgeType = (isSelected ? Style.badgeSuccess : Style.badgeSecondary);
+                const routeParams = (isSelected ? { member: this.props.memberId } : { member: this.props.memberId, framework: availableFramework });
+
+                elements.push(
+                    <Link key={availableFramework} to={Routes.documentation(routeParams)} className={[Style.badge, badgeType].join(" ")} onClick={e => e.target.blur()}>
+                        {(AvailableFrameworkDisplayName[availableFramework] || availableFramework)}
+                    </Link>
+                );
+                elements.push(" ");
+            }
+        );
+        return (
+            <div className={Style.mb3}>
+                {elements}
+            </div>
+        );
     }
 }

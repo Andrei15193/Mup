@@ -13,13 +13,13 @@ export class DocumentationView extends React.PureComponent {
     render() {
         const elements = this.props.elements;
         if (elements)
-            return this.props.elements.map(getElement);
+            return this.props.elements.map((element, index) => getElement(element, index, this.props.selectedFramework));
         else
             return null;
     }
 }
 
-function getElement(element, key) {
+function getElement(element, key, selectedFramework) {
     switch (element.type) {
         case "paragraph":
             return (
@@ -27,14 +27,15 @@ function getElement(element, key) {
                     {element.content.map(
                         (contentElement, contentElementIndex) => getElement(
                             contentElement,
-                            contentElementIndex
+                            contentElementIndex,
+                            selectedFramework
                         )
                     )}
                 </p>
             );
 
         case "reference":
-            return getReference(element.reference, key);
+            return getReference(element.reference, key, selectedFramework);
 
         case "parameterReference":
             return (
@@ -81,11 +82,11 @@ export class LinkTo extends React.PureComponent {
     }
 
     render() {
-        return getReference(this.props.reference, 0);
+        return getReference(this.props.reference, 0, this.props.selectedFramework);
     }
 }
 
-function getReference(elementReference, key) {
+function getReference(elementReference, key, selectedFramework) {
     if (typeof (elementReference) === "string")
         return (
             <em key={key}>
@@ -93,12 +94,12 @@ function getReference(elementReference, key) {
             </em>
         );
     else if (!elementReference.genericArguments || elementReference.genericArguments.every(genericArgument => typeof (genericArgument.value) === "string"))
-        return getReferenceForGenericDefinition(elementReference, key);
+        return getReferenceForGenericDefinition(elementReference, key, selectedFramework);
     else
-        return getReferenceForGenericType(elementReference, key);
+        return getReferenceForGenericType(elementReference, key, selectedFramework);
 }
 
-function getReferenceForGenericDefinition(elementReference, key) {
+function getReferenceForGenericDefinition(elementReference, key, selectedFramework) {
     let typeName = [FriendlyNames[elementReference.id] || elementReference.name];
 
     if (elementReference.genericArguments.length > 0) {
@@ -107,7 +108,7 @@ function getReferenceForGenericDefinition(elementReference, key) {
             .genericArguments
             .forEach((genericArgument, genericArgumentIndex) =>
                 typeName.push(
-                    getReference(genericArgument.value, genericArgumentIndex),
+                    getReference(genericArgument.value, genericArgumentIndex, selectedFramework),
                     ", "))
         typeName[typeName.length - 1] = ">";
     }
@@ -115,7 +116,7 @@ function getReferenceForGenericDefinition(elementReference, key) {
     let referenceComponent;
     if (elementReference.declaringAssembly.name === "Mup")
         referenceComponent = (
-            <Link key={key} to={Routes.documentation({ member: elementReference.id })}>
+            <Link key={key} to={Routes.documentation({ member: elementReference.id, framework: selectedFramework })}>
                 {typeName}
             </Link>
         );
@@ -133,11 +134,11 @@ function getReferenceForGenericDefinition(elementReference, key) {
     return referenceComponent;
 }
 
-function getReferenceForGenericType(elementReference, key) {
+function getReferenceForGenericType(elementReference, key, selectedFramework) {
     let referenceComponent;
     if (elementReference.declaringAssembly.name === "Mup")
         referenceComponent = (
-            <Link key={key} to={Routes.documentation({ member: elementReference.id })}>
+            <Link key={key} to={Routes.documentation({ member: elementReference.id, framework: selectedFramework })}>
                 {elementReference.name}
             </Link>
         );
@@ -159,7 +160,7 @@ function getReferenceForGenericType(elementReference, key) {
             elementReference
                 .genericArguments
                 .map((genericArgument, genericArgumentIndex) =>
-                    getReference(genericArgument.value, (key + "." + genericArgumentIndex))
+                    getReference(genericArgument.value, (key + "." + genericArgumentIndex), selectedFramework)
                 ),
             ">"
         ];

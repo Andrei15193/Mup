@@ -1,7 +1,7 @@
 export const RoutePaths = {
     "home": "/",
     "onlineParser": "/online-parser",
-    "documentation": "/documentation/:member?",
+    "documentation": "/documentation/:member?/:framework?",
     "license": "/license"
 };
 
