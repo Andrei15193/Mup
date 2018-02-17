@@ -2,20 +2,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Restore",
-            "type": "process",
-            "command": "dotnet",
-            "args": [
-                "restore"
-            ],
-            "group": "none",
-            "problemMatcher": []
-        },
-        {
             "label": "Build",
-            "dependsOn": "Restore",
             "type": "shell",
-            "command": "msbuild /t:build /p:Configuration=Debug ${workspaceFolder}/Mup.sln",
+            "command": "msbuild /t:restore,build /p:Configuration=Debug",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -89,27 +78,21 @@
         },
         {
             "label": "Release",
-            "dependsOn": "Restore",
             "type": "shell",
-            "command": "msbuild /t:build /p:Configuration=Release ${workspaceFolder}/Mup.sln",
+            "command": "msbuild /t:restore,build /p:Configuration=Release",
             "problemMatcher": "$msCompile"
         },
         {
             "label": "Pack",
-            "dependsOn": "Release",
             "type": "shell",
-            "command": "mup\\pack.bat",
-            "problemMatcher": []
+            "command": "msbuild /t:restore,rebuild,pack /p:Configuration=Release",
+            "problemMatcher": "$msCompile"
         },
         {
             "label": "Clean",
-            "type": "process",
-            "command": "dotnet",
-            "args": [
-                "clean"
-            ],
-            "group": "none",
-            "problemMatcher": []
+            "type": "shell",
+            "command": "msbuild /t:clean /p:Configuration=Debug;msbuild /t:clean /p:Configuration=Release",
+            "problemMatcher": "$msCompile"
         }
     ]
 }

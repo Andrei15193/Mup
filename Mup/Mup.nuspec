@@ -22,5 +22,23 @@ The library does not expose types for each mentioned format, but it is made to b
 To keep it lightweight, the library only provides a parser for Creole right now and an HTML visitor which allows users to generate HTML from parsed text. With each increment (or major version if that helps), the library will bring a new parser into the fold and thus supporting more languages. The end goal is to support most, if not all, Lightweight Markup Languages.</description>
         <releaseNotes>Added support for .NET 2.0. 
 Added Begin/End asynchronous pattern variant (mostly for .NET 2.0).</releaseNotes>
+
+        <dependencies>
+            <group targetFramework="net20" />
+            <group targetFramework="net45" />
+            <group targetFramework="netcoreapp1.0">
+                <dependency id="Microsoft.NETCore.App" version="1.0.0" exclude="Build,Analyzers" />
+            </group>
+            <group targetFramework="netstandard1.0">
+                <dependency id="NETStandard.Library" version="1.6.0" exclude="Build,Analyzers" />
+            </group>
+        </dependencies>
     </metadata>
+    
+    <files>
+        <file src="bin\Release\net20\*.*" target="lib\net20" exclude="**\*.pdb" />
+        <file src="bin\Release\net45\*.*" target="lib\net45" exclude="**\*.pdb" />
+        <file src="bin\Release\netcoreapp1.0\*.*" target="lib\netcoreapp1.0" exclude="**\*.pdb" />
+        <file src="bin\Release\netstandard1.0\*.*" target="lib\netstandard1.0" exclude="**\*.pdb" />
+    </files>
 </package>
