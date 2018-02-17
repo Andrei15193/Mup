@@ -2,25 +2,20 @@
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworks>net20;net45;netstandard1.0;netcoreapp1.0</TargetFrameworks>
+    <TargetFrameworks>net20;net45;netcoreapp1.0;netstandard1.0</TargetFrameworks>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Mup.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>
+    <Version>1.1.0</Version>
+    <NuspecFile>Mup.nuspec</NuspecFile>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <PackageId>Mup</PackageId>
-    <PackageVersion>1.1.0-beta1</PackageVersion>
-    <Authors>Andrei15193</Authors>
-    <Description>Markup Parser (Mup) is an extensible .NET Standard Library (1.0) containing types for parsing and generating HTML from text using the Creole lightweight markup language.</Description>
-    <Title>Mup</Title>
-    <PackageProjectUrl>http://www.mup-project.net/</PackageProjectUrl>
-    <PackageLicenseUrl>http://www.mup-project.net/#license</PackageLicenseUrl>
-    <PackageIconUrl>https://mupstore.blob.core.windows.net/nuget/logo.png</PackageIconUrl>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Added support for .NET 2.0. Added Begin/End asynchronous pattern variant (mostly for .NET 2.0).</PackageReleaseNotes>
-    <Copyright>Andrei Fangli</Copyright>
-    <PackageTags>lightweight markup language parser creole net standard html portable library</PackageTags>
+  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp1.0'">
+    <RuntimeFrameworkVersion>1.0.0</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.0'">
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -35,7 +30,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <DocumentationFile>bin\Release\Mup.xml</DocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <TreatSpecificWarningsAsErrors />
   </PropertyGroup>
