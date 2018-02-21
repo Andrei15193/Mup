@@ -325,13 +325,14 @@ class ConstructorsList extends React.PureComponent {
                         </thead>
                         <tbody>
                             {constructors
-                                .filter(constructorId => (!this.props.selectedFramework || MupDefinitions[constructorId].availableFrameworks.includes(this.props.selectedFramework)))
-                                .map(constructorId => {
-                                    const constructorDefinition = MupDefinitions[constructorId];
-                                    return (
-                                        <tr key={constructorId}>
+                                .map(constructorId => MupDefinitions[constructorId])
+                                .filter(constructorDefinition => (!this.props.selectedFramework || constructorDefinition.availableFrameworks.includes(this.props.selectedFramework)))
+                                .sort(methodComparer)
+                                .map(
+                                    constructorDefinition => (
+                                        <tr key={constructorDefinition.id}>
                                             <td>
-                                                <Link to={Routes.documentation({ member: constructorId, framework: this.props.selectedFramework })}>
+                                                <Link to={Routes.documentation({ member: constructorDefinition.id, framework: this.props.selectedFramework })}>
                                                     <MemberName definition={constructorDefinition} />
                                                 </Link>
                                             </td>
@@ -340,8 +341,8 @@ class ConstructorsList extends React.PureComponent {
                                                 <DocumentationView elements={constructorDefinition.documentation.summary} selectedFramework={this.props.selectedFramework} />
                                             </td>
                                         </tr>
-                                    );
-                                })}
+                                    )
+                                )}
                         </tbody>
                     </table>
                 </div>
@@ -379,13 +380,14 @@ class PropertiesList extends React.PureComponent {
                         </thead>
                         <tbody>
                             {properties
-                                .filter(propertyId => (!this.props.selectedFramework || MupDefinitions[propertyId].availableFrameworks.includes(this.props.selectedFramework)))
-                                .map(propertyId => {
-                                    const propertyDefinition = MupDefinitions[propertyId];
-                                    return (
-                                        <tr key={propertyId}>
+                                .map(propertyId => MupDefinitions[propertyId])
+                                .filter(propertyDefinition => (!this.props.selectedFramework || propertyDefinition.availableFrameworks.includes(this.props.selectedFramework)))
+                                .sort((left, right) => left.name < right.name ? -1 : left.name > right.name ? 1 : 0)
+                                .map(
+                                    propertyDefinition => (
+                                        <tr key={propertyDefinition.id}>
                                             <td>
-                                                <Link to={Routes.documentation({ member: propertyId, framework: this.props.selectedFramework })}>
+                                                <Link to={Routes.documentation({ member: propertyDefinition.id, framework: this.props.selectedFramework })}>
                                                     <MemberName definition={propertyDefinition} />
                                                 </Link>
                                             </td>
@@ -396,8 +398,8 @@ class PropertiesList extends React.PureComponent {
                                                 <DocumentationView elements={propertyDefinition.documentation.summary} selectedFramework={this.props.selectedFramework} />
                                             </td>
                                         </tr>
-                                    );
-                                })}
+                                    )
+                                )}
                         </tbody>
                     </table>
                 </div>
@@ -475,13 +477,14 @@ class MethodsList extends React.PureComponent {
                         </thead>
                         <tbody>
                             {methods
-                                .filter(methodId => (!this.props.selectedFramework || MupDefinitions[methodId].availableFrameworks.includes(this.props.selectedFramework)))
-                                .map(methodId => {
-                                    const methodDefinition = MupDefinitions[methodId];
-                                    return (
-                                        <tr key={methodId}>
+                                .map(methodId => MupDefinitions[methodId])
+                                .filter(methodDefinition => (!this.props.selectedFramework || methodDefinition.availableFrameworks.includes(this.props.selectedFramework)))
+                                .sort(methodComparer)
+                                .map(
+                                    methodDefinition => (
+                                        <tr key={methodDefinition.id}>
                                             <td>
-                                                <Link to={Routes.documentation({ member: methodId, framework: this.props.selectedFramework })}>
+                                                <Link to={Routes.documentation({ member: methodDefinition.id, framework: this.props.selectedFramework })}>
                                                     <MemberName definition={methodDefinition} />
                                                 </Link>
                                             </td>
@@ -490,8 +493,8 @@ class MethodsList extends React.PureComponent {
                                                 <DocumentationView elements={methodDefinition.documentation.summary} selectedFramework={this.props.selectedFramework} />
                                             </td>
                                         </tr>
-                                    );
-                                })}
+                                    )
+                                )}
                         </tbody>
                     </table>
                 </div>
@@ -953,4 +956,30 @@ class AvailableFrameworks extends React.PureComponent {
             </div>
         );
     }
+}
+
+function methodComparer(left, right) {
+    let order = 0;
+    if (left.name < right.name)
+        order = -1;
+    else if (left.name > right.name)
+        order = 1;
+    if (left.name === right.name)
+        if (left.parameters.length < right.parameters.length)
+            order = -1;
+        else if (left.parameters.length > right.parameters.length)
+            order = 1;
+        else {
+            let index = 0;
+            while (order === 0 && index < left.parameters.length) {
+                if (left.parameters[index].type.name < right.parameters[index].type.name)
+                    order = -1;
+                else if (left.parameters[index].type.name > right.parameters[index].type.name)
+                    order = 1;
+                else
+                    return order;
+                index++;
+            }
+        }
+    return order;
 }
