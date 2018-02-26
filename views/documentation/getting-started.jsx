@@ -1,10 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 import Style from "mup/style";
 import { Routes } from "../../routes";
+import MsdnLinks from "./msdn-links.json";
 
-export class GettingStarted extends React.PureComponent {
+export const GettingStarted = withRouter(class extends React.PureComponent {
     constructor(props) {
         super(props);
     }
@@ -16,17 +17,19 @@ export class GettingStarted extends React.PureComponent {
 
                 <h3>Introduction</h3>
 
-                <p>The library has a few core types that make it work: IParser, IParseTree and ParseTreeVisitor.</p>
+                <p>The library has a few core types that make it work: <Link to={Routes.documentation({ member: "mup.imarkupparser", framework: this.props.match.params.framework })}>IMarkupParser</Link>, <Link to={Routes.documentation({ member: "mup.iparsetree", framework: this.props.match.params.framework })}>IParseTree</Link> and <Link to={Routes.documentation({ member: "mup.parsetreevisitor", framework: this.props.match.params.framework })}>ParseTreeVisitor</Link>.</p>
 
-                <p>Each parser (currently just Creole) implements the IParser interface which exposes a number of methods that allow parsing a string or text from a TextReader with support for asynchronous programming.</p>
+                <p>Each parser (currently just Creole) implements the <Link to={Routes.documentation({ member: "mup.imarkupparser", framework: this.props.match.params.framework })}>IMarkupParser</Link> interface which exposes a number of methods that allow parsing a <a href={MsdnLinks["system.string"]} target="_blank">string</a> or text from a <a href={MsdnLinks["system.io.textreader"]} target="_blank">TextReader</a>. Each parser supports both synchronous and asynchronous models allowing its users to consume the <abbr title="Application Programming Interface">API</abbr> any way they want.</p>
 
-                <p>The result of any parse method is ultimately an IParseTree. Surprising, or not, this interface does not expose something like a root node or anything related to what one would expect when reading &quot;tree&quot; in a type name.</p>
+                <p>The result of any parse method is ultimately an <Link to={Routes.documentation({ member: "mup.iparsetree", framework: this.props.match.params.framework })}>IParseTree</Link>. Surprisingly or not, this interface does not expose something like a root node or anything related to what one would expect when seeing the word &quot;tree&quot;.</p>
 
-                <p>This is because trees can have different representations. For instance, we can have the usual example where we have the root node and the root node exposes a collection property of nodes which are the child nodes, the child nodes also have such a property for grandchild nodes and so on. A different representation is a flat one where the entire tree is stored as a list of pair elements that mark the beginning and end of each node, respectively.</p>
+                <p>This is because trees can have different representations. For instance, we can have the usual example where we have a root node which exposes a property containing a number of nodes that are in fact child nodes, each child node also exposes such a property that contains their child nodes and so on. A different representation can be a flat one where the entire tree is stored as a list of elements that mark the beginning and end of each node.</p>
 
-                <p>Regardless of how we chose to represent the parse tree, that is not what we are really after. We want the parse tree so we can traverse it in order to generate a specific output, say HTML. Here is where the ParseTreeVisitor comes into play, regardless of how the tree is represented, the IParseTree interface exposes methods that accept a ParseTreeVisitor. When the parse tree is traversed specific methods from the visitor are called.</p>
+                <p>Regardless of how we represent a parse tree, we need to be able to traverse it in order to generate a specific output, say <abbr title="HyperText Markup Language">HTML</abbr>. This is where a <Link to={Routes.documentation({ member: "mup.parsetreevisitor", framework: this.props.match.params.framework })}>ParseTreeVisitor</Link> comes into play. Any <Link to={Routes.documentation({ member: "mup.iparsetree", framework: this.props.match.params.framework })}>IParseTree</Link> exposes methods that accept a <Link to={Routes.documentation({ member: "mup.parsetreevisitor", framework: this.props.match.params.framework })}>ParseTreeVisitor</Link>, the entire logic for traversing the tree is encapsulated inside itself. Each time a node is being visited, a specific method for that node is called on the visitor. This helps keep the interface clean and completely decouple the language that is being parsed from the desired output format. Any new markup parser will work with existing visitors and any new visitor will work with any existing parser.</p>
 
-                <p>For instance, given the Creole block <code>plain //emphasized// text</code> the visitor will have the following methods invoked:</p>
+                <p>The one common rule between all parse trees is that they are traversed in pre-order (see <a href="https://en.wikipedia.org/wiki/Tree_traversal">Tree Traversal <small>(Wikipedia)</small></a> for more about this topic).</p>
+
+                <p>For instance, given the Creole block <code>plain //emphasized// text</code> the visitor will have the following methods called:</p>
 
                 <ol>
                     <li>VisitParagraphBeginning()</li>
@@ -38,15 +41,15 @@ export class GettingStarted extends React.PureComponent {
                     <li>VisistParagraphEnding()</li>
                 </ol>
 
-                <p>When outputting HTML we will write corresponding tags for each of the visitor methods. The VisitParagraphBeginning will write <code>&lt;p&gt;</code> while VisistParagraphEnding will write <code>&lt;/p&gt;</code>. Similar for VisitEmphasisBeginning and VisitEmphasisEnding by writing <code>&lt;em&gt;</code> and <code>&lt;/em&gt;</code>, respectively. Thus we have our output: <code>&lt;p&gt;plain &lt;em&gt;emphasized&lt;/em&gt; text&lt;/p&gt;</code>.</p>
+                <p>When outputting <abbr title="HyperText Markup Language">HTML</abbr> we will write corresponding tags for each of the visitor methods. The VisitParagraphBeginning will write <code>&lt;p&gt;</code> while VisistParagraphEnding will write <code>&lt;/p&gt;</code>. Similar for VisitEmphasisBeginning and VisitEmphasisEnding by writing <code>&lt;em&gt;</code> and <code>&lt;/em&gt;</code>, respectively. Thus, we have our output: <code>&lt;p&gt;plain &lt;em&gt;emphasized&lt;/em&gt; text&lt;/p&gt;</code>.</p>
 
-                <p>For each desired output format (e.g.: HTML, XHTML, XML, Word Document and so on) there should be one visitor. Each visitor can be reused across parser implementations meaning that the same one can be used for the Creole parser or the WikiMedia parser since both of them actually expose an IParseTree. There is no direct relationship between an IParser and a ParseTreeVisitor.</p>
+                <p>For each desired output format (e.g.: <abbr title="HyperText Markup Language">HTML</abbr>, <abbr title="eXtensible HyperText Markup Language">XHTML</abbr>, <abbr title="eXtensible Markup Language">XML</abbr>, Word Document and so on) there will be one visitor. This will keep the responsibilities clear for each visitor, additionally they may be configurable depending on the output format (e.g.: indentation settings for <abbr title="HyperText Markup Language">HTML</abbr> output, minification and so on).</p>
 
-                <p>Sometimes we just want to parse a block of text and generate an HTML string out of it. However, sometimes we would like to write directly to the file system, or use the visitor to send data over a network based on what it visits. Usually when working with streams the recommended way is to use asynchronous programming in order to keep the application responsive and free up thread time while the hardware components do the actual writing.</p>
+                <p>In some cases, we would like to write directly to the file system or use the visitor to send data over a network as the parse tree is being visited. When working with streams the recommended way to use them is through asynchronous programming in order to keep the application responsive and free up thread time while hardware components do the actual writing.</p>
 
-                <p>Mup is built with asynchronous programming in mind, from parsing until visiting there is support for async methods. When implementing a custom ParseTreeVisitor (the library only exposes one that outputs HTML to a string) one can override both asynchronous method and their synchronous counterpart.</p>
+                <p>Mup is built with asynchronous programming in mind, from start until end there is support for <a href="https://docs.microsoft.com/en-us/dotnet/csharp/async" target="_blank">async methods</a>. When implementing a custom <Link to={Routes.documentation({ member: "mup.parsetreevisitor", framework: this.props.match.params.framework })}>ParseTreeVisitor</Link> (the library only exposes one that outputs <abbr title="HyperText Markup Language">HTML</abbr> to a <a href={MsdnLinks["system.string"]} target="_blank">string</a>) one can override both the asynchronous method and its synchronous counterpart.</p>
 
-                <p>The pattern after each method pair is defined as follows:</p>
+                <p>Below is the pattern after each method pair is defined:</p>
 
                 <pre><code>
                     <Keyword>protected</Keyword> <Keyword>virtual</Keyword> <Keyword>async</Keyword>{` Task Visit`}<em>{`{Element}`}</em>{`Async(CancellationToken cancellationToken)
@@ -60,47 +63,21 @@ export class GettingStarted extends React.PureComponent {
 }`}
                 </code></pre>
 
-                <p>The synchronous method always gets called from its asynchronous counterpart which in turn is called when visiting the corresponding element. If you are implementing a visitor that outputs to something in-memory (you are simply writing to a StringBuilder) you can just override the synchronous methods and not bother yourself with asynchrony at all.</p>
+                <p>The synchronous method always gets called from its asynchronous counterpart which in turn is called when visiting the corresponding element. If you are implementing a visitor that outputs to something in-memory (e.g.: simply writing to a <a href={MsdnLinks["system.text.stringbuilder"]} target="_blank">StringBuilder</a>) you can just override the synchronous methods and not bother yourself with asynchrony at all.</p>
 
                 <p><strong>NOTE!</strong> When overriding the asynchronous method then the synchronous counterpart will not be invoked anymore unless called explicitly or calling the base implementation (e.g. <code>{`base.Visit{Element}Async(cancellationToken)`}</code> or <code>{`Visit{Element}()`}</code>).</p>
 
                 <h3>Using the Library</h3>
 
-                <p>To exemplify how easy it is to get starting with Mup we will build a small web application that exposes just one endpoint which parses the body of a request and returns the HTML, similar to what this site uses for the <Link to={Routes.onlineParser()}>Online Parser</Link> (if you haven&#39;t tried it, you should definitely give it a go, it&#39;s really cool).</p>
+                <p>To exemplify how easy it is to get started with Mup, we will build a small web application that exposes just one endpoint which parses the body of a request and returns the <abbr title="HyperText Markup Language">HTML</abbr> for it, similar to what this site uses for the <Link to={Routes.onlineParser()}>Online Parser</Link> (if you haven&#39;t tried it, you should definitely give it a go, it&#39;s really cool).</p>
 
-                <p>For our little web project we will be using .NET Core for convenience and because it is cross-platform, you do not really need to use Windows to go though this example. Besides, the library is cross-platform itself.</p>
+                <p>For our little web project we will be using .NET Core for convenience and because it is cross-platform, you do not really need to use Windows to go through this example.</p>
 
-                <p>Now let us finally get on with it, create a folder where you usually have your projects, I will call mine <code>mup-example</code>, go to that folder and run <code>netcore new webapi</code> in the command line. I use <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> which has an integrated terminal so I can do my code editing and use the command line from one place.</p>
+                <p>Now let us finally get on with it, create a folder where you usually have your projects, I will call mine <code>mup-example</code>, go to that folder and run <code>dotnet new webapi</code> in the command line. I use <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> which has an integrated terminal so I can do my code editing and use the command line from one window.</p>
 
-                <p>Now that we have our demo project created, we will start by adding a <a href="https://www.nuget.org/" target="_blank">NuGet</a> dependency towards the <a href="https://www.nuget.org/packages/Mup" target="_blank">Mup package</a>. Open <em>mup-example.csproj</em> (assuming you have the same folder name as I do, otherwise the <em>.csproj</em> file will have the same name as the folder in which you created your .NET Core application) and add the following line: <code>&lt;PackageReference Include=&quot;Mup&quot; Version=&quot;1.0.0&quot; /&gt;</code>. The <em>.csproj</em> file should look something like this:</p>
+                <p>Now that we have our demo project created, we will start by adding a <a href="https://www.nuget.org/" target="_blank">NuGet</a> dependency towards the <a href="https://www.nuget.org/packages/Mup" target="_blank">Mup package</a>. In the same command line that we used to initialize our project simply type <code>dotnet add package Mup</code>. This will add the latest release of Mup to our project, that's it with the configuration!</p>
 
-                <pre><code>
-                    <Tag>{`<Project`}</Tag> <AttributeName>Sdk</AttributeName>=<AttributeValue>"Microsoft.NET.Sdk.Web"</AttributeValue><Tag>{`>`}</Tag>{`
-
-  `}<Tag>{`<PropertyGroup>`}</Tag>{`
-    `}<Tag>{`<TargetFramework>`}</Tag>netcoreapp1.1<Tag>{`</TargetFramework>`}</Tag>{`
-    `}<Tag>{`<PackageTargetFallback>`}</Tag>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;<Tag>{`</PackageTargetFallback>`}</Tag>{`
-  `}<Tag>{`</PropertyGroup>`}</Tag>{`
-
-  `}<Tag>{`<ItemGroup>`}</Tag>{`
-    `}<Tag>{`<Folder`}</Tag> <AttributeName>Include</AttributeName>=<AttributeValue>"wwwroot\"</AttributeValue> <Tag>{`/>`}</Tag>{`
-  `}<Tag>{`</ItemGroup>`}</Tag>{`
-
-  `}<Tag>{`<ItemGroup>`}</Tag>{`
-    `}<Tag>{`<PackageReference`}</Tag> <AttributeName>Include</AttributeName>=<AttributeValue>"Microsoft.AspNetCore"</AttributeValue> <AttributeName>Version</AttributeName>=<AttributeValue>"1.1.2"</AttributeValue> <Tag>{`/>`}</Tag>{`
-    `}<Tag>{`<PackageReference`}</Tag> <AttributeName>Include</AttributeName>=<AttributeValue>"Microsoft.AspNetCore.Mvc"</AttributeValue> <AttributeName>Version</AttributeName>=<AttributeValue>"1.1.3"</AttributeValue> <Tag>{`/>`}</Tag>{`
-    `}<Tag>{`<PackageReference`}</Tag> <AttributeName>Include</AttributeName>=<AttributeValue>"Microsoft.Extensions.Logging.Debug"</AttributeValue> <AttributeName>Version</AttributeName>=<AttributeValue>"1.1.2"</AttributeValue> <Tag>{`/>`}</Tag>{`
-    `}<strong><Tag>{`<PackageReference`}</Tag> <AttributeName>Include</AttributeName>=<AttributeValue>"Mup"</AttributeValue> <AttributeName>Version</AttributeName>=<AttributeValue>"1.0.0"</AttributeValue> <Tag>{`/>`}</Tag></strong>{`
-  `}<Tag>{`</ItemGroup>`}</Tag>{`
-
-  `}<Tag>{`<ItemGroup>`}</Tag>{`
-    `}<Tag>{`<DotNetCliToolReference`}</Tag> <AttributeName>Include</AttributeName>=<AttributeValue>"Microsoft.VisualStudio.Web.CodeGeneration.Tools"</AttributeValue> <AttributeName>Version</AttributeName>=<AttributeValue>"1.0.1"</AttributeValue> <Tag>{`/>`}</Tag>{`
-  `}<Tag>{`</ItemGroup>`}</Tag>{`
-
-`}<Tag>{`</Project>`}</Tag>
-                </code></pre>
-
-                <p>Next we will create our controller that will be using Mup to parse Creole and return HTML. Under <em>Controllers</em> create a new file: <em>CreoleController.cs</em>, the controller will have just one method for handing <strong>POST</strong> requests on the <strong>api/creole</strong> endpoint:</p>
+                <p>Next, we will create our controller that will be using Mup to parse Creole and return <abbr title="HyperText Markup Language">HTML</abbr>. Under <em>Controllers</em> create a new file: <em>CreoleController.cs</em>, the controller will have just one method for handling <strong>POST</strong> requests on the <strong>api/creole</strong> endpoint:</p>
 
                 <pre><code>
                     <Keyword>{`using`}</Keyword>{` System.Threading;
@@ -129,9 +106,9 @@ export class GettingStarted extends React.PureComponent {
 
                 <p>Time to test this, run the application and open a Web API testing tool so we can make some requests! I use <a href="https://www.getpostman.com/" target="_blank">Postman</a> for this as I can create collections and keep my requests organized and synced across devices (or just use Cloud storage for backup, fewer things to worry about).</p>
 
-                <p>Usually the .NET Core App will run on port 5000 locally, when you start the application in debug mode it will automatically open your favourite browser and in the address bar you can grab the base URL for your request. For me it is: <code>http://localhost:5000/</code>. If a 404 error shows when you start the application it is alright, the application only exposes HTTP endpoints and no static content (like <em>index.html</em>).</p>
+                <p>Usually the .NET Core App will run on port 5000 locally, when you start the application in debug mode it will automatically open your favourite browser and from the address bar you can grab the base URL for your request. For me it is: <code>http://localhost:5000/</code>. If a 404 error shows when you start the application it is alright, the application only exposes <abbr title="HyperText Transfer Protocol">HTTP</abbr> endpoints and no static content (like <em>index.html</em>), there is no default route.</p>
 
-                <p>Now to make our request, append to the base URL the route we have defined for parsing Creole text: <code>http://localhost:5000/api/creole</code>, keep in mind that it is a <strong>POST</strong> request and in the body add the following:</p>
+                <p>Now to make our request, append to the base URL the route we have defined for parsing Creole text: <code>http://localhost:5000/api/creole</code>, keep in mind that it is a <strong>POST</strong> request, in the body add the following:</p>
 
                 <pre><code>
                     <StringLiteral>{`"== Hey There!
@@ -139,11 +116,11 @@ export class GettingStarted extends React.PureComponent {
 This is a test"`}</StringLiteral>
                 </code></pre>
 
-                <p>When you call the API you should get <code>&lt;h2&gt;Hey There!&lt;/h2&gt;&lt;p&gt;This is a test&lt;/p&gt;</code>.</p>
+                <p>When you call the endpoint you should get <code>&lt;h2&gt;Hey There!&lt;/h2&gt;&lt;p&gt;This is a test&lt;/p&gt;</code>.</p>
 
                 <h3>Customizing the Result</h3>
 
-                <p>As you can see, we have quite a few lines for using the core feature that Mup offers, fear not as we can turn it into a one line! We can make use of extension methods to combine the asynchronous methods into one so we get rid of the boilerplate code:</p>
+                <p>As you can see, we only have few lines for using the core feature that Mup offers, fear not as we can turn it all into one line! We can make use of extension methods to combine the asynchronous methods into one so we get rid of the boilerplate code:</p>
 
                 <pre><code>
                     <Keyword>public</Keyword> <Keyword>async</Keyword>{` Task<IActionResult> Parse([FromBody] `}<Keyword>string</Keyword>{` text, CancellationToken cancellationToken)
@@ -153,15 +130,15 @@ This is a test"`}</StringLiteral>
 }`}
                 </code></pre>
 
-                <p>If you look at the base class for <code>HtmlWriterVisitor</code> you will notice that it does not extend <code>ParseTreeVisitor</code> directly, it inherits <code>ParseTreeVisitor&lt;TResult&gt;</code> which in turn inherits <code>ParseTreeVisitor</code>. The difference between the two visitor base classes is that the former provides an in-memory result after visiting the entire parse tree while the latter provides a more indirect result (e.g.: writing to a file or to a network stream). The <code>HtmlWriterVisitor</code> provides a <a href="https://msdn.microsoft.com/en-us/library/system.string.aspx" target="_blank">string</a> containing the HTML corresponding to the given Creole text.</p>
+                <p>If you look at the base class for <Link to={Routes.documentation({ member: "mup.htmlwritervisitor", framework: this.props.match.params.framework })}>HtmlWriterVisitor</Link> you will notice that it does not extend <Link to={Routes.documentation({ member: "mup.parsetreevisitor", framework: this.props.match.params.framework })}>ParseTreeVisitor</Link> directly, it inherits <Link to={Routes.documentation({ member: "mup.parsetreevisitor<tresult>", framework: this.props.match.params.framework })}>ParseTreeVisitor&lt;TResult&gt;</Link> which in turn inherits <Link to={Routes.documentation({ member: "mup.parsetreevisitor", framework: this.props.match.params.framework })}>ParseTreeVisitor</Link>. The difference between the two base classes is that the former provides an in-memory result after visiting the entire parse tree while the latter provides a more indirect result (e.g.: writing to a file or to a network stream). The <Link to={Routes.documentation({ member: "mup.htmlwritervisitor", framework: this.props.match.params.framework })}>HtmlWriterVisitor</Link> provides a <a href={MsdnLinks["system.string"]} target="_blank">string</a> containing the <abbr title="HyperText Markup Language">HTML</abbr> corresponding to the given Creole text.</p>
 
-                <p>Depending on your needs you will inherit from one or the other, the only thing that <code>ParseTreeVisitor&lt;TResult&gt;</code> adds is an abstract method for providing the result and a virtual asynchronous counterpart.</p>
+                <p>Depending on your needs you will inherit from one or the other, the only thing that <Link to={Routes.documentation({ member: "mup.parsetreevisitor<tresult>", framework: this.props.match.params.framework })}>ParseTreeVisitor&lt;TResult&gt;</Link> adds is an abstract method for providing the result and a virtual asynchronous counterpart.</p>
 
-                <p>If you look at the HTML result you get from the <Link to={Routes.onlineParser()}>Online Parser</Link> you will notice that it looks a bit different than what our endpoint returns. The HtmlWriterVisitor that is provided with the library tries to generate the result as compact as possible, but we can change that by overriding a few methods and add a blank line so we get a more readable result.</p>
+                <p>If you look at the <abbr title="HyperText Markup Language">HTML</abbr> result you get from the <Link to={Routes.onlineParser()}>Online Parser</Link> you will notice that it looks a bit different than what our endpoint returns. The <Link to={Routes.documentation({ member: "mup.htmlwritervisitor", framework: this.props.match.params.framework })}>HtmlWriterVisitor</Link> that is provided with the library tries to generate the result as compact as possible, but we can change that by overriding a few methods and add a blank line so we get a more readable result.</p>
 
-                <p>The <a href="https://msdn.microsoft.com/en-us/library/system.text.stringbuilder.aspx" target="_blank">StringBuilder</a> with which HTML is being generated is exposed through the <code>HtmlStringBuilder</code> protected property. We can append new lines and then call the base implementation. If you need to append text you should be using one of the <code>AppendHtmlSafe</code> overloads as special characters are encoded into HTML entities.</p>
+                <p>The <a href={MsdnLinks["system.text.stringbuilder"]} target="_blank">StringBuilder</a> with which <abbr title="HyperText Markup Language">HTML</abbr> is being generated is exposed through the <Link to={Routes.documentation({ member: "mup.htmlwritervisitor.htmlstringbuilder", framework: this.props.match.params.framework })}>HtmlStringBuilder</Link> protected property, we can append new lines and then call the base implementation. If you need to append text you should be using <Link to={Routes.documentation({ member: "mup.htmlwritervisitor.appendhtmlsafe(system.char)", framework: this.props.match.params.framework })}>AppendHtmlSafe(char)</Link> or <Link to={Routes.documentation({ member: "mup.htmlwritervisitor.appendhtmlsafe(system.string)", framework: this.props.match.params.framework })}>AppendHtmlSafe(string)</Link> to encode special characters to <abbr title="HyperText Markup Language">HTML</abbr> entities.</p>
 
-                <p>We want to generate paragraphs that are separated by blank lines with the exception of the first one. We do not want an empty line before the first paragraph in our HTML. First we will write a custom visitor which inherits from <code>HtmlWriterVisitor</code>, we don&#39;t need to reinvent the wheel, we&#39;ll just override the methods that we want to change.</p>
+                <p>We want to generate paragraphs that are separated by blank lines with the exception of the first one. We do not want our <abbr title="HyperText Markup Language">HTML</abbr> to start with an empty line. First, we will write a custom visitor which inherits from <Link to={Routes.documentation({ member: "mup.htmlwritervisitor.htmlstringbuilder", framework: this.props.match.params.framework })}>HtmlStringBuilder</Link>, we don&#39;t need to reinvent the wheel, we&#39;ll just override the methods that need to do a little extra.</p>
 
                 <pre><code>
                     <Keyword>public</Keyword> <Keyword>class</Keyword>{` PrettyHtmlWriterVisitor : HtmlWriterVisitor
@@ -198,17 +175,19 @@ This is a test"`}</StringLiteral>
 paragraph 2"`}</StringLiteral>
                 </code></pre>
 
-                <p>When we call the endpoint we will be receiving the following HTML:</p>
+                <p>When we call the endpoint we will be receiving the following <abbr title="HyperText Markup Language">HTML</abbr>:</p>
 
                 <pre><code>
                     <Tag>{`<p>`}</Tag>paragraph 1<Tag>{`</p>`}</Tag>{`
 
 `}<Tag>{`<p>`}</Tag>paragraph 2<Tag>{`</p>`}</Tag>
                 </code></pre>
+
+                <p>We can continue to do the same for more elements like tables or lists, however that goes beyond what this example proposes. Writing a custom vistior might take a bit of time, but it will work with any markup parser.</p>
             </div>
         );
     }
-};
+});
 
 class Keyword extends React.PureComponent {
     constructor(props) {
