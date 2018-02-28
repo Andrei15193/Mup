@@ -14,7 +14,7 @@ export class License extends React.PureComponent {
                 <h1>License</h1>
 
                 <p>
-                    Mup Copyright &copy; 2017 Andrei Fangli
+                    Mup Copyright &copy; 2018 Andrei Fangli
                 </p>
 
                 <p>
