@@ -24,7 +24,7 @@ namespace Mup.Creole.ElementParsers
                     start = start.Next;
                 }
 
-                if (dashCount >= 4 && (start.Next == end || ContainsLineFeed(start.Next)))
+                if (dashCount >= 4 && (start.Next == end || ContainsLineFeed(start.Next) || (start.Next.Code == WhiteSpace && start.Next.Next == null)))
                 {
                     var endToken = start;
                     result = new CreoleElementParserResult(startToken, endToken, new CreoleHorizontalRuleElement());

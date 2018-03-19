@@ -15,7 +15,22 @@ namespace Mup.Creole.ElementParsers
         {
             CreoleElementParserResult result = null;
 
-            if ((start.Code == Asterisk || start.Code == Hash) && start.Next != end && start.Next.Code != start.Code)
+            if (start.Next == null)
+            {
+                if (start.Code == Asterisk)
+                {
+                    var listItemElements = new[] { new CreoleListItemElement(EmptyContent) };
+                    var listElement = new CreoleUnorderedListElement(listItemElements);
+                    result = new CreoleElementParserResult(start, start, listElement);
+                }
+                else if (start.Code == Hash)
+                {
+                    var listItemElements = new[] { new CreoleListItemElement(EmptyContent) };
+                    var listElement = new CreoleOrderedListElement(listItemElements);
+                    result = new CreoleElementParserResult(start, start, listElement);
+                }
+            }
+            else if ((start.Code == Asterisk || start.Code == Hash) && start.Next != end && start.Next.Code != start.Code)
             {
                 var startToken = start;
                 var listElementInfos = new Stack<ListElementInfo>();
@@ -107,7 +122,7 @@ namespace Mup.Creole.ElementParsers
 
         private IEnumerable<CreoleElement> _GetListItemContent(CreoleToken start, CreoleToken end)
         {
-            if (start.Code == WhiteSpace)
+            if (start.Code == WhiteSpace && start.Next != null)
                 start = start.Next;
             if (end.Code == WhiteSpace)
                 end = end.Previous;

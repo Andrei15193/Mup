@@ -65,6 +65,54 @@ namespace Mup.Tests
             new object[]
             {
                 "= heading\nparagraph", "<h1>heading</h1><p>paragraph</p>"
+            },
+            new object[]
+            {
+                "=", "<h1></h1>"
+            },
+            new object[]
+            {
+                "= ", "<h1></h1>"
+            },
+            new object[]
+            {
+                "==", "<h2></h2>"
+            },
+            new object[]
+            {
+                "== ", "<h2></h2>"
+            },
+            new object[]
+            {
+                "===", "<h3></h3>"
+            },
+            new object[]
+            {
+                "=== ", "<h3></h3>"
+            },
+            new object[]
+            {
+                "====", "<h4></h4>"
+            },
+            new object[]
+            {
+                "==== ", "<h4></h4>"
+            },
+            new object[]
+            {
+                "=====", "<h5></h5>"
+            },
+            new object[]
+            {
+                "===== ", "<h5></h5>"
+            },
+            new object[]
+            {
+                "======", "<h6></h6>"
+            },
+            new object[]
+            {
+                "====== ", "<h6></h6>"
             }
         };
 
@@ -77,6 +125,10 @@ namespace Mup.Tests
             new object[]
             {
                 "paragraph 1\n\nparagraph 2", "<p>paragraph 1</p><p>paragraph 2</p>"
+            },
+            new object[]
+            {
+                " ", ""
             }
         };
 
@@ -133,6 +185,10 @@ namespace Mup.Tests
             new object[]
             {
                 "{{{\ncode\n}}}\nparagraph", "<pre><code>code</code></pre><p>paragraph</p>"
+            },
+            new object[]
+            {
+                "{{{}}}", "<p><code></code></p>"
             }
         };
 
@@ -217,6 +273,22 @@ namespace Mup.Tests
             new object[]
             {
                 "|cell\nparagraph", "<table><tbody><tr><td>cell</td></tr></tbody></table><p>paragraph</p>"
+            },
+            new object[]
+            {
+                "|", "<table><tbody><tr><td></td></tr></tbody></table>"
+            },
+            new object[]
+            {
+                "| ", "<table><tbody><tr><td></td></tr></tbody></table>"
+            },
+            new object[]
+            {
+                "|=", "<table><tbody><tr><th></th></tr></tbody></table>"
+            },
+            new object[]
+            {
+                "|= ", "<table><tbody><tr><th></th></tr></tbody></table>"
             }
         };
 
@@ -397,6 +469,22 @@ namespace Mup.Tests
             new object[]
             {
                 "#item 1\n\nparagraph", "<ol><li>item 1</li></ol><p>paragraph</p>"
+            },
+            new object[]
+            {
+                "*", "<ul><li></li></ul>"
+            },
+            new object[]
+            {
+                "* ", "<ul><li></li></ul>"
+            },
+            new object[]
+            {
+                "#", "<ol><li></li></ol>"
+            },
+            new object[]
+            {
+                "# ", "<ol><li></li></ol>"
             }
         };
 
@@ -421,6 +509,14 @@ namespace Mup.Tests
             new object[]
             {
                 "~~~~~plain text", "<p>~~~plain text</p>"
+            },
+            new object[]
+            {
+                "~", "<p>~</p>"
+            },
+            new object[]
+            {
+                "~ ", "<p>~</p>"
             }
         };
 
@@ -848,6 +944,10 @@ namespace Mup.Tests
             new object[]
             {
                 "~----", "<p>----</p>"
+            },
+            new object[]
+            {
+                "----   ",  "<hr>"
             }
         };
 
@@ -888,6 +988,10 @@ namespace Mup.Tests
             new object[]
             {
                 "<<plug in>>\nparagraph", "<!-- plug in --><p>paragraph</p>"
+            },
+            new object[]
+            {
+                "<< plug in >>", "<!--  plug in  -->"
             }
         };
 
