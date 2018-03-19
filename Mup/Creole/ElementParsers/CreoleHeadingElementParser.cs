@@ -24,12 +24,14 @@ namespace Mup.Creole.ElementParsers
             if (start.Code == Equal)
             {
                 var startToken = start;
+                var headingMarkEnd = start;
                 var headingContentStart = startToken.Next;
 
                 var headingLevel = 1;
                 while (headingContentStart != end && headingContentStart.Code == Equal && headingLevel < 6)
                 {
                     headingLevel++;
+                    headingMarkEnd = headingContentStart;
                     headingContentStart = headingContentStart.Next;
                 }
 
@@ -40,12 +42,13 @@ namespace Mup.Creole.ElementParsers
                         endToken = endToken.Next;
 
                     var headingText = _GetHeadingText(headingContentStart, endToken);
-                    if (!IsNullOrWhiteSpace(headingText))
-                    {
-                        var headingElement = _GetHeadingElement(headingLevel, headingText);
-
-                        result = new CreoleElementParserResult(startToken, (endToken.Next ?? endToken), headingElement);
-                    }
+                    var headingElement = _GetHeadingElement(headingLevel, headingText);
+                    result = new CreoleElementParserResult(startToken, (endToken.Next ?? endToken), headingElement);
+                }
+                else
+                {
+                    var headingElement = _GetHeadingElement(headingLevel, string.Empty);
+                    result = new CreoleElementParserResult(startToken, headingMarkEnd, headingElement);
                 }
             }
 
@@ -84,11 +87,13 @@ namespace Mup.Creole.ElementParsers
             var headerTextStart = _GetHeaderStart(startToken);
             var headerTextEnd = _GetHeaderEnd(endToken);
             var headerText = Substring(Context.Text, headerTextStart, headerTextEnd.Next);
+            if (IsNullOrWhiteSpace(headerText))
+                headerText = string.Empty;
             return headerText;
         }
 
         private static CreoleToken _GetHeaderStart(CreoleToken startToken)
-            => (startToken.Code == WhiteSpace ? startToken.Next : startToken);
+            => ((startToken.Code == WhiteSpace && startToken.Next != null) ? startToken.Next : startToken);
 
         private static CreoleToken _GetHeaderEnd(CreoleToken endToken)
         {

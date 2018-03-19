@@ -45,6 +45,13 @@ namespace Mup.Creole.ElementParsers
                 } while (_IsTableRowBeginning(token, end));
                 result = new CreoleElementParserResult(tableStart, tableEnd, new CreoleTableElement(rows));
             }
+            else if (start.Code == Pipe && start.Next == null)
+            {
+                var cells = new[] { new CreoleTableDataCellElement(EmptyContent) };
+                var rows = new[] { new CreoleTableRowElement(cells) };
+                var table = new CreoleTableElement(rows);
+                result = new CreoleElementParserResult(start, start, table);
+            }
 
             return result;
         }
@@ -69,7 +76,10 @@ namespace Mup.Creole.ElementParsers
 
         private IEnumerable<CreoleElement> _GetCellContent(CreoleToken contentStart, CreoleToken contentEnd)
         {
-            if (contentStart.Code == WhiteSpace)
+            if (contentStart == null)
+                return EmptyContent;
+
+            if (contentStart.Code == WhiteSpace && contentStart.Next != null)
                 contentStart = contentStart.Next;
             if (contentEnd.Code == WhiteSpace)
                 contentEnd = contentEnd.Previous;
