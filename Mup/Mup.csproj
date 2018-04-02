@@ -6,7 +6,7 @@
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Mup.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>
-    <Version>1.1.0</Version>
+    <Version>1.1.2</Version>
     <NuspecFile>Mup.nuspec</NuspecFile>
   </PropertyGroup>
 
