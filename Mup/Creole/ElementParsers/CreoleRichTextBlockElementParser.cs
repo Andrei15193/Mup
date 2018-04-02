@@ -124,7 +124,7 @@ namespace Mup.Creole.ElementParsers
                 {
                     var childElementInfoNode = parentElementInfoNode.Next;
                     var childElementInfo = childElementInfoNode.Value;
-                    parentElementInfo.Children.AddFirst(childElementInfo);
+                    parentElementInfo.Children.AddLast(childElementInfo);
                     elementInfos.Remove(childElementInfoNode);
                 }
                 parentElementInfoNode = parentElementInfoNode.Previous;

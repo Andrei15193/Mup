@@ -908,6 +908,24 @@ namespace Mup.Tests
             new object[]
             {
                 "plain **bold 1*** plain ****bold 2***** plain", "<p>plain <strong>bold 1</strong>* plain **<strong>bold 2</strong>*** plain</p>"
+            },
+
+            new object[]
+            {
+                "//this **is** a **test**//",
+                "<p><em>this <strong>is</strong> a <strong>test</strong></em></p>"
+            },
+
+            new object[]
+            {
+                "[[url|this **is** a **test**]]",
+                "<p><a href=\"url\">this <strong>is</strong> a <strong>test</strong></a></p>"
+            },
+
+            new object[]
+            {
+                "//One **activator** can control multiple **effects** or activate one **effect** in multiple different {{{Island States}}}//",
+                "<p><em>One <strong>activator</strong> can control multiple <strong>effects</strong> or activate one <strong>effect</strong> in multiple different <code>Island States</code></em></p>"
             }
         };
 
