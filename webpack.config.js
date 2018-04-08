@@ -44,7 +44,7 @@ module.exports = {
                         {
                             loader: "css-loader",
                             options: {
-                                camelCase: true,
+                                camelCase: "only",
                                 localIdentName: (isProduction ? "[hash:base64]" : "[path][name]__[local]__[hash:base64:5]"),
                                 minimize: isProduction,
                                 modules: true
