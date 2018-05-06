@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
     <IsPackable>False</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>Mup.Tests.Net20.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Mup.Tests.NetCore10.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>
   </PropertyGroup>
 
@@ -24,12 +24,12 @@
   <ItemGroup>
     <!-- <ProjectReference Include="..\Mup\Mup.csproj" /> -->
     <Reference Include="Mup.dll">
-      <HintPath>..\Mup\bin\$(Configuration)\net20\Mup.dll</HintPath>
+      <HintPath>..\Mup\bin\$(Configuration)\netcoreapp1.0\Mup.dll</HintPath>
     </Reference>
 
     <!-- <ProjectReference Include="..\Mup.Tests\Mup.Tests.csproj" /> -->
     <Reference Include="Mup.Tests.dll">
-      <HintPath>..\Mup.Tests\bin\$(Configuration)\net45\Mup.Tests.dll</HintPath>
+      <HintPath>..\Mup.Tests\bin\$(Configuration)\netcoreapp1.0\Mup.Tests.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -44,7 +44,7 @@
             "command": "dotnet",
             "args": [
                 "test",
-                "${workspaceFolder}/Mup.Tests.NetCore/Mup.Tests.NetCore.csproj",
+                "${workspaceFolder}/Mup.Tests.NetCore10/Mup.Tests.NetCore10.csproj",
                 "--no-build"
             ],
             "group": "test",
@@ -57,7 +57,7 @@
             "command": "dotnet",
             "args": [
                 "test",
-                "${workspaceFolder}/Mup.Tests.NetStandard/Mup.Tests.NetStandard.csproj",
+                "${workspaceFolder}/Mup.Tests.NetStandard10/Mup.Tests.NetStandard10.csproj",
                 "--no-build"
             ],
             "group": "test",

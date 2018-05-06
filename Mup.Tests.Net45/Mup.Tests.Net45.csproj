@@ -27,7 +27,7 @@
       <HintPath>..\Mup\bin\$(Configuration)\net45\Mup.dll</HintPath>
     </Reference>
 
-    <!-- <ProjectReference Include="..\Mup\Mup.Tests.csproj" /> -->
+    <!-- <ProjectReference Include="..\Mup.Tests\Mup.Tests.csproj" /> -->
     <Reference Include="Mup.Tests.dll">
       <HintPath>..\Mup.Tests\bin\$(Configuration)\net45\Mup.Tests.dll</HintPath>
     </Reference>
