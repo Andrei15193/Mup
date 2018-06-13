@@ -11,19 +11,9 @@ namespace Mup
     /// <summary>Specifies options for the <see cref="CreoleParser"/>.</summary>
     public sealed class CreoleParserOptions
     {
-#if netstandard10
-        private static IReadOnlyCollection<string> _defaultInlineHyperlinkProtocols
-#else
-        private static IEnumerable<string> _defaultInlineHyperlinkProtocols
-#endif
-            = new[] { "http", "https", "ftp", "ftps" };
+        private static IEnumerable<string> _defaultInlineHyperlinkProtocols = new[] { "http", "https", "ftp", "ftps" };
 
-#if netstandard10
-        private IReadOnlyCollection<string>
-#else
-        private IEnumerable<string>
-#endif
-            _inlineHyperlinkProtocols;
+        private IEnumerable<string> _inlineHyperlinkProtocols;
 
         /// <summary>Initializes a new instance of the <see cref="CreoleParserOptions"/> class.</summary>
         public CreoleParserOptions()

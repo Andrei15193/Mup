@@ -29,9 +29,14 @@ namespace Mup.Creole
         public TResult Accept<TResult>(ParseTreeVisitor<TResult> visitor)
         {
             Accept((ParseTreeVisitor)visitor);
-
             return visitor.GetResult();
         }
+#else
+        public void Accept(ParseTreeVisitor visitor)
+            => Task.Run(() => AcceptAsync(visitor, CancellationToken.None)).Wait();
+
+        public TResult Accept<TResult>(ParseTreeVisitor<TResult> visitor)
+            => Task.Run(() => AcceptAsync<TResult>(visitor, CancellationToken.None)).Result;
 #endif
 
         public IAsyncResult BeginAccept(ParseTreeVisitor visitor)
@@ -48,11 +53,7 @@ namespace Mup.Creole
             if (visitor == null)
                 throw new ArgumentNullException(nameof(visitor));
 
-#if net20
-            return TaskAsyncOperationHelper.Run(this, () => Accept(visitor), asyncCallback, asyncState);
-#else
-            return TaskAsyncOperationHelper.Run(this, () => AcceptAsync(visitor), asyncCallback, asyncState);
-#endif
+            return TaskAsyncOperationHelper.BeginAcceptVisitor(this, visitor, asyncCallback, asyncState);
         }
 
         public IAsyncResult BeginAccept<TResult>(ParseTreeVisitor<TResult> visitor)
@@ -69,11 +70,7 @@ namespace Mup.Creole
             if (visitor == null)
                 throw new ArgumentNullException(nameof(visitor));
 
-#if net20
-            return TaskAsyncOperationHelper.Run<TResult>(this, () => Accept(visitor), asyncCallback, asyncState);
-#else
-            return TaskAsyncOperationHelper.Run<TResult>(this, () => AcceptAsync(visitor), asyncCallback, asyncState);
-#endif
+            return TaskAsyncOperationHelper.BeginAcceptVisitor(this, visitor, asyncCallback, asyncState);
         }
         public void EndAccept(IAsyncResult asyncResult)
             => TaskAsyncOperationHelper.Wait(this, asyncResult);
@@ -82,12 +79,6 @@ namespace Mup.Creole
             => TaskAsyncOperationHelper.GetResult<TResult>(this, asyncResult);
 
 #if netstandard10
-        public void Accept(ParseTreeVisitor visitor)
-            => Task.Run(() => AcceptAsync(visitor, CancellationToken.None)).Wait();
-
-        public TResult Accept<TResult>(ParseTreeVisitor<TResult> visitor)
-            => Task.Run(() => AcceptAsync<TResult>(visitor, CancellationToken.None)).Result;
-
         public Task AcceptAsync(ParseTreeVisitor visitor)
             => AcceptAsync(visitor, CancellationToken.None);
 

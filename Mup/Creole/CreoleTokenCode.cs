@@ -1,6 +1,6 @@
 ﻿namespace Mup.Creole
 {
-    internal enum CreoleTokenCode
+    internal enum CreoleTokenCode : byte
     {
         Text,
         Asterisk,
@@ -15,6 +15,8 @@
         Equal,
         Dash,
         WhiteSpace,
+        NewLine,
+        BlankLine,
         Hash,
         Pipe,
         Tilde,

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading;
 #if netstandard10
 using System.Threading.Tasks;
@@ -14,6 +15,41 @@ namespace Mup
 
     internal static class TaskAsyncOperationHelper
     {
+        internal static IAsyncResult BeginParse(IMarkupParser markupParser, string text, AsyncCallback asyncCallback, object asyncState)
+#if net20
+            => TaskAsyncOperationHelper.Run<IParseTree>(markupParser, () => markupParser.Parse(text), asyncCallback, asyncState);
+#else
+            => TaskAsyncOperationHelper.Run<IParseTree>(markupParser, () => markupParser.ParseAsync(text), asyncCallback, asyncState);
+#endif
+
+        internal static IAsyncResult BeginParse(IMarkupParser markupParser, TextReader reader, AsyncCallback asyncCallback, object asyncState)
+#if net20
+            => TaskAsyncOperationHelper.Run<IParseTree>(markupParser, () => markupParser.Parse(reader), asyncCallback, asyncState);
+#else
+            => TaskAsyncOperationHelper.Run<IParseTree>(markupParser, () => markupParser.ParseAsync(reader), asyncCallback, asyncState);
+#endif
+
+        internal static IAsyncResult BeginParse(IMarkupParser markupParser, TextReader reader, int bufferSize, AsyncCallback asyncCallback, object asyncState)
+#if net20
+            => TaskAsyncOperationHelper.Run<IParseTree>(markupParser, () => markupParser.Parse(reader, bufferSize), asyncCallback, asyncState);
+#else
+            => TaskAsyncOperationHelper.Run<IParseTree>(markupParser, () => markupParser.ParseAsync(reader, bufferSize), asyncCallback, asyncState);
+#endif
+
+        internal static IAsyncResult BeginAcceptVisitor(IParseTree parseTree, ParseTreeVisitor visitor, AsyncCallback asyncCallback, object asyncState)
+#if net20
+            => TaskAsyncOperationHelper.Run(parseTree, () => parseTree.Accept(visitor), asyncCallback, asyncState);
+#else
+            => TaskAsyncOperationHelper.Run(parseTree, () => parseTree.AcceptAsync(visitor), asyncCallback, asyncState);
+#endif
+
+        internal static IAsyncResult BeginAcceptVisitor<TResult>(IParseTree parseTree, ParseTreeVisitor<TResult> visitor, AsyncCallback asyncCallback, object asyncState)
+#if net20
+            => TaskAsyncOperationHelper.Run(parseTree, () => parseTree.Accept(visitor), asyncCallback, asyncState);
+#else
+            => TaskAsyncOperationHelper.Run(parseTree, () => parseTree.AcceptAsync(visitor), asyncCallback, asyncState);
+#endif
+
 #if net20
         internal static ITaskAsyncOperation Run(object instance, AsyncOperation asyncOperation, AsyncCallback asyncCallback, object asyncState)
         {

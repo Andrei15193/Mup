@@ -65,19 +65,103 @@ namespace Mup.Tests
             },
             new object[]
             {
-                "paragraph1\n\nparagraph2", new object[] { Text, WhiteSpace, Text }
+                "paragraph1\n\nparagraph2", new object[] { Text, BlankLine, Text }
             },
             new object[]
             {
-                "paragraph1\r\n\nparagraph2", new object[] { Text, WhiteSpace, Text }
+                "paragraph1\r\n\nparagraph2", new object[] { Text, BlankLine, Text }
             },
             new object[]
             {
-                "paragraph1\n\r\nparagraph2", new object[] { Text, WhiteSpace, Text }
+                "paragraph1\n\r\nparagraph2", new object[] { Text, BlankLine, Text }
             },
             new object[]
             {
-                "paragraph1\r\n\r\nparagraph2", new object[] { Text, WhiteSpace, Text }
+                "paragraph1\r\n\r\nparagraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1\t\n\nparagraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1\n\t\nparagraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1\n\n\tparagraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1\t\n\t\nparagraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1\n\t\n\tparagraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1\t\n\n\tparagraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1\t\n\t\n\tparagraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1 \n\nparagraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1\n \nparagraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1\n\n paragraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1 \n \nparagraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1\n \n paragraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1 \n\n paragraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1 \n \n paragraph2", new object[] { Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "paragraph1 \n \n paragraph2 \n \n paragraph3", new object[] { Text, BlankLine, Text, BlankLine, Text }
+            },
+            new object[]
+            {
+                "line1\nline2", new object[] { Text, NewLine, Text }
+            },
+            new object[]
+            {
+                "line1\t\nline2", new object[] { Text, NewLine, Text }
+            },
+            new object[]
+            {
+                "line1\n\tline2", new object[] { Text, NewLine, Text }
+            },
+            new object[]
+            {
+                "line1 \nline2", new object[] { Text, NewLine, Text }
+            },
+            new object[]
+            {
+                "line1\n line2", new object[] { Text, NewLine, Text }
+            },
+            new object[]
+            {
+                "line1 \n line2 \n line3", new object[] { Text, NewLine, Text, NewLine, Text }
             },
             new object[]
             {
