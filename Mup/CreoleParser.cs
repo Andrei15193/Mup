@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
-using System.Threading;
+using System.Text;
 using Mup.Creole;
-using Mup.Creole.ElementParsers;
+using Mup.Creole.ElementProcessors;
 using Mup.Creole.Elements;
-using Mup.Creole.Scanner;
 using static Mup.Creole.CreoleTokenCode;
 #if netstandard10
+using System.Threading;
 using System.Threading.Tasks;
 #endif
 
@@ -16,6 +17,22 @@ namespace Mup
     /// <summary>A markup parser implementation for Creole.</summary>
     public class CreoleParser : IMarkupParser
     {
+        private delegate CreoleElementProcessor CreoleElementProcessorFactory(CreoleParserContext context, CreoleTokenRange tokens);
+
+        private static readonly ReadOnlyCollection<CreoleElementProcessorFactory> _creoleElementProcessorFactories =
+            new ReadOnlyCollection<CreoleElementProcessorFactory>(
+                new CreoleElementProcessorFactory[]
+                {
+                    (context, tokens) => new CreoleCodeBlockElementProcessor(context, tokens),
+                    (context, tokens) => new CreoleHeadingElementProcessor(context, tokens),
+                    (context, tokens) => new CreoleHorizontalRuleElementProcessor(context, tokens),
+                    (context, tokens) => new CreolePluginElementProcessor(context, tokens),
+                    (context, tokens) => new CreoleListElementProcessor(context, tokens),
+                    (context, tokens) => new CreoleTableElementProcessor(context, tokens),
+                    (context, tokens) => new CreoleParagraphElementProcessor(context, tokens)
+                }
+            );
+
         /// <summary>Initializes a new instance of the <see cref="CreoleParser"/> class.</summary>
         /// <param name="options">The options to use when parsing a block of text.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> are null.</exception>
@@ -108,11 +125,7 @@ namespace Mup
             if (text == null)
                 throw new ArgumentNullException(nameof(text));
 
-#if net20
-            return TaskAsyncOperationHelper.Run<IParseTree>(this, () => Parse(text), asyncCallback, asyncState);
-#else
-            return TaskAsyncOperationHelper.Run<IParseTree>(this, () => ParseAsync(text), asyncCallback, asyncState);
-#endif
+            return TaskAsyncOperationHelper.BeginParse(this, text, asyncCallback, asyncState);
         }
 
         /// <summary>Begins to asynchronously parse text from the given <paramref name="reader"/>.</summary>
@@ -149,11 +162,7 @@ namespace Mup
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
 
-#if net20
-            return TaskAsyncOperationHelper.Run<IParseTree>(this, () => Parse(reader), asyncCallback, asyncState);
-#else
-            return TaskAsyncOperationHelper.Run<IParseTree>(this, () => ParseAsync(reader), asyncCallback, asyncState);
-#endif
+            return TaskAsyncOperationHelper.BeginParse(this, reader, asyncCallback, asyncState);
         }
 
         /// <summary>Begins to asynchronously parse text from the given <paramref name="reader"/>.</summary>
@@ -200,11 +209,7 @@ namespace Mup
             if (bufferSize <= 0)
                 throw new ArgumentException("The buffer size must be greater than zero.", nameof(bufferSize));
 
-#if net20
-            return TaskAsyncOperationHelper.Run<IParseTree>(this, () => Parse(reader, bufferSize), asyncCallback, asyncState);
-#else
-            return TaskAsyncOperationHelper.Run<IParseTree>(this, () => ParseAsync(reader, bufferSize), asyncCallback, asyncState);
-#endif
+            return TaskAsyncOperationHelper.BeginParse(this, reader, bufferSize, asyncCallback, asyncState);
         }
 
         /// <summary>Waits for the pending asynchronous parse operation to complete.</summary>
@@ -312,203 +317,100 @@ namespace Mup
         }
 #endif
 
-        private IParseTree _Parse(CreoleScanResult scanResult)
+        private IParseTree _Parse(ReadOnlyCollection<CreoleToken> tokens)
         {
-            var parser = new CreoleMarkupParser(scanResult, Options.InlineHyperlinkProtocols);
-            var parseTree = parser.Parse();
-            return parseTree;
+            var context = new CreoleParserContext(Options.InlineHyperlinkProtocols);
+            var tokenRange = new CreoleTokenRange(tokens);
+
+            var elementInfos = new LinkedList<CreoleElementInfo>();
+
+            foreach (var creoleElementFactory in _creoleElementProcessorFactories)
+            {
+                var startIndex = 0;
+                for (var baseElementNode = elementInfos.First; baseElementNode != null; baseElementNode = baseElementNode.Next)
+                {
+                    using (var processor = creoleElementFactory(context, tokenRange.SubRange(startIndex, (baseElementNode.Value.StartIndex - startIndex))))
+                        while (processor.MoveNext())
+                            elementInfos.AddBefore(
+                                baseElementNode,
+                                new CreoleElementInfo(
+                                    (startIndex + processor.Current.StartIndex),
+                                    (startIndex + processor.Current.EndIndex),
+                                    processor.Current.Element
+                                )
+                            );
+                    startIndex = baseElementNode.Value.EndIndex;
+                }
+
+                using (var processor = creoleElementFactory(context, tokenRange.SubRange(startIndex, (tokens.Count - startIndex))))
+                    while (processor.MoveNext())
+                        elementInfos.AddLast(
+                            new CreoleElementInfo(
+                                (startIndex + processor.Current.StartIndex),
+                                (startIndex + processor.Current.EndIndex),
+                                processor.Current.Element
+                            )
+                        );
+            }
+
+            var creoleElements = new List<CreoleElement>(elementInfos.Count);
+            foreach (var elementInfo in elementInfos)
+                creoleElements.Add(elementInfo.Element);
+            return new CreoleParseTree(creoleElements);
         }
 
 #if netstandard10
-        private async Task<IParseTree> _ParseAsync(CreoleScanResult scanResult, CancellationToken cancellationToken)
+        private async Task<IParseTree> _ParseAsync(ReadOnlyCollection<CreoleToken> tokens, CancellationToken cancellationToken)
         {
-            var parser = new CreoleMarkupParser(scanResult, Options.InlineHyperlinkProtocols);
-            var parseTree = await parser.ParseAsync(cancellationToken).ConfigureAwait(false);
-            return parseTree;
-        }
-#endif
+            var context = new CreoleParserContext(Options.InlineHyperlinkProtocols);
+            var tokenRange = new CreoleTokenRange(tokens);
 
-        private class CreoleMarkupParser
-        {
-            private readonly CreoleParserContext _context;
-            private readonly IEnumerable<CreoleToken> _tokens;
-            private readonly CreoleParagraphElementParser _paragraphParser;
-            private readonly IEnumerable<CreoleElementParser> _blockElementParsersExceptParagraph;
+            var elementInfos = new LinkedList<CreoleElementInfo>();
 
-            internal CreoleMarkupParser(CreoleScanResult scanResult, IEnumerable<string> inlineHyperlinkProtocols)
+            foreach (var creoleElementFactory in _creoleElementProcessorFactories)
             {
-                _context = new CreoleParserContext(scanResult.Text, inlineHyperlinkProtocols);
-                _tokens = scanResult.Tokens;
-                _paragraphParser = new CreoleParagraphElementParser(_context);
-                _blockElementParsersExceptParagraph = new CreoleElementParser[]
+                var startIndex = 0;
+                for (var baseElementNode = elementInfos.First; baseElementNode != null; baseElementNode = baseElementNode.Next)
                 {
-                    new CreoleHeadingElementParser(_context),
-                    new CreolePluginElementParser(_context),
-                    new CreolePreformattedBlockElementParser(_context),
-                    new CreoleHorizontalRuleElementParser(_context),
-                    new CreoleTableElementParser(_context),
-                    new CreoleListElementParser(_context)
-                };
-            }
-
-            internal IParseTree Parse()
-            {
-                var token = _GetFirstNonWhiteSpaceToken();
-                var paragraphStart = token;
-
-                var blockElements = new List<CreoleElement>();
-                while (token != null)
-                {
-                    if (_IsBlankLine(token.Next))
-                    {
-                        var paragraphParseResult = _paragraphParser.TryCreateFrom(paragraphStart, token);
-                        if (paragraphParseResult != null)
+                    using (var processor = creoleElementFactory(context, tokenRange.SubRange(startIndex, (baseElementNode.Value.StartIndex - startIndex))))
+                        while (processor.MoveNext())
                         {
-                            blockElements.Add(paragraphParseResult.Element);
-                            token = paragraphParseResult.End;
-                            paragraphStart = token.Next;
-                        }
-                    }
-                    else if (token.Previous == null
-                        || (token.Previous.Code == WhiteSpace && token.Previous.Previous == null)
-                        || _IsNewLine(token.Previous))
-                    {
-                        var elementParseResult = _TryCreateBlockElementExceptParagpraphFrom(token);
-                        if (elementParseResult != null)
-                        {
-                            if (elementParseResult.Start.Previous != null)
-                            {
-                                var paragraphParseResult = _paragraphParser.TryCreateFrom(paragraphStart, elementParseResult.Start.Previous);
-                                if (paragraphParseResult != null)
-                                    blockElements.Add(paragraphParseResult.Element);
-                            }
-                            blockElements.Add(elementParseResult.Element);
-                            token = elementParseResult.End;
-                            paragraphStart = token.Next;
-                        }
-                    }
-
-                    token = token.Next;
-                }
-                if (paragraphStart != null)
-                {
-                    var paragraphElement = _paragraphParser.TryCreateFrom(paragraphStart, null);
-                    if (paragraphElement != null)
-                        blockElements.Add(paragraphElement.Element);
-                }
-
-                return new CreoleParseTree(blockElements);
-            }
-
-#if netstandard10
-            internal async Task<IParseTree> ParseAsync(CancellationToken cancellationToken)
-            {
-                var token = _GetFirstNonWhiteSpaceToken();
-                var paragraphStart = token;
-
-                var blockElements = new List<CreoleElement>();
-                while (token != null)
-                {
-                    if (_IsBlankLine(token.Next))
-                    {
-                        var paragraphParseResult = _paragraphParser.TryCreateFrom(paragraphStart, token);
-                        if (paragraphParseResult != null)
-                        {
-                            blockElements.Add(paragraphParseResult.Element);
-                            token = paragraphParseResult.End;
-                            paragraphStart = token.Next;
+                            elementInfos.AddBefore(
+                               baseElementNode,
+                               new CreoleElementInfo(
+                                   (startIndex + processor.Current.StartIndex),
+                                   (startIndex + processor.Current.EndIndex),
+                                   processor.Current.Element
+                               )
+                           );
 
                             await Task.Yield();
                             cancellationToken.ThrowIfCancellationRequested();
                         }
-                    }
-                    else if (token.Previous == null
-                        || (token.Previous.Code == WhiteSpace && token.Previous.Previous == null)
-                        || _IsNewLine(token.Previous))
-                    {
-                        var elementParseResult = _TryCreateBlockElementExceptParagpraphFrom(token);
-                        if (elementParseResult != null)
-                        {
-                            if (elementParseResult.Start.Previous != null)
-                            {
-                                var paragraphParseResult = _paragraphParser.TryCreateFrom(paragraphStart, elementParseResult.Start.Previous);
-                                if (paragraphParseResult != null)
-                                    blockElements.Add(paragraphParseResult.Element);
-                            }
-                            blockElements.Add(elementParseResult.Element);
-                            token = elementParseResult.End;
-                            paragraphStart = token.Next;
-
-                            await Task.Yield();
-                            cancellationToken.ThrowIfCancellationRequested();
-                        }
-                    }
-
-                    token = token.Next;
-                }
-                if (paragraphStart != null)
-                {
-                    var paragraphElement = _paragraphParser.TryCreateFrom(paragraphStart, null);
-                    if (paragraphElement != null)
-                        blockElements.Add(paragraphElement.Element);
-
-                    await Task.Yield();
-                    cancellationToken.ThrowIfCancellationRequested();
+                    startIndex = baseElementNode.Value.EndIndex;
                 }
 
-                return new CreoleParseTree(blockElements);
-            }
-#endif
-
-            private CreoleElementParserResult _TryCreateBlockElementExceptParagpraphFrom(CreoleToken token)
-            {
-                CreoleElementParserResult elementParseResult = null;
-
-                using (var blockElementParser = _blockElementParsersExceptParagraph.GetEnumerator())
-                    while (elementParseResult == null && blockElementParser.MoveNext())
-                        elementParseResult = blockElementParser.Current.TryCreateFrom(token, null);
-
-                return elementParseResult;
-            }
-
-            private CreoleToken _GetFirstNonWhiteSpaceToken()
-            {
-                CreoleToken firstNonWhiteSpaceToken = null;
-                using (var token = _tokens.GetEnumerator())
-                    if (token.MoveNext())
+                using (var processor = creoleElementFactory(context, tokenRange.SubRange(startIndex, (tokens.Count - startIndex))))
+                    while (processor.MoveNext())
                     {
-                        firstNonWhiteSpaceToken = token.Current;
-                        while (token.MoveNext() && firstNonWhiteSpaceToken.Code == WhiteSpace)
-                            firstNonWhiteSpaceToken = token.Current;
+                        elementInfos.AddLast(
+                           new CreoleElementInfo(
+                               (startIndex + processor.Current.StartIndex),
+                               (startIndex + processor.Current.EndIndex),
+                               processor.Current.Element
+                           )
+                       );
+
+                        await Task.Yield();
+                        cancellationToken.ThrowIfCancellationRequested();
                     }
-                return firstNonWhiteSpaceToken;
             }
 
-            private bool _IsNewLine(CreoleToken token)
-                => _ContainsLineFeeds(token, 1);
-
-            private bool _IsBlankLine(CreoleToken token)
-                => _ContainsLineFeeds(token, 2);
-
-            private bool _ContainsLineFeeds(CreoleToken token, int minCount)
-            {
-                var containsBlankLine = false;
-
-                if (token?.Code == WhiteSpace)
-                {
-                    var index = token.StartIndex;
-                    var lineFeedCount = 0;
-                    while (index < token.EndIndex && lineFeedCount < minCount)
-                    {
-                        if (_context.Text[index] == '\n')
-                            lineFeedCount++;
-                        index++;
-                    }
-                    containsBlankLine = (lineFeedCount >= minCount);
-                }
-
-                return containsBlankLine;
-            }
+            var creoleElements = new List<CreoleElement>(elementInfos.Count);
+            foreach (var elementInfo in elementInfos)
+                creoleElements.Add(elementInfo.Element);
+            return new CreoleParseTree(creoleElements);
         }
+#endif
     }
 }

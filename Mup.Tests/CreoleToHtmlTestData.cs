@@ -779,6 +779,22 @@ namespace Mup.Tests
             {
                 "//[[Important page|this link is italicized]]//\n**[[Important page]]**\n//**[[Important page]]**//", "<p><em><a href=\"Important page\">this link is italicized</a></em>\n<strong><a href=\"Important page\">Important page</a></strong>\n<em><strong><a href=\"Important page\">Important page</a></strong></em></p>"
             },
+            new object[]
+            {
+                "//**[[url|no //emphasis// nor //strong//]]**//", "<p><em><strong><a href=\"url\">no //emphasis// nor //strong//</a></strong></em></p>"
+            },
+            new object[]
+            {
+                "**//[[url|no //emphasis// nor //strong//]]//**", "<p><strong><em><a href=\"url\">no //emphasis// nor //strong//</a></em></strong></p>"
+            },
+            new object[]
+            {
+                @"[[test|line\\break]]", "<p><a href=\"test\">line<br>break</a></p>"
+            },
+            new object[]
+            {
+                "Here's a external link without a description: [[http://www.wikicreole.org]]", "<p>Here&#39;s a external link without a description: <a href=\"http://www.wikicreole.org\">http://www.wikicreole.org</a></p>"
+            },
 
             new object[]
             {

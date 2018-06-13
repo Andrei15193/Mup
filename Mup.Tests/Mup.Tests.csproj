@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;netcoreapp1.0;netstandard1.5</TargetFrameworks>
-    <Version>1.1.0-beta</Version>
     <IsPackable>False</IsPackable>
   </PropertyGroup>
 

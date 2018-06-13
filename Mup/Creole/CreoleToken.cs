@@ -1,21 +1,36 @@
-﻿using Mup.Scanner;
+﻿using System;
+using Mup.Scanner;
 
 namespace Mup.Creole
 {
-    internal class CreoleToken : Token<CreoleTokenCode>
+    internal class CreoleToken : IEquatable<CreoleToken>
     {
-        internal CreoleToken(CreoleTokenCode code, int start, int length, CreoleToken previous = null)
-            : base(code, start, length)
+        public static bool operator ==(CreoleToken left, CreoleToken right)
+            => left.Equals(right);
+
+        public static bool operator !=(CreoleToken left, CreoleToken right)
+            => !left.Equals(right);
+
+        internal CreoleToken(CreoleTokenCode code, string text)
         {
-            if (previous != null)
-            {
-                Previous = previous;
-                previous.Next = this;
-            }
+            Code = code;
+            Text = text;
         }
 
-        internal CreoleToken Previous { get; }
+        internal CreoleTokenCode Code { get; }
 
-        internal CreoleToken Next { get; private set; }
+        internal string Text { get; }
+
+        public bool Equals(CreoleToken other)
+            => (Code == other.Code && Text == other.Text);
+
+        public override bool Equals(object obj)
+            => (obj != null && ((obj as CreoleToken)?.Equals(this) ?? false));
+
+        public override int GetHashCode()
+            => (new { Code, Text }).GetHashCode();
+
+        public override string ToString()
+            => $"{Code}: {Text}";
     }
 }

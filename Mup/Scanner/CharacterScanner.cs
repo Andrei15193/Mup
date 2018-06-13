@@ -20,7 +20,7 @@ namespace Mup.Scanner
             _Reset();
             foreach (var character in text)
                 _Process(character);
-            ScanCompleted(text);
+            ScanCompleted();
         }
 
         internal void Scan(TextReader reader)
@@ -36,19 +36,16 @@ namespace Mup.Scanner
 
             int bufferLength;
             var buffer = new char[bufferSize];
-            var textBuilder = new StringBuilder();
             do
             {
                 bufferLength = reader.Read(buffer, 0, bufferSize);
 
-                textBuilder.Append(buffer, 0, bufferLength);
                 for (var bufferIndex = 0; bufferIndex < bufferLength; bufferIndex++)
                     _Process(buffer[bufferIndex]);
             }
             while (bufferLength > 0);
 
-            var text = textBuilder.ToString();
-            ScanCompleted(text);
+            ScanCompleted();
         }
 
 #if netstandard10
@@ -70,7 +67,7 @@ namespace Mup.Scanner
             await Task.Yield();
             cancellationToken.ThrowIfCancellationRequested();
 
-            ScanCompleted(text);
+            ScanCompleted();
         }
 
         internal Task ScanAsync(TextReader reader, CancellationToken cancellationToken)
@@ -93,14 +90,12 @@ namespace Mup.Scanner
                 bufferLength = await reader.ReadAsync(buffer, 0, bufferSize).ConfigureAwait(false);
                 cancellationToken.ThrowIfCancellationRequested();
 
-                textBuilder.Append(buffer, 0, bufferLength);
                 for (var bufferIndex = 0; bufferIndex < bufferLength; bufferIndex++)
                     _Process(buffer[bufferIndex]);
             }
             while (bufferLength > 0);
 
-            var text = textBuilder.ToString();
-            ScanCompleted(text);
+            ScanCompleted();
         }
 #endif
 
@@ -119,7 +114,7 @@ namespace Mup.Scanner
 
         protected abstract void Process(char character);
 
-        protected abstract void ScanCompleted(string text);
+        protected abstract void ScanCompleted();
 
         private void _Reset()
         {
