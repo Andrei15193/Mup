@@ -39,14 +39,14 @@ class Description extends React.PureComponent {
                 </p>
                 <p>
                     The library does not expose types for each mentioned format, but it is made to be extensible. Any parsed text can be run through
-                    a custom visitor which, um, "visits" the results allowing the developer to specify what exactly needs to be generated at every step.
+                    a custom visitor which traverses the resulting parse tree allowing the developer to specify what exactly needs to be generated at every step.
                 </p>
                 <p>
                     To keep it lightweight, the library only provides parsers for several languages (see below) and
                     an <abbr title="HyperText Markup Language">HTML</abbr> visitor which allows users to
-                    generate <abbr title="HyperText Markup Language">HTML</abbr> from parsed text. With each increment (or major version if
-                    that helps), the library will bring a new parser into the fold and thus supporting more languages. The end goal is to support most,
-                    if not all, <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language" target="_blank">Lightweight Markup Languages</a>.
+                    generate <abbr title="HyperText Markup Language">HTML</abbr> from parsed text. With each increment (or major version), the library will bring
+                    a new parser into the fold and thus supporting more languages. The end goal is to support most, if not all,
+                    <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language" target="_blank">Lightweight Markup Languages</a>.
                 </p>
             </div>
         );
