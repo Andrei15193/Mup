@@ -27,8 +27,8 @@ namespace Mup
                     (context, tokens) => new CreoleHeadingElementProcessor(context, tokens),
                     (context, tokens) => new CreoleHorizontalRuleElementProcessor(context, tokens),
                     (context, tokens) => new CreolePluginElementProcessor(context, tokens),
-                    (context, tokens) => new CreoleListElementProcessor(context, tokens),
                     (context, tokens) => new CreoleTableElementProcessor(context, tokens),
+                    (context, tokens) => new CreoleListElementProcessor(context, tokens),
                     (context, tokens) => new CreoleParagraphElementProcessor(context, tokens)
                 }
             );
