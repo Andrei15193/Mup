@@ -9,20 +9,20 @@ namespace Mup.Creole.ElementProcessors
         private enum State
         {
             NotInListItem,
-            EmptyListItemLine,
+            ClearListInfos,
             InListItemLevel,
-            InListItemWhiteSpace,
-            InListItem,
+            ListItemNewLineContentStart,
+            ListItemWhiteSpaceContentStart,
+            ListItemContent,
             ListItemMayEndInWhiteSpace,
             ListItemMayEnd
         }
 
         private State _state = State.NotInListItem;
-        private int _listItemStartIndex;
-        private int _listItemEndIndex;
-        private int _listItemContentStartIndex;
-        private int _listItemLevel;
         private bool _listItemIsOrdered;
+        private int _listItemContentStartIndex;
+        private int _listItemEndIndex;
+        private int _listItemLevel;
         private Stack<CreoleListInfo> _listInfos = new Stack<CreoleListInfo>();
 
         public CreoleListElementProcessor(CreoleParserContext context, CreoleTokenRange tokens)
@@ -34,44 +34,41 @@ namespace Mup.Creole.ElementProcessors
         {
             switch (_state)
             {
-                case State.NotInListItem:
-                    if (IsOnNewLine)
+                case State.NotInListItem when (IsOnNewLine):
+                    if (Token.Code == Asterisk)
                     {
-                        if (Token.Code == Asterisk)
-                        {
-                            _listItemIsOrdered = false;
-                            _SetItemStartIndex();
-                            _listItemLevel = 1;
-                            _state = State.InListItemLevel;
-                        }
-                        else if (Token.Code == Hash)
-                        {
-                            _listItemIsOrdered = true;
-                            _SetItemStartIndex();
-                            _listItemLevel = 1;
-                            _state = State.InListItemLevel;
-                        }
+                        if (_listInfos.Count == 0)
+                            SetElementStartIndex();
+                        _listItemIsOrdered = false;
+                        _listItemLevel = 1;
+                        _state = State.InListItemLevel;
                     }
-                    else if ((Token.Code == NewLine || Token.Code == BlankLine) && _listInfos.Count > 0)
-                        SetResult(_GetTopList());
+                    else if (Token.Code == Hash)
+                    {
+                        if (_listInfos.Count == 0)
+                            SetElementStartIndex();
+                        _listItemIsOrdered = true;
+                        _listItemLevel = 1;
+                        _state = State.InListItemLevel;
+                    }
                     break;
 
-                case State.EmptyListItemLine:
+                case State.ClearListInfos:
                     if (_listInfos.Count > 0)
                         SetResult(_GetTopList());
 
                     if (IsOnNewLine)
                         if (Token.Code == Asterisk)
                         {
+                            SetElementStartIndex();
                             _listItemIsOrdered = false;
-                            _SetItemStartIndex();
                             _listItemLevel = 1;
                             _state = State.InListItemLevel;
                         }
                         else if (Token.Code == Hash)
                         {
+                            SetElementStartIndex();
                             _listItemIsOrdered = true;
-                            _SetItemStartIndex();
                             _listItemLevel = 1;
                             _state = State.InListItemLevel;
                         }
@@ -86,153 +83,223 @@ namespace Mup.Creole.ElementProcessors
                         _listItemLevel++;
                     else
                     {
-                        if (_listInfos.Count == 1 && _listItemLevel == 1 && _listInfos.Peek().IsOrdered != _listItemIsOrdered)
-                            SetResult(_PopList());
-
-                        if (Token.Code == BlankLine)
+                        if (_listInfos.Count + 1 < _listItemLevel)
                         {
-                            _listItemEndIndex = Index;
-                            _listItemContentStartIndex = Index;
-                            _ProcessListItem();
-                            _state = State.EmptyListItemLine;
+                            if (_listInfos.Count > 0)
+                                SetResult(_GetTopList());
+                            _state = State.NotInListItem;
                         }
-                        else if (Token.Code == NewLine)
-                        {
-                            _listItemEndIndex = Index;
-                            _state = State.ListItemMayEnd;
-                        }
-                        else if (Token.Code == WhiteSpace)
-                            _state = State.InListItemWhiteSpace;
                         else
                         {
-                            _listItemContentStartIndex = Index;
-                            _state = State.InListItem;
+                            while (_listInfos.Count > _listItemLevel)
+                                _PopList();
+
+                            if (_listInfos.Count == _listItemLevel && _listInfos.Peek().IsOrdered != _listItemIsOrdered)
+                                if (_listInfos.Count == 1) if (_listInfos.Count == 1)
+                                        SetResult(_PopList());
+                                    else
+                                        _PopList();
+
+                            if (Token.Code == BlankLine)
+                            {
+                                SetElementEndIndex();
+                                var richText = GetRichText(Index, Index);
+                                if (_listInfos.Count < _listItemLevel)
+                                {
+                                    var listInfo = new CreoleListInfo(_listItemIsOrdered);
+                                    listInfo.AddItem(richText);
+                                    _listInfos.Push(listInfo);
+                                }
+                                else
+                                    _listInfos.Peek().AddItem(richText);
+
+                                _state = State.ClearListInfos;
+                            }
+                            else if (Token.Code == NewLine)
+                                _state = State.ListItemNewLineContentStart;
+                            else if (Token.Code == WhiteSpace)
+                                _state = State.ListItemWhiteSpaceContentStart;
+                            else
+                            {
+                                _listItemContentStartIndex = Index;
+                                _state = State.ListItemContent;
+                            }
                         }
                     }
                     break;
 
-                case State.InListItemWhiteSpace:
-                    _listItemContentStartIndex = Index;
-                    _state = State.InListItem;
-                    break;
-
-                case State.InListItem:
-                    _listItemEndIndex = Index;
-                    if (Token.Code == BlankLine)
-                    {
-                        _ProcessListItem();
-                        _state = State.EmptyListItemLine;
-                    }
-                    else if (Token.Code == NewLine)
-                        _state = State.ListItemMayEnd;
-                    else if (Token.Code == WhiteSpace)
-                        _state = State.ListItemMayEndInWhiteSpace;
-                    break;
-
-                case State.ListItemMayEndInWhiteSpace:
-                    _state = State.InListItem;
-                    break;
-
-                case State.ListItemMayEnd:
+                case State.ListItemNewLineContentStart:
                     if (Token.Code == Asterisk || Token.Code == Hash)
                     {
-                        _ProcessListItem();
+                        SetElementEndIndex();
+                        var richText = GetRichText(Index, Index);
+                        if (_listInfos.Count < _listItemLevel)
+                        {
+                            var listInfo = new CreoleListInfo(_listItemIsOrdered);
+                            listInfo.AddItem(richText);
+                            _listInfos.Push(listInfo);
+                        }
+                        else
+                            _listInfos.Peek().AddItem(richText);
 
                         if (Token.Code == Asterisk)
                         {
+                            if (_listInfos.Count == 0)
+                                SetElementStartIndex();
                             _listItemIsOrdered = false;
                             _listItemLevel = 1;
                             _state = State.InListItemLevel;
                         }
                         else if (Token.Code == Hash)
                         {
+                            if (_listInfos.Count == 0)
+                                SetElementStartIndex();
                             _listItemIsOrdered = true;
                             _listItemLevel = 1;
                             _state = State.InListItemLevel;
                         }
                         else
                         {
+                            _listItemContentStartIndex = Index;
+                            _state = State.ListItemContent;
+                        }
+                    }
+                    else
+                    {
+                        _listItemContentStartIndex = Index;
+                        _state = State.ListItemContent;
+                    }
+                    break;
+
+                case State.ListItemWhiteSpaceContentStart:
+                    _listItemContentStartIndex = Index;
+                    _state = State.ListItemContent;
+                    break;
+
+                case State.ListItemContent:
+                    if (Token.Code == BlankLine)
+                    {
+                        _listItemEndIndex = Index;
+                        SetElementEndIndex();
+                        var richText = GetRichText(_listItemContentStartIndex, _listItemEndIndex);
+                        if (_listInfos.Count < _listItemLevel)
+                        {
+                            var listInfo = new CreoleListInfo(_listItemIsOrdered);
+                            listInfo.AddItem(richText);
+                            _listInfos.Push(listInfo);
+                        }
+                        else
+                            _listInfos.Peek().AddItem(richText);
+                        SetResult(_GetTopList());
+
+                        _state = State.NotInListItem;
+                    }
+                    else if (Token.Code == NewLine)
+                    {
+                        _listItemEndIndex = Index;
+                        SetElementEndIndex();
+
+                        _state = State.ListItemMayEnd;
+                    }
+                    else if (Token.Code == WhiteSpace)
+                    {
+                        _listItemEndIndex = Index;
+                        SetElementEndIndex();
+
+                        _state = State.ListItemMayEndInWhiteSpace;
+                    }
+                    break;
+
+                case State.ListItemMayEndInWhiteSpace:
+                    _state = State.ListItemContent;
+                    break;
+
+                case State.ListItemMayEnd:
+                    if (Token.Code == Asterisk || Token.Code == Hash)
+                    {
+                        var richText = GetRichText(_listItemContentStartIndex, _listItemEndIndex);
+                        if (_listInfos.Count < _listItemLevel)
+                        {
+                            var listInfo = new CreoleListInfo(_listItemIsOrdered);
+                            listInfo.AddItem(richText);
+                            _listInfos.Push(listInfo);
+                        }
+                        else
+                            _listInfos.Peek().AddItem(richText);
+
+                        if (Token.Code == Asterisk)
+                        {
+                            if (_listInfos.Count == 0)
+                                SetElementStartIndex();
+                            _listItemIsOrdered = false;
+                            _listItemLevel = 1;
+                            _state = State.InListItemLevel;
+                        }
+                        else if (Token.Code == Hash)
+                        {
+                            if (_listInfos.Count == 0)
+                                SetElementStartIndex();
+                            _listItemIsOrdered = true;
+                            _listItemLevel = 1;
+                            _state = State.InListItemLevel;
+                        }
+                        else
+                        {
+                            SetResult(_GetTopList());
                             _listItemLevel = 0;
                             _state = State.NotInListItem;
                         }
                     }
                     else
-                        _state = State.InListItem;
+                        _state = State.ListItemContent;
                     break;
             }
         }
 
         protected override void Complete()
         {
-            if (_state == State.InListItemLevel || _state == State.InListItemWhiteSpace)
-            {
-                _listItemContentStartIndex = Index;
-                _listItemEndIndex = Index;
-                _ProcessListItem();
-            }
-            else if (_state == State.InListItem)
-            {
-                _listItemEndIndex = Index;
-                _ProcessListItem();
-            }
-            if (_state == State.ListItemMayEndInWhiteSpace)
-                _ProcessListItem();
-
-            if (_listInfos.Count > 0)
-                SetResult(_GetTopList());
-        }
-
-        private void _SetItemStartIndex()
-        {
-            _listItemStartIndex = Index;
-            if (_listInfos.Count == 0)
-                SetElementStartIndex();
-        }
-
-        private void _ProcessListItem()
-        {
-            if (_listItemLevel == 0)
-            {
-                if (_listInfos.Count > 0)
-                    SetResult(_GetTopList());
-            }
-            else if (_listInfos.Count == 0 && _listItemLevel == 1)
+            if (_state == State.InListItemLevel || _state == State.ListItemWhiteSpaceContentStart || _state == State.ListItemNewLineContentStart)
             {
                 SetElementEndIndex();
-                var listInfo = new CreoleListInfo(_listItemIsOrdered);
-                listInfo.AddItem(GetRichText(_listItemContentStartIndex, _listItemEndIndex));
-                _listInfos.Push(listInfo);
-            }
-            else if (_listItemLevel == _listInfos.Count + 1)
-            {
-                SetElementEndIndex();
-                var listInfo = new CreoleListInfo(_listItemIsOrdered);
-                listInfo.AddItem(GetRichText(_listItemContentStartIndex, _listItemEndIndex));
-                _listInfos.Push(listInfo);
-            }
-            else if (_listItemLevel <= _listInfos.Count)
-            {
-                while (_listItemLevel < _listInfos.Count)
-                    _PopList();
-
-                if (_listInfos.Peek().IsOrdered != _listItemIsOrdered)
+                var richText = GetRichText(Index, Index);
+                if (_listInfos.Count < _listItemLevel)
                 {
-                    _PopList();
-
-                    SetElementEndIndex();
                     var listInfo = new CreoleListInfo(_listItemIsOrdered);
-                    listInfo.AddItem(GetRichText(_listItemContentStartIndex, _listItemEndIndex));
+                    listInfo.AddItem(richText);
                     _listInfos.Push(listInfo);
                 }
                 else
-                {
-                    SetElementEndIndex();
-                    _listInfos.Peek().AddItem(GetRichText(_listItemContentStartIndex, _listItemEndIndex));
-                }
+                    _listInfos.Peek().AddItem(richText);
             }
-            else if (_listInfos.Count > 0)
+            else if (_state == State.ListItemContent)
+            {
+                _listItemEndIndex = Index;
+                SetElementEndIndex();
+                var richText = GetRichText(_listItemContentStartIndex, _listItemEndIndex);
+                if (_listInfos.Count < _listItemLevel)
+                {
+                    var listInfo = new CreoleListInfo(_listItemIsOrdered);
+                    listInfo.AddItem(richText);
+                    _listInfos.Push(listInfo);
+                }
+                else
+                    _listInfos.Peek().AddItem(richText);
+            }
+            else if (_state == State.ListItemMayEnd || _state == State.ListItemMayEndInWhiteSpace)
+            {
+                var richText = GetRichText(_listItemContentStartIndex, _listItemEndIndex);
+                if (_listInfos.Count < _listItemLevel)
+                {
+                    var listInfo = new CreoleListInfo(_listItemIsOrdered);
+                    listInfo.AddItem(richText);
+                    _listInfos.Push(listInfo);
+                }
+                else
+                    _listInfos.Peek().AddItem(richText);
+            }
+
+            if (_listInfos.Count > 0)
                 SetResult(_GetTopList());
-            SetElementEndIndex();
         }
 
         private CreoleListElement _GetTopList()

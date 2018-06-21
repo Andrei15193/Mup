@@ -485,6 +485,46 @@ namespace Mup.Tests
             new object[]
             {
                 "# ", "<ol><li></li></ol>"
+            },
+            new object[]
+            {
+                "* bullet item 1\n* bullet item 2\n** sub-bullet item 2.1\n# numbered item 1\n# numbered item 2\n## sub-numbered item 2.1", "<ul><li>bullet item 1</li><li>bullet item 2<ul><li>sub-bullet item 2.1</li></ul></li></ul><ol><li>numbered item 1</li><li>numbered item 2<ol><li>sub-numbered item 2.1</li></ol></li></ol>"
+            },
+            new object[]
+            {
+                "* bullet item\n", "<ul><li>bullet item</li></ul>"
+            },
+            new object[]
+            {
+                "# numbered item\n", "<ol><li>numbered item</li></ol>"
+            },
+            new object[]
+            {
+                "# bullet item 1\n# bullet item 2\n## sub-bullet item 2.1\n* numbered item 1\n* numbered item 2\n** sub-numbered item 2.1", "<ol><li>bullet item 1</li><li>bullet item 2<ol><li>sub-bullet item 2.1</li></ol></li></ol><ul><li>numbered item 1</li><li>numbered item 2<ul><li>sub-numbered item 2.1</li></ul></li></ul>"
+            },
+            new object[]
+            {
+                "*\n*bullet item 2", "<ul><li></li><li>bullet item 2</li></ul>"
+            },
+            new object[]
+            {
+                "*\n#bullet item 2", "<ul><li></li></ul><ol><li>bullet item 2</li></ol>"
+            },
+            new object[]
+            {
+                "#\n#bullet item 2", "<ol><li></li><li>bullet item 2</li></ol>"
+            },
+            new object[]
+            {
+                "#\n*bullet item 2", "<ol><li></li></ol><ul><li>bullet item 2</li></ul>"
+            },
+            new object[]
+            {
+                "*\n", "<ul><li></li></ul>"
+            },
+            new object[]
+            {
+                "#\n", "<ol><li></li></ol>"
             }
         };
 

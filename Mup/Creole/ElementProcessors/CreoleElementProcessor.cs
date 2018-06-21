@@ -9,6 +9,7 @@ namespace Mup.Creole.ElementProcessors
 {
     internal abstract class CreoleElementProcessor : IDisposable
     {
+        private static readonly IEnumerable<CreoleElement> _emptyCreoleElements = new CreoleElement[0];
         private readonly CreoleTokenRange _tokens;
         private int _index = 0;
         private bool _isOnNewLine = true;
@@ -126,6 +127,9 @@ namespace Mup.Creole.ElementProcessors
 
         protected IEnumerable<CreoleElement> GetRichText(int startIndex, int endIndex)
         {
+            if (startIndex == endIndex)
+                return _emptyCreoleElements;
+
             var richTextProcessor = new CreoleRichTextProcessor(Context);
             var tokens = GetTokens(startIndex, endIndex);
             return richTextProcessor.Process(tokens);
