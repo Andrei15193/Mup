@@ -48,30 +48,47 @@ namespace Mup
         /// <summary>Initializes a new instance of the <see cref="HtmlWriterVisitor"/> class.</summary>
         public HtmlWriterVisitor()
         {
+            _wrappedBuilder = null;
+            Options = _defaultOptions;
         }
 
         /// <summary>Initializes a new instance of the <see cref="HtmlWriterVisitor"/> class.</summary>
         /// <param name="options">The <see cref="HtmlWriterVisitorOptions"/> to use when writing HTML.</param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the <paramref name="options"/> are <c>null</c>.
+        /// </exception>
         /// <exception cref="ArgumentException">
         /// Thrown when the <see cref="HtmlWriterVisitorOptions.IndentOffset"/> is less than 0 (zero).
         /// </exception>
         public HtmlWriterVisitor(HtmlWriterVisitorOptions options)
         {
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
             if (options.IndentOffset < 0)
                 throw new ArgumentException("The IndentOffset cannot be negative.", nameof(options));
+
+            _wrappedBuilder = null;
             Options = options;
         }
 
         /// <summary>Initializes a new instance of the <see cref="HtmlWriterVisitor"/> class.</summary>
         /// <param name="stringBuilder">The <see cref="StringBuilder"/> to which to write the result.</param>
         /// <param name="options">The <see cref="HtmlWriterVisitorOptions"/> to use when writing HTML.</param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the <paramref name="stringBuilder"/> or <paramref name="options"/> are <c>null</c>.
+        /// </exception>
         /// <exception cref="ArgumentException">
         /// Thrown when the <see cref="HtmlWriterVisitorOptions.IndentOffset"/> is less than 0 (zero).
         /// </exception>
         public HtmlWriterVisitor(StringBuilder stringBuilder, HtmlWriterVisitorOptions options)
         {
+            if (stringBuilder == null)
+                throw new ArgumentNullException(nameof(stringBuilder));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
             if (options.IndentOffset < 0)
                 throw new ArgumentException("The IndentOffset cannot be negative.", nameof(options));
+
             _wrappedBuilder = stringBuilder;
             Options = options;
         }
@@ -82,7 +99,7 @@ namespace Mup
             => _htmlStringBuilder;
 
         /// <summary>Gets the <see cref="HtmlWriterVisitorOptions"/> to use when writing HTML to the result.</summary>
-        protected HtmlWriterVisitorOptions Options { get; } = _defaultOptions;
+        protected HtmlWriterVisitorOptions Options { get; }
 
         /// <summary>Gets the visitor result. This method is called only after the visit operation completes.</summary>
         /// <returns>Returns the result after the entire parse tree has been visited.</returns>
