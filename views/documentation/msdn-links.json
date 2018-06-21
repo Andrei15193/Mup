@@ -4,6 +4,8 @@
     "system.asynccallback": "https://docs.microsoft.com/en-gb/dotnet/api/system.asynccallback?view=netstandard-1.0",
     "system.char": "https://docs.microsoft.com/en-gb/dotnet/api/system.char?view=netstandard-1.0",
     "system.collections.generic.ienumerable<t>":"https://docs.microsoft.com/en-gb/dotnet/api/system.collections.generic.ienumerable-1?view=netstandard-1.0",
+    "system.environment": "https://docs.microsoft.com/en-gb/dotnet/api/system.environment?view=netstandard-1.0",
+    "system.environment.newline": "https://docs.microsoft.com/en-gb/dotnet/api/system.environment.newline?view=netstandard-1.0#System_Environment_NewLine",
     "system.iasyncresult": "https://docs.microsoft.com/en-gb/dotnet/api/system.iasyncresult?view=netstandard-1.0",
     "system.int32": "https://docs.microsoft.com/en-gb/dotnet/api/system.int32?view=netstandard-1.0",
     "system.io.memorystream": "https://docs.microsoft.com/en-gb/dotnet/api/system.io.memorystream?view=netstandard-1.0",
