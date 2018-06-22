@@ -298,7 +298,7 @@ namespace Mup
         protected internal override void VisitHyperlinkBeginning(string destination)
         {
             BeginElementWithoutIndent("a");
-            WriteHtmlAttribute("href", destination);
+            WriteAttribute("href", destination);
         }
 
         /// <summary>Visits the ending of a hyperlink.</summary>
@@ -311,9 +311,9 @@ namespace Mup
         protected internal override void VisitImage(string source, string alternativeText)
         {
             BeginElementWithoutIndent("img");
-            WriteHtmlAttribute("src", source);
+            WriteAttribute("src", source);
             if (!IsNullOrWhiteSpace(alternativeText))
-                WriteHtmlAttribute("alt", alternativeText);
+                WriteAttribute("alt", alternativeText);
             EndElement();
         }
 
@@ -443,7 +443,7 @@ namespace Mup
         /// <exception cref="InvalidOperationException">
         /// Thrown when content has been written inside the HTML element or there is no HTML element started.
         /// </exception>
-        protected void WriteHtmlAttribute(string attributeName)
+        protected void WriteAttribute(string attributeName)
         {
             if (_openElements.Count == 0)
                 throw new InvalidOperationException("There are no elements started.");
@@ -460,7 +460,7 @@ namespace Mup
         /// <exception cref="InvalidOperationException">
         /// Thrown when content has been written inside the HTML element or there is no HTML element started.
         /// </exception>
-        protected void WriteHtmlAttribute(string attributeName, string attributeValue)
+        protected void WriteAttribute(string attributeName, string attributeValue)
         {
             if (_openElements.Count == 0)
                 throw new InvalidOperationException("There are no elements started.");
