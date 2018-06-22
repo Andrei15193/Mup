@@ -4172,8 +4172,8 @@
                 "mup.htmlwritervisitor.beginelementwithoutindent(system.string)",
                 "mup.htmlwritervisitor.endelement()",
                 "mup.htmlwritervisitor.endelementwithoutindent()",
-                "mup.htmlwritervisitor.writehtmlattribute(system.string)",
-                "mup.htmlwritervisitor.writehtmlattribute(system.string,system.string)",
+                "mup.htmlwritervisitor.writeattribute(system.string)",
+                "mup.htmlwritervisitor.writeattribute(system.string,system.string)",
                 "mup.htmlwritervisitor.writecomment(system.string)",
                 "mup.htmlwritervisitor.write(system.string)",
                 "mup.htmlwritervisitor.write(system.char)",
@@ -7000,15 +7000,15 @@
                 "references": []
             }
         },
-        "mup.htmlwritervisitor.writehtmlattribute(system.string)": {
+        "mup.htmlwritervisitor.writeattribute(system.string)": {
             "availableFrameworks": [
                 "net20",
                 "net45",
                 "netcoreapp1.0",
                 "netstandard1.0"
             ],
-            "name": "WriteHtmlAttribute",
-            "id": "mup.htmlwritervisitor.writehtmlattribute(system.string)",
+            "name": "WriteAttribute",
+            "id": "mup.htmlwritervisitor.writeattribute(system.string)",
             "type": "method",
             "isStatic": false,
             "isExtension": false,
@@ -7101,15 +7101,15 @@
                 "references": []
             }
         },
-        "mup.htmlwritervisitor.writehtmlattribute(system.string,system.string)": {
+        "mup.htmlwritervisitor.writeattribute(system.string,system.string)": {
             "availableFrameworks": [
                 "net20",
                 "net45",
                 "netcoreapp1.0",
                 "netstandard1.0"
             ],
-            "name": "WriteHtmlAttribute",
-            "id": "mup.htmlwritervisitor.writehtmlattribute(system.string,system.string)",
+            "name": "WriteAttribute",
+            "id": "mup.htmlwritervisitor.writeattribute(system.string,system.string)",
             "type": "method",
             "isStatic": false,
             "isExtension": false,
