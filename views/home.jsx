@@ -45,8 +45,7 @@ class Description extends React.PureComponent {
                     To keep it lightweight, the library only provides parsers for several languages (see below) and
                     an <abbr title="HyperText Markup Language">HTML</abbr> visitor which allows users to
                     generate <abbr title="HyperText Markup Language">HTML</abbr> from parsed text. With each increment (or major version), the library will bring
-                    a new parser into the fold and thus supporting more languages. The end goal is to support most, if not all,
-                    <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language" target="_blank">Lightweight Markup Languages</a>.
+                    a new parser into the fold and thus supporting more languages. The end goal is to support most, if not all, <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language" target="_blank">Lightweight Markup Languages</a>.
                 </p>
             </div>
         );
@@ -205,7 +204,7 @@ class Element extends React.PureComponent {
         )
     }
 
-    getBadgeColorClassName(badgeType) {
+    getBadgeColorClassName() {
         switch (this.props.status) {
             case ElementStatus.InProgress:
                 return Style.badgeInfo;
