@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import "bootstrap";
 
+import "./images/logo-og.png";
 import { RoutePaths } from "./routes";
 import { Home } from "./views/home";
 import { OnlineParser } from "./views/online-parser";

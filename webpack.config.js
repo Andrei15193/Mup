@@ -103,7 +103,7 @@ module.exports = {
             { property: "og:description", content: "Mup is a cross-platform library written in C# that parses Creole markup into a common representation that later can be translated into HTML or any other format." },
             { property: "og:url", content: "http://www.mup-project.net/" },
             { property: "og:type", content: "website" },
-            { property: "og:image", content: "http://www.mup-project.net/logo.png" }
+            { property: "og:image", content: "http://www.mup-project.net/logo-og.png" }
         ])
     ].filter(plugin => !!plugin)
 };
