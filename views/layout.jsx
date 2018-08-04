@@ -13,12 +13,11 @@ export class Page extends React.PureComponent {
 
     render() {
         return (
-            <div className={[Style.minHeight100, Style.dFlex, Style.flexColumn, Style.container, Style.px2].join(" ")}>
-                <h1 className={[Style.mt4, Style.mb3].join(" ")}>
+            <div className={[Style.noHeight, Style.minHeight100, Style.dFlex, Style.flexColumn, Style.container, Style.px2].join(" ")}>
+                <h1 className={[Style.mt4, Style.mb3, Style.flexNoShrink].join(" ")}>
                     <img src={LogoUrl} alt="logo" /> <abbr title="MarkUp Parser">Mup</abbr> <small>Markup for Everyone</small>
                 </h1>
-
-                <div>
+                <div className={Style.flexNoShrink}>
                     <ul className={[Style.nav, Style.navPills, Style.pAuto].join(" ")}>
                         <NavItem exact path={Routes.home()}>Home</NavItem>
                         <NavItem path={Routes.onlineParser()}>Online Parser</NavItem>
@@ -29,7 +28,7 @@ export class Page extends React.PureComponent {
                 <div className={[Style.px3, Style.py4, Style.flexFill].join(" ")}>
                     {this.props.children}
                 </div>
-                <div>
+                <div className={Style.flexNoShrink}>
                     <p className={Style.textCenter}>
                         Mup Copyright &copy; 2018 Andrei Fangli<br />
                         <a href="http://www.mup-project.net/">www.mup-project.net</a>
@@ -40,7 +39,7 @@ export class Page extends React.PureComponent {
     }
 };
 
-const NavItem =  withRouter(
+const NavItem = withRouter(
     class extends React.PureComponent {
         static get propTypes() {
             return {
