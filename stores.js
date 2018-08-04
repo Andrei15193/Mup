@@ -14,7 +14,8 @@ export class EditorStore {
         const handle = function (data) {
             if (data.action === "update" && data.state === ActionState.completed) {
                 this.text = data.text;
-                sessionStorage.setItem(sessionStorageId, this.text);
+                if (sessionStorage)
+                    sessionStorage.setItem(sessionStorageId, this.text);
                 propertyChangedEventHandler.invoke("text");
             }
         }.bind(this);
@@ -24,7 +25,10 @@ export class EditorStore {
             .onSubscribed
             .add(args => {
                 if (args.listenerCount === 1 && handleId === null) {
-                    this.text = (sessionStorage.getItem(sessionStorageId) || "");
+                    if (sessionStorage)
+                        this.text = (sessionStorage.getItem(sessionStorageId) || "");
+                    else
+                        this.text = "";
                     propertyChangedEventHandler.invoke("text");
 
                     handleId = dispatcher.register(handle);
