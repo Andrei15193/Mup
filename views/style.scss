@@ -7,20 +7,12 @@
     align-items: stretch;
 }
 
-.flex-no-shrink {
-    flex-shrink: 0;
-}
-
 .resize-none {
     resize: none;
 }
 
 html, body, body > div {
     height: 100%;
-}
-
-.no-height {
-    height: 0;
 }
 
 .min-height-100 {
