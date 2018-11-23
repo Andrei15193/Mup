@@ -1,14 +1,47 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { HashRouter, Route, Switch } from "react-router-dom";
+import { HashRouter, Route, Switch, withRouter } from "react-router-dom";
 import "bootstrap";
 
 import "./images/logo-og.png";
 import { RoutePaths } from "./routes";
 import { Home } from "./views/home";
 import { OnlineParser } from "./views/online-parser";
+import { DependencyContainer } from "./dependency-container";
 import { Documentation } from "./views/documentation";
 import { License } from "./views/license";
+
+const RouteNavigation = withRouter(
+    class extends React.PureComponent {
+        constructor(props) {
+            super(props);
+        }
+
+        componentWillMount() {
+            this._routeChanged();
+        }
+
+        componentDidUpdate(prevProps) {
+            if (this.props.location !== prevProps.location)
+                this._routeChanged();
+        }
+
+        _routeChanged() {
+            DependencyContainer.api.postAsync("/api/logs/navigations", this.props.location.pathname);
+        }
+
+        render() {
+            return (
+                <Switch>
+                    <Route exact path={RoutePaths.home} component={Home} />
+                    <Route path={RoutePaths.onlineParser} component={OnlineParser} />
+                    <Route path={RoutePaths.documentation} component={Documentation} />
+                    <Route path={RoutePaths.license} component={License} />
+                </Switch>
+            );
+        }
+    }
+)
 
 class App extends React.PureComponent {
     constructor(props) {
@@ -18,12 +51,7 @@ class App extends React.PureComponent {
     render() {
         return (
             <HashRouter hashType="noslash">
-                <Switch>
-                    <Route exact path={RoutePaths.home} component={Home} />
-                    <Route path={RoutePaths.onlineParser} component={OnlineParser} />
-                    <Route path={RoutePaths.documentation} component={Documentation} />
-                    <Route path={RoutePaths.license} component={License} />
-                </Switch>
+                <RouteNavigation />
             </HashRouter>
         );
     }
