@@ -31,7 +31,7 @@ export class Page extends React.PureComponent {
                 </div>
                 <div>
                     <p className={Style.textCenter}>
-                        Mup Copyright &copy; 2018 Andrei Fangli<br />
+                        Mup Copyright &copy; 2019 Andrei Fangli<br />
                         <a href="http://www.mup-project.net/">www.mup-project.net</a>
                     </p>
                 </div>
