@@ -1,13 +1,11 @@
 export const RoutePaths = {
     "home": "/",
-    "onlineParser": "/online-parser",
     "documentation": "/documentation/:member?/:framework?",
     "license": "/license"
 };
 
 export const Routes = {
     home: fillParameters.bind({ route: RoutePaths.home }),
-    onlineParser: fillParameters.bind({ route: RoutePaths.onlineParser }),
     documentation: fillParameters.bind({ route: RoutePaths.documentation }),
     license: fillParameters.bind({ route: RoutePaths.license })
 };

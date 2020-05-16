@@ -21,7 +21,6 @@ export class Page extends React.PureComponent {
                 <div>
                     <ul className={[Style.nav, Style.navPills, Style.pAuto].join(" ")}>
                         <NavItem exact path={Routes.home()}>Home</NavItem>
-                        <NavItem path={Routes.onlineParser()}>Online Parser</NavItem>
                         <NavItem path={Routes.documentation()}>Documentation</NavItem>
                         <NavItem path={Routes.license()}>License</NavItem>
                     </ul>
