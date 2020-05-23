@@ -4,7 +4,7 @@ using System.Threading;
 using Mup.Creole;
 using Xunit;
 
-namespace Mup.Tests.Net45
+namespace Mup.Tests
 {
     public class CreoleParseTree_BeginEndVisit
     {

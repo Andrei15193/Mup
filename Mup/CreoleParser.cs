@@ -6,11 +6,9 @@ using System.Text;
 using Mup.Creole;
 using Mup.Creole.ElementProcessors;
 using Mup.Creole.Elements;
-using static Mup.Creole.CreoleTokenCode;
-#if netstandard10
 using System.Threading;
 using System.Threading.Tasks;
-#endif
+using static Mup.Creole.CreoleTokenCode;
 
 namespace Mup
 {
@@ -225,7 +223,6 @@ namespace Mup
             return TaskAsyncOperationHelper.GetResult<IParseTree>(this, asyncResult);
         }
 
-#if netstandard10
         /// <summary>Asynchronously parses the given <paramref name="text"/>.</summary>
         /// <param name="text">The text to parse.</param>
         /// <returns>Returns an <see cref="IParseTree"/> wrapped in a <see cref="Task{TResult}"/> that can eventually be traversed using a <see cref="ParseTreeVisitor"/>.</returns>
@@ -315,7 +312,6 @@ namespace Mup
                 return parseTree;
             }
         }
-#endif
 
         private IParseTree _Parse(ReadOnlyCollection<CreoleToken> tokens)
         {
@@ -359,7 +355,6 @@ namespace Mup
             return new CreoleParseTree(creoleElements);
         }
 
-#if netstandard10
         private async Task<IParseTree> _ParseAsync(ReadOnlyCollection<CreoleToken> tokens, CancellationToken cancellationToken)
         {
             var context = new CreoleParserContext(Options.InlineHyperlinkProtocols);
@@ -411,6 +406,5 @@ namespace Mup
                 creoleElements.Add(elementInfo.Element);
             return new CreoleParseTree(creoleElements);
         }
-#endif
     }
 }

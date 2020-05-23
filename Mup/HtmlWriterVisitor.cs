@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-#if netstandard10
 using System.Threading;
 using System.Threading.Tasks;
-#endif
-#if net20
-using static Mup.StringHelper;
-#else
 using static System.String;
-#endif
 
 namespace Mup
 {
@@ -106,13 +100,11 @@ namespace Mup
         protected internal override string GetResult()
             => _result;
 
-#if netstandard10
         /// <summary>Asynchronously initializes the visitor. This method is called before any visit method.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
         /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal sealed override Task BeginVisitAsync(CancellationToken cancellationToken)
             => base.BeginVisitAsync(cancellationToken);
-#endif
 
         /// <summary>Initializes the visitor. This method is called before any visit method.</summary>
         protected internal sealed override void BeginVisit()
@@ -123,13 +115,11 @@ namespace Mup
             _htmlStringBuilder = (_wrappedBuilder ?? new StringBuilder());
         }
 
-#if netstandard10
         /// <summary>Asynchronously completes the visit operation. This method is called after all visit methods.</summary>
         /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
         /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
         protected internal sealed override Task EndVisitAsync(CancellationToken cancellationToken)
             => base.EndVisitAsync(cancellationToken);
-#endif
 
         /// <summary>Completes the visit operation. This method is called after all visit methods.</summary>
         protected internal sealed override void EndVisit()

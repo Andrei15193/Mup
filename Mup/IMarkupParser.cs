@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
-#if netstandard10
 using System.Threading;
 using System.Threading.Tasks;
-#endif
 
 namespace Mup
 {
@@ -129,7 +127,6 @@ namespace Mup
         /// <exception cref="System.ArgumentException">Thrown when <paramref name="asyncResult"/> was not returned by one of the Begin methods of the current instance.</exception>
         IParseTree EndParse(IAsyncResult asyncResult);
 
-#if netstandard10
         /// <summary>Asynchronously parses the given <paramref name="text"/>.</summary>
         /// <param name="text">The text to parse.</param>
         /// <returns>Returns an <see cref="IParseTree"/> wrapped in a <see cref="Task{TResult}"/> that can eventually be traversed using a <see cref="ParseTreeVisitor"/>.</returns>
@@ -172,6 +169,5 @@ namespace Mup
         /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="reader"/> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentException">Thrown when <paramref name="bufferSize"/> is negative or 0 (zero).</exception>
         Task<IParseTree> ParseAsync(TextReader reader, int bufferSize, CancellationToken cancellationToken);
-#endif
     }
 }

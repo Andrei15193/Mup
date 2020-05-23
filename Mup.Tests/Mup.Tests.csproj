@@ -1,44 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netcoreapp1.0;netstandard1.5</TargetFrameworks>
-    <IsPackable>False</IsPackable>
-  </PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 
-  <!-- Custom properties for each target framework -->
-  <PropertyGroup Label="Custom" Condition="'$(TargetFramework)'=='net45'">
-    <MupAssemblyLocation>..\Mup\bin\$(Configuration)\net45\Mup.dll</MupAssemblyLocation>
-  </PropertyGroup>
-
-  <PropertyGroup Label="Custom" Condition="'$(TargetFramework)'=='netcoreapp1.0'">
-    <MupAssemblyLocation>..\Mup\bin\$(Configuration)\netcoreapp1.0\Mup.dll</MupAssemblyLocation>
-  </PropertyGroup>
-
-  <PropertyGroup Label="Custom" Condition="'$(TargetFramework)'=='netstandard1.5'">
-    <MupAssemblyLocation>..\Mup\bin\$(Configuration)\netstandard1.0\Mup.dll</MupAssemblyLocation>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>Mup.Tests.snk</AssemblyOriginatorKeyFile>
-    <DelaySign>False</DelaySign>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <GenerateFullPaths>True</GenerateFullPaths>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    <PackageReference Include="coverlet.collector" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <!-- <ProjectReference Include="..\Mup\Mup.csproj" /> -->
-    <Reference Include="Mup.dll">
-      <HintPath>$(MupAssemblyLocation)</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Mup\Mup.csproj" />
   </ItemGroup>
 
 </Project>

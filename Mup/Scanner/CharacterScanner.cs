@@ -1,10 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-#if netstandard10
 using System.Threading;
 using System.Threading.Tasks;
-#endif
 
 namespace Mup.Scanner
 {
@@ -48,7 +46,6 @@ namespace Mup.Scanner
             ScanCompleted();
         }
 
-#if netstandard10
         internal async Task ScanAsync(string text, CancellationToken cancellationToken)
         {
             if (text == null)
@@ -97,7 +94,6 @@ namespace Mup.Scanner
 
             ScanCompleted();
         }
-#endif
 
         protected int Line { get; private set; }
 

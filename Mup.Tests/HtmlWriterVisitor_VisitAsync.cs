@@ -2,7 +2,7 @@
 using Xunit;
 using static Mup.Tests.HtmlWriterVisitorTestData;
 
-namespace Mup.Tests.NetStandard10
+namespace Mup.Tests
 {
     public class HtmlWriterVisitor_VisitAsync
     {

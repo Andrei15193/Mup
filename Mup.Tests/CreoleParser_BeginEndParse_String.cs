@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Xunit;
 using static Mup.Tests.CreoleToHtmlTestData;
 
-namespace Mup.Tests.NetCore10
+namespace Mup.Tests
 {
     public class CreoleParser_BeginEndParse_String
     {

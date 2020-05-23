@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Mup.Creole;
 using Xunit;
 using static Mup.Tests.CreoleScannerTestData;
 using static Mup.Tests.ScannerTestData;
 
-namespace Mup.Tests.NetStandard10
+namespace Mup.Tests
 {
-    public class CreoleScanner_Scan
+    public class CreoleScanner_ScanAsync
     {
         private static readonly CreoleScanner _scanner = new CreoleScanner();
 
@@ -22,21 +24,21 @@ namespace Mup.Tests.NetStandard10
         [Fact(DisplayName = (_textMethod + nameof(CannotScanFromNullText)))]
         public void CannotScanFromNullText()
         {
-            Assert.Throws<ArgumentNullException>(() => _scanner.Scan(text: null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => _scanner.ScanAsync(text: null, cancellationToken: CancellationToken.None));
         }
 
         [Trait("Class", nameof(CreoleScanner))]
         [Fact(DisplayName = (_readerMethod + nameof(CannotScanFromNullTextReader)))]
         public void CannotScanFromNullTextReader()
         {
-            Assert.Throws<ArgumentNullException>(() => _scanner.Scan(reader: null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => _scanner.ScanAsync(reader: null, cancellationToken: CancellationToken.None));
         }
 
         [Trait("Class", nameof(CreoleScanner))]
-        [Fact(DisplayName = (_readerWithBufferMethod + nameof(CannotScanFromNullTextReader)))]
+        [Fact(DisplayName = (_readerWithBufferMethod + nameof(CannotScanFromNullTextReaderWithBuffer)))]
         public void CannotScanFromNullTextReaderWithBuffer()
         {
-            Assert.Throws<ArgumentNullException>(() => _scanner.Scan(reader: null, bufferSize: 0));
+            Assert.ThrowsAsync<ArgumentNullException>(() => _scanner.ScanAsync(reader: null, bufferSize: 0, cancellationToken: CancellationToken.None));
         }
 
         [Trait("Class", nameof(CreoleScanner))]
@@ -45,25 +47,27 @@ namespace Mup.Tests.NetStandard10
         public void CannotScanWithNegativeOrZeroBufferSize(int bufferSize)
         {
             using (var reader = new StringReader(string.Empty))
-                Assert.Throws<ArgumentException>(() => _scanner.Scan(reader, bufferSize));
+                Assert.ThrowsAsync<ArgumentException>(() => _scanner.ScanAsync(reader, bufferSize, CancellationToken.None));
         }
 
         [Trait("Class", nameof(CreoleScanner))]
         [Theory(DisplayName = (_textMethod + nameof(ScanText)))]
         [MemberData(nameof(TextToTokensTestData), MemberType = typeof(CreoleScannerTestData))]
 
-        public void ScanText(string text, IEnumerable<object> tokens)
+        public async Task ScanText(string text, IEnumerable<object> tokens)
         {
-            _scanner.Scan(text);
+            await _scanner.ScanAsync(text, CancellationToken.None);
             Assert.Equal(tokens.Cast<CreoleTokenCode>().ToArray(), _scanner.Result.Select(token => token.Code).ToArray());
         }
 
         [Trait("Class", nameof(CreoleScanner))]
         [Theory(DisplayName = (_textMethod + nameof(ScannedTextFromTokens)))]
         [MemberData(nameof(TextFromTokensTestData), MemberType = typeof(CreoleScannerTestData))]
-        public void ScannedTextFromTokens(string text, string textFromTokens)
+
+        public async Task ScannedTextFromTokens(string text, string textFromTokens)
         {
-            _scanner.Scan(text);
+            await _scanner.ScanAsync(text, CancellationToken.None);
+            var scanResult = _scanner.Result;
             Assert.Equal(
                 textFromTokens,
                 _scanner
@@ -75,25 +79,28 @@ namespace Mup.Tests.NetStandard10
         }
 
         [Trait("Class", nameof(CreoleScanner))]
-        [Theory(DisplayName = (_readerMethod + nameof(ScanTextUsingReader)))]
+        [Theory(DisplayName = (_readerMethod + nameof(ScanTextWithReader)))]
         [MemberData(nameof(TextToTokensTestData), MemberType = typeof(CreoleScannerTestData))]
-        public void ScanTextUsingReader(string text, IEnumerable<object> tokens)
+
+        public async Task ScanTextWithReader(string text, IEnumerable<object> tokens)
         {
             using (var stringReader = new StringReader(text))
             {
-                _scanner.Scan(stringReader);
+                await _scanner.ScanAsync(stringReader, CancellationToken.None);
                 Assert.Equal(tokens.Cast<CreoleTokenCode>().ToArray(), _scanner.Result.Select(token => token.Code).ToArray());
             }
         }
 
         [Trait("Class", nameof(CreoleScanner))]
-        [Theory(DisplayName = (_readerMethod + nameof(ScannedTextFromTokensUsingReader)))]
+        [Theory(DisplayName = (_readerMethod + nameof(ScannedTextFromTokensWithReader)))]
         [MemberData(nameof(TextFromTokensTestData), MemberType = typeof(CreoleScannerTestData))]
-        public void ScannedTextFromTokensUsingReader(string text, string textFromTokens)
+
+        public async Task ScannedTextFromTokensWithReader(string text, string textFromTokens)
         {
             using (var stringReader = new StringReader(text))
             {
-                _scanner.Scan(stringReader);
+                await _scanner.ScanAsync(stringReader, CancellationToken.None);
+                var scanResult = _scanner.Result;
                 Assert.Equal(
                     textFromTokens,
                     _scanner
@@ -106,25 +113,28 @@ namespace Mup.Tests.NetStandard10
         }
 
         [Trait("Class", nameof(CreoleScanner))]
-        [Theory(DisplayName = (_readerWithBufferMethod + nameof(ScanTextUsingReaderWithBuffer)))]
+        [Theory(DisplayName = (_readerWithBufferMethod + nameof(ScanTextWithReader)))]
         [MemberData(nameof(TextToTokensTestData), MemberType = typeof(CreoleScannerTestData))]
-        public void ScanTextUsingReaderWithBuffer(string text, IEnumerable<object> tokens)
+
+        public async Task ScanTextWithReaderAndBuffer(string text, IEnumerable<object> tokens)
         {
             using (var stringReader = new StringReader(text))
             {
-                _scanner.Scan(stringReader, 10);
+                await _scanner.ScanAsync(stringReader, 10, CancellationToken.None);
                 Assert.Equal(tokens.Cast<CreoleTokenCode>().ToArray(), _scanner.Result.Select(token => token.Code).ToArray());
             }
         }
 
         [Trait("Class", nameof(CreoleScanner))]
-        [Theory(DisplayName = (_readerWithBufferMethod + nameof(ScannedTextFromTokensUsingReaderWithBuffer)))]
+        [Theory(DisplayName = (_readerWithBufferMethod + nameof(ScannedTextFromTokensWithReader)))]
         [MemberData(nameof(TextFromTokensTestData), MemberType = typeof(CreoleScannerTestData))]
-        public void ScannedTextFromTokensUsingReaderWithBuffer(string text, string textFromTokens)
+
+        public async Task ScannedTextFromTokensWithReaderAndBuffer(string text, string textFromTokens)
         {
             using (var stringReader = new StringReader(text))
             {
-                _scanner.Scan(stringReader, 10);
+                await _scanner.ScanAsync(stringReader, 10, CancellationToken.None);
+                var scanResult = _scanner.Result;
                 Assert.Equal(
                     textFromTokens,
                     _scanner

@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using Xunit;
 
-namespace Mup.Tests.Net20
+namespace Mup.Tests
 {
     public class CreoleParser_BeginEndParse
     {

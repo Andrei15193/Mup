@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mup.Creole.Elements;
-#if netstandard10
 using System.Threading;
 using System.Threading.Tasks;
-#endif
 
 namespace Mup.Creole
 {
@@ -17,27 +15,11 @@ namespace Mup.Creole
             _elements = elements;
         }
 
-#if net20
-        public void Accept(ParseTreeVisitor visitor)
-        {
-            visitor.BeginVisit();
-            foreach (var blockElement in _elements)
-                blockElement.Accept(visitor);
-            visitor.EndVisit();
-        }
-
-        public TResult Accept<TResult>(ParseTreeVisitor<TResult> visitor)
-        {
-            Accept((ParseTreeVisitor)visitor);
-            return visitor.GetResult();
-        }
-#else
         public void Accept(ParseTreeVisitor visitor)
             => Task.Run(() => AcceptAsync(visitor, CancellationToken.None)).Wait();
 
         public TResult Accept<TResult>(ParseTreeVisitor<TResult> visitor)
             => Task.Run(() => AcceptAsync<TResult>(visitor, CancellationToken.None)).Result;
-#endif
 
         public IAsyncResult BeginAccept(ParseTreeVisitor visitor)
             => BeginAccept(visitor, null, null);
@@ -78,7 +60,6 @@ namespace Mup.Creole
         public TResult EndAccept<TResult>(IAsyncResult asyncResult)
             => TaskAsyncOperationHelper.GetResult<TResult>(this, asyncResult);
 
-#if netstandard10
         public Task AcceptAsync(ParseTreeVisitor visitor)
             => AcceptAsync(visitor, CancellationToken.None);
 
@@ -104,6 +85,5 @@ namespace Mup.Creole
             cancellationToken.ThrowIfCancellationRequested();
             return result;
         }
-#endif
     }
 }

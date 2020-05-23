@@ -3,7 +3,7 @@ using System.Linq;
 using Xunit;
 using static Mup.Tests.CreoleParseroptionsTestData;
 
-namespace Mup.Tests.NetCore10
+namespace Mup.Tests
 {
     public class CreoleParserOptions_InlineHyperlinkProtocols
     {

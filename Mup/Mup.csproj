@@ -2,36 +2,14 @@
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworks>net20;net45;netcoreapp1.0;netstandard1.0</TargetFrameworks>
-    <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>Mup.snk</AssemblyOriginatorKeyFile>
-    <DelaySign>False</DelaySign>
-    <NuspecFile>Mup.nuspec</NuspecFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp1.0'">
-    <RuntimeFrameworkVersion>1.0.0</RuntimeFrameworkVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.0'">
-    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
-  </PropertyGroup>
-
-  <PropertyGroup>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <GenerateFullPaths>True</GenerateFullPaths>
-    <DefineConstants Condition="'$(Configuration)'=='Debug'">DEBUG;$(DefineConstants)</DefineConstants>
-    <DefineConstants Condition="'$(Configuration)'=='Release'">RELEASE;$(DefineConstants)</DefineConstants>
-    <DefineConstants Condition="'$(TargetFramework)'=='net20'">net20;$(DefineConstants)</DefineConstants>
-    <DefineConstants Condition="'$(TargetFramework)'=='net45'">net45;$(DefineConstants)</DefineConstants>
-    <DefineConstants Condition="'$(TargetFramework)'=='netcoreapp1.0'">netcoreapp10;$(DefineConstants)</DefineConstants>
-    <DefineConstants Condition="'$(TargetFramework)'=='net20' OR '$(TargetFramework)'=='net45'">net;$(DefineConstants)</DefineConstants>
-    <DefineConstants Condition="'$(TargetFramework)'=='netstandard1.0' OR '$(TargetFramework)'=='net45' OR '$(TargetFramework)'=='netcoreapp1.0'">netstandard10;$(DefineConstants)</DefineConstants>
+    <NuspecFile>Mup.nuspec</NuspecFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <TreatSpecificWarningsAsErrors />
   </PropertyGroup>
 
 </Project>

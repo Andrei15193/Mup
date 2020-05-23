@@ -1,48 +1,23 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 using static Mup.Tests.CreoleToHtmlTestData;
 
-namespace Mup.Tests.Net20
+namespace Mup.Tests
 {
-    public class CreoleParser_Parse_TextReader_Int32
+    public class CreoleParser_BeginEndParse_TextReader
     {
         private static readonly CreoleParser _parser = new CreoleParser();
 
-        private const string _method = (nameof(CreoleParser) + ".Parse(TextReader, int): ");
-        [Trait("Class", nameof(CreoleParser))]
-        [Fact(DisplayName = (_method + nameof(TryingToParseNullThrowsException)))]
-        public void TryingToParseNullThrowsException()
-        {
-            Assert.Throws<ArgumentNullException>(() => _parser.Parse(reader: null));
-        }
-
-        [Trait("Class", nameof(CreoleParser))]
-        [Fact(DisplayName = (_method + nameof(TryingToParseWithNegativeBufferSizeThrowsException)))]
-        public void TryingToParseWithNegativeBufferSizeThrowsException()
-        {
-            using (var reader = new StringReader(string.Empty))
-                Assert.Throws<ArgumentException>(() => _parser.Parse(reader, -1));
-        }
-
-        [Trait("Class", nameof(CreoleParser))]
-        [Fact(DisplayName = (_method + nameof(TryingToParseWithZeroBufferSizeThrowsException)))]
-        public void TryingToParseWithZeroBufferSizeThrowsException()
-        {
-            using (var reader = new StringReader(string.Empty))
-                Assert.Throws<ArgumentException>(() => _parser.Parse(reader, 0));
-        }
+        private const string _method = (nameof(CreoleParser) + ".BeginParse(TextReader)/" + nameof(CreoleParser) + ".EndParse(IAsyncResult)" + ": ");
 
         [Trait("Class", nameof(CreoleParser))]
         [Theory(DisplayName = (_method + nameof(ParseHeadingsToHtml)))]
         [MemberData(nameof(HeadingsToHtmlTestCases), MemberType = typeof(CreoleToHtmlTestData))]
         public void ParseHeadingsToHtml(string text, string expectedHtml)
         {
-            using (var stringReader = new StringReader(text))
+            using (var stringReader = new System.IO.StringReader(text))
             {
-                var actualHtml = _parser.Parse(stringReader, 1).Accept(new HtmlWriterVisitor());
+                var parseTree =_parser.EndParse(_parser.BeginParse(stringReader));
+                var actualHtml = parseTree.EndAccept<string>(parseTree.BeginAccept(new HtmlWriterVisitor()));
                 Assert.Equal(expectedHtml, actualHtml);
             }
         }
@@ -52,9 +27,10 @@ namespace Mup.Tests.Net20
         [MemberData(nameof(ParagraphsToHtmlTestCases), MemberType = typeof(CreoleToHtmlTestData))]
         public void ParseParagraphsToHtml(string text, string expectedHtml)
         {
-            using (var stringReader = new StringReader(text))
+            using (var stringReader = new System.IO.StringReader(text))
             {
-                var actualHtml = _parser.Parse(stringReader, 1).Accept(new HtmlWriterVisitor());
+                var parseTree =_parser.EndParse(_parser.BeginParse(stringReader));
+                var actualHtml = parseTree.EndAccept<string>(parseTree.BeginAccept(new HtmlWriterVisitor()));
                 Assert.Equal(expectedHtml, actualHtml);
             }
         }
@@ -64,9 +40,10 @@ namespace Mup.Tests.Net20
         [MemberData(nameof(PreformattedBlocksToHtmlTestCases), MemberType = typeof(CreoleToHtmlTestData))]
         public void ParsePreforamattedBlocksToHtml(string text, string expectedHtml)
         {
-            using (var stringReader = new StringReader(text))
+            using (var stringReader = new System.IO.StringReader(text))
             {
-                var actualHtml = _parser.Parse(stringReader, 1).Accept(new HtmlWriterVisitor());
+                var parseTree =_parser.EndParse(_parser.BeginParse(stringReader));
+                var actualHtml = parseTree.EndAccept<string>(parseTree.BeginAccept(new HtmlWriterVisitor()));
                 Assert.Equal(expectedHtml, actualHtml);
             }
         }
@@ -76,9 +53,10 @@ namespace Mup.Tests.Net20
         [MemberData(nameof(TablesToHtmlTestCases), MemberType = typeof(CreoleToHtmlTestData))]
         public void ParseTablesToHtml(string text, string expectedHtml)
         {
-            using (var stringReader = new StringReader(text))
+            using (var stringReader = new System.IO.StringReader(text))
             {
-                var actualHtml = _parser.Parse(stringReader, 1).Accept(new HtmlWriterVisitor());
+                var parseTree =_parser.EndParse(_parser.BeginParse(stringReader));
+                var actualHtml = parseTree.EndAccept<string>(parseTree.BeginAccept(new HtmlWriterVisitor()));
                 Assert.Equal(expectedHtml, actualHtml);
             }
         }
@@ -88,9 +66,10 @@ namespace Mup.Tests.Net20
         [MemberData(nameof(ListsToHtmlTestsCases), MemberType = typeof(CreoleToHtmlTestData))]
         public void ParseListsToHtml(string text, string expectedHtml)
         {
-            using (var stringReader = new StringReader(text))
+            using (var stringReader = new System.IO.StringReader(text))
             {
-                var actualHtml = _parser.Parse(stringReader, 1).Accept(new HtmlWriterVisitor());
+                var parseTree =_parser.EndParse(_parser.BeginParse(stringReader));
+                var actualHtml = parseTree.EndAccept<string>(parseTree.BeginAccept(new HtmlWriterVisitor()));
                 Assert.Equal(expectedHtml, actualHtml);
             }
         }
@@ -100,9 +79,10 @@ namespace Mup.Tests.Net20
         [MemberData(nameof(EscapeCharacterToHtmlTestCases), MemberType = typeof(CreoleToHtmlTestData))]
         public void ParsesEscapeCharactersToHtml(string text, string expectedHtml)
         {
-            using (var stringReader = new StringReader(text))
+            using (var stringReader = new System.IO.StringReader(text))
             {
-                var actualHtml = _parser.Parse(stringReader, 1).Accept(new HtmlWriterVisitor());
+                var parseTree =_parser.EndParse(_parser.BeginParse(stringReader));
+                var actualHtml = parseTree.EndAccept<string>(parseTree.BeginAccept(new HtmlWriterVisitor()));
                 Assert.Equal(expectedHtml, actualHtml);
             }
         }
@@ -112,9 +92,10 @@ namespace Mup.Tests.Net20
         [MemberData(nameof(RichTextToHtmlTestCases), MemberType = typeof(CreoleToHtmlTestData))]
         public void ParsesRichTextToHtml(string text, string expectedHtml)
         {
-            using (var stringReader = new StringReader(text))
+            using (var stringReader = new System.IO.StringReader(text))
             {
-                var actualHtml = _parser.Parse(stringReader, 1).Accept(new HtmlWriterVisitor());
+                var parseTree =_parser.EndParse(_parser.BeginParse(stringReader));
+                var actualHtml = parseTree.EndAccept<string>(parseTree.BeginAccept(new HtmlWriterVisitor()));
                 Assert.Equal(expectedHtml, actualHtml);
             }
         }
@@ -124,9 +105,10 @@ namespace Mup.Tests.Net20
         [MemberData(nameof(HorizontalRuleToHtmlTestsCases), MemberType = typeof(CreoleToHtmlTestData))]
         public void ParsesHorizontalRuleToHtml(string text, string expectedHtml)
         {
-            using (var stringReader = new StringReader(text))
+            using (var stringReader = new System.IO.StringReader(text))
             {
-                var actualHtml = _parser.Parse(stringReader, 1).Accept(new HtmlWriterVisitor());
+                var parseTree =_parser.EndParse(_parser.BeginParse(stringReader));
+                var actualHtml = parseTree.EndAccept<string>(parseTree.BeginAccept(new HtmlWriterVisitor()));
                 Assert.Equal(expectedHtml, actualHtml);
             }
         }
@@ -136,9 +118,10 @@ namespace Mup.Tests.Net20
         [MemberData(nameof(PluginToHtmlTestsCases), MemberType = typeof(CreoleToHtmlTestData))]
         public void ParsesPluginsToHtml(string text, string expectedHtml)
         {
-            using (var stringReader = new StringReader(text))
+            using (var stringReader = new System.IO.StringReader(text))
             {
-                var actualHtml = _parser.Parse(stringReader, 1).Accept(new HtmlWriterVisitor());
+                var parseTree =_parser.EndParse(_parser.BeginParse(stringReader));
+                var actualHtml = parseTree.EndAccept<string>(parseTree.BeginAccept(new HtmlWriterVisitor()));
                 Assert.Equal(expectedHtml, actualHtml);
             }
         }
@@ -149,9 +132,10 @@ namespace Mup.Tests.Net20
         [MemberData(nameof(CreoleWikiTestsCases), MemberType = typeof(CreoleToHtmlTestData))]
         public void CreoleSiteTestsCase(string text, string expectedHtml)
         {
-            using (var stringReader = new StringReader(text))
+            using (var stringReader = new System.IO.StringReader(text))
             {
-                var actualHtml = _parser.Parse(stringReader, 1).Accept(new HtmlWriterVisitor());
+                var parseTree =_parser.EndParse(_parser.BeginParse(stringReader));
+                var actualHtml = parseTree.EndAccept<string>(parseTree.BeginAccept(new HtmlWriterVisitor()));
                 Assert.Equal(expectedHtml, actualHtml);
             }
         }

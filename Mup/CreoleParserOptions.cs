@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-#if net20
-using static Mup.StringHelper;
-#else
 using static System.String;
-#endif
 
 namespace Mup
 {

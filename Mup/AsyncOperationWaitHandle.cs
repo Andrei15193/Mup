@@ -10,19 +10,7 @@ namespace Mup
 
         internal AsyncOperationWaitHandle()
         {
-#if net
-            SafeWaitHandle = null;
-#endif
         }
-
-#if net
-        [ObsoleteAttribute("Use the SafeWaitHandle property instead.")]
-        public override IntPtr Handle
-        {
-            get => throw new NotSupportedException();
-            set => throw new NotSupportedException();
-        }
-#endif
 
         public bool IsSet
             => _isSet;
@@ -60,20 +48,6 @@ namespace Mup
             return true;
         }
 
-#if net
-        public override bool WaitOne(int millisecondsTimeout, bool exitContext)
-        {
-            if (_isSet)
-                return true;
-
-            lock (_lock)
-                while (!_isSet)
-                    Monitor.Wait(_lock, millisecondsTimeout, exitContext);
-
-            return true;
-        }
-#endif
-
         public override bool WaitOne(TimeSpan timeout)
         {
             if (_isSet)
@@ -85,19 +59,5 @@ namespace Mup
 
             return true;
         }
-
-#if net
-        public override bool WaitOne(TimeSpan timeout, bool exitContext)
-        {
-            if (_isSet)
-                return true;
-
-            lock (_lock)
-                while (!_isSet)
-                    Monitor.Wait(_lock, timeout, exitContext);
-
-            return true;
-        }
-#endif
     }
 }
