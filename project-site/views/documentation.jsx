@@ -942,7 +942,7 @@ class AvailableFrameworks extends React.PureComponent {
                 const routeParams = (isSelected ? { member: this.props.memberId } : { member: this.props.memberId, framework: availableFramework });
 
                 elements.push(
-                    <Link key={availableFramework} to={Routes.documentation(routeParams)} className="badge badge-type" onClick={e => e.target.blur()}>
+                    <Link key={availableFramework} to={Routes.documentation(routeParams)} className={`badge ${badgeType}`} onClick={e => e.target.blur()}>
                         {(AvailableFrameworkDisplayName[availableFramework] || availableFramework)}
                     </Link>
                 );

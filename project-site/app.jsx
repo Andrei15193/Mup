@@ -42,9 +42,4 @@ class App extends React.PureComponent {
     }
 }
 
-const appElement = document.createElement("div");
-if (document.body.children.length > 0)
-    document.body.insertBefore(appElement, document.body.children[0]);
-else
-    document.body.appendChild(appElement);
-ReactDOM.render(<App />, appElement);
+ReactDOM.render(<App />, document.getElementById("app"));
