@@ -12,7 +12,7 @@ export class Page extends React.PureComponent {
 
     render() {
         return (
-            <div className="min-height-100 d-flex flex-column container px2">
+            <div className="min-height-100 d-flex flex-column container px-2">
                 <h1 className="mt4 mb3">
                     <img src={LogoUrl} alt="logo" /> <abbr title="MarkUp Parser">Mup</abbr> <small>Markup for Everyone</small>
                 </h1>
@@ -24,7 +24,7 @@ export class Page extends React.PureComponent {
                         <NavItem path={Routes.license()}>License</NavItem>
                     </ul>
                 </div>
-                <div className="px3 py4 flex-fill">
+                <div className="px-3 py-4 flex-fill">
                     {this.props.children}
                 </div>
                 <div>
