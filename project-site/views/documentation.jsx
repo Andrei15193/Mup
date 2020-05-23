@@ -950,7 +950,7 @@ class AvailableFrameworks extends React.PureComponent {
             }
         );
         return (
-            <div className="mb3">
+            <div className="mb-3">
                 {elements}
             </div>
         );

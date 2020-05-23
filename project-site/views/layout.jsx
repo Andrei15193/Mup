@@ -13,7 +13,7 @@ export class Page extends React.PureComponent {
     render() {
         return (
             <div className="min-height-100 d-flex flex-column container px-2">
-                <h1 className="mt4 mb3">
+                <h1 className="mt-4 mb-3">
                     <img src={LogoUrl} alt="logo" /> <abbr title="MarkUp Parser">Mup</abbr> <small>Markup for Everyone</small>
                 </h1>
 
