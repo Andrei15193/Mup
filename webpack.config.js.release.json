@@ -1,7 +1,0 @@
-{
-    "axios": {
-        "headers": {
-            "Content-Type": "application/json"
-        }
-    }
-}

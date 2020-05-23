@@ -15,8 +15,7 @@ module.exports = {
     resolve: {
         extensions: [".js", ".jsx"],
         alias: {
-            "mup/style": path.join(__dirname, "./views/style.scss"),
-            "mup/config": path.join(__dirname, (isProduction ? "./webpack.config.js.release.json" : "./webpack.config.js.debug.json"))
+            "mup/style": path.join(__dirname, "./views/style.scss")
         }
     },
     devtool: (isProduction ? false : "source-map"),
