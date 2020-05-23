@@ -2,9 +2,14 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build",
+            "label": "build",
+            "command": "dotnet",
             "type": "shell",
-            "command": "msbuild /t:restore,build /p:Configuration=Debug",
+            "args": [
+                "build",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -12,87 +17,18 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "Test .NET Framework 2.0",
-            "dependsOn": "Build",
-            "type": "process",
+            "label": "test",
             "command": "dotnet",
+            "type": "shell",
             "args": [
                 "test",
-                "${workspaceFolder}/Mup.Tests.Net20/Mup.Tests.Net20.csproj",
-                "--no-build"
-            ],
-            "group": "test",
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "Test .NET Framework 4.5",
-            "dependsOn": "Build",
-            "type": "process",
-            "command": "dotnet",
-            "args": [
-                "test",
-                "${workspaceFolder}/Mup.Tests.Net45/Mup.Tests.Net45.csproj",
-                "--no-build"
-            ],
-            "group": "test",
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "Test .NET Core",
-            "dependsOn": "Build",
-            "type": "process",
-            "command": "dotnet",
-            "args": [
-                "test",
-                "${workspaceFolder}/Mup.Tests.NetCore10/Mup.Tests.NetCore10.csproj",
-                "--no-build"
-            ],
-            "group": "test",
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "Test .NET Standard 1.0",
-            "dependsOn": "Build",
-            "type": "process",
-            "command": "dotnet",
-            "args": [
-                "test",
-                "${workspaceFolder}/Mup.Tests.NetStandard10/Mup.Tests.NetStandard10.csproj",
-                "--no-build"
-            ],
-            "group": "test",
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "Test",
-            "dependsOn": [
-                "Test .NET Framework 2.0",
-                "Test .NET Framework 4.5",
-                "Test .NET Core",
-                "Test .NET Standard 1.0"
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
             ],
             "group": {
                 "kind": "test",
                 "isDefault": true
             }
-        },
-        {
-            "label": "Release",
-            "type": "shell",
-            "command": "msbuild /t:restore,build /p:Configuration=Release",
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "Pack",
-            "type": "shell",
-            "command": "msbuild /t:restore,rebuild,pack /p:Configuration=Release",
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "Clean",
-            "type": "shell",
-            "command": "msbuild /t:clean /p:Configuration=Debug;msbuild /t:clean /p:Configuration=Release",
-            "problemMatcher": "$msCompile"
         }
     ]
 }
