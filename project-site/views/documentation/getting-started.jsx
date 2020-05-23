@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 
-import Style from "mup/style";
 import { Routes } from "../../routes";
 import MsdnLinks from "./msdn-links.json";
 
@@ -196,7 +195,7 @@ class Keyword extends React.PureComponent {
 
     render() {
         return (
-            <span className={Style.textPrimary}>
+            <span className="text-primary">
                 {this.props.children}
             </span>
         );
@@ -210,7 +209,7 @@ class StringLiteral extends React.PureComponent {
 
     render() {
         return (
-            <span className={Style.textDanger}>
+            <span className="text-danger">
                 {this.props.children}
             </span>
         );
@@ -224,7 +223,7 @@ class Comment extends React.PureComponent {
 
     render() {
         return (
-            <span className={Style.textMuted}>
+            <span className="text-muted">
                 {this.props.children}
             </span>
         );
@@ -238,7 +237,7 @@ class Tag extends React.PureComponent {
 
     render() {
         return (
-            <span className={Style.textSecondary}>
+            <span className="text-secondary">
                 {this.props.children}
             </span>
         );
@@ -252,7 +251,7 @@ class AttributeName extends React.PureComponent {
 
     render() {
         return (
-            <span className={Style.textPrimary}>
+            <span className="text-primary">
                 {this.props.children}
             </span>
         );
@@ -266,7 +265,7 @@ class AttributeValue extends React.PureComponent {
 
     render() {
         return (
-            <span className={Style.textDanger}>
+            <span className="text-danger">
                 {this.props.children}
             </span>
         );

@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import Style from "mup/style";
 import { Page } from "./layout";
 import { Routes } from "../routes";
 import { DocumentationView, FriendlyNames, LinkTo } from "./documentation/documentation-view";
@@ -72,13 +71,13 @@ class MupNamespace extends React.PureComponent {
         return (
             <div>
                 <nav aria-label="breadcrumb" role="navigation">
-                    <ol className={Style.breadcrumb}>
-                        <li className={[Style.breadcrumbItem, Style.active].join(" ")} aria-current="page">Mup</li>
+                    <ol className="breadcrumb">
+                        <li className="breadcrumbItem active" aria-current="page">Mup</li>
                     </ol>
                 </nav>
                 <h2>Mup Namespace</h2>
                 <AvailableFrameworks memberId="mup" selected={this.props.selectedFramework}>{mupNamespace.availableFrameworks}</AvailableFrameworks>
-                <table className={[Style.table, Style.tableHover].join(" ")}>
+                <table className="table table-hover">
                     <thead>
                         <tr>
                             <th>Type</th>
@@ -96,7 +95,7 @@ class MupNamespace extends React.PureComponent {
                                                 <MemberName definition={MupDefinitions[typeId]} />
                                             </Link>
                                         </td>
-                                        <td className={Style.documentationTable}>
+                                        <td className="documentation-table">
                                             <DocumentationView elements={MupDefinitions[typeId].documentation.summary} selectedFramework={this.props.selectedFramework} />
                                         </td>
                                     </tr>
@@ -120,11 +119,11 @@ class Interface extends React.PureComponent {
         return (
             <div>
                 <nav aria-label="breadcrumb" role="navigation">
-                    <ol className={Style.breadcrumb}>
-                        <li className={Style.breadcrumbItem} aria-current="page">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item" aria-current="page">
                             <Link to={Routes.documentation({ member: definition.namespaceId, framework: this.props.selectedFramework })}>{definition.namespace}</Link>
                         </li>
-                        <li className={[Style.breadcrumbItem, Style.active].join(" ")} aria-current="page">
+                        <li className="breadcrumb-item active" aria-current="page">
                             <MemberName definition={definition} />
                         </li>
                     </ol>
@@ -150,11 +149,11 @@ class Class extends React.PureComponent {
         return (
             <div>
                 <nav aria-label="breadcrumb" role="navigation">
-                    <ol className={Style.breadcrumb}>
-                        <li className={Style.breadcrumbItem} aria-current="page">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item" aria-current="page">
                             <Link to={Routes.documentation({ member: definition.namespaceId, framework: this.props.selectedFramework })}>{definition.namespace}</Link>
                         </li>
-                        <li className={[Style.breadcrumbItem, Style.active].join(" ")} aria-current="page">
+                        <li className="breadcrumb-item active" aria-current="page">
                             <MemberName definition={definition} />
                         </li>
                     </ol>
@@ -183,16 +182,16 @@ class Method extends React.PureComponent {
         return (
             <div>
                 <nav aria-label="breadcrumb" role="navigation">
-                    <ol className={Style.breadcrumb}>
-                        <li className={Style.breadcrumbItem} aria-current="page">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item" aria-current="page">
                             <Link to={Routes.documentation({ member: declaringTypeDefinition.namespaceId, framework: this.props.selectedFramework })}>{declaringTypeDefinition.namespace}</Link>
                         </li>
-                        <li className={Style.breadcrumbItem} aria-current="page">
+                        <li className="breadcrumb-item" aria-current="page">
                             <Link to={Routes.documentation({ member: declaringTypeDefinition.id, framework: this.props.selectedFramework })}>
                                 <MemberName definition={declaringTypeDefinition} />
                             </Link>
                         </li>
-                        <li className={[Style.breadcrumbItem, Style.active].join(" ")} aria-current="page">
+                        <li className="breadcrumb-item active" aria-current="page">
                             <MemberName definition={definition} />
                         </li>
                     </ol>
@@ -221,16 +220,16 @@ class Property extends React.PureComponent {
         return (
             <div>
                 <nav aria-label="breadcrumb" role="navigation">
-                    <ol className={Style.breadcrumb}>
-                        <li className={Style.breadcrumbItem} aria-current="page">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item" aria-current="page">
                             <Link to={Routes.documentation({ member: declaringTypeDefinition.namespaceId, framework: this.props.selectedFramework })}>{declaringTypeDefinition.namespace}</Link>
                         </li>
-                        <li className={Style.breadcrumbItem} aria-current="page">
+                        <li className="breadcrumb-item" aria-current="page">
                             <Link to={Routes.documentation({ member: declaringTypeDefinition.id, framework: this.props.selectedFramework })}>
                                 <MemberName definition={declaringTypeDefinition} />
                             </Link>
                         </li>
-                        <li className={[Style.breadcrumbItem, Style.active].join(" ")} aria-current="page">
+                        <li className="breadcrumb-item active" aria-current="page">
                             <MemberName definition={definition} />
                         </li>
                     </ol>
@@ -315,7 +314,7 @@ class ConstructorsList extends React.PureComponent {
             return (
                 <div>
                     <h3>Constructors</h3>
-                    <table className={[Style.table, Style.tableHover].join(" ")}>
+                    <table className="table table-hover">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -337,7 +336,7 @@ class ConstructorsList extends React.PureComponent {
                                                 </Link>
                                             </td>
                                             {this.props.includeAccessModifier ? <td><AccessModifier access={constructorDefinition.access} /></td> : null}
-                                            <td className={Style.documentationTable}>
+                                            <td className="documentation-table">
                                                 <DocumentationView elements={constructorDefinition.documentation.summary} selectedFramework={this.props.selectedFramework} />
                                             </td>
                                         </tr>
@@ -370,7 +369,7 @@ class PropertiesList extends React.PureComponent {
             return (
                 <div>
                     <h3>Properties</h3>
-                    <table className={[Style.table, Style.tableHover].join(" ")}>
+                    <table className="table table-hover">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -394,7 +393,7 @@ class PropertiesList extends React.PureComponent {
                                             <td>
                                                 <PropertyAccessor includeAccessModifier={includeAccessModifier} definition={propertyDefinition} />
                                             </td>
-                                            <td className={Style.documentationTable}>
+                                            <td className="documentation-table">
                                                 <DocumentationView elements={propertyDefinition.documentation.summary} selectedFramework={this.props.selectedFramework} />
                                             </td>
                                         </tr>
@@ -467,7 +466,7 @@ class MethodsList extends React.PureComponent {
             return (
                 <div>
                     <h3>Methods</h3>
-                    <table className={[Style.table, Style.tableHover].join(" ")}>
+                    <table className="table table-hover">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -489,7 +488,7 @@ class MethodsList extends React.PureComponent {
                                                 </Link>
                                             </td>
                                             {this.props.includeAccessModifier ? <td><AccessModifier access={methodDefinition.access} /></td> : null}
-                                            <td className={Style.documentationTable}>
+                                            <td className="documentation-table">
                                                 <DocumentationView elements={methodDefinition.documentation.summary} selectedFramework={this.props.selectedFramework} />
                                             </td>
                                         </tr>
@@ -939,11 +938,11 @@ class AvailableFrameworks extends React.PureComponent {
             this.props.children,
             availableFramework => {
                 const isSelected = (availableFramework === this.props.selected);
-                const badgeType = (isSelected ? Style.badgeSuccess : Style.badgeSecondary);
+                const badgeType = (isSelected ? "badge-success" : "badge-secondary");
                 const routeParams = (isSelected ? { member: this.props.memberId } : { member: this.props.memberId, framework: availableFramework });
 
                 elements.push(
-                    <Link key={availableFramework} to={Routes.documentation(routeParams)} className={[Style.badge, badgeType].join(" ")} onClick={e => e.target.blur()}>
+                    <Link key={availableFramework} to={Routes.documentation(routeParams)} className="badge badge-type" onClick={e => e.target.blur()}>
                         {(AvailableFrameworkDisplayName[availableFramework] || availableFramework)}
                     </Link>
                 );
@@ -951,7 +950,7 @@ class AvailableFrameworks extends React.PureComponent {
             }
         );
         return (
-            <div className={Style.mb3}>
+            <div className="mb3">
                 {elements}
             </div>
         );

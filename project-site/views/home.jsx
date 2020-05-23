@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Style from "mup/style";
 import { Page } from "./layout";
 
 export class Home extends React.PureComponent {
@@ -61,7 +60,7 @@ class LanguageSupport extends React.PureComponent {
         return (
             <div>
                 <h3>Language Support</h3>
-                <table className={[Style.table, Style.tableHover].join(" ")}>
+                <table className="table table-hover">
                     <thead>
                         <tr>
                             <th>Language</th>
@@ -198,7 +197,7 @@ class Element extends React.PureComponent {
 
     render() {
         return (
-            <span className={[Style.badge, this.getBadgeColorClassName()].join(" ")}>
+            <span className={`badge ${this.getBadgeColorClassName()}`}>
                 {this.props.name}
             </span>
         )
@@ -207,13 +206,13 @@ class Element extends React.PureComponent {
     getBadgeColorClassName() {
         switch (this.props.status) {
             case ElementStatus.InProgress:
-                return Style.badgeInfo;
+                return "badge info";
 
             case ElementStatus.Done:
-                return Style.badgeSuccess;
+                return "badge success";
 
             default:
-                return Style.badgeSecondary;
+                return "badge secondary";
         }
     }
 }

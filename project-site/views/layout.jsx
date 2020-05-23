@@ -2,7 +2,6 @@ import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import Style from "mup/style";
 import { Routes } from "../routes";
 import LogoUrl from "../images/logo.png";
 
@@ -13,23 +12,23 @@ export class Page extends React.PureComponent {
 
     render() {
         return (
-            <div className={[Style.minHeight100, Style.dFlex, Style.flexColumn, Style.container, Style.px2].join(" ")}>
-                <h1 className={[Style.mt4, Style.mb3].join(" ")}>
+            <div className="min-height-100 d-flex flex-column container px2">
+                <h1 className="mt4 mb3">
                     <img src={LogoUrl} alt="logo" /> <abbr title="MarkUp Parser">Mup</abbr> <small>Markup for Everyone</small>
                 </h1>
 
                 <div>
-                    <ul className={[Style.nav, Style.navPills, Style.pAuto].join(" ")}>
+                    <ul className="nav nav-pills p-auto">
                         <NavItem exact path={Routes.home()}>Home</NavItem>
                         <NavItem path={Routes.documentation()}>Documentation</NavItem>
                         <NavItem path={Routes.license()}>License</NavItem>
                     </ul>
                 </div>
-                <div className={[Style.px3, Style.py4, Style.flexFill].join(" ")}>
+                <div className="px3 py4 flex-fill">
                     {this.props.children}
                 </div>
                 <div>
-                    <p className={Style.textCenter}>
+                    <p className="text-center">
                         Mup Copyright &copy; 2019 Andrei Fangli<br />
                         <a href="http://www.mup-project.net/">www.mup-project.net</a>
                     </p>
@@ -60,13 +59,13 @@ const NavItem =  withRouter(
 
         render() {
             return (
-                <li className={Style.navItem}>
+                <li className="nav-item">
                     <NavLink
-                        className={Style.navLink}
-                        activeClassName={Style.active}
+                        className="nav-link"
+                        activeClassName="active"
                         to={this.props.path}
                         exact={this.props.exact}
-                        onClick={(event => (event.target.className.includes(Style.active) && event.preventDefault()))}>
+                        onClick={(event => (event.target.className.includes("active") && event.preventDefault()))}>
                         {this.props.children}
                     </NavLink>
                 </li>

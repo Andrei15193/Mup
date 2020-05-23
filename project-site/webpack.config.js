@@ -1,27 +1,19 @@
-const isProduction = !!process.argv.find(item => item == "-p");
+const isProduction = !!process.argv.find(item => item == '-p');
 
-const path = require("path");
-const webpack = require("webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const OpengraphHtmlWebpackPlugin = require("opengraph-html-webpack-plugin").default;
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const UglifyJsWebpackPlugin = require("uglifyjs-webpack-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: [
-        "babel-polyfill",
-        "./app.jsx"
-    ],
-    resolve: {
-        extensions: [".js", ".jsx"],
-        alias: {
-            "mup/style": path.join(__dirname, "./views/style.scss")
-        }
+    mode: isProduction ? 'production' : 'development',
+    devtool: isProduction ? 'none' : 'eval-source-map',
+    entry: {
+        app: './app.jsx'
     },
-    devtool: (isProduction ? false : "source-map"),
     output: {
-        path: path.join(__dirname, "build"),
-        filename: "app.js"
+        path: path.resolve(__dirname, 'build')
+    },
+    resolve: {
+        extensions: ['.js', '.jsx']
     },
     module: {
         rules: [
@@ -29,80 +21,58 @@ module.exports = {
                 test: /\.js(x?)$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: "babel-loader"
-                }
-            },
-            {
-                test: /\.png$/,
-                use: {
-                    loader: "file-loader",
+                    loader: 'babel-loader',
                     options: {
-                        name: '[name].[ext]?[hash]'
+                        presets: ["@babel/preset-env", "@babel/preset-react"]
                     }
                 }
             },
             {
-                test: /\.scss$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [
-                        {
-                            loader: "css-loader",
-                            options: {
-                                camelCase: "only",
-                                localIdentName: (isProduction ? "[hash:base64]" : "[path][name]__[local]__[hash:base64:5]"),
-                                minimize: isProduction,
-                                modules: true
-                            }
-                        },
-                        {
-                            loader: "postcss-loader",
-                            options: {
-                                plugins: () => [
-                                    require("precss"),
-                                    require("autoprefixer")
-                                ]
-                            }
-                        },
-                        {
-                            loader: "sass-loader"
-                        }
-                    ]
-                })
+                test: /\.s[ac]ss$/i,
+                use: ['style-loader', 'css-loader', 'sass-loader',],
+            },
+            {
+                test: /\.png$/,
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]?[hash]'
+                    }
+                }
             }
         ]
     },
     plugins: [
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery",
-            "window.jQuery": "jquery",
-            Popper: ["popper.js", "default"]
-        }),
-        new ExtractTextPlugin({
-            filename: 'style.css'
-        }),
-        new UglifyJsWebpackPlugin({
-            sourceMap: !isProduction
-        }),
         new HtmlWebpackPlugin({
-            title: "Mup - Markup for Everyone",
+            title: 'Mup - Markup for Everyone',
             hash: true,
-            favicon: "./images/favicon.ico",
+            favicon: './images/favicon.ico',
             minify: {
                 collapseBooleanAttributes: isProduction,
                 collapseWhitespace: isProduction,
-                quoteCharacter: "\"",
+                quoteCharacter: '\'',
                 removeComments: true,
                 removeScriptTypeAttributes: true
-            }
-        }),
-        new OpengraphHtmlWebpackPlugin([
-            { property: "og:title", content: "Mup - MarkUp Parser" },
-            { property: "og:description", content: "Mup is a cross-platform library written in C# that parses Creole markup into a common representation that later can be translated into HTML or any other format." },
-            { property: "og:url", content: "http://www.mup-project.net/" },
-            { property: "og:type", content: "website" },
-            { property: "og:image", content: "http://www.mup-project.net/logo-og.png" }
-        ])
-    ].filter(plugin => !!plugin)
+            },
+            templateContent: ({ htmlWebpackPlugin }) => `
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                        ${htmlWebpackPlugin.tags.headTags}
+                        <title>${htmlWebpackPlugin.options.title}</title>
+                        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+                    </head>
+                    <body>
+                        <div id='app'></div>
+                        <script crossorigin src='https://unpkg.com/react@16/umd/react.${isProduction ? 'production.min' : 'development'}.js'></script>
+                        <script crossorigin src='https://unpkg.com/react-dom@16/umd/react-dom.${isProduction ? 'production.min' : 'development'}.js'></script>
+                        ${htmlWebpackPlugin.tags.bodyTags}
+                    </body>
+                </html>`
+        })
+    ],
+    externals: {
+        'react': 'React',
+        'react-dom': 'ReactDOM'
+    }
 };

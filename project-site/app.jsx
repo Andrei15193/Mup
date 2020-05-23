@@ -1,13 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { HashRouter, Route, Switch, withRouter } from "react-router-dom";
-import "bootstrap";
 
 import "./images/logo-og.png";
 import { RoutePaths } from "./routes";
 import { Home } from "./views/home";
 import { Documentation } from "./views/documentation";
 import { License } from "./views/license";
+
+import "./app.scss";
 
 const RouteNavigation = withRouter(
     class extends React.PureComponent {
