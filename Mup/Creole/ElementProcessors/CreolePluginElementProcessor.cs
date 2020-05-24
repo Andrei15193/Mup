@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Mup.Creole.Elements;
 using static Mup.Creole.CreoleTokenCode;
 

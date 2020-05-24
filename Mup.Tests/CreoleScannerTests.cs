@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Mup.Creole;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Mup.Creole;
 using Xunit;
 using static Mup.Tests.CreoleScannerTestData;
 using static Mup.Tests.ScannerTestData;

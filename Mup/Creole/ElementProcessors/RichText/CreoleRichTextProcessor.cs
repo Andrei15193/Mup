@@ -1,7 +1,6 @@
+using Mup.Creole.Elements;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Mup.Creole.Elements;
 
 namespace Mup.Creole.ElementProcessors.RichText
 {

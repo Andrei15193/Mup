@@ -1,8 +1,5 @@
-﻿using System;
+﻿using Mup.Creole.Elements;
 using System.Collections.Generic;
-using Mup.Creole.Elements;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mup.Creole
 {

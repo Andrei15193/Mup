@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Mup.Scanner;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
-using Mup.Scanner;
-using static System.Char;
 using static Mup.Creole.CreoleTokenCode;
+using static System.Char;
 
 namespace Mup.Creole
 {

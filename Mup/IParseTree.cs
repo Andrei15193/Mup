@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Mup
+﻿namespace Mup
 {
     /// <summary>A common interface for the result of any markup parser.</summary>
     public interface IParseTree

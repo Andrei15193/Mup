@@ -1,7 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
-namespace Mup
+﻿namespace Mup
 {
     /// <summary>Base class of all parse tree visitors.</summary>
     public abstract class ParseTreeVisitor

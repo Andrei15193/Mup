@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Xunit;
+﻿using Xunit;
 using static Mup.Tests.HtmlWriterVisitorTestData;
 
 namespace Mup.Tests

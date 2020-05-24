@@ -1,8 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mup.Scanner
 {
@@ -22,7 +19,7 @@ namespace Mup.Scanner
         }
 
         internal void Scan(TextReader reader)
-            =>Scan(reader, DefaultBuffer);
+            => Scan(reader, DefaultBuffer);
 
         internal void Scan(TextReader reader, int bufferSize)
         {

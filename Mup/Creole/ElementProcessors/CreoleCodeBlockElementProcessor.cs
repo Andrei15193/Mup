@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Text;
 using Mup.Creole.Elements;
+using System.Text;
 using static Mup.Creole.CreoleTokenCode;
 
 namespace Mup.Creole.ElementProcessors
