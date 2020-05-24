@@ -5,7 +5,7 @@ namespace Mup.Creole.Elements
 {
     internal sealed class CreoleLineBreakElement : CreoleElement
     {
-        internal override Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken)
-            => visitor.VisitLineBreakAsync(cancellationToken);
+        internal override void Accept(ParseTreeVisitor visitor)
+            => visitor.VisitLineBreak();
     }
 }

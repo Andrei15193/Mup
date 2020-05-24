@@ -12,7 +12,7 @@ namespace Mup.Creole.Elements
 
         internal string PreformattedText { get; }
 
-        internal override Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken)
-            => visitor.VisitPreformattedBlockAsync(PreformattedText, cancellationToken);
+        internal override void Accept(ParseTreeVisitor visitor)
+            => visitor.VisitPreformattedBlock(PreformattedText);
     }
 }

@@ -4,15 +4,13 @@ using static Mup.Tests.HtmlWriterVisitorTestData;
 
 namespace Mup.Tests
 {
-    public class HtmlWriterVisitor_VisitAsync
+    public class HtmlWriterVisitorTests
     {
         private static readonly HtmlWriterVisitor visitor = new HtmlWriterVisitor();
 
         private const string _method = (nameof(HtmlWriterVisitor) + ".VisitAsync(string, IEnumerable<ElementMark>): ");
 
-        [Trait("Class", nameof(HtmlWriterVisitor))]
-        [Theory(DisplayName = (_method + nameof(EscapesHtmlSpecialCharactersForPlainText)))]
-        [MemberData(nameof(EscapeSpecialCharactersForPlainTextTestData), MemberType = typeof(HtmlWriterVisitorTestData))]
+        [Theory, MemberData(nameof(EscapeSpecialCharactersForPlainTextTestData), MemberType = typeof(HtmlWriterVisitorTestData))]
         public void EscapesHtmlSpecialCharactersForPlainText(string text, string expectedHtml)
         {
             visitor.BeginVisit();
@@ -23,9 +21,7 @@ namespace Mup.Tests
             Assert.Equal(expectedHtml, actualHtml);
         }
 
-        [Trait("Class", nameof(HtmlWriterVisitor))]
-        [Theory(DisplayName = (_method + nameof(EscapesHtmlSpecialCharactersForPreformattedBlock)))]
-        [MemberData(nameof(EscapeSpecialCharactersForPreformattedBlocksTestData), MemberType = typeof(HtmlWriterVisitorTestData))]
+        [Theory, MemberData(nameof(EscapeSpecialCharactersForPreformattedBlocksTestData), MemberType = typeof(HtmlWriterVisitorTestData))]
         public void EscapesHtmlSpecialCharactersForPreformattedBlock(string text, string expectedHtml)
         {
             visitor.BeginVisit();
@@ -36,9 +32,7 @@ namespace Mup.Tests
             Assert.Equal(expectedHtml, actualHtml);
         }
 
-        [Trait("Class", nameof(HtmlWriterVisitor))]
-        [Theory(DisplayName = (_method + nameof(EscapesHtmlSpecialCharactersForCodeFragment)))]
-        [MemberData(nameof(EscapeSpecialCharactersForCodeFragmentsTestData), MemberType = typeof(HtmlWriterVisitorTestData))]
+        [Theory, MemberData(nameof(EscapeSpecialCharactersForCodeFragmentsTestData), MemberType = typeof(HtmlWriterVisitorTestData))]
         public void EscapesHtmlSpecialCharactersForCodeFragment(string text, string expectedHtml)
         {
             visitor.BeginVisit();
@@ -49,9 +43,7 @@ namespace Mup.Tests
             Assert.Equal(expectedHtml, actualHtml);
         }
 
-        [Trait("Class", nameof(HtmlWriterVisitor))]
-        [Theory(DisplayName = (_method + nameof(EscapesHtmlSpecialCharactersForImages)))]
-        [MemberData(nameof(EscapeSpecialCharactersForImagesTestData), MemberType = typeof(HtmlWriterVisitorTestData))]
+        [Theory, MemberData(nameof(EscapeSpecialCharactersForImagesTestData), MemberType = typeof(HtmlWriterVisitorTestData))]
         public void EscapesHtmlSpecialCharactersForImages(string text, string expectedHtml)
         {
             visitor.BeginVisit();
@@ -62,9 +54,7 @@ namespace Mup.Tests
             Assert.Equal(expectedHtml, actualHtml);
         }
 
-        [Trait("Class", nameof(HtmlWriterVisitor))]
-        [Theory(DisplayName = (_method + nameof(EscapesHtmlSpecialCharactersForHyperlinks)))]
-        [MemberData(nameof(EscapeSpecialCharactersForHyperlinksTestData), MemberType = typeof(HtmlWriterVisitorTestData))]
+        [Theory, MemberData(nameof(EscapeSpecialCharactersForHyperlinksTestData), MemberType = typeof(HtmlWriterVisitorTestData))]
         public void EscapesHtmlSpecialCharactersForHyperlinks(string text, string expectedHtml)
         {
             visitor.BeginVisit();

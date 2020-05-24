@@ -12,7 +12,7 @@ namespace Mup.Creole.Elements
 
         internal string PluginText { get; }
 
-        internal override Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken)
-            => visitor.VisitPluginAsync(PluginText, cancellationToken);
+        internal override void Accept(ParseTreeVisitor visitor)
+            => visitor.VisitPlugin(PluginText);
     }
 }

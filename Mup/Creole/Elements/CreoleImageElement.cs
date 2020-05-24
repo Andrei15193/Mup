@@ -21,7 +21,7 @@ namespace Mup.Creole.Elements
 
         internal string AlternativeText { get; }
 
-        internal override Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken)
-            => visitor.VisitImageAsync(Source, AlternativeText, cancellationToken);
+        internal override void Accept(ParseTreeVisitor visitor)
+            => visitor.VisitImage(Source, AlternativeText);
     }
 }

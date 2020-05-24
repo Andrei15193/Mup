@@ -46,55 +46,6 @@ namespace Mup.Scanner
             ScanCompleted();
         }
 
-        internal async Task ScanAsync(string text, CancellationToken cancellationToken)
-        {
-            if (text == null)
-                throw new ArgumentNullException(nameof(text));
-
-            _Reset();
-            foreach (var character in text)
-            {
-                _Process(character);
-                if (Index / DefaultBuffer == 0)
-                {
-                    await Task.Yield();
-                    cancellationToken.ThrowIfCancellationRequested();
-                }
-            }
-            await Task.Yield();
-            cancellationToken.ThrowIfCancellationRequested();
-
-            ScanCompleted();
-        }
-
-        internal Task ScanAsync(TextReader reader, CancellationToken cancellationToken)
-            => ScanAsync(reader, DefaultBuffer, cancellationToken);
-
-        internal async Task ScanAsync(TextReader reader, int bufferSize, CancellationToken cancellationToken)
-        {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-            if (bufferSize <= 0)
-                throw new ArgumentException("The buffer size must be greater than zero.", nameof(bufferSize));
-
-            _Reset();
-
-            int bufferLength;
-            var buffer = new char[bufferSize];
-            var textBuilder = new StringBuilder();
-            do
-            {
-                bufferLength = await reader.ReadAsync(buffer, 0, bufferSize).ConfigureAwait(false);
-                cancellationToken.ThrowIfCancellationRequested();
-
-                for (var bufferIndex = 0; bufferIndex < bufferLength; bufferIndex++)
-                    _Process(buffer[bufferIndex]);
-            }
-            while (bufferLength > 0);
-
-            ScanCompleted();
-        }
-
         protected int Line { get; private set; }
 
         protected int Column { get; private set; }

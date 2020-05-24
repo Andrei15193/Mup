@@ -5,6 +5,6 @@ namespace Mup.Creole.Elements
 {
     internal abstract class CreoleElement
     {
-        internal abstract Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken);
+        internal abstract void Accept(ParseTreeVisitor visitor);
     }
 }

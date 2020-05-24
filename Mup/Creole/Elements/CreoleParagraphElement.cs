@@ -13,12 +13,12 @@ namespace Mup.Creole.Elements
             _richTextElements = richTextElements;
         }
 
-        internal override async Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken)
+        internal override void Accept(ParseTreeVisitor visitor)
         {
-            await visitor.VisitParagraphBeginningAsync(cancellationToken).ConfigureAwait(false);
+            visitor.VisitParagraphBeginning();
             foreach (var richTextElement in _richTextElements)
-                await richTextElement.AcceptAsync(visitor, cancellationToken).ConfigureAwait(false);
-            await visitor.VisitParagraphEndingAsync(cancellationToken).ConfigureAwait(false);
+                richTextElement.Accept(visitor);
+            visitor.VisitParagraphEnding();
         }
     }
 }

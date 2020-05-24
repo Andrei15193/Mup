@@ -11,12 +11,12 @@ namespace Mup.Creole.Elements
         {
         }
 
-        internal override async Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken)
+        internal override void Accept(ParseTreeVisitor visitor)
         {
-            await visitor.VisitTableHeaderCellBeginningAsync(cancellationToken).ConfigureAwait(false);
+            visitor.VisitTableHeaderCellBeginning();
             foreach (var element in Content)
-                await element.AcceptAsync(visitor, cancellationToken).ConfigureAwait(false);
-            await visitor.VisitTableHeaderCellEndingAsync(cancellationToken).ConfigureAwait(false);
+                element.Accept(visitor);
+            visitor.VisitTableHeaderCellEnding();
         }
     }
 }

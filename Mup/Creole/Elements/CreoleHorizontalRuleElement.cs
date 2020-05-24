@@ -5,7 +5,7 @@ namespace Mup.Creole.Elements
 {
     internal class CreoleHorizontalRuleElement : CreoleElement
     {
-        internal override Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken)
-            => visitor.VisitHorizontalRuleAsync(cancellationToken);
+        internal override void Accept(ParseTreeVisitor visitor)
+            => visitor.VisitHorizontalRule();
     }
 }

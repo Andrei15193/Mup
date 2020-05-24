@@ -6,7 +6,7 @@ namespace Mup.Creole.Elements
 {
     internal class CreoleBlankElement : CreoleElement
     {
-        internal override Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken)
+        internal override void Accept(ParseTreeVisitor visitor)
             => Task.FromResult<object>(null);
     }
 }

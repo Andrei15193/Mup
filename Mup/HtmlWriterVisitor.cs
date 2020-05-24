@@ -100,12 +100,6 @@ namespace Mup
         protected internal override string GetResult()
             => _result;
 
-        /// <summary>Asynchronously initializes the visitor. This method is called before any visit method.</summary>
-        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
-        protected internal sealed override Task BeginVisitAsync(CancellationToken cancellationToken)
-            => base.BeginVisitAsync(cancellationToken);
-
         /// <summary>Initializes the visitor. This method is called before any visit method.</summary>
         protected internal sealed override void BeginVisit()
         {
@@ -114,12 +108,6 @@ namespace Mup
             _openElements.Clear();
             _htmlStringBuilder = (_wrappedBuilder ?? new StringBuilder());
         }
-
-        /// <summary>Asynchronously completes the visit operation. This method is called after all visit methods.</summary>
-        /// <param name="cancellationToken">A token that can be used to signal a cancellation request.</param>
-        /// <returns>Returns a <see cref="Task"/> representing the asynchronous operation.</returns>
-        protected internal sealed override Task EndVisitAsync(CancellationToken cancellationToken)
-            => base.EndVisitAsync(cancellationToken);
 
         /// <summary>Completes the visit operation. This method is called after all visit methods.</summary>
         protected internal sealed override void EndVisit()

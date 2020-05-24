@@ -13,7 +13,7 @@ namespace Mup.Creole.Elements
 
         internal string Code { get; }
 
-        internal override Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken)
-            => visitor.VisitCodeFragmentAsync(Code, cancellationToken);
+        internal override void Accept(ParseTreeVisitor visitor)
+            => visitor.VisitCodeFragment(Code);
     }
 }

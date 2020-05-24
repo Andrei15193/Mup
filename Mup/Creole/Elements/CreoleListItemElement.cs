@@ -13,12 +13,12 @@ namespace Mup.Creole.Elements
 
         internal IEnumerable<CreoleElement> Content { get; }
 
-        internal override async Task AcceptAsync(ParseTreeVisitor visitor, CancellationToken cancellationToken)
+        internal override void Accept(ParseTreeVisitor visitor)
         {
-            await visitor.VisitListItemBeginningAsync(cancellationToken).ConfigureAwait(false);
+            visitor.VisitListItemBeginning();
             foreach (var element in Content)
-                await element.AcceptAsync(visitor, cancellationToken).ConfigureAwait(false);
-            await visitor.VisitListItemEndingAsync(cancellationToken).ConfigureAwait(false);
+                element.Accept(visitor);
+            visitor.VisitListItemEnding();
         }
     }
 }
