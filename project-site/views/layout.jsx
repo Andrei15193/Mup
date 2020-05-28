@@ -22,6 +22,9 @@ export class Page extends React.PureComponent {
                         <NavItem exact path={Routes.home()}>Home</NavItem>
                         <NavItem path={Routes.documentation()}>Documentation</NavItem>
                         <NavItem path={Routes.license()}>License</NavItem>
+                        <li className="nav-item">
+                            <a className="nav-link" href="https://github.com/Andrei15193/Mup" target="_blank">View on GitHub</a>
+                        </li>
                     </ul>
                 </div>
                 <div className="px-3 py-4 flex-fill">
