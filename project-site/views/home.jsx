@@ -206,13 +206,13 @@ class Element extends React.PureComponent {
     getBadgeColorClassName() {
         switch (this.props.status) {
             case ElementStatus.InProgress:
-                return "badge info";
+                return "badge-info";
 
             case ElementStatus.Done:
-                return "badge success";
+                return "badge-success";
 
             default:
-                return "badge secondary";
+                return "badge-secondary";
         }
     }
 }
