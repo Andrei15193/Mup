@@ -7,20 +7,6 @@ namespace Mup.Scanner
     {
         private const int _defaultBufferSize = 2048;
 
-        internal void Scan(string text)
-        {
-            if (text == null)
-                throw new ArgumentNullException(nameof(text));
-
-            _Reset();
-            foreach (var character in text)
-                _Process(character);
-            ScanCompleted();
-        }
-
-        internal void Scan(TextReader reader)
-            => Scan(reader, DefaultBuffer);
-
         internal void Scan(TextReader reader, int bufferSize)
         {
             if (reader == null)
