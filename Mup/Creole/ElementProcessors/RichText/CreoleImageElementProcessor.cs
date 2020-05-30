@@ -1,15 +1,16 @@
+using Mup.Scanner;
 using static Mup.Creole.CreoleTokenCode;
 
 namespace Mup.Creole.ElementProcessors.RichText
 {
     internal class CreoleImageElementProcessor : CreoleUrlElementProcessor
     {
-        internal CreoleImageElementProcessor(CreoleParserContext context, CreoleTokenRange tokens)
+        internal CreoleImageElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
             : base(context, tokens)
         {
         }
 
-        internal CreoleImageElementProcessor(CreoleParserContext context, CreoleTokenRange tokens, CreoleRichTextElementProcessor baseElementProcessor)
+        internal CreoleImageElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens, CreoleRichTextElementProcessor baseElementProcessor)
             : base(context, tokens, baseElementProcessor)
         {
         }

@@ -1,6 +1,7 @@
 ﻿using Mup.Creole;
 using Mup.Creole.ElementProcessors;
 using Mup.Creole.Elements;
+using Mup.Scanner;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,7 +14,7 @@ namespace Mup
     {
         private const int _defaultBufferSize = 1024;
 
-        private delegate CreoleElementProcessor CreoleElementProcessorFactory(CreoleParserContext context, CreoleTokenRange tokens);
+        private delegate CreoleElementProcessor CreoleElementProcessorFactory(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens);
 
         private static readonly ReadOnlyCollection<CreoleElementProcessorFactory> _creoleElementProcessorFactories =
             new ReadOnlyCollection<CreoleElementProcessorFactory>(
@@ -77,10 +78,10 @@ namespace Mup
             return parseTree;
         }
 
-        private IParseTree _Parse(IReadOnlyList<CreoleToken> tokens)
+        private IParseTree _Parse(IReadOnlyList<Token<CreoleTokenCode>> tokens)
         {
             var context = new CreoleParserContext(Options.InlineHyperlinkProtocols);
-            var tokenRange = new CreoleTokenRange(tokens);
+            var tokenRange = new TokenRange<CreoleTokenCode>(tokens);
 
             var elementInfos = new LinkedList<CreoleElementInfo>();
 

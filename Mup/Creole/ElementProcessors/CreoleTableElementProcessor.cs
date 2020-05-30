@@ -1,4 +1,5 @@
 using Mup.Creole.Elements;
+using Mup.Scanner;
 using System.Collections.Generic;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -23,7 +24,7 @@ namespace Mup.Creole.ElementProcessors
         private List<CreoleTableRowElement> _rows;
         private List<CreoleTableCellElement> _cells;
 
-        internal CreoleTableElementProcessor(CreoleParserContext context, CreoleTokenRange tokens)
+        internal CreoleTableElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
             : base(context, tokens)
         {
         }

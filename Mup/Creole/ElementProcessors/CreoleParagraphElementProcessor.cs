@@ -1,4 +1,5 @@
 using Mup.Creole.Elements;
+using Mup.Scanner;
 using static Mup.Creole.CreoleTokenCode;
 
 namespace Mup.Creole.ElementProcessors
@@ -14,7 +15,7 @@ namespace Mup.Creole.ElementProcessors
 
         private State _state = State.NotInParagraph;
 
-        internal CreoleParagraphElementProcessor(CreoleParserContext context, CreoleTokenRange tokens)
+        internal CreoleParagraphElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
             : base(context, tokens)
         {
         }

@@ -1,4 +1,5 @@
 using Mup.Creole.Elements;
+using Mup.Scanner;
 using System;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Mup.Creole.ElementProcessors.RichText
 {
     internal class CreoleRichTextProcessor
     {
-        private delegate CreoleStyleElementProcessor CreoleStyleElementProcessorFactory(CreoleParserContext context, CreoleTokenRange tokens, IEnumerable<CreoleRichTextElementData> baseElementsData);
+        private delegate CreoleStyleElementProcessor CreoleStyleElementProcessorFactory(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens, IEnumerable<CreoleRichTextElementData> baseElementsData);
         private static readonly IDictionary<CreoleRichTextElementType, CreoleStyleElementProcessorFactory> _styleElementFactories = new Dictionary<CreoleRichTextElementType, CreoleStyleElementProcessorFactory>
         {
             { CreoleRichTextElementType.Emphasis, (context, tokens, baseElementsData) => new CreoleEmphasisElementProcessor(context, tokens, baseElementsData) },
@@ -21,7 +22,7 @@ namespace Mup.Creole.ElementProcessors.RichText
             _context = context;
         }
 
-        internal IEnumerable<CreoleElement> Process(CreoleTokenRange tokens)
+        internal IEnumerable<CreoleElement> Process(TokenRange<CreoleTokenCode> tokens)
         {
             var baseElementsData = new List<CreoleRichTextElementData>();
             using (var baseElementProcessor = _GetBaseElementProcessor(_context, tokens))
@@ -36,7 +37,7 @@ namespace Mup.Creole.ElementProcessors.RichText
             return _GetCreoleElements(tokens, elementsData);
         }
 
-        private CreoleRichTextElementProcessor _GetBaseElementProcessor(CreoleParserContext contenxt, CreoleTokenRange tokens)
+        private CreoleRichTextElementProcessor _GetBaseElementProcessor(CreoleParserContext contenxt, TokenRange<CreoleTokenCode> tokens)
             => new CreoleLineBreakElementProcessor(
                 _context,
                 tokens,
@@ -61,7 +62,7 @@ namespace Mup.Creole.ElementProcessors.RichText
                 )
             );
 
-        private CreoleRichTextElementProcessor _GetHyperlinkBaseElementProcessor(CreoleParserContext contenxt, CreoleTokenRange tokens)
+        private CreoleRichTextElementProcessor _GetHyperlinkBaseElementProcessor(CreoleParserContext contenxt, TokenRange<CreoleTokenCode> tokens)
             => new CreoleLineBreakElementProcessor(
                 _context,
                 tokens,
@@ -74,20 +75,20 @@ namespace Mup.Creole.ElementProcessors.RichText
                 )
             );
 
-        private IEnumerable<CreoleElement> _GetCreoleElements(CreoleTokenRange tokens, IEnumerable<CreoleRichTextElementData> elementsData)
+        private IEnumerable<CreoleElement> _GetCreoleElements(TokenRange<CreoleTokenCode> tokens, IEnumerable<CreoleRichTextElementData> elementsData)
             => _GetCreoleElements(tokens, _GetRootNodesFrom(tokens, elementsData));
 
-        private IEnumerable<CreoleElement> _GetCreoleElements(CreoleTokenRange tokens, IEnumerable<CreoleRichTextElementNodeData> nodesData)
+        private IEnumerable<CreoleElement> _GetCreoleElements(TokenRange<CreoleTokenCode> tokens, IEnumerable<CreoleRichTextElementNodeData> nodesData)
             => _GetCreoleElements(tokens, 0, tokens.Count, nodesData);
 
-        private IEnumerable<CreoleElement> _GetCreoleElements(CreoleTokenRange tokens, int startIndex, int endIndex, IEnumerable<CreoleRichTextElementNodeData> nodesData)
+        private IEnumerable<CreoleElement> _GetCreoleElements(TokenRange<CreoleTokenCode> tokens, int startIndex, int endIndex, IEnumerable<CreoleRichTextElementNodeData> nodesData)
         {
             var elements = new List<CreoleElement>();
             var subRangeStartIndex = startIndex;
             foreach (var nodeData in nodesData)
             {
                 if (subRangeStartIndex < nodeData.StartIndex)
-                    elements.Add(new CreoleTextElement(CreoleTokenRangeHelper.GetPlainText(tokens.SubRange(subRangeStartIndex, (nodeData.StartIndex - subRangeStartIndex)))));
+                    elements.Add(new CreoleTextElement(TokenRangeHelper.GetPlainText(tokens.SubRange(subRangeStartIndex, (nodeData.StartIndex - subRangeStartIndex)))));
 
                 elements.Add(_GetCreoleElementFrom(tokens, nodeData));
                 subRangeStartIndex = nodeData.EndIndex;
@@ -95,13 +96,13 @@ namespace Mup.Creole.ElementProcessors.RichText
             if (subRangeStartIndex < endIndex)
             {
                 var subRange = tokens.SubRange(subRangeStartIndex, (endIndex - subRangeStartIndex));
-                elements.Add(new CreoleTextElement(CreoleTokenRangeHelper.GetPlainText(subRange)));
+                elements.Add(new CreoleTextElement(TokenRangeHelper.GetPlainText(subRange)));
             }
 
             return elements;
         }
 
-        private IEnumerable<CreoleRichTextElementNodeData> _GetRootNodesFrom(CreoleTokenRange tokens, IEnumerable<CreoleRichTextElementData> elementsData)
+        private IEnumerable<CreoleRichTextElementNodeData> _GetRootNodesFrom(TokenRange<CreoleTokenCode> tokens, IEnumerable<CreoleRichTextElementData> elementsData)
         {
             var rootNodes = new List<CreoleRichTextElementNodeData>();
             var visitedElementTypes = new List<CreoleRichTextElementType>(10);
@@ -146,7 +147,7 @@ namespace Mup.Creole.ElementProcessors.RichText
                 nodeData.ChildNodes
             );
 
-        private IEnumerable<CreoleRichTextElementNodeData> _GetHyperlinkContentElementNodesData(CreoleTokenRange tokens, IEnumerable<CreoleRichTextElementType> excludedElementTypes)
+        private IEnumerable<CreoleRichTextElementNodeData> _GetHyperlinkContentElementNodesData(TokenRange<CreoleTokenCode> tokens, IEnumerable<CreoleRichTextElementType> excludedElementTypes)
         {
             var baseElementsData = new List<CreoleRichTextElementData>();
             using (var baseElementProcessor = _GetHyperlinkBaseElementProcessor(_context, tokens))
@@ -168,7 +169,7 @@ namespace Mup.Creole.ElementProcessors.RichText
             return _GetRootNodesFrom(tokens, elementsData);
         }
 
-        private CreoleElement _GetCreoleElementFrom(CreoleTokenRange tokens, CreoleRichTextElementNodeData nodeData)
+        private CreoleElement _GetCreoleElementFrom(TokenRange<CreoleTokenCode> tokens, CreoleRichTextElementNodeData nodeData)
         {
             CreoleElement result = null;
 
@@ -236,20 +237,20 @@ namespace Mup.Creole.ElementProcessors.RichText
             return result;
         }
 
-        private string _GetUrlFrom(CreoleTokenRange tokens, CreoleRichTextElementNodeData richTextElementData)
+        private string _GetUrlFrom(TokenRange<CreoleTokenCode> tokens, CreoleRichTextElementNodeData richTextElementData)
         {
             var urlStartIndex = richTextElementData.UrlStartIndex;
             var urlEndIdnex = richTextElementData.UrlEndIndex;
             var urlRange = tokens.SubRange(urlStartIndex, (urlEndIdnex - urlStartIndex));
-            return CreoleTokenRangeHelper.GetPlainText(urlRange);
+            return TokenRangeHelper.GetPlainText(urlRange);
         }
 
-        private string _GetContentFrom(CreoleTokenRange tokens, CreoleRichTextElementNodeData richTextElementData)
+        private string _GetContentFrom(TokenRange<CreoleTokenCode> tokens, CreoleRichTextElementNodeData richTextElementData)
         {
             var contentStartIndex = richTextElementData.ContentStartIndex;
             var contentEndIdnex = richTextElementData.ContentEndIndex;
             var contentRange = tokens.SubRange(contentStartIndex, (contentEndIdnex - contentStartIndex));
-            return CreoleTokenRangeHelper.GetPlainText(contentRange);
+            return TokenRangeHelper.GetPlainText(contentRange);
         }
 
         private static bool _Contains(CreoleRichTextElementData parent, CreoleRichTextElementData child)
@@ -258,10 +259,10 @@ namespace Mup.Creole.ElementProcessors.RichText
         private static bool _Contains(CreoleRichTextElementNodeData parent, CreoleRichTextElementNodeData child)
             => (parent.ContentStartIndex <= child.StartIndex && child.EndIndex <= parent.ContentEndIndex);
 
-        private IElementDataIterator _GetStyleElementIterator(CreoleParserContext context, CreoleTokenRange tokens, IEnumerable<CreoleRichTextElementData> baseElementsData)
+        private IElementDataIterator _GetStyleElementIterator(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens, IEnumerable<CreoleRichTextElementData> baseElementsData)
             => _GetStyleElementIterator(context, tokens, baseElementsData, null);
 
-        private IElementDataIterator _GetStyleElementIterator(CreoleParserContext context, CreoleTokenRange tokens, IEnumerable<CreoleRichTextElementData> baseElementsData, IEnumerable<CreoleRichTextElementType> excludedElementTypes)
+        private IElementDataIterator _GetStyleElementIterator(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens, IEnumerable<CreoleRichTextElementData> baseElementsData, IEnumerable<CreoleRichTextElementType> excludedElementTypes)
         {
             var processors = new List<IElementDataIterator>();
             if (excludedElementTypes == null)

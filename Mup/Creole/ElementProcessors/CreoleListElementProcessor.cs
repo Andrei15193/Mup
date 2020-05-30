@@ -1,4 +1,5 @@
 using Mup.Creole.Elements;
+using Mup.Scanner;
 using System.Collections.Generic;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -25,7 +26,7 @@ namespace Mup.Creole.ElementProcessors
         private int _listItemLevel;
         private Stack<CreoleListInfo> _listInfos = new Stack<CreoleListInfo>();
 
-        public CreoleListElementProcessor(CreoleParserContext context, CreoleTokenRange tokens)
+        public CreoleListElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
             : base(context, tokens)
         {
         }

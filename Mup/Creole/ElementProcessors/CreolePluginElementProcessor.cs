@@ -1,4 +1,5 @@
 using Mup.Creole.Elements;
+using Mup.Scanner;
 using static Mup.Creole.CreoleTokenCode;
 
 namespace Mup.Creole.ElementProcessors
@@ -22,7 +23,7 @@ namespace Mup.Creole.ElementProcessors
         private int _contentEndIndexOddEndingIndex = 0;
         private State _state = State.NotInPlugin;
 
-        internal CreolePluginElementProcessor(CreoleParserContext context, CreoleTokenRange tokens)
+        internal CreolePluginElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
             : base(context, tokens)
         {
         }

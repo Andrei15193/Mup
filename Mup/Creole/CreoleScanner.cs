@@ -19,9 +19,9 @@ namespace Mup.Creole
 
         private readonly StringBuilder _textBuilder = new StringBuilder();
 
-        private List<CreoleToken> _tokens;
+        private List<Token<CreoleTokenCode>> _tokens;
 
-        internal IReadOnlyList<CreoleToken> Result { get; private set; }
+        internal IReadOnlyList<Token<CreoleTokenCode>> Result { get; private set; }
 
         protected override void Reset()
         {
@@ -31,7 +31,7 @@ namespace Mup.Creole
             _tokenCode = Text;
             _lineFeedCount = 0;
             _textBuilder.Length = 0;
-            _tokens = new List<CreoleToken>();
+            _tokens = new List<Token<CreoleTokenCode>>();
         }
 
         protected override void Process(char character)
@@ -58,74 +58,74 @@ namespace Mup.Creole
 
                 case '*':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(Asterisk, "*", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(Asterisk, "*", Line, Column));
                     break;
 
                 case '/':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(Slash, "/", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(Slash, "/", Line, Column));
                     break;
 
                 case '\\':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(BackSlash, "\\", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(BackSlash, "\\", Line, Column));
                     break;
 
                 case '[':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(BracketOpen, "[", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(BracketOpen, "[", Line, Column));
                     break;
 
                 case ']':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(BracketClose, "]", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(BracketClose, "]", Line, Column));
                     break;
 
                 case '{':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(BraceOpen, "{", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(BraceOpen, "{", Line, Column));
                     break;
 
                 case '}':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(BraceClose, "}", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(BraceClose, "}", Line, Column));
                     break;
 
                 case '<':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(AngleOpen, "<", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(AngleOpen, "<", Line, Column));
                     break;
 
                 case '>':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(AngleClose, ">", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(AngleClose, ">", Line, Column));
                     break;
 
                 case '=':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(Equal, "=", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(Equal, "=", Line, Column));
                     break;
 
                 case '-':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(Dash, "-", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(Dash, "-", Line, Column));
                     break;
 
                 case '#':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(Hash, "#", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(Hash, "#", Line, Column));
                     break;
 
                 case '|':
                     _AddToken();
-                    _tokens.Add(new CreoleToken(Pipe, "|", Line, Column));
+                    _tokens.Add(new Token<CreoleTokenCode>(Pipe, "|", Line, Column));
                     break;
 
                 default:
                     if (IsPunctuation(character))
                     {
                         _AddToken();
-                        _tokens.Add(new CreoleToken(Punctuation, character.ToString(), Line, Column));
+                        _tokens.Add(new Token<CreoleTokenCode>(Punctuation, character.ToString(), Line, Column));
                     }
                     else
                     {
@@ -150,7 +150,7 @@ namespace Mup.Creole
             {
                 _AddToken();
 
-                _tokens.Add(new CreoleToken(Tilde, _escapeCahracterString, Line, Column));
+                _tokens.Add(new Token<CreoleTokenCode>(Tilde, _escapeCahracterString, Line, Column));
 
                 _tokenCode = Text;
                 _textBuilder.Append(character);
@@ -159,7 +159,7 @@ namespace Mup.Creole
             {
                 _AddToken();
 
-                _tokens.Add(new CreoleToken(Text, _escapeCahracterString, Line, Column));
+                _tokens.Add(new Token<CreoleTokenCode>(Text, _escapeCahracterString, Line, Column));
 
                 _tokenCode = Text;
             }
@@ -215,11 +215,11 @@ namespace Mup.Creole
                     _lineFeedCount = 0;
                 }
 
-                _tokens.Add(new CreoleToken(_tokenCode, _textBuilder.ToString(), Line, Column));
+                _tokens.Add(new Token<CreoleTokenCode>(_tokenCode, _textBuilder.ToString(), Line, Column));
                 _textBuilder.Length = 0;
             }
             else if (_isEscaped)
-                _tokens.Add(new CreoleToken(Text, _escapeCahracterString, Line, Column));
+                _tokens.Add(new Token<CreoleTokenCode>(Text, _escapeCahracterString, Line, Column));
         }
     }
 }

@@ -1,4 +1,5 @@
 using Mup.Creole.Elements;
+using Mup.Scanner;
 using static Mup.Creole.CreoleTokenCode;
 
 namespace Mup.Creole.ElementProcessors
@@ -16,7 +17,7 @@ namespace Mup.Creole.ElementProcessors
         private int dashCount = 0;
         private State _state = State.NotInHorizontalRule;
 
-        internal CreoleHorizontalRuleElementProcessor(CreoleParserContext context, CreoleTokenRange tokens)
+        internal CreoleHorizontalRuleElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
             : base(context, tokens)
         {
         }

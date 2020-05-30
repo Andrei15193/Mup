@@ -1,3 +1,4 @@
+using Mup.Scanner;
 using static Mup.Creole.CreoleTokenCode;
 
 namespace Mup.Creole.ElementProcessors.RichText
@@ -13,12 +14,12 @@ namespace Mup.Creole.ElementProcessors.RichText
         private int _elementStartIndex;
         private State _state = State.NoElement;
 
-        internal CreoleLineBreakElementProcessor(CreoleParserContext context, CreoleTokenRange tokens)
+        internal CreoleLineBreakElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
             : base(context, tokens)
         {
         }
 
-        internal CreoleLineBreakElementProcessor(CreoleParserContext context, CreoleTokenRange tokens, CreoleRichTextElementProcessor baseElementProcessor)
+        internal CreoleLineBreakElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens, CreoleRichTextElementProcessor baseElementProcessor)
             : base(context, tokens, baseElementProcessor)
         {
         }

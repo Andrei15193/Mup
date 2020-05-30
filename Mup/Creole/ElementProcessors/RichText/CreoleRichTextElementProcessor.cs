@@ -1,3 +1,4 @@
+using Mup.Scanner;
 using System;
 using System.Collections.Generic;
 
@@ -5,29 +6,29 @@ namespace Mup.Creole.ElementProcessors.RichText
 {
     internal abstract class CreoleRichTextElementProcessor : IDisposable
     {
-        private readonly CreoleTokenRange _tokens;
+        private readonly TokenRange<CreoleTokenCode> _tokens;
         private int _index;
         private int _startIndex = 0;
         private CreoleRichTextElementData _result = null;
         private ICreoleRichTextElementDataIterator _element;
-        private IEnumerator<CreoleToken> _token;
+        private IEnumerator<Token<CreoleTokenCode>> _token;
 
-        internal CreoleRichTextElementProcessor(CreoleParserContext context, CreoleTokenRange tokens)
+        internal CreoleRichTextElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
             : this(context, tokens, elementIterator: null)
         {
         }
 
-        internal CreoleRichTextElementProcessor(CreoleParserContext context, CreoleTokenRange tokens, CreoleRichTextElementProcessor elementProcessor)
+        internal CreoleRichTextElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens, CreoleRichTextElementProcessor elementProcessor)
             : this(context, tokens, (elementProcessor != null ? new CreoleRichTextElementProcessorIteratorAdapter(elementProcessor) : null))
         {
         }
 
-        internal CreoleRichTextElementProcessor(CreoleParserContext context, CreoleTokenRange tokens, IEnumerable<CreoleRichTextElementData> elements)
+        internal CreoleRichTextElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens, IEnumerable<CreoleRichTextElementData> elements)
             : this(context, tokens, (elements != null ? new CreoleRichTextElementDataCollectionAdapter(elements) : null))
         {
         }
 
-        private CreoleRichTextElementProcessor(CreoleParserContext context, CreoleTokenRange tokens, ICreoleRichTextElementDataIterator elementIterator)
+        private CreoleRichTextElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens, ICreoleRichTextElementDataIterator elementIterator)
         {
             _tokens = tokens;
             Context = context;
@@ -105,7 +106,7 @@ namespace Mup.Creole.ElementProcessors.RichText
 
         protected CreoleParserContext Context { get; }
 
-        protected CreoleToken Token
+        protected Token<CreoleTokenCode> Token
             => _token.Current;
 
         protected int Index

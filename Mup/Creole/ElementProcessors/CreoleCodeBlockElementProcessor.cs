@@ -1,4 +1,5 @@
 using Mup.Creole.Elements;
+using Mup.Scanner;
 using System.Text;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -25,7 +26,7 @@ namespace Mup.Creole.ElementProcessors
 
         private bool _isAtBeginningOfLine = true;
 
-        internal CreoleCodeBlockElementProcessor(CreoleParserContext context, CreoleTokenRange tokens)
+        internal CreoleCodeBlockElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
             : base(context, tokens)
         {
         }
@@ -114,7 +115,7 @@ namespace Mup.Creole.ElementProcessors
             return new CreolePreformattedBlockElement(codeBlockText);
         }
 
-        private string _GetCodeBlockTextFrom(CreoleTokenRange tokens)
+        private string _GetCodeBlockTextFrom(TokenRange<CreoleTokenCode> tokens)
         {
             var builder = new StringBuilder();
 

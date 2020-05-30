@@ -1,10 +1,10 @@
 using System.Text;
 
-namespace Mup.Creole
+namespace Mup.Scanner
 {
-    internal static class CreoleTokenRangeHelper
+    internal static class TokenRangeHelper
     {
-        internal static string GetPlainText(CreoleTokenRange tokens)
+        internal static string GetPlainText<TCode>(TokenRange<TCode> tokens)
         {
             var stringBuilder = new StringBuilder();
             foreach (var token in tokens)

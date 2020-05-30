@@ -1,3 +1,4 @@
+using Mup.Scanner;
 using System;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -24,12 +25,12 @@ namespace Mup.Creole.ElementProcessors.RichText
         private bool _isEscaped;
         private State _state = State.NoElement;
 
-        internal CreoleInlineHyperlinkProcessor(CreoleParserContext context, CreoleTokenRange tokens)
+        internal CreoleInlineHyperlinkProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
             : base(context, tokens)
         {
         }
 
-        internal CreoleInlineHyperlinkProcessor(CreoleParserContext context, CreoleTokenRange tokens, CreoleRichTextElementProcessor baseElementProcessor)
+        internal CreoleInlineHyperlinkProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens, CreoleRichTextElementProcessor baseElementProcessor)
             : base(context, tokens, baseElementProcessor)
         {
         }

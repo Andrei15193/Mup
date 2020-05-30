@@ -1,5 +1,6 @@
 using Mup.Creole.ElementProcessors.RichText;
 using Mup.Creole.Elements;
+using Mup.Scanner;
 using System;
 using System.Collections.Generic;
 using static Mup.Creole.CreoleTokenCode;
@@ -9,17 +10,17 @@ namespace Mup.Creole.ElementProcessors
     internal abstract class CreoleElementProcessor : IDisposable
     {
         private static readonly IEnumerable<CreoleElement> _emptyCreoleElements = new CreoleElement[0];
-        private readonly CreoleTokenRange _tokens;
+        private readonly TokenRange<CreoleTokenCode> _tokens;
         private int _index = 0;
         private bool _isOnNewLine = true;
         private int _elementStartIndex = 0;
         private int _elementEndIndex = 0;
-        private readonly IEnumerator<CreoleToken> _token;
+        private readonly IEnumerator<Token<CreoleTokenCode>> _token;
         private bool _tokenHasValue;
         private CreoleElementInfo _result = null;
         private bool _isCompleted = false;
 
-        protected CreoleElementProcessor(CreoleParserContext context, CreoleTokenRange tokens)
+        protected CreoleElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
         {
             Context = context;
             _tokens = tokens;
@@ -83,7 +84,7 @@ namespace Mup.Creole.ElementProcessors
 
         protected CreoleParserContext Context { get; }
 
-        protected CreoleToken Token
+        protected Token<CreoleTokenCode> Token
             => _token.Current;
 
         protected int Index
@@ -119,7 +120,7 @@ namespace Mup.Creole.ElementProcessors
             => GetPlainText(_elementStartIndex, _elementEndIndex);
 
         protected string GetPlainText(int startIndex, int endIndex)
-            => CreoleTokenRangeHelper.GetPlainText(GetTokens(startIndex, endIndex));
+            => TokenRangeHelper.GetPlainText(GetTokens(startIndex, endIndex));
 
         protected IEnumerable<CreoleElement> GetRichText()
             => GetRichText(_elementStartIndex, _elementEndIndex);
@@ -134,7 +135,7 @@ namespace Mup.Creole.ElementProcessors
             return richTextProcessor.Process(tokens);
         }
 
-        protected CreoleTokenRange GetTokens(int startIndex, int endIndex)
+        protected TokenRange<CreoleTokenCode> GetTokens(int startIndex, int endIndex)
         {
             if (startIndex < _elementStartIndex)
                 throw new ArgumentException("Content cannot begin before the element starts.", nameof(startIndex));

@@ -1,3 +1,4 @@
+using Mup.Scanner;
 using System.Collections.Generic;
 
 namespace Mup.Creole.ElementProcessors.RichText
@@ -17,12 +18,12 @@ namespace Mup.Creole.ElementProcessors.RichText
         private int _elementEndIndex;
         private State _state = State.NoElement;
 
-        internal CreoleStyleElementProcessor(CreoleParserContext context, CreoleTokenRange tokens)
+        internal CreoleStyleElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
             : base(context, tokens)
         {
         }
 
-        internal CreoleStyleElementProcessor(CreoleParserContext context, CreoleTokenRange tokens, IEnumerable<CreoleRichTextElementData> baseElements)
+        internal CreoleStyleElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens, IEnumerable<CreoleRichTextElementData> baseElements)
             : base(context, tokens, baseElements)
         {
         }
