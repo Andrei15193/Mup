@@ -77,7 +77,7 @@ namespace Mup
             return parseTree;
         }
 
-        private IParseTree _Parse(ReadOnlyCollection<CreoleToken> tokens)
+        private IParseTree _Parse(IReadOnlyList<CreoleToken> tokens)
         {
             var context = new CreoleParserContext(Options.InlineHyperlinkProtocols);
             var tokenRange = new CreoleTokenRange(tokens);

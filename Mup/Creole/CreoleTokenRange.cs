@@ -1,17 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace Mup.Creole
 {
     internal class CreoleTokenRange : IEnumerable<CreoleToken>
     {
-        private readonly ReadOnlyCollection<CreoleToken> _tokens;
+        private readonly IReadOnlyList<CreoleToken> _tokens;
         private readonly int _startIndex;
         private readonly int _count;
 
-        internal CreoleTokenRange(ReadOnlyCollection<CreoleToken> tokens)
+        internal CreoleTokenRange(IReadOnlyList<CreoleToken> tokens)
         {
             if (tokens == null)
                 throw new ArgumentNullException(nameof(tokens));
@@ -21,7 +20,7 @@ namespace Mup.Creole
             _count = _tokens.Count;
         }
 
-        internal CreoleTokenRange(ReadOnlyCollection<CreoleToken> tokens, int rangeStartIndex, int rangeLength)
+        internal CreoleTokenRange(IReadOnlyList<CreoleToken> tokens, int rangeStartIndex, int rangeLength)
         {
             if (tokens == null)
                 throw new ArgumentNullException(nameof(tokens));

@@ -1,18 +1,11 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace Mup.Scanner
 {
     internal abstract class CharacterScanner
     {
-        private const int _defaultBufferSize = 2048;
-
         internal void Scan(TextReader reader, int bufferSize)
         {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-            if (bufferSize <= 0)
-                throw new ArgumentException("The buffer size must be greater than zero.", nameof(bufferSize));
             _Reset();
 
             int bufferLength;
@@ -33,11 +26,6 @@ namespace Mup.Scanner
 
         protected int Column { get; private set; }
 
-        protected int Index { get; private set; }
-
-        protected virtual int DefaultBuffer
-            => _defaultBufferSize;
-
         protected virtual void Reset()
         {
         }
@@ -50,7 +38,6 @@ namespace Mup.Scanner
         {
             Line = 1;
             Column = 1;
-            Index = 0;
             Reset();
         }
 
@@ -58,7 +45,6 @@ namespace Mup.Scanner
         {
             Process(character);
 
-            Index++;
             if (character == '\n')
             {
                 Line++;

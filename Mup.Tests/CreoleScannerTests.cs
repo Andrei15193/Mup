@@ -1,5 +1,4 @@
 ﻿using Mup.Creole;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,20 +10,6 @@ namespace Mup.Tests
     public class CreoleScannerTests
     {
         private readonly CreoleScanner _scanner = new CreoleScanner();
-
-        [Fact]
-        public void CannotScanFromNullTextReaderWithBuffer()
-        {
-            Assert.Throws<ArgumentNullException>(() => _scanner.Scan(null, 0));
-        }
-
-        [Theory, MemberData(nameof(ScannerTestData.InvalidBufferSizeTestData), MemberType = typeof(ScannerTestData))]
-        public void CannotScanWithNegativeOrZeroBufferSize(int bufferSize)
-        {
-            using var reader = new StringReader(string.Empty);
-
-            Assert.Throws<ArgumentException>(() => _scanner.Scan(reader, bufferSize));
-        }
 
         [Theory, MemberData(nameof(CreoleScannerTestData.TextToTokensTestData), MemberType = typeof(CreoleScannerTestData))]
         public void ScanTextUsingReaderWithBuffer(string text, IEnumerable<object> tokens)

@@ -24,22 +24,6 @@ namespace Mup.Tests
             }
         };
 
-        public static IEnumerable<object[]> InvalidBufferSizeTestData { get; } = new List<object[]>
-        {
-            new object[]
-            {
-                -1
-            },
-            new object[]
-            {
-                -2
-            },
-            new object[]
-            {
-                0
-            }
-        };
-
         public static IEnumerable<object[]> UnrecognizedCharacterTestData { get; } = new List<object[]>
         {
             new object[]
