@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using static System.String;
 
 namespace Mup
 {
@@ -31,59 +30,37 @@ namespace Mup
         private static bool _IsVoidElement(string elementName)
             => _voidElements.Exists(voidElement => StringComparer.OrdinalIgnoreCase.Equals(voidElement, elementName));
 
-        private readonly StringBuilder _wrappedBuilder = null;
+        private readonly StringBuilder _htmlStringBuilder;
         private readonly Stack<string> _openElements = new Stack<string>();
-        private string _previousElement = null;
-        private string _result = null;
         private bool _elementEnded = true;
-        private StringBuilder _htmlStringBuilder = null;
 
         /// <summary>Initializes a new instance of the <see cref="HtmlWriterVisitor"/> class.</summary>
         public HtmlWriterVisitor()
+            : this(null)
         {
-            _wrappedBuilder = null;
-            Options = _defaultOptions;
         }
 
         /// <summary>Initializes a new instance of the <see cref="HtmlWriterVisitor"/> class.</summary>
         /// <param name="options">The <see cref="HtmlWriterVisitorOptions"/> to use when writing HTML.</param>
-        /// <exception cref="ArgumentNullException">
-        /// Thrown when the <paramref name="options"/> are <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// Thrown when the <see cref="HtmlWriterVisitorOptions.IndentOffset"/> is less than 0 (zero).
-        /// </exception>
+        /// <exception cref="ArgumentException">Thrown when the <see cref="HtmlWriterVisitorOptions.IndentOffset"/> is less than 0 (zero).</exception>
         public HtmlWriterVisitor(HtmlWriterVisitorOptions options)
+            : this(null, options)
         {
-            if (options == null)
-                throw new ArgumentNullException(nameof(options));
-            if (options.IndentOffset < 0)
-                throw new ArgumentException("The IndentOffset cannot be negative.", nameof(options));
-
-            _wrappedBuilder = null;
-            Options = options;
         }
 
         /// <summary>Initializes a new instance of the <see cref="HtmlWriterVisitor"/> class.</summary>
         /// <param name="stringBuilder">The <see cref="StringBuilder"/> to which to write the result.</param>
         /// <param name="options">The <see cref="HtmlWriterVisitorOptions"/> to use when writing HTML.</param>
-        /// <exception cref="ArgumentNullException">
-        /// Thrown when the <paramref name="stringBuilder"/> or <paramref name="options"/> are <c>null</c>.
-        /// </exception>
         /// <exception cref="ArgumentException">
         /// Thrown when the <see cref="HtmlWriterVisitorOptions.IndentOffset"/> is less than 0 (zero).
         /// </exception>
         public HtmlWriterVisitor(StringBuilder stringBuilder, HtmlWriterVisitorOptions options)
         {
-            if (stringBuilder == null)
-                throw new ArgumentNullException(nameof(stringBuilder));
-            if (options == null)
-                throw new ArgumentNullException(nameof(options));
-            if (options.IndentOffset < 0)
-                throw new ArgumentException("The IndentOffset cannot be negative.", nameof(options));
+            _htmlStringBuilder = stringBuilder ?? new StringBuilder();
+            Options = options ?? _defaultOptions;
 
-            _wrappedBuilder = stringBuilder;
-            Options = options;
+            if (Options.IndentOffset < 0)
+                throw new ArgumentException("The IndentOffset cannot be negative.", nameof(options));
         }
 
         /// <summary>Gets the <see cref="HtmlWriterVisitorOptions"/> to use when writing HTML to the result.</summary>
@@ -92,22 +69,17 @@ namespace Mup
         /// <summary>Gets the visitor result. This method is called only after the visit operation completes.</summary>
         /// <returns>Returns the result after the entire parse tree has been visited.</returns>
         protected internal override string GetResult()
-            => _result = _result ?? _htmlStringBuilder.ToString();
+            => _htmlStringBuilder.ToString();
 
         /// <summary>Visits the provided <paramref name="rootElement"/>.</summary>
         /// <param name="rootElement">The <see cref="ParseTreeRootElement"/> to visit.</param>
         protected internal override void Visit(ParseTreeRootElement rootElement)
         {
-            _result = null;
             _elementEnded = true;
             _openElements.Clear();
 
             foreach (var element in rootElement.Elements)
                 element.Accept(this);
-
-            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
-            _result = _htmlStringBuilder.ToString();
-            _htmlStringBuilder = null;
         }
 
         /// <summary>Visits the provided <paramref name="heading1"/> element.</summary>
@@ -201,10 +173,7 @@ namespace Mup
             BeginElement("li");
             foreach (var element in listItem.Content)
                 element.Accept(this);
-            if (StringComparer.OrdinalIgnoreCase.Equals("ul", _previousElement) || StringComparer.OrdinalIgnoreCase.Equals("ol", _previousElement))
-                EndElement();
-            else
-                EndElementWithoutIndent();
+            EndElementWithoutIndent();
         }
 
         /// <summary>Visits the provided <paramref name="tableElement"/> element.</summary>
@@ -293,7 +262,7 @@ namespace Mup
         {
             BeginElementWithoutIndent("img");
             WriteAttribute("src", image.Source);
-            if (!IsNullOrWhiteSpace(image.AlternativeText))
+            if (!string.IsNullOrWhiteSpace(image.AlternativeText))
                 WriteAttribute("alt", image.AlternativeText);
             EndElement();
         }
@@ -348,13 +317,10 @@ namespace Mup
             _CompleteElementBeginning();
             _Indent();
 
-            _result = null;
-            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             _htmlStringBuilder.Append('<');
             _AppendHtmlSafe(elementName);
             _elementEnded = false;
             _openElements.Push(elementName);
-            _previousElement = elementName;
         }
 
         /// <summary>Begins an HTML element without indentation.</summary>
@@ -363,13 +329,10 @@ namespace Mup
         {
             _CompleteElementBeginning();
 
-            _result = null;
-            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             _htmlStringBuilder.Append('<');
             _AppendHtmlSafe(elementName);
             _elementEnded = false;
             _openElements.Push(elementName);
-            _previousElement = elementName;
         }
 
         /// <summary>Ends a previously started HTML element.</summary>
@@ -382,8 +345,6 @@ namespace Mup
             if (_openElements.Count == 0)
                 throw new InvalidOperationException("There are no HTML elements to end.");
 
-            _result = null;
-            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             var elementName = _openElements.Pop();
             if (!_elementEnded)
             {
@@ -405,7 +366,6 @@ namespace Mup
                 _AppendHtmlSafe(elementName);
                 _htmlStringBuilder.Append('>');
             }
-            _previousElement = elementName;
         }
 
         /// <summary>Ends a previously started HTML element without indentation.</summary>
@@ -418,8 +378,6 @@ namespace Mup
             if (_openElements.Count == 0)
                 throw new InvalidOperationException("There are no HTML elements to end.");
 
-            _result = null;
-            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             var elementName = _openElements.Pop();
             if (!_elementEnded)
             {
@@ -439,7 +397,6 @@ namespace Mup
                 _AppendHtmlSafe(elementName);
                 _htmlStringBuilder.Append('>');
             }
-            _previousElement = elementName;
         }
 
         /// <summary>Writes an HTML attribute to the result.</summary>
@@ -454,8 +411,6 @@ namespace Mup
             if (_elementEnded)
                 throw new InvalidOperationException("Element content has already been written.");
 
-            _result = null;
-            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             _htmlStringBuilder.Append(' ');
             _AppendHtmlSafe(attributeName);
         }
@@ -473,8 +428,6 @@ namespace Mup
             if (_elementEnded)
                 throw new InvalidOperationException("Element content has already been written.");
 
-            _result = null;
-            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             _htmlStringBuilder.Append(' ');
             _AppendHtmlSafe(attributeName);
             _htmlStringBuilder.Append("=\"");
@@ -490,8 +443,6 @@ namespace Mup
             if (_openElements.Count == 0)
                 _Indent();
 
-            _result = null;
-            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             _htmlStringBuilder.Append("<!--");
             _AppendHtmlSafe(text);
             _htmlStringBuilder.Append("-->");
@@ -527,16 +478,14 @@ namespace Mup
 
         private void _Indent()
         {
-            _result = null;
-            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
-            if (Options.Indent != null)
+            if (!string.IsNullOrEmpty(Options.Indent) && !string.IsNullOrEmpty(Options.NewLine))
             {
                 if (_htmlStringBuilder.Length > 0)
                     _htmlStringBuilder.Append(Options.NewLine ?? Environment.NewLine);
                 for (var indentCount = 0; indentCount < Options.IndentOffset + _openElements.Count; indentCount++)
                     _htmlStringBuilder.Append(Options.Indent);
             }
-            else if (Options.NewLine != null && _htmlStringBuilder.Length > 0)
+            else if (!string.IsNullOrWhiteSpace(Options.NewLine))
                 _htmlStringBuilder.Append(Options.NewLine);
         }
 
@@ -544,8 +493,6 @@ namespace Mup
         {
             if (!_elementEnded)
             {
-                _result = null;
-                _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
                 _htmlStringBuilder.Append('>');
                 _elementEnded = true;
             }
@@ -553,8 +500,6 @@ namespace Mup
 
         private void _AppendHtmlSafe(char character)
         {
-            _result = null;
-            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             switch (character)
             {
                 case '&':

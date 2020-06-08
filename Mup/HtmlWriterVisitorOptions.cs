@@ -21,8 +21,8 @@ namespace Mup
         public int IndentOffset { get; set; }
 
         /// <summary>
-        /// When provided, the given sequence is used for breaking elements on separate lines
-        /// otherwise the <see cref="System.Environment"/>.<see cref="System.Environment.NewLine"/> is used.
+        /// When provided, the given sequence is used for breaking elements on separate lines otherwise no new line is used
+        /// and implicitly no indentantion is applied.
         /// </summary>
         public string NewLine { get; set; }
     }
