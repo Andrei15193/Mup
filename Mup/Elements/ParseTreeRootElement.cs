@@ -10,6 +10,13 @@ namespace Mup.Elements
         public ParseTreeRootElement(IEnumerable<Element> elements)
             => Elements = elements;
 
+        /// <summary>Initializes a new instance of the <see cref="ParseTreeRootElement"/> class.</summary>
+        /// <param name="elements">The immediate descendants of the parse tree root node.</param>
+        public ParseTreeRootElement(params Element[] elements)
+            : this((IEnumerable<Element>)elements)
+        {
+        }
+
         /// <summary>The immediate descendants of the parse tree root node.</summary>
         public IEnumerable<Element> Elements { get; }
 

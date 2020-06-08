@@ -6,7 +6,7 @@ using static System.String;
 
 namespace Mup
 {
-    /// <summary>A <see cref="ParseTreeVisitor{TResult}"/> implementation for generating HTML from an <see cref="IParseTree"/>.</summary>
+    /// <summary>A <see cref="ParseTreeVisitor{TResult}"/> implementation for generating HTML from an <see cref="ParseTreeRootElement"/>.</summary>
     public class HtmlWriterVisitor : ParseTreeVisitor<string>
     {
         private static readonly HtmlWriterVisitorOptions _defaultOptions = new HtmlWriterVisitorOptions();

@@ -41,7 +41,7 @@ namespace Mup.Tests
         [Theory, MemberData(nameof(EscapeSpecialCharactersForHyperlinksTestData), MemberType = typeof(HtmlWriterVisitorTestData))]
         public void EscapesHtmlSpecialCharactersForHyperlinks(string text, string expectedHtml)
         {
-            var actualHtml = new HyperlinkElement(text, new TextElement[] { new TextElement(text) }).Accept(new HtmlWriterVisitor());
+            var actualHtml = new HyperlinkElement(text, new TextElement(text)).Accept(new HtmlWriterVisitor());
 
             Assert.Equal(expectedHtml, actualHtml);
         }
