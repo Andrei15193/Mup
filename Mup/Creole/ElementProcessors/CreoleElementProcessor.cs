@@ -1,5 +1,5 @@
 using Mup.Creole.ElementProcessors.RichText;
-using Mup.Creole.Elements;
+using Mup.Elements;
 using Mup.Scanner;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace Mup.Creole.ElementProcessors
 {
     internal abstract class CreoleElementProcessor : IDisposable
     {
-        private static readonly IEnumerable<CreoleElement> _emptyCreoleElements = new CreoleElement[0];
+        private static readonly IEnumerable<Element> _emptyCreoleElements = new Element[0];
         private readonly TokenRange<CreoleTokenCode> _tokens;
         private int _index = 0;
         private bool _isOnNewLine = true;
@@ -107,7 +107,7 @@ namespace Mup.Creole.ElementProcessors
             _elementEndIndex = Index;
         }
 
-        protected void SetResult(CreoleElement creoleElement)
+        protected void SetResult(Element creoleElement)
         {
             if (creoleElement != null)
             {
@@ -122,10 +122,10 @@ namespace Mup.Creole.ElementProcessors
         protected string GetPlainText(int startIndex, int endIndex)
             => TokenRangeHelper.GetPlainText(GetTokens(startIndex, endIndex));
 
-        protected IEnumerable<CreoleElement> GetRichText()
+        protected IEnumerable<Element> GetRichText()
             => GetRichText(_elementStartIndex, _elementEndIndex);
 
-        protected IEnumerable<CreoleElement> GetRichText(int startIndex, int endIndex)
+        protected IEnumerable<Element> GetRichText(int startIndex, int endIndex)
         {
             if (startIndex == endIndex)
                 return _emptyCreoleElements;

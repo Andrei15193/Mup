@@ -1,6 +1,6 @@
 ﻿using Mup.Creole;
 using Mup.Creole.ElementProcessors;
-using Mup.Creole.Elements;
+using Mup.Elements;
 using Mup.Scanner;
 using System;
 using System.Collections.Generic;
@@ -51,7 +51,7 @@ namespace Mup
         /// <param name="text">The text to parse.</param>
         /// <returns>Returns an <see cref="IParseTree"/> that can be traversed using a <see cref="ParseTreeVisitor"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="text"/> is <c>null</c>.</exception>
-        public IParseTree Parse(string text)
+        public ParseTreeRootElement Parse(string text)
         {
             using (var stringReader = new StringReader(text))
                 return Parse(stringReader);
@@ -61,7 +61,7 @@ namespace Mup
         /// <param name="reader">A text reader from which to parse text.</param>
         /// <returns>Returns an <see cref="IParseTree"/> that can be traversed using a <see cref="ParseTreeVisitor"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is <c>null</c>.</exception>
-        public IParseTree Parse(TextReader reader)
+        public ParseTreeRootElement Parse(TextReader reader)
             => Parse(reader, _defaultBufferSize);
 
         /// <summary>Parses text from the given <paramref name="reader"/>.</summary>
@@ -69,7 +69,7 @@ namespace Mup
         /// <param name="bufferSize">The buffer size to use when reading text from the reader.</param>
         /// <returns>Returns an <see cref="IParseTree"/> that can be traversed using a <see cref="ParseTreeVisitor"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="reader"/> is <c>null</c>.</exception>
-        public IParseTree Parse(TextReader reader, int bufferSize)
+        public ParseTreeRootElement Parse(TextReader reader, int bufferSize)
         {
             var scanner = new CreoleScanner();
             scanner.Scan(reader, bufferSize);
@@ -78,7 +78,7 @@ namespace Mup
             return parseTree;
         }
 
-        private IParseTree _Parse(IReadOnlyList<Token<CreoleTokenCode>> tokens)
+        private ParseTreeRootElement _Parse(IReadOnlyList<Token<CreoleTokenCode>> tokens)
         {
             var context = new CreoleParserContext(Options.InlineHyperlinkProtocols);
             var tokenRange = new TokenRange<CreoleTokenCode>(tokens);
@@ -114,10 +114,10 @@ namespace Mup
                         );
             }
 
-            var creoleElements = new List<CreoleElement>(elementInfos.Count);
+            var creoleElements = new List<Element>(elementInfos.Count);
             foreach (var elementInfo in elementInfos)
                 creoleElements.Add(elementInfo.Element);
-            return new CreoleParseTree(creoleElements);
+            return new ParseTreeRootElement(creoleElements);
         }
     }
 }

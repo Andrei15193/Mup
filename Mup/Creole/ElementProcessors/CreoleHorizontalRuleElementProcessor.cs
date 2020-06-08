@@ -1,4 +1,4 @@
-using Mup.Creole.Elements;
+using Mup.Elements;
 using Mup.Scanner;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -12,7 +12,7 @@ namespace Mup.Creole.ElementProcessors
             InHorizontalRule
         }
 
-        private static readonly CreoleElement _creoleHorizontalRuleElement = new CreoleHorizontalRuleElement();
+        private static readonly Element _creoleHorizontalRuleElement = new HorizontalRuleElement();
 
         private int dashCount = 0;
         private State _state = State.NotInHorizontalRule;

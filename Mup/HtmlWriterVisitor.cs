@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mup.Elements;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using static System.String;
@@ -85,241 +86,260 @@ namespace Mup
             Options = options;
         }
 
-        /// <summary>Gets the <see cref="StringBuilder"/> where the HTML is being written.</summary>
-        [Obsolete("The use of this property is discouraged and will be removed in Mup 2.0. Please use the BeginElement, EndElement, WriteAttribute methods.")]
-        protected StringBuilder HtmlStringBuilder
-            => _htmlStringBuilder;
-
         /// <summary>Gets the <see cref="HtmlWriterVisitorOptions"/> to use when writing HTML to the result.</summary>
         protected HtmlWriterVisitorOptions Options { get; }
 
         /// <summary>Gets the visitor result. This method is called only after the visit operation completes.</summary>
         /// <returns>Returns the result after the entire parse tree has been visited.</returns>
         protected internal override string GetResult()
-            => _result;
+            => _result = _result ?? _htmlStringBuilder.ToString();
 
-        /// <summary>Initializes the visitor. This method is called before any visit method.</summary>
-        protected internal sealed override void BeginVisit()
+        /// <summary>Visits the provided <paramref name="rootElement"/>.</summary>
+        /// <param name="rootElement">The <see cref="ParseTreeRootElement"/> to visit.</param>
+        protected internal override void Visit(ParseTreeRootElement rootElement)
         {
             _result = null;
             _elementEnded = true;
             _openElements.Clear();
-            _htmlStringBuilder = (_wrappedBuilder ?? new StringBuilder());
-        }
 
-        /// <summary>Completes the visit operation. This method is called after all visit methods.</summary>
-        protected internal sealed override void EndVisit()
-        {
+            foreach (var element in rootElement.Elements)
+                element.Accept(this);
+
+            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             _result = _htmlStringBuilder.ToString();
             _htmlStringBuilder = null;
         }
 
-        /// <summary>Visits the beginning of a level 1 heading.</summary>
-        protected internal override void VisitHeading1Beginning()
-            => BeginElement("h1");
-
-        /// <summary>Visits the ending of a level 1 heading.</summary>
-        protected internal override void VisitHeading1Ending()
-            => EndElementWithoutIndent();
-
-        /// <summary>Visits the beginning of a level 2 heading.</summary>
-        protected internal override void VisitHeading2Beginning()
-            => BeginElement("h2");
-
-        /// <summary>Visits the ending of a level 2 heading.</summary>
-        protected internal override void VisitHeading2Ending()
-            => EndElementWithoutIndent();
-
-        /// <summary>Visits the beginning of a level 3 heading.</summary>
-        protected internal override void VisitHeading3Beginning()
-            => BeginElement("h3");
-
-        /// <summary>Visits the ending of a level 3 heading.</summary>
-        protected internal override void VisitHeading3Ending()
-            => EndElementWithoutIndent();
-
-        /// <summary>Visits the beginning of a level 4 heading.</summary>
-        protected internal override void VisitHeading4Beginning()
-            => BeginElement("h4");
-
-        /// <summary>Visits the ending of a level 4 heading.</summary>
-        protected internal override void VisitHeading4Ending()
-            => EndElementWithoutIndent();
-
-        /// <summary>Visits the beginning of a level 5 heading.</summary>
-        protected internal override void VisitHeading5Beginning()
-            => BeginElement("h5");
-
-        /// <summary>Visits the ending of a level 5 heading.</summary>
-        protected internal override void VisitHeading5Ending()
-            => EndElementWithoutIndent();
-
-        /// <summary>Visits the beginning of a level 6 heading.</summary>
-        protected internal override void VisitHeading6Beginning()
-            => BeginElement("h6");
-
-        /// <summary>Visits the ending of a level 6 heading.</summary>
-        protected internal override void VisitHeading6Ending()
-            => EndElementWithoutIndent();
-
-        /// <summary>Visits the beginning of a paragraph.</summary>
-        protected internal override void VisitParagraphBeginning()
-            => BeginElement("p");
-
-        /// <summary>Visits the ending of a paragraph.</summary>
-        protected internal override void VisitParagraphEnding()
-            => EndElementWithoutIndent();
-
-        /// <summary>Visits a preformatted block.</summary>
-        /// <param name="preformattedText">The preformatted text.</param>
-        protected internal override void VisitPreformattedBlock(string preformattedText)
+        /// <summary>Visits the provided <paramref name="heading1"/> element.</summary>
+        /// <param name="heading1">The <see cref="Heading1Element"/> to visit.</param>
+        protected internal override void Visit(Heading1Element heading1)
         {
-            BeginElement("pre");
-            BeginElementWithoutIndent("code");
-            Write(preformattedText);
-            EndElementWithoutIndent();
+            BeginElement("h1");
+            Write(heading1.Text);
             EndElementWithoutIndent();
         }
 
-        /// <summary>Visits the beginning of a table.</summary>
-        protected internal override void VisitTableBeginning()
+        /// <summary>Visits the provided <paramref name="heading2"/> element.</summary>
+        /// <param name="heading2">The <see cref="Heading2Element"/> to visit.</param>
+        protected internal override void Visit(Heading2Element heading2)
         {
-            BeginElement("table");
-            BeginElement("tbody");
+            BeginElement("h2");
+            Write(heading2.Text);
+            EndElementWithoutIndent();
         }
 
-        /// <summary>Visits the ending of a table.</summary>
-        protected internal override void VisitTableEnding()
+        /// <summary>Visits the provided <paramref name="heading3"/> element.</summary>
+        /// <param name="heading3">The <see cref="Heading3Element"/> to visit.</param>
+        protected internal override void Visit(Heading3Element heading3)
         {
-            EndElement();
+            BeginElement("h3");
+            Write(heading3.Text);
+            EndElementWithoutIndent();
+        }
+
+        /// <summary>Visits the provided <paramref name="heading4"/> element.</summary>
+        /// <param name="heading4">The <see cref="Heading4Element"/> to visit.</param>
+        protected internal override void Visit(Heading4Element heading4)
+        {
+            BeginElement("h4");
+            Write(heading4.Text);
+            EndElementWithoutIndent();
+        }
+
+        /// <summary>Visits the provided <paramref name="heading5"/> element.</summary>
+        /// <param name="heading5">The <see cref="Heading5Element"/> to visit.</param>
+        protected internal override void Visit(Heading5Element heading5)
+        {
+            BeginElement("h5");
+            Write(heading5.Text);
+            EndElementWithoutIndent();
+        }
+
+        /// <summary>Visits the provided <paramref name="heading6"/> element.</summary>
+        /// <param name="heading6">The <see cref="Heading6Element"/> to visit.</param>
+        protected internal override void Visit(Heading6Element heading6)
+        {
+            BeginElement("h6");
+            Write(heading6.Text);
+            EndElementWithoutIndent();
+        }
+
+        /// <summary>Visits the provided <paramref name="paragraph"/> element.</summary>
+        /// <param name="paragraph">The <see cref="ParagraphElement"/> to visit.</param>
+        protected internal override void Visit(ParagraphElement paragraph)
+        {
+            BeginElement("p");
+            foreach (var element in paragraph.Content)
+                element.Accept(this);
+            EndElementWithoutIndent();
+        }
+
+        /// <summary>Visits the provided <paramref name="unorderedListElement"/> element.</summary>
+        /// <param name="unorderedListElement">The <see cref="UnorderedListElement"/> to visit.</param>
+        protected internal override void Visit(UnorderedListElement unorderedListElement)
+        {
+            BeginElement("ul");
+            foreach (var item in unorderedListElement.Items)
+                item.Accept(this);
             EndElement();
         }
 
-        /// <summary>Visits the beginning of a table row.</summary>
-        protected internal override void VisitTableRowBeginning()
-            => BeginElement("tr");
-
-        /// <summary>Visits the ending of a table row.</summary>
-        protected internal override void VisitTableRowEnding()
-            => EndElement();
-
-        /// <summary>Visits the beginning of a table header cell.</summary>
-        protected internal override void VisitTableHeaderCellBeginning()
-            => BeginElement("th");
-
-        /// <summary>Visits the ending of a table header cell.</summary>
-        protected internal override void VisitTableHeaderCellEnding()
-            => EndElementWithoutIndent();
-
-        /// <summary>Visits the beginning of a table cell.</summary>
-        protected internal override void VisitTableCellBeginning()
-            => BeginElement("td");
-
-        /// <summary>Visits the ending of a table cell.</summary>
-        protected internal override void VisitTableCellEnding()
-            => EndElementWithoutIndent();
-
-        /// <summary>Visits the beginning of an unordered list.</summary>
-        protected internal override void VisitUnorderedListBeginning()
-            => BeginElement("ul");
-
-        /// <summary>Visits the ending of an unordered list.</summary>
-        protected internal override void VisitUnorderedListEnding()
-            => EndElement();
-
-        /// <summary>Visits the beginning of an ordered list.</summary>
-        protected internal override void VisitOrderedListBeginning()
-            => BeginElement("ol");
-
-        /// <summary>Visits the ending of an ordered list.</summary>
-        protected internal override void VisitOrderedListEnding()
-            => EndElement();
-
-        /// <summary>Visits the beginning of a list item.</summary>
-        protected internal override void VisitListItemBeginning()
-            => BeginElement("li");
-
-        /// <summary>Visits the ending of a list item.</summary>
-        protected internal override void VisitListItemEnding()
+        /// <summary>Visits the provided <paramref name="orderedList"/> element.</summary>
+        /// <param name="orderedList">The <see cref="OrderedListElement"/> to visit.</param>
+        protected internal override void Visit(OrderedListElement orderedList)
         {
+            BeginElement("ol");
+            foreach (var item in orderedList.Items)
+                item.Accept(this);
+            EndElement();
+        }
+
+        /// <summary>Visits the provided <paramref name="listItem"/> element.</summary>
+        /// <param name="listItem">The <see cref="ListItemElement"/> to visit.</param>
+        protected internal override void Visit(ListItemElement listItem)
+        {
+            BeginElement("li");
+            foreach (var element in listItem.Content)
+                element.Accept(this);
             if (StringComparer.OrdinalIgnoreCase.Equals("ul", _previousElement) || StringComparer.OrdinalIgnoreCase.Equals("ol", _previousElement))
                 EndElement();
             else
                 EndElementWithoutIndent();
         }
 
-        /// <summary>Visits a plugin.</summary>
-        /// <param name="text">The plugin text.</param>
-        protected internal override void VisitPlugin(string text)
-            => WriteComment($" {text} ");
-
-        /// <summary>Visits the beginning of a strong element.</summary>
-        protected internal override void VisitStrongBeginning()
-            => BeginElementWithoutIndent("strong");
-
-        /// <summary>Visits the ending of a strong element.</summary>
-        protected internal override void VisitStrongEnding()
-            => EndElementWithoutIndent();
-
-        /// <summary>Visits the beginning of an emphasised element.</summary>
-        protected internal override void VisitEmphasisBeginning()
-            => BeginElementWithoutIndent("em");
-
-        /// <summary>Visits the ending of an emphasised element.</summary>
-        protected internal override void VisitEmphasisEnding()
-            => EndElementWithoutIndent();
-
-        /// <summary>Visits the beginning of a hyperlink.</summary>
-        /// <param name="destination">The hyperlink destination.</param>
-        protected internal override void VisitHyperlinkBeginning(string destination)
+        /// <summary>Visits the provided <paramref name="tableElement"/> element.</summary>
+        /// <param name="tableElement">The <see cref="TableElement"/> to visit.</param>
+        protected internal override void Visit(TableElement tableElement)
         {
-            BeginElementWithoutIndent("a");
-            WriteAttribute("href", destination);
-        }
-
-        /// <summary>Visits the ending of a hyperlink.</summary>
-        protected internal override void VisitHyperlinkEnding()
-            => EndElementWithoutIndent();
-
-        /// <summary>Visits an image.</summary>
-        /// <param name="source">The source of the image.</param>
-        /// <param name="alternativeText">The alternative text for the image.</param>
-        protected internal override void VisitImage(string source, string alternativeText)
-        {
-            BeginElementWithoutIndent("img");
-            WriteAttribute("src", source);
-            if (!IsNullOrWhiteSpace(alternativeText))
-                WriteAttribute("alt", alternativeText);
+            BeginElement("table");
+            BeginElement("tbody");
+            foreach (var row in tableElement.Rows)
+                row.Accept(this);
+            EndElement();
             EndElement();
         }
 
-        /// <summary>Visits a line break.</summary>
-        protected internal override void VisitLineBreak()
+        /// <summary>Visits the provided <paramref name="tableRow"/> element.</summary>
+        /// <param name="tableRow">The <see cref="TableRowElement"/> to visit.</param>
+        protected internal override void Visit(TableRowElement tableRow)
+        {
+            BeginElement("tr");
+            foreach (var cell in tableRow.Cells)
+                cell.Accept(this);
+            EndElement();
+        }
+
+        /// <summary>Visits the provided <paramref name="tableHeaderCell"/> element.</summary>
+        /// <param name="tableHeaderCell">The <see cref="TableHeaderCellElement"/> to visit.</param>
+        protected internal override void Visit(TableHeaderCellElement tableHeaderCell)
+        {
+            BeginElement("th");
+            foreach (var element in tableHeaderCell.Content)
+                element.Accept(this);
+            EndElement();
+        }
+
+        /// <summary>Visits the provided <paramref name="tableDataCell"/> element.</summary>
+        /// <param name="tableDataCell">The <see cref="TableDataCellElement"/> to visit.</param>
+        protected internal override void Visit(TableDataCellElement tableDataCell)
+        {
+            BeginElement("td");
+            foreach (var element in tableDataCell.Content)
+                element.Accept(this);
+            EndElement();
+        }
+
+        /// <summary>Visits the provided <paramref name="text"/> element.</summary>
+        /// <param name="text">The <see cref="TextElement"/> to visit.</param>
+        protected internal override void Visit(TextElement text)
+        {
+            Write(text.Text);
+        }
+
+        /// <summary>Visits the provided <paramref name="emphasis"/> element.</summary>
+        /// <param name="emphasis">The <see cref="EmphasisElement"/> to visit.</param>
+        protected internal override void Visit(EmphasisElement emphasis)
+        {
+            BeginElementWithoutIndent("em");
+            foreach (var element in emphasis.Content)
+                element.Accept(this);
+            EndElementWithoutIndent();
+        }
+
+        /// <summary>Visits the provided <paramref name="strong"/> element.</summary>
+        /// <param name="strong">The <see cref="StrongElement"/> to visit.</param>
+        protected internal override void Visit(StrongElement strong)
+        {
+            BeginElementWithoutIndent("strong");
+            foreach (var element in strong.Content)
+                element.Accept(this);
+            EndElementWithoutIndent();
+        }
+
+        /// <summary>Visits the provided <paramref name="hyperlink"/> element.</summary>
+        /// <param name="hyperlink">The <see cref="HyperlinkElement"/> to visit.</param>
+        protected internal override void Visit(HyperlinkElement hyperlink)
+        {
+            BeginElementWithoutIndent("a");
+            WriteAttribute("href", hyperlink.Destination);
+            foreach (var element in hyperlink.Content)
+                element.Accept(this);
+            EndElementWithoutIndent();
+        }
+
+        /// <summary>Visits the provided <paramref name="image"/> element.</summary>
+        /// <param name="image">The <see cref="ImageElement"/> to visit.</param>
+        protected internal override void Visit(ImageElement image)
+        {
+            BeginElementWithoutIndent("img");
+            WriteAttribute("src", image.Source);
+            if (!IsNullOrWhiteSpace(image.AlternativeText))
+                WriteAttribute("alt", image.AlternativeText);
+            EndElement();
+        }
+
+        /// <summary>Visits the provided <paramref name="code"/> element.</summary>
+        /// <param name="code">The <see cref="CodeElement"/> to visit.</param>
+        protected internal override void Visit(CodeElement code)
+        {
+            BeginElementWithoutIndent("code");
+            Write(code.Code);
+            EndElementWithoutIndent();
+        }
+
+        /// <summary>Visits the provided <paramref name="lineBreak"/> element.</summary>
+        /// <param name="lineBreak">The <see cref="LineBreakElement"/> to visit.</param>
+        protected internal override void Visit(LineBreakElement lineBreak)
         {
             BeginElementWithoutIndent("br");
             EndElement();
         }
 
-        /// <summary>Visits a code fragment inside a block (e.g.: paragraph, list item or table).</summary>
-        /// <param name="fragment">The preformatted text.</param>
-        protected internal override void VisitCodeFragment(string fragment)
+        /// <summary>Visits the provided <paramref name="preformattedBlock"/> element.</summary>
+        /// <param name="preformattedBlock">The <see cref="PreformattedBlockElement"/> to visit.</param>
+        protected internal override void Visit(PreformattedBlockElement preformattedBlock)
         {
+            BeginElement("pre");
             BeginElementWithoutIndent("code");
-            Write(fragment);
+            Write(preformattedBlock.PreformattedText);
+            EndElementWithoutIndent();
             EndElementWithoutIndent();
         }
 
-        /// <summary>Visits a horizontal rule.</summary>
-        protected internal override void VisitHorizontalRule()
+        /// <summary>Visits the provided <paramref name="horizontalRule"/> element.</summary>
+        /// <param name="horizontalRule">The <see cref="HorizontalRuleElement"/> to visit.</param>
+        protected internal override void Visit(HorizontalRuleElement horizontalRule)
         {
             BeginElement("hr");
             EndElement();
         }
 
-        /// <summary>Visits plain text. This method may be called multiple times consecutively.</summary>
-        /// <param name="text">The plain text.</param>
-        protected internal override void VisitText(string text)
-            => Write(text);
+        /// <summary>Visits the provided <paramref name="plugin"/> element.</summary>
+        /// <param name="plugin">The <see cref="PluginElement"/> to visit.</param>
+        protected internal override void Visit(PluginElement plugin)
+        {
+            WriteComment($" {plugin.PluginText} ");
+        }
 
         /// <summary>Begins an HTML element.</summary>
         /// <param name="elementName">The name of the HTML element.</param>
@@ -328,6 +348,8 @@ namespace Mup
             _CompleteElementBeginning();
             _Indent();
 
+            _result = null;
+            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             _htmlStringBuilder.Append('<');
             _AppendHtmlSafe(elementName);
             _elementEnded = false;
@@ -341,6 +363,8 @@ namespace Mup
         {
             _CompleteElementBeginning();
 
+            _result = null;
+            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             _htmlStringBuilder.Append('<');
             _AppendHtmlSafe(elementName);
             _elementEnded = false;
@@ -358,6 +382,8 @@ namespace Mup
             if (_openElements.Count == 0)
                 throw new InvalidOperationException("There are no HTML elements to end.");
 
+            _result = null;
+            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             var elementName = _openElements.Pop();
             if (!_elementEnded)
             {
@@ -392,6 +418,8 @@ namespace Mup
             if (_openElements.Count == 0)
                 throw new InvalidOperationException("There are no HTML elements to end.");
 
+            _result = null;
+            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             var elementName = _openElements.Pop();
             if (!_elementEnded)
             {
@@ -426,6 +454,8 @@ namespace Mup
             if (_elementEnded)
                 throw new InvalidOperationException("Element content has already been written.");
 
+            _result = null;
+            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             _htmlStringBuilder.Append(' ');
             _AppendHtmlSafe(attributeName);
         }
@@ -443,6 +473,8 @@ namespace Mup
             if (_elementEnded)
                 throw new InvalidOperationException("Element content has already been written.");
 
+            _result = null;
+            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             _htmlStringBuilder.Append(' ');
             _AppendHtmlSafe(attributeName);
             _htmlStringBuilder.Append("=\"");
@@ -458,6 +490,8 @@ namespace Mup
             if (_openElements.Count == 0)
                 _Indent();
 
+            _result = null;
+            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             _htmlStringBuilder.Append("<!--");
             _AppendHtmlSafe(text);
             _htmlStringBuilder.Append("-->");
@@ -485,48 +519,6 @@ namespace Mup
             _AppendHtmlSafe(character);
         }
 
-        /// <summary>Appends the HTML encoded <paramref name="text"/>. Encoding is done only for special characters.</summary>
-        /// <param name="text">The text to append to <see cref="HtmlStringBuilder"/>.</param>
-        [Obsolete("The use of this method is discouraged and will be removed in Mup 2.0. Please use the Write methods instead.")]
-        protected void AppendHtmlSafe(string text)
-        {
-            foreach (var character in text)
-                AppendHtmlSafe(character);
-        }
-
-        /// <summary>Appends the HTML encoded <paramref name="character"/>. Encoding is done only for special characters.</summary>
-        /// <param name="character">The character to append to <see cref="HtmlStringBuilder"/>.</param>
-        [Obsolete("The use of this method is discouraged and will be removed in Mup 2.0. Please use the Write methods instead.")]
-        protected void AppendHtmlSafe(char character)
-        {
-            switch (character)
-            {
-                case '&':
-                    HtmlStringBuilder.Append("&amp;");
-                    break;
-
-                case '<':
-                    HtmlStringBuilder.Append("&lt;");
-                    break;
-
-                case '>':
-                    HtmlStringBuilder.Append("&gt;");
-                    break;
-
-                case '"':
-                    HtmlStringBuilder.Append("&quot;");
-                    break;
-
-                case '\'':
-                    HtmlStringBuilder.Append("&#39;");
-                    break;
-
-                default:
-                    HtmlStringBuilder.Append(character);
-                    break;
-            }
-        }
-
         private void _AppendHtmlSafe(string text)
         {
             foreach (var character in text)
@@ -535,6 +527,8 @@ namespace Mup
 
         private void _Indent()
         {
+            _result = null;
+            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             if (Options.Indent != null)
             {
                 if (_htmlStringBuilder.Length > 0)
@@ -550,6 +544,8 @@ namespace Mup
         {
             if (!_elementEnded)
             {
+                _result = null;
+                _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
                 _htmlStringBuilder.Append('>');
                 _elementEnded = true;
             }
@@ -557,6 +553,8 @@ namespace Mup
 
         private void _AppendHtmlSafe(char character)
         {
+            _result = null;
+            _htmlStringBuilder = _htmlStringBuilder ?? _wrappedBuilder ?? new StringBuilder();
             switch (character)
             {
                 case '&':

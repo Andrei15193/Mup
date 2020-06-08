@@ -1,4 +1,4 @@
-using Mup.Creole.Elements;
+using Mup.Elements;
 using Mup.Scanner;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -137,25 +137,25 @@ namespace Mup.Creole.ElementProcessors
             }
         }
 
-        private CreoleElement _GetHeadingElementFor()
+        private Element _GetHeadingElementFor()
             => _GetHeadingElementFor(string.Empty);
 
-        private CreoleElement _GetHeadingElementFor(string text)
+        private Element _GetHeadingElementFor(string text)
         {
             switch (_equalTokensCount)
             {
                 case 1:
-                    return new CreoleHeading1Element(text);
+                    return new Heading1Element(text);
                 case 2:
-                    return new CreoleHeading2Element(text);
+                    return new Heading2Element(text);
                 case 3:
-                    return new CreoleHeading3Element(text);
+                    return new Heading3Element(text);
                 case 4:
-                    return new CreoleHeading4Element(text);
+                    return new Heading4Element(text);
                 case 5:
-                    return new CreoleHeading5Element(text);
+                    return new Heading5Element(text);
                 default:
-                    return new CreoleHeading6Element(text);
+                    return new Heading6Element(text);
             }
         }
     }

@@ -1,4 +1,4 @@
-using Mup.Creole.Elements;
+using Mup.Elements;
 using Mup.Scanner;
 using System.Collections.Generic;
 using static Mup.Creole.CreoleTokenCode;
@@ -303,14 +303,14 @@ namespace Mup.Creole.ElementProcessors
                 SetResult(_GetTopList());
         }
 
-        private CreoleListElement _GetTopList()
+        private ListElement _GetTopList()
         {
             while (_listInfos.Count > 1)
                 _PopList();
             return _PopList();
         }
 
-        private CreoleListElement _PopList()
+        private ListElement _PopList()
         {
             var list = _GetListFrom(_listInfos.Pop());
             if (_listInfos.Count > 0)
@@ -319,16 +319,16 @@ namespace Mup.Creole.ElementProcessors
             return list;
         }
 
-        private static CreoleListElement _GetListFrom(CreoleListInfo listInfo)
+        private static ListElement _GetListFrom(CreoleListInfo listInfo)
         {
-            var listItems = new List<CreoleListItemElement>();
+            var listItems = new List<ListItemElement>();
             foreach (var listItemInfo in listInfo.ListItems)
-                listItems.Add(new CreoleListItemElement(listItemInfo.Elements));
+                listItems.Add(new ListItemElement(listItemInfo.Elements));
 
             if (listInfo.IsOrdered)
-                return new CreoleOrderedListElement(listItems);
+                return new OrderedListElement(listItems);
             else
-                return new CreoleUnorderedListElement(listItems);
+                return new UnorderedListElement(listItems);
         }
 
         private class CreoleListInfo
@@ -349,7 +349,7 @@ namespace Mup.Creole.ElementProcessors
             internal CreoleListItemInfo LastItem
                 => _listItems.Last.Value;
 
-            internal CreoleListItemInfo AddItem(IEnumerable<CreoleElement> elements)
+            internal CreoleListItemInfo AddItem(IEnumerable<Element> elements)
             {
                 var item = new CreoleListItemInfo(elements);
                 _listItems.AddLast(item);
@@ -359,12 +359,12 @@ namespace Mup.Creole.ElementProcessors
 
         private class CreoleListItemInfo
         {
-            internal CreoleListItemInfo(IEnumerable<CreoleElement> elements)
+            internal CreoleListItemInfo(IEnumerable<Element> elements)
             {
-                Elements = new List<CreoleElement>(elements);
+                Elements = new List<Element>(elements);
             }
 
-            internal ICollection<CreoleElement> Elements { get; }
+            internal ICollection<Element> Elements { get; }
         }
     }
 }

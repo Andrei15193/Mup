@@ -1,4 +1,4 @@
-using Mup.Creole.Elements;
+using Mup.Elements;
 using Mup.Scanner;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -60,7 +60,7 @@ namespace Mup.Creole.ElementProcessors
                 SetResult(_GetParagraphElement());
         }
 
-        private CreoleElement _GetParagraphElement()
-            => new CreoleParagraphElement(GetRichText());
+        private Element _GetParagraphElement()
+            => new ParagraphElement(GetRichText());
     }
 }

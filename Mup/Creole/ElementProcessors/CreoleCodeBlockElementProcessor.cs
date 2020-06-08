@@ -1,4 +1,4 @@
-using Mup.Creole.Elements;
+using Mup.Elements;
 using Mup.Scanner;
 using System.Text;
 using static Mup.Creole.CreoleTokenCode;
@@ -108,11 +108,11 @@ namespace Mup.Creole.ElementProcessors
             }
         }
 
-        private CreoleElement _GetCodeBlockElement()
+        private Element _GetCodeBlockElement()
         {
             var codeBlockTokenRange = GetTokens(_contentStartIndex, _contentEndIndex);
             var codeBlockText = _GetCodeBlockTextFrom(codeBlockTokenRange);
-            return new CreolePreformattedBlockElement(codeBlockText);
+            return new PreformattedBlockElement(codeBlockText);
         }
 
         private string _GetCodeBlockTextFrom(TokenRange<CreoleTokenCode> tokens)

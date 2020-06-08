@@ -1,4 +1,4 @@
-using Mup.Creole.Elements;
+using Mup.Elements;
 using Mup.Scanner;
 using static Mup.Creole.CreoleTokenCode;
 
@@ -97,7 +97,7 @@ namespace Mup.Creole.ElementProcessors
                     else if (Token.Code == NewLine || Token.Code == BlankLine)
                     {
                         SetElementEndIndex();
-                        SetResult(new CreolePluginElement(GetPlainText(_contentStartIndex, _contentEndIndexEvenEndingIndex)));
+                        SetResult(new PluginElement(GetPlainText(_contentStartIndex, _contentEndIndexEvenEndingIndex)));
                         _state = State.NotInPlugin;
                     }
                     else
@@ -113,7 +113,7 @@ namespace Mup.Creole.ElementProcessors
                     else if (Token.Code == NewLine || Token.Code == BlankLine)
                     {
                         SetElementEndIndex();
-                        SetResult(new CreolePluginElement(GetPlainText(_contentStartIndex, _contentEndIndexOddEndingIndex)));
+                        SetResult(new PluginElement(GetPlainText(_contentStartIndex, _contentEndIndexOddEndingIndex)));
                         _state = State.NotInPlugin;
                     }
                     else
@@ -127,12 +127,12 @@ namespace Mup.Creole.ElementProcessors
             if (_state == State.PluginEvenEnding)
             {
                 SetElementEndIndex();
-                SetResult(new CreolePluginElement(GetPlainText(_contentStartIndex, _contentEndIndexEvenEndingIndex)));
+                SetResult(new PluginElement(GetPlainText(_contentStartIndex, _contentEndIndexEvenEndingIndex)));
             }
             else if (_state == State.PluginOddEnding)
             {
                 SetElementEndIndex();
-                SetResult(new CreolePluginElement(GetPlainText(_contentStartIndex, _contentEndIndexOddEndingIndex)));
+                SetResult(new PluginElement(GetPlainText(_contentStartIndex, _contentEndIndexOddEndingIndex)));
             }
         }
     }

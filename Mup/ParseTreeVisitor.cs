@@ -1,4 +1,6 @@
-﻿namespace Mup
+﻿using Mup.Elements;
+
+namespace Mup
 {
     /// <summary>Base class of all parse tree visitors.</summary>
     public abstract class ParseTreeVisitor
@@ -8,227 +10,105 @@
         {
         }
 
-        /// <summary>Initializes the visitor. This method is called before any visit method.</summary>
-        protected internal virtual void BeginVisit()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="rootElement"/>.</summary>
+        /// <param name="rootElement">The <see cref="ParseTreeRootElement"/> to visit.</param>
+        protected internal abstract void Visit(ParseTreeRootElement rootElement);
 
-        /// <summary>Completes the visit operation. This method is called after all visit methods.</summary>
-        protected internal virtual void EndVisit()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="heading1"/> element.</summary>
+        /// <param name="heading1">The <see cref="Heading1Element"/> to visit.</param>
+        protected internal abstract void Visit(Heading1Element heading1);
 
-        /// <summary>Visits the beginning of a level 1 heading.</summary>
-        protected internal virtual void VisitHeading1Beginning()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="heading2"/> element.</summary>
+        /// <param name="heading2">The <see cref="Heading2Element"/> to visit.</param>
+        protected internal abstract void Visit(Heading2Element heading2);
 
-        /// <summary>Visits the ending of a level 1 heading.</summary>
-        protected internal virtual void VisitHeading1Ending()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="heading3"/> element.</summary>
+        /// <param name="heading3">The <see cref="Heading3Element"/> to visit.</param>
+        protected internal abstract void Visit(Heading3Element heading3);
 
-        /// <summary>Visits the beginning of a level 2 heading.</summary>
-        protected internal virtual void VisitHeading2Beginning()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="heading4"/> element.</summary>
+        /// <param name="heading4">The <see cref="Heading4Element"/> to visit.</param>
+        protected internal abstract void Visit(Heading4Element heading4);
 
-        /// <summary>Visits the ending of a level 2 heading.</summary>
-        protected internal virtual void VisitHeading2Ending()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="heading5"/> element.</summary>
+        /// <param name="heading5">The <see cref="Heading5Element"/> to visit.</param>
+        protected internal abstract void Visit(Heading5Element heading5);
 
-        /// <summary>Visits the beginning of a level 3 heading.</summary>
-        protected internal virtual void VisitHeading3Beginning()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="heading6"/> element.</summary>
+        /// <param name="heading6">The <see cref="Heading6Element"/> to visit.</param>
+        protected internal abstract void Visit(Heading6Element heading6);
 
-        /// <summary>Visits the ending of a level 3 heading.</summary>
-        protected internal virtual void VisitHeading3Ending()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="paragraph"/> element.</summary>
+        /// <param name="paragraph">The <see cref="ParagraphElement"/> to visit.</param>
+        protected internal abstract void Visit(ParagraphElement paragraph);
 
-        /// <summary>Visits the beginning of a level 4 heading.</summary>
-        protected internal virtual void VisitHeading4Beginning()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="unorderedListElement"/> element.</summary>
+        /// <param name="unorderedListElement">The <see cref="UnorderedListElement"/> to visit.</param>
+        protected internal abstract void Visit(UnorderedListElement unorderedListElement);
 
-        /// <summary>Visits the ending of a level 4 heading.</summary>
-        protected internal virtual void VisitHeading4Ending()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="orderedList"/> element.</summary>
+        /// <param name="orderedList">The <see cref="OrderedListElement"/> to visit.</param>
+        protected internal abstract void Visit(OrderedListElement orderedList);
 
-        /// <summary>Visits the beginning of a level 5 heading.</summary>
-        protected internal virtual void VisitHeading5Beginning()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="listItem"/> element.</summary>
+        /// <param name="listItem">The <see cref="ListItemElement"/> to visit.</param>
+        protected internal abstract void Visit(ListItemElement listItem);
 
-        /// <summary>Visits the ending of a level 5 heading.</summary>
-        protected internal virtual void VisitHeading5Ending()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="tableElement"/> element.</summary>
+        /// <param name="tableElement">The <see cref="TableElement"/> to visit.</param>
+        protected internal abstract void Visit(TableElement tableElement);
 
-        /// <summary>Visits the beginning of a level 6 heading.</summary>
-        protected internal virtual void VisitHeading6Beginning()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="tableRow"/> element.</summary>
+        /// <param name="tableRow">The <see cref="TableRowElement"/> to visit.</param>
+        protected internal abstract void Visit(TableRowElement tableRow);
 
-        /// <summary>Visits the ending of a level 6 heading.</summary>
-        protected internal virtual void VisitHeading6Ending()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="tableHeaderCell"/> element.</summary>
+        /// <param name="tableHeaderCell">The <see cref="TableHeaderCellElement"/> to visit.</param>
+        protected internal abstract void Visit(TableHeaderCellElement tableHeaderCell);
 
-        /// <summary>Visits the beginning of a paragraph.</summary>
-        protected internal virtual void VisitParagraphBeginning()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="tableDataCell"/> element.</summary>
+        /// <param name="tableDataCell">The <see cref="TableDataCellElement"/> to visit.</param>
+        protected internal abstract void Visit(TableDataCellElement tableDataCell);
 
-        /// <summary>Visits the ending of a paragraph.</summary>
-        protected internal virtual void VisitParagraphEnding()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="text"/> element.</summary>
+        /// <param name="text">The <see cref="TextElement"/> to visit.</param>
+        protected internal abstract void Visit(TextElement text);
 
-        /// <summary>Visits a preformatted block.</summary>
-        /// <param name="preformattedText">The preformatted text.</param>
-        protected internal virtual void VisitPreformattedBlock(string preformattedText)
-        {
-        }
+        /// <summary>Visits the provided <paramref name="emphasis"/> element.</summary>
+        /// <param name="emphasis">The <see cref="EmphasisElement"/> to visit.</param>
+        protected internal abstract void Visit(EmphasisElement emphasis);
 
-        /// <summary>Visits a horizontal rule.</summary>
-        protected internal virtual void VisitHorizontalRule()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="strong"/> element.</summary>
+        /// <param name="strong">The <see cref="StrongElement"/> to visit.</param>
+        protected internal abstract void Visit(StrongElement strong);
 
-        /// <summary>Visits a plugin.</summary>
-        /// <param name="text">The plugin text.</param>
-        protected internal virtual void VisitPlugin(string text)
-        {
-        }
+        /// <summary>Visits the provided <paramref name="hyperlink"/> element.</summary>
+        /// <param name="hyperlink">The <see cref="HyperlinkElement"/> to visit.</param>
+        protected internal abstract void Visit(HyperlinkElement hyperlink);
 
-        /// <summary>Visits the beginning of a table.</summary>
-        protected internal virtual void VisitTableBeginning()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="image"/> element.</summary>
+        /// <param name="image">The <see cref="ImageElement"/> to visit.</param>
+        protected internal abstract void Visit(ImageElement image);
 
-        /// <summary>Visits the ending of a table.</summary>
-        protected internal virtual void VisitTableEnding()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="code"/> element.</summary>
+        /// <param name="code">The <see cref="CodeElement"/> to visit.</param>
+        protected internal abstract void Visit(CodeElement code);
 
-        /// <summary>Visits the beginning of a table row.</summary>
-        protected internal virtual void VisitTableRowBeginning()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="lineBreak"/> element.</summary>
+        /// <param name="lineBreak">The <see cref="LineBreakElement"/> to visit.</param>
+        protected internal abstract void Visit(LineBreakElement lineBreak);
 
-        /// <summary>Visits the ending of a table row.</summary>
-        protected internal virtual void VisitTableRowEnding()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="preformattedBlock"/> element.</summary>
+        /// <param name="preformattedBlock">The <see cref="PreformattedBlockElement"/> to visit.</param>
+        protected internal abstract void Visit(PreformattedBlockElement preformattedBlock);
 
-        /// <summary>Visits the beginning of a table header cell.</summary>
-        protected internal virtual void VisitTableHeaderCellBeginning()
-        {
-        }
+        /// <summary>Visits the provided <paramref name="horizontalRule"/> element.</summary>
+        /// <param name="horizontalRule">The <see cref="HorizontalRuleElement"/> to visit.</param>
+        protected internal abstract void Visit(HorizontalRuleElement horizontalRule);
 
-        /// <summary>Visits the ending of a table header cell.</summary>
-        protected internal virtual void VisitTableHeaderCellEnding()
-        {
-        }
-
-        /// <summary>Visits the beginning of a table cell.</summary>
-        protected internal virtual void VisitTableCellBeginning()
-        {
-        }
-
-        /// <summary>Visits the ending of a table cell.</summary>
-        protected internal virtual void VisitTableCellEnding()
-        {
-        }
-
-        /// <summary>Visits the beginning of an unordered list.</summary>
-        protected internal virtual void VisitUnorderedListBeginning()
-        {
-        }
-
-        /// <summary>Visits the ending of an unordered list.</summary>
-        protected internal virtual void VisitUnorderedListEnding()
-        {
-        }
-
-        /// <summary>Visits the beginning of an ordered list.</summary>
-        protected internal virtual void VisitOrderedListBeginning()
-        {
-        }
-
-        /// <summary>Visits the ending of an ordered list.</summary>
-        protected internal virtual void VisitOrderedListEnding()
-        {
-        }
-
-        /// <summary>Visits the beginning of a list item.</summary>
-        protected internal virtual void VisitListItemBeginning()
-        {
-        }
-
-        /// <summary>Visits the ending of a list item.</summary>
-        protected internal virtual void VisitListItemEnding()
-        {
-        }
-
-        /// <summary>Visits the beginning of a strong element.</summary>
-        protected internal virtual void VisitStrongBeginning()
-        {
-        }
-
-        /// <summary>Visits the ending of a strong element.</summary>
-        protected internal virtual void VisitStrongEnding()
-        {
-        }
-
-        /// <summary>Visits the beginning of an emphasised element.</summary>
-        protected internal virtual void VisitEmphasisBeginning()
-        {
-        }
-
-        /// <summary>Visits the ending of an emphasised element.</summary>
-        protected internal virtual void VisitEmphasisEnding()
-        {
-        }
-
-        /// <summary>Visits the beginning of a hyperlink.</summary>
-        /// <param name="destination">The hyperlink destination.</param>
-        protected internal virtual void VisitHyperlinkBeginning(string destination)
-        {
-        }
-
-        /// <summary>Visits the ending of a hyperlink.</summary>
-        protected internal virtual void VisitHyperlinkEnding()
-        {
-        }
-
-        /// <summary>Visits an image.</summary>
-        /// <param name="source">The source of the image.</param>
-        /// <param name="alternativeText">The alternative text for the image.</param>
-        protected internal virtual void VisitImage(string source, string alternativeText)
-        {
-        }
-
-        /// <summary>Visits a line break.</summary>
-        protected internal virtual void VisitLineBreak()
-        {
-        }
-
-        /// <summary>Visits a code fragment inside a block (e.g.: paragraph, list item or table).</summary>
-        /// <param name="fragment">The code fragment.</param>
-        protected internal virtual void VisitCodeFragment(string fragment)
-        {
-        }
-
-        /// <summary>Visits plain text. This method may be called multiple times consecutively.</summary>
-        /// <param name="text">The plain text.</param>
-        protected internal virtual void VisitText(string text)
-        {
-        }
+        /// <summary>Visits the provided <paramref name="plugin"/> element.</summary>
+        /// <param name="plugin">The <see cref="PluginElement"/> to visit.</param>
+        protected internal abstract void Visit(PluginElement plugin);
     }
 
     /// <summary>Base class for all parse tree visitors that eventually provide a result that is stored in

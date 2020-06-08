@@ -1,10 +1,10 @@
-using Mup.Creole.Elements;
+using Mup.Elements;
 
 namespace Mup.Creole.ElementProcessors
 {
     internal class CreoleElementInfo
     {
-        internal CreoleElementInfo(int startIndex, int endIndex, CreoleElement element)
+        internal CreoleElementInfo(int startIndex, int endIndex, Element element)
         {
             StartIndex = startIndex;
             EndIndex = endIndex;
@@ -15,6 +15,6 @@ namespace Mup.Creole.ElementProcessors
 
         internal int EndIndex { get; }
 
-        internal CreoleElement Element { get; }
+        internal Element Element { get; }
     }
 }

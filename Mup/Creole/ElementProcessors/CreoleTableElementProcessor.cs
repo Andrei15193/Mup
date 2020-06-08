@@ -1,4 +1,4 @@
-using Mup.Creole.Elements;
+using Mup.Elements;
 using Mup.Scanner;
 using System.Collections.Generic;
 using static Mup.Creole.CreoleTokenCode;
@@ -21,8 +21,8 @@ namespace Mup.Creole.ElementProcessors
         private int _cellStartIndex;
         private int _cellEndIndex;
         private bool _isHeaderCell;
-        private List<CreoleTableRowElement> _rows;
-        private List<CreoleTableCellElement> _cells;
+        private List<TableRowElement> _rows;
+        private List<TableCellElement> _cells;
 
         internal CreoleTableElementProcessor(CreoleParserContext context, TokenRange<CreoleTokenCode> tokens)
             : base(context, tokens)
@@ -35,8 +35,8 @@ namespace Mup.Creole.ElementProcessors
             {
                 case State.NotInTable when (Token.Code == Pipe && IsOnNewLine):
                     SetElementStartIndex();
-                    _rows = new List<CreoleTableRowElement>();
-                    _cells = new List<CreoleTableCellElement>();
+                    _rows = new List<TableRowElement>();
+                    _cells = new List<TableCellElement>();
                     _isHeaderCell = false;
                     _state = State.InTableCellStart;
                     break;
@@ -58,7 +58,7 @@ namespace Mup.Creole.ElementProcessors
                             _cellEndIndex = Index;
                             _cells.Add(_GetTableCellElement());
                         }
-                        _rows.Add(new CreoleTableRowElement(_cells));
+                        _rows.Add(new TableRowElement(_cells));
                         _cells = null;
                         _state = State.TableMayEnd;
                     }
@@ -70,9 +70,9 @@ namespace Mup.Creole.ElementProcessors
                             _cellEndIndex = Index;
                             _cells.Add(_GetTableCellElement());
                         }
-                        _rows.Add(new CreoleTableRowElement(_cells));
+                        _rows.Add(new TableRowElement(_cells));
                         SetElementEndIndex();
-                        SetResult(new CreoleTableElement(_rows));
+                        SetResult(new TableElement(_rows));
 
                         _rows = null;
                         _cells = null;
@@ -112,7 +112,7 @@ namespace Mup.Creole.ElementProcessors
                     {
                         _cellEndIndex = Index;
                         _cells.Add(_GetTableCellElement());
-                        _rows.Add(new CreoleTableRowElement(_cells));
+                        _rows.Add(new TableRowElement(_cells));
                         _cells = null;
                         _state = State.TableMayEnd;
                     }
@@ -120,9 +120,9 @@ namespace Mup.Creole.ElementProcessors
                     {
                         _cellEndIndex = Index;
                         _cells.Add(_GetTableCellElement());
-                        _rows.Add(new CreoleTableRowElement(_cells));
+                        _rows.Add(new TableRowElement(_cells));
                         SetElementEndIndex();
-                        SetResult(new CreoleTableElement(_rows));
+                        SetResult(new TableElement(_rows));
 
                         _rows = null;
                         _cells = null;
@@ -149,14 +149,14 @@ namespace Mup.Creole.ElementProcessors
                 case State.TableMayEnd:
                     if (Token.Code == Pipe)
                     {
-                        _cells = new List<CreoleTableCellElement>();
+                        _cells = new List<TableCellElement>();
                         _isHeaderCell = false;
                         _state = State.InTableCellStart;
                     }
                     else
                     {
                         SetElementEndIndex();
-                        SetResult(new CreoleTableElement(_rows));
+                        SetResult(new TableElement(_rows));
 
                         _rows = null;
                         _cells = null;
@@ -178,49 +178,49 @@ namespace Mup.Creole.ElementProcessors
                         _cells.Add(_GetTableCellElement());
                     }
                     SetElementEndIndex();
-                    _rows.Add(new CreoleTableRowElement(_cells));
-                    SetResult(new CreoleTableElement(_rows));
+                    _rows.Add(new TableRowElement(_cells));
+                    SetResult(new TableElement(_rows));
                     break;
 
                 case State.InTableCellWhiteSpaceStart:
                     _cellStartIndex = Index;
                     _cellEndIndex = Index;
                     _cells.Add(_GetTableCellElement());
-                    _rows.Add(new CreoleTableRowElement(_cells));
+                    _rows.Add(new TableRowElement(_cells));
                     SetElementEndIndex();
-                    SetResult(new CreoleTableElement(_rows));
+                    SetResult(new TableElement(_rows));
                     break;
 
                 case State.InCellContent:
                     _cellEndIndex = Index;
                     _cells.Add(_GetTableCellElement());
-                    _rows.Add(new CreoleTableRowElement(_cells));
+                    _rows.Add(new TableRowElement(_cells));
                     SetElementEndIndex();
-                    SetResult(new CreoleTableElement(_rows));
+                    SetResult(new TableElement(_rows));
                     break;
 
                 case State.CellContentMayEnd:
                     _cells.Add(_GetTableCellElement());
-                    _rows.Add(new CreoleTableRowElement(_cells));
+                    _rows.Add(new TableRowElement(_cells));
                     SetElementEndIndex();
-                    SetResult(new CreoleTableElement(_rows));
+                    SetResult(new TableElement(_rows));
                     break;
 
                 case State.TableMayEnd:
                     SetElementEndIndex();
-                    SetResult(new CreoleTableElement(_rows));
+                    SetResult(new TableElement(_rows));
                     break;
             }
         }
 
-        private CreoleTableCellElement _GetTableCellElement()
+        private TableCellElement _GetTableCellElement()
         {
             SetElementEndIndex();
             var richText = GetRichText(_cellStartIndex, _cellEndIndex);
             if (_isHeaderCell)
-                return new CreoleTableHeaderCellElement(richText);
+                return new TableHeaderCellElement(richText);
             else
-                return new CreoleTableDataCellElement(richText);
+                return new TableDataCellElement(richText);
         }
     }
 }
