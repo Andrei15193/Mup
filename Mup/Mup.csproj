@@ -5,13 +5,13 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
 
     <Description>
-      Mup, which is short for Markup Parser, is a cross-platform library written in C#. It targets .NET Standard 1.0 making it available for a wide variety of devices and applications.
+Mup, which is short for Markup Parser, is a cross-platform library written in C#. It targets .NET Standard 1.0 making it available for a wide variety of devices and applications.
 
-      The main purpose of the library is to support parsing Lightweight Markup Languages into various output formats, such as HTML, XHTML, XML, Word Documents, Excel Documents, and any other type of document.
+The main purpose of the library is to support parsing Lightweight Markup Languages into various output formats, such as HTML, XHTML, XML, Word Documents, Excel Documents, and any other type of document.
 
-      The library does not expose types for each mentioned format, but it is made to be extensible. Any parsed text can be run through a custom visitor which traverses the resulting parse tree allowing the developer to specify what exactly needs to be generated at every step.
+The library does not expose types for each mentioned format, but it is made to be extensible. Any parsed text can be run through a custom visitor which traverses the resulting parse tree allowing the developer to specify what exactly needs to be generated at every step.
 
-      To keep it lightweight, the library only provides a parser for Creole right now and an HTML visitor which allows users to generate HTML from parsed text. With each increment (or major version), the library will bring a new parser into the fold and thus supporting more languages. The end goal is to support most, if not all, Lightweight Markup Languages.
+To keep it lightweight, the library only provides a parser for Creole right now and an HTML visitor which allows users to generate HTML from parsed text. With each increment (or major version), the library will bring a new parser into the fold and thus supporting more languages. The end goal is to support most, if not all, Lightweight Markup Languages.
     </Description>
     <Authors>Andrei Fangli</Authors>
     <Copyright>Andrei Fangli</Copyright>
@@ -19,9 +19,9 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReleaseNotes>
-      * Change build target to .NET Standard 1.0 (#2)
-      * Removed async implementation (#9)
-      * Migrated to use a common parse tree (#12)
+* Change build target to .NET Standard 1.0 (#2)
+* Removed async implementation (#9)
+* Migrated to use a common parse tree (#12)
     </PackageReleaseNotes>
     <PackageTags>lightweight;markup;language;parser;creole;net;standard;html;portable;library</PackageTags>
     <RepositoryType>git</RepositoryType>
