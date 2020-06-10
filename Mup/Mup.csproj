@@ -27,10 +27,7 @@
     <PackageTags>lightweight;markup;language;parser;creole;net;standard;html;portable;library</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Andrei15193/Mup.git</RepositoryUrl>
-    <ProjectUrl>https://andrei15193.github.io/Mup</ProjectUrl>
-    <NuspecProperties>
-      summary=Markup Parser (Mup) is an extensible .NET Standard Library (1.0) containing types for parsing and generating HTML from text using the Creole lightweight markup language.
-    </NuspecProperties>
+    <PackageProjectUrl>https://andrei15193.github.io/Mup</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
