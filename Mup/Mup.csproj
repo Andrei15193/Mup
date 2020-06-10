@@ -5,6 +5,15 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
 
     <Description>Markup Parser (Mup) is an extensible .NET Standard Library (1.0) containing types for parsing and generating HTML from text using the Creole lightweight markup language.</Description>
+    <PackageDescription>
+      Mup, which is short for Markup Parser, is a cross-platform library written in C#. It targets .NET Standard 1.0 making it available for a wide variety of devices and applications.
+
+      The main purpose of the library is to support parsing Lightweight Markup Languages into various output formats, such as HTML, XHTML, XML, Word Documents, Excel Documents, and any other type of document.
+
+      The library does not expose types for each mentioned format, but it is made to be extensible. Any parsed text can be run through a custom visitor which traverses the resulting parse tree allowing the developer to specify what exactly needs to be generated at every step.
+
+      To keep it lightweight, the library only provides a parser for Creole right now and an HTML visitor which allows users to generate HTML from parsed text. With each increment (or major version), the library will bring a new parser into the fold and thus supporting more languages. The end goal is to support most, if not all, Lightweight Markup Languages.
+    </PackageDescription>
     <Authors>Andrei Fangli</Authors>
     <Copyright>Andrei Fangli</Copyright>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -18,7 +27,10 @@
     <PackageTags>lightweight;markup;language;parser;creole;net;standard;html;portable;library</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Andrei15193/Mup.git</RepositoryUrl>
-    <projectUrl>https://andrei15193.github.io/Mup</projectUrl>
+    <ProjectUrl>https://andrei15193.github.io/Mup</ProjectUrl>
+    <NuspecProperties>
+      summary=Markup Parser (Mup) is an extensible .NET Standard Library (1.0) containing types for parsing and generating HTML from text using the Creole lightweight markup language.
+    </NuspecProperties>
   </PropertyGroup>
 
   <ItemGroup>
