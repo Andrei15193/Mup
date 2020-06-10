@@ -1,10 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFramework>netstandard1.0</TargetFramework>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <NuspecFile>Mup.nuspec</NuspecFile>
+
+    <Description>Markup Parser (Mup) is an extensible .NET Standard Library (1.0) containing types for parsing and generating HTML from text using the Creole lightweight markup language.</Description>
+    <Authors>Andrei Fangli</Authors>
+    <Copyright>Andrei Fangli</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageReleaseNotes>
+      * Change build target to .NET Standard 1.0 (#2)
+      * Removed async implementation (#9)
+      * Migrated to use a common parse tree (12)
+    </PackageReleaseNotes>
+    <PackageTags>lightweight;markup;language;parser;creole;net;standard;html;portable;library</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Andrei15193/Mup.git</RepositoryUrl>
+    <projectUrl>https://andrei15193.github.io/Mup</projectUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\logo.png" Pack="true" PackagePath="" />
+  </ItemGroup>
 </Project>
