@@ -13,7 +13,7 @@
     <PackageReleaseNotes>
       * Change build target to .NET Standard 1.0 (#2)
       * Removed async implementation (#9)
-      * Migrated to use a common parse tree (12)
+      * Migrated to use a common parse tree (#12)
     </PackageReleaseNotes>
     <PackageTags>lightweight;markup;language;parser;creole;net;standard;html;portable;library</PackageTags>
     <RepositoryType>git</RepositoryType>
