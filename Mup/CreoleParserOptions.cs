@@ -13,9 +13,7 @@ namespace Mup
 
         /// <summary>Initializes a new instance of the <see cref="CreoleParserOptions"/> class.</summary>
         public CreoleParserOptions()
-        {
-            _inlineHyperlinkProtocols = _defaultInlineHyperlinkProtocols;
-        }
+            => _inlineHyperlinkProtocols = _defaultInlineHyperlinkProtocols;
 
         /// <summary>The protocols to consider when parsing inline hyperlinks (e.g.: http, https and so on). The defauts are <c>http</c>, <c>https</c>, <c>ftp</c> and <c>ftps</c>.</summary>
         /// <exception cref="ArgumentNullException">Thrown when the value is set to <c>null</c>.</exception>

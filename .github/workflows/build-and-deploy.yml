@@ -153,17 +153,30 @@ jobs:
         asset_path: ./publish/Mup.${{ steps.package_info.outputs.package_version }}.nupkg
         asset_name: Mup.${{ steps.package_info.outputs.package_version }}.nupkg
         asset_content_type: application/zip
-
-    - name: Build Project Site
-      if: github.ref == 'refs/heads/master'
-      working-directory: ./project-site
+        
+    - name: Prepare Project Site Build
+      shell: pwsh
       run: |
-        npm install
-        npm run release-build
+        mkdir ./project-site
+        mkdir ./project-site/dev
+
+    - name: Generate Project Site (dev)
+      if: github.ref == 'refs/heads/master'
+      working-directory: ./project-site/dev
+      shell: pwsh
+      run: |
+        dotnet run --project ../../Mup.Documentation --configuration Release
+
+    - name: Generate Project Site (Release)
+      if: startsWith(github.ref, 'refs/heads/releases/')
+      working-directory: ./project-site
+      shell: pwsh
+      run: |
+        dotnet run --project ../Mup.Documentation --configuration Release
     
     - name: Publish Project Site
       uses: peaceiris/actions-gh-pages@v3.6.1
       if: github.ref == 'refs/heads/master'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./project-site/build
+        publish_dir: ./project-site

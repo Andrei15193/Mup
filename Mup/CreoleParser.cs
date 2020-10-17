@@ -34,9 +34,7 @@ namespace Mup
         /// <param name="options">The options to use when parsing a block of text.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="options"/> are null.</exception>
         public CreoleParser(CreoleParserOptions options)
-        {
-            Options = (options ?? throw new ArgumentNullException(nameof(options)));
-        }
+            => Options = (options ?? throw new ArgumentNullException(nameof(options)));
 
         /// <summary>Initializes a new instance of the <see cref="CreoleParser"/> class.</summary>
         public CreoleParser()

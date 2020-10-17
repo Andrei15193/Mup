@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\favicon.ico" />
+    <EmbeddedResource Include="Assets\logo.png" />
+    <EmbeddedResource Include="Assets\style.css" />
+    <EmbeddedResource Include="Partials\Layout.hbs" />
+    <EmbeddedResource Include="Templates\Index.hbs" />
+    <EmbeddedResource Include="Templates\License.hbs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CodeMap" Version="1.0.0-beta1" />
+    <PackageReference Include="CodeMap.Handlebars" Version="1.0.0-beta1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mup\Mup.csproj" />
+  </ItemGroup>
+
+</Project>

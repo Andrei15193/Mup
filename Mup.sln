@@ -6,6 +6,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mup", "Mup\Mup.csproj", "{6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mup.Tests", "Mup.Tests\Mup.Tests.csproj", "{6B9F3D1C-1A5F-4F87-AF6F-B45906193DD1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mup.Documentation", "Mup.Documentation\Mup.Documentation.csproj", "{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,18 @@ Global
 		{6B9F3D1C-1A5F-4F87-AF6F-B45906193DD1}.Release|x64.Build.0 = Release|Any CPU
 		{6B9F3D1C-1A5F-4F87-AF6F-B45906193DD1}.Release|x86.ActiveCfg = Release|Any CPU
 		{6B9F3D1C-1A5F-4F87-AF6F-B45906193DD1}.Release|x86.Build.0 = Release|Any CPU
+		{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}.Debug|x64.Build.0 = Debug|Any CPU
+		{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}.Debug|x86.Build.0 = Debug|Any CPU
+		{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}.Release|x64.ActiveCfg = Release|Any CPU
+		{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}.Release|x64.Build.0 = Release|Any CPU
+		{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}.Release|x86.ActiveCfg = Release|Any CPU
+		{2F900E85-DCCA-4CC9-AE8B-E4AF744BF053}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
