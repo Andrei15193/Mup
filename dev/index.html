@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Mup - MarkUp Parser</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body class="d-flex flex-column">
+    <div>
+        <div class="d-flex flex-row align-items-center container px-2 pt-2">
+            <h1 class="mt-4 mb-3"><img src="logo.png" alt="logo"> <abbr title="MarkUp Parser">Mup</abbr> <small>Markup for Everyone</small></h1>
+        </div>
+    </div>
+
+    <div class="flex-grow-1 flex-shrink-1">
+        <div class="d-flex flex-column container px-2 pt-2">
+            <div class="mb-3">
+                <ul class="nav nav-pills p-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="true" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="false" href="documentation.html">Documentation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="false" href="license.html">License</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="https://github.com/Andrei15193/Mup" target="_blank">View on GitHub</a></li>
+                </ul>
+            </div>
+<h2>Home</h2>
+<p>
+    Mup, which is short for <strong>M</strong>ark<strong>u</strong>p <strong>P</strong>arser, is a cross-platform library written in C#.
+    It targets .NET Standard 1.0 making it available for a wide variety of devices and applications.
+</p>
+<p>
+    The main purpose of the library is to support parsing <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language" target="_blank">Lightweight Markup Languages</a>
+    into various output formats, such as HTML, XHTML, XML, Word Documents, Excel Documents, and any other type of document.
+</p>
+<p>
+    The library does not expose types for each mentioned format, but it is made to be extensible. Any parsed text can be run through a
+    custom visitor which traverses the resulting parse tree allowing the developer to specify what exactly needs to be generated at
+    every step.
+</p>
+<p>
+    To keep it lightweight, the library only provides parsers for several languages (see below) and an <abbr title="HyperText Markup Language">HTML</abbr>
+    visitor which allows users to generate <abbr title="HyperText Markup Language">HTML</abbr> from parsed text. With each increment
+    (or major version), the library will bring a new parser into the fold and thus supporting more languages. The end goal is to support
+    most, if not all, <a href="https://en.wikipedia.org/wiki/Lightweight_markup_language" target="_blank">Lightweight Markup Languages</a>.
+</p>
+
+<h3>Language Support</h3>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Language</th>
+            <th>Phase</th>
+            <th>Release Version</th>
+            <th width="60%">Elements</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong><a href="http://www.wikicreole.org/wiki/Home/" target="_blank">Creole</a></strong></td>
+            <td>Released </td>
+            <td>1.0.0</td>
+            <td>
+                <span class="badge badge-success">headings</span>
+                <span class="badge badge-success">paragraphs</span>
+                <span class="badge badge-success">lists</span>
+                <span class="badge badge-success">tables</span>
+                <span class="badge badge-success">inline code</span>
+                <span class="badge badge-success">code blocks</span>
+                <span class="badge badge-success">horizontal rules</span>
+                <span class="badge badge-success">emphasis (italics)</span>
+                <span class="badge badge-success">strong (bold)</span>
+                <span class="badge badge-success">inline hyperlinks</span>
+                <span class="badge badge-success">hyperlinks</span>
+                <span class="badge badge-success">images</span>
+                <span class="badge badge-success">line breaks</span>
+                <span class="badge badge-success">plugins</span>
+            </td>
+        </tr>
+        <tr>
+            <td><strong><a href="http://commonmark.org/" target="_blank">CommonMark</a></strong></td>
+            <td>Planned </td>
+            <td>2.0.0</td>
+            <td>
+                <span class="badge badge-secondary">headings</span>
+                <span class="badge badge-secondary">paragraphs</span>
+                <span class="badge badge-secondary">lists</span>
+                <span class="badge badge-secondary">block quotes</span>
+                <span class="badge badge-secondary">inline code</span>
+                <span class="badge badge-secondary">code blocks</span>
+                <span class="badge badge-secondary">horizontal rules</span>
+                <span class="badge badge-secondary">emphasis (italics)</span>
+                <span class="badge badge-secondary">strong (bold)</span>
+                <span class="badge badge-secondary">inline hyperlinks</span>
+                <span class="badge badge-secondary">hyperlinks</span>
+                <span class="badge badge-secondary">images</span>
+                <span class="badge badge-secondary">line breaks</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+        </div>
+    </div>
+
+    <div>
+        <div class="d-flex flex-column container px-2">
+            <p class="text-center">Mup Copyright © 2020 Andrei Fangli</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+﻿body {
+    min-height: 100vh;
+}
+
+th {
+    white-space: nowrap;
+}
+
+p, th, td, li {
+    text-align: justify;
+}
+
+table.table > thead > tr > th p:last-child, table.table > tbody > tr > td p:last-child {
+    margin-bottom: 0;
+}
+
+pre {
+    padding: 2px 7px;
+    background-color: #F8F8F8;
+}
+
+.license ol {
+    counter-reset: item;
+    list-style-type: none;
+}
+
+.license ol[start="0"] {
+    counter-reset: item -1;
+    list-style-type: none;
+}
+
+.license ol > li::before {
+    display: inline-block;
+    counter-increment: item;
+    width: 1.2em;
+    margin-left: -1.2em;
+}
+
+.license ol[type="a"] > li::before {
+    content: counter(item, lower-alpha) ") ";
+}
+
+.license ol > li::before {
+    content: counter(item) ") ";
+}

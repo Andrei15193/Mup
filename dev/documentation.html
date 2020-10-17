@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Mup 1.0.0</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body class="d-flex flex-column">
+    <div>
+        <div class="d-flex flex-row align-items-center container px-2 pt-2">
+            <h1 class="mt-4 mb-3"><img src="logo.png" alt="logo"> <abbr title="MarkUp Parser">Mup</abbr> <small>Markup for Everyone</small></h1>
+        </div>
+    </div>
+
+    <div class="flex-grow-1 flex-shrink-1">
+        <div class="d-flex flex-column container px-2 pt-2">
+            <div class="mb-3">
+                <ul class="nav nav-pills p-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="false" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="true" href="documentation.html">Documentation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="false" href="license.html">License</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="https://github.com/Andrei15193/Mup" target="_blank">View on GitHub</a></li>
+                </ul>
+            </div>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Mup</li>
+    </ol>
+</nav>
+
+<h2>Mup</h2>
+
+<p>
+Mup, which is short for Markup Parser, is a cross-platform library written in C#. It targets .NET Standard 1.0 making it available for a wide variety of devices and applications.
+
+The main purpose of the library is to support parsing Lightweight Markup Languages into various output formats, such as HTML, XHTML, XML, Word Documents, Excel Documents, and any other type of document.
+
+The library does not expose types for each mentioned format, but it is made to be extensible. Any parsed text can be run through a custom visitor which traverses the resulting parse tree allowing the developer to specify what exactly needs to be generated at every step.
+
+To keep it lightweight, the library only provides a parser for Creole right now and an HTML visitor which allows users to generate HTML from parsed text. With each increment (or major version), the library will bring a new parser into the fold and thus supporting more languages. The end goal is to support most, if not all, Lightweight Markup Languages.
+    
+</p>
+
+<h3>Namespaces</h3>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th class="w-75">Summary</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><a href="Mup.html">Mup</a></td>
+            <td><p>Contains the base Mup types and implemented parsers.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="Mup.Elements.html">Mup.Elements</a></td>
+            <td><p>Contains the parse nodes representing a mark-up document.
+</p>
+</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Remarks</h3>
+<p>The library has a few core types that make it work: <a href="Mup.IMarkupParser.html">IMarkupParser</a> <a href="Mup.Elements.ParseTreeRootElement.html">ParseTreeRootElement</a> and <a href="Mup.ParseTreeVisitor.html">ParseTreeVisitor</a>.
+</p>
+<p>Each parser (currently just Creole) implements the IMarkupParser interface which exposes a number of methods that allow parsing a <a href="https://docs.microsoft.com/dotnet/api/system.string?view=netstandard-1.0">string</a> or text from a <a href="https://docs.microsoft.com/dotnet/api/system.io.textreader?view=netstandard-1.0">TextReader</a>. Each parser supports both synchronous and asynchronous models allowing its users to consume the API any way they want.
+</p>
+<p>The result of any parse method is ultimately a <a href="Mup.Elements.ParseTreeRootElement.html">ParseTreeRootElement</a>. Surprisingly or not, this interface does not expose something like a root node or anything related to what one would expect when seeing the word &quot;tree&quot;.
+</p>
+<p>This is because trees can have different representations. For instance, we can have the usual example where we have a root node which exposes a property containing a number of nodes that are in fact child nodes, each child node also exposes such a property that contains their child nodes and so on. A different representation can be a flat one where the entire tree is stored as a list of elements that mark the beginning and end of each node.
+</p>
+<p>Regardless of how we represent a parse tree, we need to be able to traverse it in order to generate a specific output, say HTML. This is where a <a href="Mup.ParseTreeVisitor.html">ParseTreeVisitor</a> comes into play. Any <a href="Mup.Elements.ParseTreeRootElement.html">ParseTreeRootElement</a> exposes methods that accept a <a href="Mup.ParseTreeVisitor.html">ParseTreeVisitor</a>, the entire logic for traversing the tree is encapsulated inside itself. Each time a node is being visited, a specific method for that node is called on the visitor. This helps keep the interface clean and completely decouple the language that is being parsed from the desired output format. Any new markup parser will work with existing visitors and any new visitor will work with any existing parser.
+</p>
+<p>The one common rule for all parse trees is that they are all traversed in pre-order (see <a href="https://en.wikipedia.org/wiki/Tree_traversal">Tree Traversal (Wikipedia)</a> for more about this topic).
+</p>
+
+        </div>
+    </div>
+
+    <div>
+        <div class="d-flex flex-column container px-2">
+            <p class="text-center">Mup Copyright © 2020 Andrei Fangli</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+</html>
