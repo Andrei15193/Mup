@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Mup - HtmlWriterVisitor Class</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body class="d-flex flex-column">
+    <div>
+        <div class="d-flex flex-row align-items-center container px-2 pt-2">
+            <h1 class="mt-4 mb-3"><img src="logo.png" alt="logo"> <abbr title="MarkUp Parser">Mup</abbr> <small>Markup for Everyone</small></h1>
+        </div>
+    </div>
+
+    <div class="flex-grow-1 flex-shrink-1">
+        <div class="d-flex flex-column container px-2 pt-2">
+            <div class="mb-3">
+                <ul class="nav nav-pills p-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="false" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="true" href="documentation.html">Documentation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="false" href="license.html">License</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="https://github.com/Andrei15193/Mup" target="_blank">View on GitHub</a></li>
+                </ul>
+            </div>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+
+
+<li class="breadcrumb-item" aria-current="page">
+    <a href="index.html">Mup</a>
+</li>
+<li class="breadcrumb-item" aria-current="page">
+    <a href="Mup.html">Mup</a>
+</li>
+        <li class="breadcrumb-item active" aria-current="page">HtmlWriterVisitor</li>
+    </ol>
+</nav>
+
+<h2>HtmlWriterVisitor Class</h2>
+
+<p>A <a href="MupParseTreeVisitor`1.html">ParseTreeVisitor</a>&lt;TResult&gt; implementation for generating HTML from an <a href="Mup.ElementsParseTreeRootElement.html">ParseTreeRootElement</a>.
+</p>
+
+<p>
+    Base type: <a href="MupParseTreeVisitor`1.html">ParseTreeVisitor</a>&lt;<a href="https://docs.microsoft.com/dotnet/api/System.String?view=netstandard-1.0">string</a>&gt;.
+</p>
+
+
+
+<h3>Constructors</h3>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Access Modifier</th>
+            <th class="w-75">Summary</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.HtmlWriterVisitor(-BCD8B0C2EB1FCE714EAB6CEF0D771ACC.html">HtmlWriterVisitor()</a></td>
+            <td class="text-left text-nowrap"><code>public</code></td>
+            <td><p>Initializes a new instance of the <a href="MupHtmlWriterVisitor.html">HtmlWriterVisitor</a> class.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.HtmlWriterVisitor(-662CA0F5CA7037A9AFF127884B6E39F0.html">HtmlWriterVisitor(HtmlWriterVisitorOptions)</a></td>
+            <td class="text-left text-nowrap"><code>public</code></td>
+            <td><p>Initializes a new instance of the <a href="MupHtmlWriterVisitor.html">HtmlWriterVisitor</a> class.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.HtmlWriterVisitor(-404F044EBABB00E4EE029207AB6871B5.html">HtmlWriterVisitor(StringBuilder, HtmlWriterVisitorOptions)</a></td>
+            <td class="text-left text-nowrap"><code>public</code></td>
+            <td><p>Initializes a new instance of the <a href="MupHtmlWriterVisitor.html">HtmlWriterVisitor</a> class.
+</p>
+</td>
+        </tr>
+    </tbody>
+</table>
+<h3>Properties</h3>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Access Modifier</th>
+            <th class="w-75">Summary</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Options.html">Options</a></td>
+            <td class="text-left text-nowrap"><code>protected get</code></td>
+            <td><p>Gets the <a href="MupHtmlWriterVisitorOptions.html">HtmlWriterVisitorOptions</a> to use when writing HTML to the result.
+</p>
+</td>
+        </tr>
+    </tbody>
+</table>
+<h3>Methods</h3>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Access Modifier</th>
+            <th class="w-75">Summary</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.BeginElement(-DB637DC63265CC6EF843A6C797EB2868.html">BeginElement(string)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Begins an HTML element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.BeginElementWithoutIndent(-DB637DC63265CC6EF843A6C797EB2868.html">BeginElementWithoutIndent(string)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Begins an HTML element without indentation.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.EndElement(-BCD8B0C2EB1FCE714EAB6CEF0D771ACC.html">EndElement()</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Ends a previously started HTML element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.EndElementWithoutIndent(-BCD8B0C2EB1FCE714EAB6CEF0D771ACC.html">EndElementWithoutIndent()</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Ends a previously started HTML element without indentation.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.GetResult(-BCD8B0C2EB1FCE714EAB6CEF0D771ACC.html">GetResult()</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Gets the visitor result. This method is called only after the visit operation completes.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-0EB370DD5A2EFF65EDAED1451BEFDD80.html">Visit(ParseTreeRootElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>rootElement</em>.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-3161F543DD8E434109A8F66926117C6F.html">Visit(Heading1Element)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>heading1</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-6B04FEF21D3F5C3EF7FD49D9D8E299F1.html">Visit(Heading2Element)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>heading2</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-1AB04CF1B50EE3FC7F2F572DA16F95FA.html">Visit(Heading3Element)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>heading3</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-DBEE5CD4D9903204F78AD16C04A747F8.html">Visit(Heading4Element)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>heading4</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-48C019192221FBD5AE1AC25BC8720DE1.html">Visit(Heading5Element)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>heading5</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-8946B74E29A29E81DC7AF1C1F58B7BD4.html">Visit(Heading6Element)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>heading6</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-B5AB9125D6C1A142CD08B7328DC1A25C.html">Visit(ParagraphElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>paragraph</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-85048BF50590458BB4C1D764A2C1346E.html">Visit(UnorderedListElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>unorderedListElement</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-2E29EF8B9169902924F7BF243E636CF7.html">Visit(OrderedListElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>orderedList</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-78429C85D73573E51616885C2BC64A82.html">Visit(ListItemElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>listItem</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-D134942231F21344946DD4B77BD0D86F.html">Visit(TableElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>tableElement</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-1CD0FB3E97735765A490435E7EC19D42.html">Visit(TableRowElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>tableRow</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-6E508E1928F4486E69DCAD4CC2DAC073.html">Visit(TableHeaderCellElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>tableHeaderCell</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-24BE6C247D4B07008DBBF8EF034BB687.html">Visit(TableDataCellElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>tableDataCell</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-CD9D84F23FF34F6801495BFD6615F7BC.html">Visit(TextElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>text</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-5E917E331DF40BCF5BA6DBF56FF287D1.html">Visit(EmphasisElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>emphasis</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-B8EBB753377457EC003BC467F896BFEF.html">Visit(StrongElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>strong</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-973C5555E447DCB45204C434DB824EE2.html">Visit(HyperlinkElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>hyperlink</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-132047E864E3B1E41E6B2FAD9F0D41C6.html">Visit(ImageElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>image</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-B179C8AA870B37DBA205080C49D2ED38.html">Visit(CodeElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>code</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-C8FB3B7D3CB560680C6E1F3A09FECC32.html">Visit(LineBreakElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>lineBreak</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-1E15427B79D45481AA00D37C2B281352.html">Visit(PreformattedBlockElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>preformattedBlock</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-3E4B357C33C6636B677AF0B7B1DD9021.html">Visit(HorizontalRuleElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>horizontalRule</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Visit(-84EF404229625C7E31F8FA7305AFC8E9.html">Visit(PluginElement)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Visits the provided <em>plugin</em> element.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Write(-DB637DC63265CC6EF843A6C797EB2868.html">Write(string)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Writes the given <em>text</em> to the result. Encoding is done for special characters only.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.Write(-7DFC1EEC2A5FBC94FB75E2C35B793206.html">Write(char)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Writes the given <em>character</em> to the result. Encoding is done for special characters only.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.WriteAttribute(-DB637DC63265CC6EF843A6C797EB2868.html">WriteAttribute(string)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Writes an HTML attribute to the result.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.WriteAttribute(-AA78E189484E5E00B7C7F61F435FC37A.html">WriteAttribute(string, string)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Writes an HTML attribute to the result.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="MupHtmlWriterVisitor.WriteComment(-DB637DC63265CC6EF843A6C797EB2868.html">WriteComment(string)</a></td>
+            <td class="text-left text-nowrap"><code>protected</code></td>
+            <td><p>Writes an HTML comment containing the given <em>text</em> to the result. Encoding is done for special characters only.
+</p>
+</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+
+        </div>
+    </div>
+
+    <div>
+        <div class="d-flex flex-column container px-2">
+            <p class="text-center">Mup Copyright © 2020 Andrei Fangli</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+</html>

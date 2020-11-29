@@ -5,7 +5,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <title>Mup - Mup Namepsace</title>
+    <title>Mup - ParseTreeRootElement Class</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
     <link rel="stylesheet" href="style.css" />
@@ -36,82 +36,94 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
 
+
 <li class="breadcrumb-item" aria-current="page">
     <a href="index.html">Mup</a>
 </li>
-        <li class="breadcrumb-item active" aria-current="page">Mup</li>
+<li class="breadcrumb-item" aria-current="page">
+    <a href="Mup.Elements.html">Mup.Elements</a>
+</li>
+        <li class="breadcrumb-item active" aria-current="page">ParseTreeRootElement</li>
     </ol>
 </nav>
 
-<h2>Mup Namespace</h2>
+<h2>ParseTreeRootElement Class</h2>
 
-<p>Contains the base Mup types and implemented parsers.
+<p>Represents the root node of a parse tree.
 </p>
 
-<h3>Interfaces</h3>
+<p>
+    Base type: <a href="Mup.ElementsElement.html">Element</a>.
+</p>
+
+
+
+<h3>Constructors</h3>
 <table class="table table-hover">
     <thead>
         <tr>
             <th>Name</th>
+            <th>Access Modifier</th>
             <th class="w-75">Summary</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td><a href="MupIMarkupParser.html">IMarkupParser</a></td>
-            <td><p>A common interface for each markup parser implementation.
+            <td><a href="Mup.ElementsParseTreeRootElement.ParseTreeRootElement(-A0345635DD17F2939A06001708AD7DD3.html">ParseTreeRootElement(IEnumerable&lt;Element&gt;)</a></td>
+            <td class="text-left text-nowrap"><code>public</code></td>
+            <td><p>Initializes a new instance of the <a href="Mup.ElementsParseTreeRootElement.html">ParseTreeRootElement</a> class.
+</p>
+</td>
+        </tr>
+        <tr>
+            <td><a href="Mup.ElementsParseTreeRootElement.ParseTreeRootElement(-84AA4E456096B32BCE11B89345D8674B.html">ParseTreeRootElement(Element[])</a></td>
+            <td class="text-left text-nowrap"><code>public</code></td>
+            <td><p>Initializes a new instance of the <a href="Mup.ElementsParseTreeRootElement.html">ParseTreeRootElement</a> class.
 </p>
 </td>
         </tr>
     </tbody>
 </table>
-<h3>Classes</h3>
+<h3>Properties</h3>
 <table class="table table-hover">
     <thead>
         <tr>
             <th>Name</th>
+            <th>Access Modifier</th>
             <th class="w-75">Summary</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td><a href="MupCreoleParser.html">CreoleParser</a></td>
-            <td><p>A markup parser implementation for Creole.
-</p>
-</td>
-        </tr>
-        <tr>
-            <td><a href="MupCreoleParserOptions.html">CreoleParserOptions</a></td>
-            <td><p>Specifies options for the <a href="MupCreoleParser.html">CreoleParser</a>.
-</p>
-</td>
-        </tr>
-        <tr>
-            <td><a href="MupHtmlWriterVisitor.html">HtmlWriterVisitor</a></td>
-            <td><p>A <a href="MupParseTreeVisitor`1.html">ParseTreeVisitor</a>&lt;TResult&gt; implementation for generating HTML from an <a href="Mup.ElementsParseTreeRootElement.html">ParseTreeRootElement</a>.
-</p>
-</td>
-        </tr>
-        <tr>
-            <td><a href="MupHtmlWriterVisitorOptions.html">HtmlWriterVisitorOptions</a></td>
-            <td><p>Specifies options for an <a href="MupHtmlWriterVisitor.html">HtmlWriterVisitor</a>.
-</p>
-</td>
-        </tr>
-        <tr>
-            <td><a href="MupParseTreeVisitor.html">ParseTreeVisitor</a></td>
-            <td><p>Base class of all parse tree visitors.
-</p>
-</td>
-        </tr>
-        <tr>
-            <td><a href="MupParseTreeVisitor`1.html">ParseTreeVisitor&lt;TResult&gt;</a></td>
-            <td><p>Base class for all parse tree visitors that eventually provide a result that is stored in memory (e.g. a <a href="https://docs.microsoft.com/dotnet/api/System.String?view=netstandard-1.0">string</a> or a <a href="https://docs.microsoft.com/dotnet/api/System.IO.MemoryStream?view=netstandard-1.0">MemoryStream</a>).
+            <td><a href="Mup.ElementsParseTreeRootElement.Elements.html">Elements</a></td>
+            <td class="text-left text-nowrap"><code>public get</code></td>
+            <td><p>The immediate descendants of the parse tree root node.
 </p>
 </td>
         </tr>
     </tbody>
 </table>
+<h3>Methods</h3>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Access Modifier</th>
+            <th class="w-75">Summary</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><a href="Mup.ElementsParseTreeRootElement.Accept(-64AF5FE4F90D4FDA572A5E533DFE2629.html">Accept(ParseTreeVisitor)</a></td>
+            <td class="text-left text-nowrap"><code>public</code></td>
+            <td><p>Accepts a <em>visitor</em> which can be used to generate output from the parse tree.
+</p>
+</td>
+        </tr>
+    </tbody>
+</table>
+
+
 
 
 

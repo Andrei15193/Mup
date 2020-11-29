@@ -5,7 +5,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <title>Mup - Mup Namepsace</title>
+    <title>Mup - HtmlWriterVisitorOptions Class</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
     <link rel="stylesheet" href="style.css" />
@@ -36,82 +36,82 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
 
+
 <li class="breadcrumb-item" aria-current="page">
     <a href="index.html">Mup</a>
 </li>
-        <li class="breadcrumb-item active" aria-current="page">Mup</li>
+<li class="breadcrumb-item" aria-current="page">
+    <a href="Mup.html">Mup</a>
+</li>
+        <li class="breadcrumb-item active" aria-current="page">HtmlWriterVisitorOptions</li>
     </ol>
 </nav>
 
-<h2>Mup Namespace</h2>
+<h2>HtmlWriterVisitorOptions Class</h2>
 
-<p>Contains the base Mup types and implemented parsers.
+<p>Specifies options for an <a href="MupHtmlWriterVisitor.html">HtmlWriterVisitor</a>.
 </p>
 
-<h3>Interfaces</h3>
+<p>
+    Base type: <a href="https://docs.microsoft.com/dotnet/api/System.Object?view=netstandard-1.0">object</a>.
+</p>
+
+
+
+<h3>Constructors</h3>
 <table class="table table-hover">
     <thead>
         <tr>
             <th>Name</th>
+            <th>Access Modifier</th>
             <th class="w-75">Summary</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td><a href="MupIMarkupParser.html">IMarkupParser</a></td>
-            <td><p>A common interface for each markup parser implementation.
+            <td><a href="MupHtmlWriterVisitorOptions.HtmlWriterVisitorOptions(-BCD8B0C2EB1FCE714EAB6CEF0D771ACC.html">HtmlWriterVisitorOptions()</a></td>
+            <td class="text-left text-nowrap"><code>public</code></td>
+            <td><p>Initializes a new instance of the <a href="MupHtmlWriterVisitorOptions.html">HtmlWriterVisitorOptions</a> class.
 </p>
 </td>
         </tr>
     </tbody>
 </table>
-<h3>Classes</h3>
+<h3>Properties</h3>
 <table class="table table-hover">
     <thead>
         <tr>
             <th>Name</th>
+            <th>Access Modifier</th>
             <th class="w-75">Summary</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td><a href="MupCreoleParser.html">CreoleParser</a></td>
-            <td><p>A markup parser implementation for Creole.
+            <td><a href="MupHtmlWriterVisitorOptions.Indent.html">Indent</a></td>
+            <td class="text-left text-nowrap"><code>public get, set</code></td>
+            <td><p>When provided, the given sequence is used to indent new elements. If the value is <code>null</code> then no indentation is done and elements will not begin on new lines unless a <a href="MupHtmlWriterVisitorOptions.NewLine.html">NewLine</a> is specified.
 </p>
 </td>
         </tr>
         <tr>
-            <td><a href="MupCreoleParserOptions.html">CreoleParserOptions</a></td>
-            <td><p>Specifies options for the <a href="MupCreoleParser.html">CreoleParser</a>.
+            <td><a href="MupHtmlWriterVisitorOptions.IndentOffset.html">IndentOffset</a></td>
+            <td class="text-left text-nowrap"><code>public get, set</code></td>
+            <td><p>The offset of the indentation. In case the HTML that is being written by the visitor is contained in an element a global indent can be applied to all of them allowing the resulting HTML to be formatted accordingly.
 </p>
 </td>
         </tr>
         <tr>
-            <td><a href="MupHtmlWriterVisitor.html">HtmlWriterVisitor</a></td>
-            <td><p>A <a href="MupParseTreeVisitor`1.html">ParseTreeVisitor</a>&lt;TResult&gt; implementation for generating HTML from an <a href="Mup.ElementsParseTreeRootElement.html">ParseTreeRootElement</a>.
-</p>
-</td>
-        </tr>
-        <tr>
-            <td><a href="MupHtmlWriterVisitorOptions.html">HtmlWriterVisitorOptions</a></td>
-            <td><p>Specifies options for an <a href="MupHtmlWriterVisitor.html">HtmlWriterVisitor</a>.
-</p>
-</td>
-        </tr>
-        <tr>
-            <td><a href="MupParseTreeVisitor.html">ParseTreeVisitor</a></td>
-            <td><p>Base class of all parse tree visitors.
-</p>
-</td>
-        </tr>
-        <tr>
-            <td><a href="MupParseTreeVisitor`1.html">ParseTreeVisitor&lt;TResult&gt;</a></td>
-            <td><p>Base class for all parse tree visitors that eventually provide a result that is stored in memory (e.g. a <a href="https://docs.microsoft.com/dotnet/api/System.String?view=netstandard-1.0">string</a> or a <a href="https://docs.microsoft.com/dotnet/api/System.IO.MemoryStream?view=netstandard-1.0">MemoryStream</a>).
+            <td><a href="MupHtmlWriterVisitorOptions.NewLine.html">NewLine</a></td>
+            <td class="text-left text-nowrap"><code>public get, set</code></td>
+            <td><p>When provided, the given sequence is used for breaking elements on separate lines otherwise no new line is used and implicitly no indentantion is applied.
 </p>
 </td>
         </tr>
     </tbody>
 </table>
+
+
 
 
 
