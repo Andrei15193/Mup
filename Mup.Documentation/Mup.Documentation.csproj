@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CodeMap" Version="1.0.0-beta1" />
-    <PackageReference Include="CodeMap.Handlebars" Version="1.0.0-beta1" />
+    <PackageReference Include="CodeMap" Version="1.0.0-beta2" />
+    <PackageReference Include="CodeMap.Handlebars" Version="1.0.0-beta2" />
   </ItemGroup>
 
   <ItemGroup>
